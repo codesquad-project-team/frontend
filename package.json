@@ -2,6 +2,12 @@
   "name": "frontend",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "dev": "webpack-dev-server --hot --open",
+    "start": "node app.js",
+    "build": "webpack --config webpack.config.prod.js",
+    "dev-build": "NODE_ENV=dev webpack --config webpack.config.prod.js"
+  },
   "repository": "https://github.com/codesquad-project-team/frontend.git",
   "author": "leehwarang <hwrng2@gmail.com>",
   "license": "MIT",
