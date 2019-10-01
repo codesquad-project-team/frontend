@@ -1,8 +1,8 @@
-export const getClassName = ({ props, parentClass }) => {
+export const getClassName = ({ props, prefix }) => {
   const { small, medium, large } = props;
   let className;
-  if (small) className = `${parentClass}-small`;
-  if (medium) className = `${parentClass}-medium`;
-  if (large) className = `${parentClass}-large`;
+  if (small) className = `${prefix}-small`;
+  if (medium) className = `${prefix}-medium`;
+  if (large) className = `${prefix}-large`;
   return className;
 };

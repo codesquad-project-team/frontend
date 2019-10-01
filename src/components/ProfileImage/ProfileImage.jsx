@@ -1,13 +1,13 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import './ProfileImage.scss';
 import { getClassName } from '../../utils/utils';
 
 const ProfileImage = props => {
-  const sizeClassName = getClassName({ props, parentClass: 'ProfileImage' });
+  const sizeClassName = getClassName({ props, prefix: 'ProfileImage' });
 
   return (
     <div className={`ProfileImage ${sizeClassName}`}>
-      <h1>ProfileImage</h1>
+      <img src="" alt="profile-image" />
     </div>
   );
 };
