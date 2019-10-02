@@ -1,26 +1,26 @@
 .detail-post {
   max-width: 700px;
-}
 
-.post-title {
-  font-size: 4.5rem;
-  text-align: center;
-}
+  &-title {
+    font-size: 4.5rem;
+    text-align: center;
+  }
 
-.post-content {
-  display: flex;
-  margin: 0 3rem;
+  &-content {
+    display: flex;
+    margin: 0 3rem;
+  }
 
-  .writer-img {
+  &-writer-img {
     margin-right: 2rem;
   }
 
-  .writer-name,
-  .post-desc {
+  &-writer-name,
+  &-desc {
     font-size: 2rem;
   }
+}
 
-  .ProfileImage {
-    margin-top: 1.5rem;
-  }
+.ProfileImage {
+  margin-top: 1.5rem;
 }
