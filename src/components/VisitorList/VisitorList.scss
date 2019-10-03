@@ -1,0 +1,44 @@
+.visitor-list {
+  max-width: 700px;
+  width: 100%;
+
+  &-header {
+    text-align: center;
+    font-size: 3.5rem;
+    margin-top: 2rem;
+  }
+
+  &-carousel {
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+  }
+
+  &-carousel-item {
+    text-align: center;
+  }
+}
+
+.visitor-comment {
+  margin-top: 1.5rem;
+}
+
+.carousel-btns-common {
+  all: unset;
+  font-size: 2rem;
+  position: relative;
+  top: -10rem;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.prev-btn {
+  float: left;
+}
+
+.next-btn {
+  float: right;
+}
