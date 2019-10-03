@@ -5184,6 +5184,18 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-load-script@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/react-load-script/-/react-load-script-0.0.6.tgz#db6851236aaa25bb622677a2eb51dad4f8d2c258"
+  integrity sha512-aRGxDGP9VoLxcsaYvKWIW+LRrMOzz2eEcubTS4NvQPPugjk2VvMhow0wWTkSl7RxookomD1MwcP4l5UStg5ShQ==
+
+react-naver-map@^0.0.23:
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/react-naver-map/-/react-naver-map-0.0.23.tgz#317dbb5792a14ad0509cb0cab3038c181db82290"
+  integrity sha512-0OYKNI4wZyHQpTu/ltua/Jy8PQG91hHks3afBNCs+B/r/pKHPBV9xxtfMLQdzavHFFX9uCQ8knx+DzhNfunxZQ==
+  dependencies:
+    react-load-script "^0.0.6"
+
 react-router-dom@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-5.1.0.tgz#48ad018d71fb7835212587e4c90bd2e3d2417e31"
