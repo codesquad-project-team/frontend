@@ -1,0 +1,50 @@
+.info-window {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28rem;
+  height: 12rem;
+  transform: translate(-95px, -200px);
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 1px 1px 10px gray;
+  &:hover {
+    cursor: default;
+  }
+
+  a {
+    text-decoration: none;
+    color: green;
+    &:visited {
+      color: green;
+    }
+  }
+  hr {
+    margin: 0;
+  }
+  div {
+  }
+  &-location-name {
+    margin: 0;
+    font-size: 2rem;
+    display: inline-block;
+    a {
+      color: black;
+      &:visited {
+        color: black;
+      }
+    }
+  }
+
+  &-arrow {
+    position: relative;
+    top: -20rem;
+    transform: translate(0, -1px);
+    height: 50px;
+    &:hover {
+      cursor: default;
+    }
+  }
+}

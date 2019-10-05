@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NaverMap, { Overlay, Marker } from 'react-naver-map';
 import { NAVER_MAP_CLIENT_ID } from '../../../map_constants';
+import InfoWindow from '../MapView/InfoWindow';
 
 const MapView = props => {
-  const { locationLatitude, locationLongitude } = props.data;
+  const { locationLatitude, locationLongitude, ...info } = props.data;
   return (
     <div>
       <NaverMap
@@ -31,7 +32,9 @@ const MapView = props => {
           onClick={e => {
             e.stopPropagation();
           }}
-        ></Overlay>
+        >
+          <InfoWindow info={info} />
+        </Overlay>
       </NaverMap>
     </div>
   );
