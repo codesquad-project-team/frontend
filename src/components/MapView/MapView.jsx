@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import NaverMap, { Overlay, Marker } from 'react-naver-map';
 import { NAVER_MAP_CLIENT_ID } from '../../../map_constants';
 import InfoWindow from '../MapView/InfoWindow';
 
 const MapView = props => {
+  const [infoDisplay, setInfoDisplay] = useState(true);
   const { locationLatitude, locationLongitude, ...info } = props.data;
+
   return (
     <div>
       <NaverMap
@@ -19,7 +21,7 @@ const MapView = props => {
         <Marker
           lat={locationLatitude}
           lng={locationLongitude}
-          onClick={event => {}} // id: given id, event: PointerEvent
+          onClick={() => setInfoDisplay(true)} // id: given id, event: PointerEvent
           shape={{
             coords: [0, 12, 12, 0, 24, 12, 12, 32, 0, 12],
             type: 'poly'
@@ -31,9 +33,12 @@ const MapView = props => {
           zIndex={200}
           onClick={e => {
             e.stopPropagation();
+            if (e.target.className === 'info-window-close') {
+              setInfoDisplay(false);
+            }
           }}
         >
-          <InfoWindow info={info} />
+          {infoDisplay && <InfoWindow info={info} />}
         </Overlay>
       </NaverMap>
     </div>

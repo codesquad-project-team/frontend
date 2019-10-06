@@ -48,6 +48,10 @@ const InfoWindow = props => {
         src="./resources/info-window-arrow.png"
         alt=""
       />
+      <img
+        src="./resources/times-solid.png"
+        className="info-window-close"
+      ></img>
     </>
   );
 };
