@@ -44,13 +44,13 @@ const InfoWindow = props => {
         </span>
       </div>
       <img
-        className="info-window-arrow"
+        className="info-window-arrow-image"
         src="./resources/info-window-arrow.png"
         alt=""
       />
       <img
+        className="info-window-close-image"
         src="./resources/times-solid.png"
-        className="info-window-close"
       ></img>
     </>
   );

@@ -39,17 +39,17 @@
     }
   }
 
-  &-arrow {
+  &-arrow-image {
     position: relative;
     top: -20rem;
     transform: translate(0, -1px);
-    height: 50px;
+    height: 5rem;
     &:hover {
       cursor: default;
     }
   }
 
-  &-close {
+  &-close-image {
     position: absolute;
     top: -21rem;
     left: 14rem;

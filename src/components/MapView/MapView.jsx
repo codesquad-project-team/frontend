@@ -33,7 +33,7 @@ const MapView = props => {
           zIndex={200}
           onClick={e => {
             e.stopPropagation();
-            if (e.target.className === 'info-window-close') {
+            if (e.target.className === 'info-window-close-image') {
               setInfoDisplay(false);
             }
           }}
