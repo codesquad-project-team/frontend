@@ -42,20 +42,12 @@ const RelatedPost = () => {
       titleCompanion: '친구랑',
       titleActivity: '코딩하기',
       postId: 1
-    },
-    {
-      profileUrl: 'https://avatars0.githubusercontent.com/u/18614517?s=460&v=4',
-      titleCompanion: '친구랑',
-      titleActivity: '코딩하기',
-      postId: 1
-    },
-    {
-      profileUrl: 'https://avatars0.githubusercontent.com/u/18614517?s=460&v=4',
-      titleCompanion: '친구랑',
-      titleActivity: '코딩하기',
-      postId: 1
     }
   ]);
+
+  const [currentActiveIndex, setCurrentActiveIndex] = useState(1);
+
+  const [positionX, setPositionX] = useState(0);
 
   const makeCarouselItem = () => {
     const items = [...datas];
@@ -92,8 +84,38 @@ const RelatedPost = () => {
         </div>
       );
     } else {
-      return <div class="related-post-carousel-wrap">{makeCarouselItem()}</div>;
+      return (
+        <div
+          class="related-post-carousel-wrap"
+          style={{
+            transform: `translateX(${positionX}px)`,
+            transition: `transform 1s ease 0s`
+          }}
+        >
+          {makeCarouselItem()}
+        </div>
+      );
     }
+  };
+
+  const getMaximalIndex = () => {
+    return datas.length % 5 === 0
+      ? parseInt(datas.length / 5)
+      : parseInt(datas.length / 5) + 1;
+  };
+
+  const prevBtnHandler = ({ target }) => {
+    const maximalIndex = getMaximalIndex();
+    if (currentActiveIndex === 1) return;
+    setCurrentActiveIndex(currentActiveIndex - 1);
+    setPositionX(positionX + 500);
+  };
+
+  const nextBtnHandler = ({ target }) => {
+    const maximalIndex = getMaximalIndex();
+    if (currentActiveIndex === maximalIndex) return;
+    setCurrentActiveIndex(currentActiveIndex + 1);
+    setPositionX(positionX - 500);
   };
 
   return (
@@ -103,8 +125,12 @@ const RelatedPost = () => {
 
       <div class="related-post-carousel">{makeCarouselJsx()}</div>
       <div class="related-post-carousel-btns">
-        <button class="carousel-btns-common prev-btn">&lt;</button>
-        <button class="carousel-btns-common next-btn">&gt;</button>
+        <button class="carousel-btns-common prev-btn" onClick={prevBtnHandler}>
+          &lt;
+        </button>
+        <button class="carousel-btns-common next-btn" onClick={nextBtnHandler}>
+          &gt;
+        </button>
       </div>
     </div>
   );
