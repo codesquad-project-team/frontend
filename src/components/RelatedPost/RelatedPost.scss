@@ -1,6 +1,6 @@
 .related-post {
-  max-width: 700px;
-  width: 100%;
+  width: 700px;
+  position: relative;
 
   &-header {
     text-align: center;
@@ -9,14 +9,30 @@
   }
 
   &-carousel {
-    max-width: 600px;
+    width: 500px;
+    overflow: hidden;
     display: flex;
-    justify-content: space-between;
     margin: 0 auto;
+
+    h3 {
+      margin: 2rem auto;
+      text-align: center;
+    }
+  }
+
+  &-carousel-wrap {
+    display: flex;
+    justify-content: space-evenly;
   }
 
   &-carousel-item {
     text-align: center;
+    width: 100px;
+  }
+
+  &-carousel-btns {
+    position: relative;
+    top: -10rem;
   }
 }
 
@@ -24,21 +40,12 @@
   margin-top: 1.5rem;
 }
 
-.carousel-btns-common {
-  all: unset;
-  font-size: 2rem;
-  position: relative;
-  top: -10rem;
-
-  &:focus {
-    outline: none;
-  }
-}
-
 .prev-btn {
-  float: left;
+  position: relative;
+  left: 2rem;
 }
 
 .next-btn {
-  float: right;
+  position: absolute;
+  right: 3rem;
 }
