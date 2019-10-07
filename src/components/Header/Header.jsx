@@ -4,6 +4,8 @@ import useInput from '../../hooks/useInput';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from './CommonBtn';
 
+const isLoggedIn = true; //TODO: 로그인 기능 구현시 수정
+
 const Header = () => {
   const [inputValue, handleChange, restore] = useInput();
 
@@ -30,9 +32,14 @@ const Header = () => {
         />
       </form>
       <div className="header-btns">
-        {/* <ProfileImage small /> */}
-        <CommonBtn>로그인</CommonBtn>
-        <CommonBtn>회원가입</CommonBtn>
+        {isLoggedIn ? (
+          <ProfileImage small />
+        ) : (
+          <>
+            <CommonBtn>로그인</CommonBtn>
+            <CommonBtn>회원가입</CommonBtn>
+          </>
+        )}
       </div>
     </div>
   );
