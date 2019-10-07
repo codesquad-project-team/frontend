@@ -12,9 +12,14 @@ const Header = () => {
   };
 
   return (
-    <div className="Header">
+    <div className="header">
       <h1>Logo</h1>
       <form onSubmit={handleSubmit}>
+        <img
+          className="header-searchbar-icon"
+          src="./resources/magnifier_icon.png"
+          alt=""
+        />
         <input
           name="searchBar"
           value={inputValue.searchBar}

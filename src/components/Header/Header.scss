@@ -1,4 +1,4 @@
-.Header {
+.header {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -6,4 +6,28 @@
   height: 8rem;
   border: 1px solid #d4d4d4;
   border-radius: 5px;
+
+  form {
+    position: relative;
+    width: 30rem;
+    height: 3rem;
+  }
+
+  .header-searchbar-icon {
+    top: 50%;
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    left: 0.75rem;
+    transform: translateY(-50%);
+  }
+
+  input {
+    width: inherit;
+    height: inherit;
+    border: 1px solid #d4d4d4;
+    border-radius: 5px;
+    padding: 0.2rem 1rem 0.2rem 2.75rem;
+    font-size: 1.75rem;
+  }
 }
