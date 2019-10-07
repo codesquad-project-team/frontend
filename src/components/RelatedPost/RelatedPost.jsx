@@ -4,15 +4,7 @@ import ProfileImage from '../ProfileImage/ProfileImage';
 import parse from 'html-react-parser';
 
 const RelatedPost = () => {
-  const [carouselVisible, setCarouselVisible] = useState(true);
-
   const [datas, setDatas] = useState([
-    {
-      profileUrl: 'https://avatars0.githubusercontent.com/u/18614517?s=460&v=4',
-      titleCompanion: '친구랑',
-      titleActivity: '코딩하기',
-      postId: 1
-    },
     {
       profileUrl: 'https://avatars0.githubusercontent.com/u/18614517?s=460&v=4',
       titleCompanion: '친구랑',
@@ -46,7 +38,6 @@ const RelatedPost = () => {
   ]);
 
   const [currentActiveIndex, setCurrentActiveIndex] = useState(1);
-
   const [positionX, setPositionX] = useState(0);
 
   const makeCarouselItem = () => {
@@ -124,14 +115,22 @@ const RelatedPost = () => {
       <h2 class="related-post-header">이 장소를 방문한 사람들</h2>
 
       <div class="related-post-carousel">{makeCarouselJsx()}</div>
-      <div class="related-post-carousel-btns">
-        <button class="carousel-btns-common prev-btn" onClick={prevBtnHandler}>
-          &lt;
-        </button>
-        <button class="carousel-btns-common next-btn" onClick={nextBtnHandler}>
-          &gt;
-        </button>
-      </div>
+      {datas.length > 5 && (
+        <div class="related-post-carousel-btns">
+          <button
+            class="carousel-btns-common prev-btn"
+            onClick={prevBtnHandler}
+          >
+            &lt;
+          </button>
+          <button
+            class="carousel-btns-common next-btn"
+            onClick={nextBtnHandler}
+          >
+            &gt;
+          </button>
+        </div>
+      )}
     </div>
   );
 };
