@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader/root';
 import React from 'react';
 import DetailPage from '../src/pages/DetailPage/DetailPage';
 
@@ -9,4 +10,4 @@ const Root = () => {
   );
 };
 
-export default Root;
+export default hot(Root);
