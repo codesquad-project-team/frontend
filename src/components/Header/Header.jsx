@@ -2,6 +2,7 @@ import React from 'react';
 import './Header.scss';
 import useInput from '../../hooks/useInput';
 import ProfileImage from '../ProfileImage/ProfileImage';
+import CommonBtn from './CommonBtn';
 
 const Header = () => {
   const [inputValue, handleChange, restore] = useInput();
@@ -15,18 +16,24 @@ const Header = () => {
     <div className="header">
       <h1>Logo</h1>
       <form onSubmit={handleSubmit}>
-        <img
-          className="header-searchbar-icon"
-          src="./resources/magnifier_icon.png"
-          alt=""
-        />
+        <div className="header-searchbar-icon-wrapper">
+          <img
+            className="header-searchbar-icon"
+            src="./resources/magnifier_icon.png"
+            alt=""
+          />
+        </div>
         <input
           name="searchBar"
           value={inputValue.searchBar}
           onChange={handleChange}
         />
       </form>
-      <ProfileImage small />
+      <div className="header-btns">
+        {/* <ProfileImage small /> */}
+        <CommonBtn>로그인</CommonBtn>
+        <CommonBtn>회원가입</CommonBtn>
+      </div>
     </div>
   );
 };
