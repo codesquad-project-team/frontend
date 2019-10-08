@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './RelatedPost.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
-import parse from 'html-react-parser';
+import RelatedPostComment from '../RelatedPostComment/RelatedPostComment';
 
 const RelatedPost = () => {
   const [datas, setDatas] = useState([
@@ -43,25 +43,13 @@ const RelatedPost = () => {
   const makeCarouselItem = () => {
     const items = [...datas];
 
-    const result = items.reduce((acc, cur) => {
-      acc += `
-          <div class="related-post-carousel-item">
-            <h3 class="related-post-comment">
-            <ProfileImage medium></ProfileImage>
-              ${cur.titleCompanion}<br />
-              ${cur.titleActivity}
-            </h3>
-          </div>
-      `;
-      return acc;
-    }, '');
-
-    return parse(result, {
-      replace: domNode => {
-        if (domNode.name === 'profileimage') {
-          return <ProfileImage medium></ProfileImage>;
-        }
-      }
+    return items.map(item => {
+      return (
+        <RelatedPostComment
+          titleCompanion={item.titleCompanion}
+          titleActivity={item.titleActivity}
+        ></RelatedPostComment>
+      );
     });
   };
 
