@@ -1,14 +1,17 @@
 import React from 'react';
 import './ProfileImage.scss';
 import { getClassName } from '../../utils/utils';
+import { DEFAULT_PROFILE_IMG_URL } from '../../configs';
 
 const ProfileImage = props => {
   const sizeClassName = getClassName({ props, prefix: 'ProfileImage' });
 
   return (
-    <div className={`ProfileImage ${sizeClassName}`}>
-      <img src="" alt="profile-image" />
-    </div>
+    <img
+      src={props.src || DEFAULT_PROFILE_IMG_URL}
+      alt="profile-image"
+      className={`ProfileImage ${sizeClassName}`}
+    />
   );
 };
 
