@@ -1,5 +1,9 @@
 import React from 'react';
+import DetailPost from '../../components/DetailPost/DetailPost';
+import LocationCarousel from '../../components/LocationCarousel/LocationCarousel';
+import RelatedPost from '../../components/RelatedPost/RelatedPost';
 import './DetailPage.scss';
+import Header from '../../components/Header/Header';
 import MapView from '../../components/MapView/MapView';
 
 const data = {
@@ -22,8 +26,11 @@ const DetailPage = () => {
   //fetch(url) + if(loading) render(spinner)
   return (
     <div className="DetailPage">
-      <h1>This is Detail Page</h1>
+      <Header />
+      <LocationCarousel></LocationCarousel>
+      <DetailPost />
       <MapView data={data} />
+      <RelatedPost></RelatedPost>
     </div>
   );
 };
