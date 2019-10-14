@@ -4,13 +4,15 @@ import { getClassName } from '../../utils/utils';
 import { DEFAULT_PROFILE_IMG_URL } from '../../configs';
 
 const ProfileImage = props => {
-  const sizeClassName = getClassName({ props, prefix: 'ProfileImage' });
+  const { className, src, ...restProps } = props;
+  const sizeClassName = getClassName({ props, prefix: 'profile-image' });
 
   return (
     <img
-      src={props.src || DEFAULT_PROFILE_IMG_URL}
+      src={src || DEFAULT_PROFILE_IMG_URL}
       alt="profile-image"
-      className={`ProfileImage ${sizeClassName}`}
+      className={`profile-image ${sizeClassName} ${className}`}
+      {...restProps}
     />
   );
 };
