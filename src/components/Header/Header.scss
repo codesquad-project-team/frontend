@@ -1,0 +1,51 @@
+.header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 8rem;
+  padding: 0 2rem;
+  border: 1px solid #d4d4d4;
+  border-radius: 5px;
+
+  h1 {
+    flex: 1;
+    margin-right: 2rem;
+  }
+
+  form {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    width: 30rem;
+    height: 3rem;
+  }
+
+  &-searchbar-icon-wrapper {
+    position: relative;
+  }
+
+  &-searchbar-icon {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    transform: translateY(-50%);
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  input {
+    width: inherit;
+    height: inherit;
+    border: 1px solid #d4d4d4;
+    border-radius: 5px;
+    padding: 0.2rem 1rem 0.2rem 2.75rem;
+    font-size: 1.75rem;
+  }
+
+  &-btns {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
