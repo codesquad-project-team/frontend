@@ -1,0 +1,51 @@
+.related-post {
+  width: 700px;
+  position: relative;
+
+  &-header {
+    text-align: center;
+    font-size: 3.5rem;
+    margin-top: 2rem;
+  }
+
+  &-carousel {
+    width: 500px;
+    overflow: hidden;
+    display: flex;
+    margin: 0 auto;
+
+    h3 {
+      margin: 2rem auto;
+      text-align: center;
+    }
+  }
+
+  &-carousel-wrap {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  &-carousel-item {
+    text-align: center;
+    width: 100px;
+  }
+
+  &-carousel-btns {
+    position: relative;
+    top: -10rem;
+  }
+}
+
+.related-post-comment {
+  margin-top: 1.5rem;
+}
+
+.prev-btn {
+  position: relative;
+  left: 2rem;
+}
+
+.next-btn {
+  position: absolute;
+  right: 3rem;
+}
