@@ -1,0 +1,12 @@
+.post-container {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  width: 50rem;
+  padding: 2rem 0;
+
+  &-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+}
