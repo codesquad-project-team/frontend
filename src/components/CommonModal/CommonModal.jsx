@@ -3,6 +3,11 @@ import './CommonModal.scss';
 import OAuthBtn from '../OAuthBtn/OAuthBtn';
 
 const CommonModal = ({ signUpHandler }) => {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => (document.body.style.overflow = 'unset');
+  }, []);
+
   return (
     <>
       <div className="common-modal-overlay" />
@@ -19,6 +24,9 @@ const CommonModal = ({ signUpHandler }) => {
             <OAuthBtn company="페이스북" color="#4267B2" imgUrl=""></OAuthBtn>
             <OAuthBtn company="인스타그램" color="#FCAF45" imgUrl=""></OAuthBtn>
           </div>
+          <p>
+            이미 계정이 있으신가요? <a herf="">로그인하기</a>
+          </p>
         </div>
       </div>
     </>
