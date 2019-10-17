@@ -6,6 +6,7 @@ const PostContainer = props => {
   const postItems = props.items.map(e => (
     <PostItem
       key={e.postId || Math.floor(Math.random() * 10000)}
+      headerOn={props.header}
       {...e}
     ></PostItem>
   ));

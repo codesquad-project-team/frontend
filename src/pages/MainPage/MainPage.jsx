@@ -56,7 +56,7 @@ const MainPage = () => {
   return (
     <div className="main-page">
       <Header />
-      {!loading && <PostContainer items={items} />}
+      {!loading && <PostContainer items={items} header />}
     </div>
   );
 };

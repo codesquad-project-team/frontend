@@ -9,15 +9,18 @@ const PostItem = ({
   titlePlace,
   titleCompanion,
   titleActivity,
-  description
+  description,
+  headerOn
 }) => {
   const desc = Buffer.from(description).toString();
   return (
     <div className="post-item">
-      <div className="post-item-header">
-        <ProfileImage small src={writerImageUrl} />
-        <span>{writerNickname}</span>
-      </div>
+      {headerOn && (
+        <div className="post-item-header">
+          <ProfileImage small src={writerImageUrl} />
+          <span>{writerNickname}</span>
+        </div>
+      )}
       <img className="post-item-img" src={representativePostImage} alt="" />
       <div className="post-item-title">
         {titlePlace}에서 {titleCompanion}랑 {titleActivity}
