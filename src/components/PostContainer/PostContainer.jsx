@@ -6,10 +6,8 @@ const PostContainer = props => {
   const postItems = props.items.map(e => (
     <PostItem
       key={e.postId || Math.floor(Math.random() * 10000)}
-      url={e.representativePostImage}
-    >
-      {e.postId || 'title'}
-    </PostItem>
+      {...e}
+    ></PostItem>
   ));
   return (
     <div className="post-container-wrapper">

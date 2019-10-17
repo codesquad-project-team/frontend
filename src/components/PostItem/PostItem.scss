@@ -1,13 +1,37 @@
 .post-item {
-  width: 15rem;
-  height: 15rem;
+  width: 30rem;
   border: 1px solid #d4d4d4;
   border-radius: 5px;
   justify-self: center;
   align-self: center;
   margin: 3rem;
-  img {
+  &:hover {
+    cursor: pointer;
+    box-shadow: 0 0 10px #a0a0a0;
+  }
+
+  &-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    span {
+      font-size: 2rem;
+      font-weight: bold;
+      padding-left: 1rem;
+    }
+  }
+
+  &-img {
     width: inherit;
     height: inherit;
+  }
+
+  &-title {
+    padding: 1rem 1.5rem 0 1.5rem;
+    font-size: 2rem;
+  }
+  &-desc {
+    padding: 1rem 1.5rem 2rem 1.5rem;
+    font-size: 1.5rem;
   }
 }
