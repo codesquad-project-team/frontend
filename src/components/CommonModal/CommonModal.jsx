@@ -6,7 +6,6 @@ const CommonModal = ({ clickHandler, target }) => {
   const [content, setContent] = useState({});
 
   const makeContent = parent => {
-    console.log(parent);
     if (parent === `signin`) {
       setContent({
         title: '시작하기',
@@ -18,7 +17,9 @@ const CommonModal = ({ clickHandler, target }) => {
       setContent({
         title: '가입하기',
         desc:
-          '이 곳에서 당신의 취향을 찾으세요. 그리고 현재의 감정 상태에 따라 지금 할 일을 정해보세요.',
+          '이 곳에서 당신의 취향을 찾으세요.' +
+          '\n' +
+          '그리고 현재의 감정 상태에 따라 지금 할 일을 정해보세요.',
         reminderMsg: '이미 계정이 있으신가요?',
         hyperlinkMsg: '로그인하기'
       });
