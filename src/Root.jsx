@@ -13,7 +13,7 @@ const Root = () => {
           <Route exact path="/" render={() => <MainPage />}></Route>
           <Route path="/post" render={() => <DetailPage />}></Route>
           <Route
-            path="/profile_edit"
+            path="/profile-edit"
             render={() => <ProfileEditPage />}
           ></Route>
         </Switch>
