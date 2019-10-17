@@ -4,8 +4,11 @@ import PostItem from '../PostItem/PostItem';
 
 const PostContainer = props => {
   const postItems = props.items.map(e => (
-    <PostItem key={e.id || Math.floor(Math.random() * 9999)}>
-      {e.title || 'title'}
+    <PostItem
+      key={e.postId || Math.floor(Math.random() * 10000)}
+      url={e.representativePostImage}
+    >
+      {e.postId || 'title'}
     </PostItem>
   ));
   return (
