@@ -50,5 +50,18 @@
         border-radius: 0.5rem;
       }
     }
+
+    .btn-submit {
+      font-size: 2rem;
+      margin-top: 18rem;
+      position: fixed;
+      left: 45%;
+      background-color: #673ab7;
+      border: 0;
+
+      &:hover {
+        background-color: #7c4dff;
+      }
+    }
   }
 }
