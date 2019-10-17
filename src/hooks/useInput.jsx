@@ -12,7 +12,7 @@ const useInput = () => {
     setInputValue({ ...inputValue, [name]: '' });
   }, []);
 
-  return [inputValue, handleChange, restore];
+  return [inputValue, setInputValue, handleChange, restore];
 };
 
 export default useInput;
