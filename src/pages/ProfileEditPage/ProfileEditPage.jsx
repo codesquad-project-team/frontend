@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ProfileEditPage.scss';
 import Header from '../../components/Header/Header';
 import ProfileImage from '../../components/ProfileImage/ProfileImage';
+import ProfileContentItem from '../../components/ProfileContentItem/ProfileContentItem';
 import Button from 'react-bootstrap/Button';
 import useInput from '../../hooks/useInput';
 
@@ -41,42 +42,30 @@ const ProfileEditPage = () => {
             <ProfileImage medium></ProfileImage>
             <button>프로필 사진 바꾸기</button>
           </div>
-          <div className="profile-edit-page-content-item">
-            <label>닉네임</label>
-            <input
-              type="text"
-              name="nickname"
-              value={nickname}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="profile-edit-page-content-item">
-            <label>소개</label>
-            <input
-              type="text"
-              name="introduction"
-              value={introduction}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="profile-edit-page-content-item">
-            <label>이메일</label>
-            <input
-              type="text"
-              name="email"
-              value={email}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="profile-edit-page-content-item">
-            <label>휴대폰 번호</label>
-            <input
-              type="text"
-              name="phone"
-              value={phone}
-              onChange={handleChange}
-            />
-          </div>
+          <ProfileContentItem
+            label="닉네임"
+            value={nickname}
+            name="nickname"
+            changeHandler={handleChange}
+          ></ProfileContentItem>
+          <ProfileContentItem
+            label="소개"
+            value={introduction}
+            name="introduction"
+            changeHandler={handleChange}
+          ></ProfileContentItem>
+          <ProfileContentItem
+            label="이메일"
+            value={email}
+            name="email"
+            changeHandler={handleChange}
+          ></ProfileContentItem>
+          <ProfileContentItem
+            label="휴대폰 번호"
+            value={phone}
+            name="phone"
+            changeHandler={handleChange}
+          ></ProfileContentItem>
           <Button variant="primary" size="lg" className="btn-submit">
             제출
           </Button>
