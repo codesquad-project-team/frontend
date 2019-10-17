@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage';
 import DetailPage from '../src/pages/DetailPage/DetailPage';
-import LoginPage from '../src/pages/LoginPage/LoginPage';
+import ProfileEditPage from '../src/pages/ProfileEditPage/ProfileEditPage';
 
 const Root = () => {
   return (
@@ -12,7 +12,10 @@ const Root = () => {
         <Switch>
           <Route exact path="/" render={() => <MainPage />}></Route>
           <Route path="/post" render={() => <DetailPage />}></Route>
-          <Route path="/login" render={() => <LoginPage />}></Route>
+          <Route
+            path="/profile_edit"
+            render={() => <ProfileEditPage />}
+          ></Route>
         </Switch>
       </Router>
     </>
