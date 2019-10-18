@@ -2,11 +2,11 @@ import React from 'react';
 import './PostContainer.scss';
 import PostItem from '../PostItem/PostItem';
 
-const PostContainer = props => {
-  const postItems = props.items.map(e => (
+const PostContainer = ({ items, header }) => {
+  const postItems = (items || []).map(e => (
     <PostItem
       key={e.postId || Math.floor(Math.random() * 10000)}
-      headerOn={props.header}
+      headerOn={header}
       {...e}
     ></PostItem>
   ));

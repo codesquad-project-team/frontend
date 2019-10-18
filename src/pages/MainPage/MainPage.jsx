@@ -10,7 +10,7 @@ import { WEB_SERVER_URL, VIEWPORT_HEIGHT, MAIN_COLOR } from '../../configs';
 const MainPage = () => {
   const [page, setPage] = useState(1);
   const [response, setResponse] = useState(null);
-  const items = response ? response.posts : [];
+  const items = response ? response.posts : null;
 
   const { error, loading } = useFetch(
     `${WEB_SERVER_URL}/post?page=${page}`,
@@ -58,17 +58,14 @@ const MainPage = () => {
   return (
     <div className="main-page">
       <Header />
-      {loading ? (
-        <FadeLoader
-          css={override}
-          sizeUnit={'px'}
-          size={150}
-          color={MAIN_COLOR}
-          loading={loading}
-        />
-      ) : (
-        <PostContainer items={items} header />
-      )}
+      {items && <PostContainer items={items} header />}
+      <FadeLoader
+        css={override}
+        sizeUnit={'px'}
+        size={150}
+        color={MAIN_COLOR}
+        loading={loading}
+      />
     </div>
   );
 };

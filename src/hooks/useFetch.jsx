@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+
+//TODO: 배포시 제거
+const makeDelay = timeInMs => {
+  return new Promise(res => setTimeout(res, timeInMs));
+};
 
 /**
  * @param {string} url fetch요청할 url
@@ -12,6 +17,8 @@ const useFetch = (url, options, callback) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
+        await makeDelay(2000); //TODO: 배포시 제거
         const res = await fetch(url, options);
         if (res instanceof Promise) throw Error('REQUEST FAILED');
         if (!res.ok) throw Error(`STATUS CODE : ${res.status}`);
