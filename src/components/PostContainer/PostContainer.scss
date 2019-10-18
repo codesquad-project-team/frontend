@@ -1,8 +1,18 @@
 .post-container {
   display: grid;
+  justify-items: center;
   grid-template-columns: 50% 50%;
-  width: 80rem;
+  row-gap: 6rem;
+  width: 72rem;
   padding: 2rem 0;
+
+  a {
+    color: black;
+    &:hover {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
 
   &-wrapper {
     display: flex;
