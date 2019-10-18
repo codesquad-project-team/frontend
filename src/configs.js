@@ -7,3 +7,5 @@ export const VIEWPORT_HEIGHT = Math.max(
   document.documentElement.clientHeight,
   window.innerHeight || 0
 );
+
+export const MAIN_COLOR = '#123abc';

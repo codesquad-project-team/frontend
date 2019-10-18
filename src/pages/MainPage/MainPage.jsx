@@ -3,7 +3,9 @@ import './MainPage.scss';
 import Header from '../../components/Header/Header';
 import PostContainer from '../../components/PostContainer/PostContainer';
 import useFetch from '../../hooks/useFetch';
-import { WEB_SERVER_URL, VIEWPORT_HEIGHT } from '../../configs';
+import { css } from '@emotion/core';
+import FadeLoader from 'react-spinners/FadeLoader';
+import { WEB_SERVER_URL, VIEWPORT_HEIGHT, MAIN_COLOR } from '../../configs';
 
 const MainPage = () => {
   const [page, setPage] = useState(1);
@@ -46,9 +48,9 @@ const MainPage = () => {
   };
 
   const isScrollEnd = () => {
-    const scrollY = window.scrollY;
+    const pageYOffset = window.pageYOffset;
     const documentHeight = document.body.offsetHeight; //TODO: 새로운 items를 렌더링 할 때만 값을 캐싱하도록 수정필요
-    const viewportBottomPosition = VIEWPORT_HEIGHT + scrollY;
+    const viewportBottomPosition = VIEWPORT_HEIGHT + pageYOffset;
     const distanceToBottom = documentHeight - viewportBottomPosition;
     return distanceToBottom === 0;
   };
@@ -56,9 +58,24 @@ const MainPage = () => {
   return (
     <div className="main-page">
       <Header />
-      {!loading && <PostContainer items={items} header />}
+      {loading ? (
+        <FadeLoader
+          css={override}
+          sizeUnit={'px'}
+          size={150}
+          color={MAIN_COLOR}
+          loading={loading}
+        />
+      ) : (
+        <PostContainer items={items} header />
+      )}
     </div>
   );
 };
 
 export default MainPage;
+
+const override = css`
+  display: block;
+  margin: 10rem auto;
+`;

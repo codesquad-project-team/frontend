@@ -1,4 +1,7 @@
 .main-page {
+  display: flex;
+  flex-direction: column;
+
   .post-container-wrapper {
     padding-top: 8rem;
   }
