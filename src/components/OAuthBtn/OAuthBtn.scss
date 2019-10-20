@@ -1,0 +1,17 @@
+.OAuth-btn {
+  margin-top: 2rem;
+  font-size: 1.8rem;
+  border-radius: 1.4rem;
+  padding: 0.8rem;
+  border: 1px solid gray;
+
+  &-company {
+    text-decoration: none;
+    color: #263238;
+
+    &:hover {
+      text-decoration: none;
+      color: #263238;
+    }
+  }
+}
