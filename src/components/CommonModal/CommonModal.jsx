@@ -63,7 +63,7 @@ const CommonModal = ({ clickHandler, target }) => {
             ></OAuthBtn>
           </div>
           <p>
-            {content.reminderMsg} <a herf="">{content.hyperlinkMsg}</a>
+            {content.reminderMsg} <a href="">{content.hyperlinkMsg}</a>
           </p>
         </div>
       </div>
