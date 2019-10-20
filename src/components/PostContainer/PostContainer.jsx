@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 import PostItem from '../PostItem/PostItem';
 
 const PostContainer = ({ items, header }) => {
-  const postItems = (items || []).map(e => (
+  const postItems = (items || []).map(item => (
     <Link
-      to={`/post/${e.postId}`}
-      key={e.postId || Math.floor(Math.random() * 10000)}
+      to={`/post/${item.postId}`}
+      key={item.postId || Math.floor(Math.random() * 10000)}
     >
-      <PostItem headerOn={header} {...e}></PostItem>
+      <PostItem headerOn={header} {...item}></PostItem>
     </Link>
   ));
   return (
