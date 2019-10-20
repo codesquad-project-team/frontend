@@ -1,12 +1,16 @@
 .header {
+  position: fixed;
+  top: 0;
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 100%;
   height: 8rem;
   padding: 0 2rem;
+  background: #fff;
   border: 1px solid #d4d4d4;
   border-radius: 5px;
+  z-index: 1000;
 
   h1 {
     flex: 1;

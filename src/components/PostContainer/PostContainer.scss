@@ -1,0 +1,22 @@
+.post-container {
+  display: grid;
+  justify-items: center;
+  grid-template-columns: 50% 50%;
+  row-gap: 6rem;
+  width: 72rem;
+  padding: 2rem 0;
+
+  a {
+    color: black;
+    &:hover {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+
+  &-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+}

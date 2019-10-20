@@ -3,7 +3,11 @@ module.exports = function(api) {
 
   const presets = [['@babel/preset-env'], ['@babel/preset-react']];
 
-  const plugins = ['@babel/plugin-transform-runtime', 'react-hot-loader/babel'];
+  const plugins = [
+    '@babel/plugin-transform-runtime',
+    'react-hot-loader/babel',
+    'emotion'
+  ];
 
   return {
     presets,
