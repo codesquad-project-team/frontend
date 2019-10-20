@@ -14,10 +14,10 @@ const ProfileEditPage = () => {
     async function fetchUsefInfo(url) {
       const response = await fetch(url);
       const userInfo = await response.json();
-      const { ProfileImage, nickname, email, phone } = userInfo;
+      const { profileImage, nickname, email, phone } = userInfo;
       const buf = Buffer.from(userInfo.description);
       const initialValue = {
-        profileimage: ProfileImage,
+        profileImage,
         nickname,
         email,
         phone,
@@ -39,7 +39,7 @@ const ProfileEditPage = () => {
         </div>
         <form className="profile-edit-page-content">
           <div className="profile-edit-page-content-item">
-            <ProfileImage medium></ProfileImage>
+            <ProfileImage medium src={profileImage}></ProfileImage>
             <button>프로필 사진 바꾸기</button>
           </div>
           <ProfileContentItem
@@ -66,7 +66,7 @@ const ProfileEditPage = () => {
             name="phone"
             changeHandler={handleChange}
           ></ProfileContentItem>
-          <Button variant="primary" size="lg" className="btn-submit">
+          <Button variant="primary" size="lg" className="submit-btn">
             제출
           </Button>
         </form>
