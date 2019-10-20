@@ -1,0 +1,48 @@
+.profile-edit-page {
+  margin: 0 auto;
+  width: 100rem;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10rem;
+
+  &-nav {
+    width: 20%;
+
+    &-item {
+      text-align: center;
+      padding: 1rem;
+      font-size: 2rem;
+      border-left: 3px solid #673ab7;
+      font-weight: 500;
+      color: #673ab7;
+    }
+  }
+
+  &-content {
+    width: 70%;
+
+    &-item {
+      button {
+        border: none;
+        color: #b388ff;
+      }
+
+      .profile-image {
+        margin: 0 2rem 2rem 24rem;
+      }
+    }
+
+    .submit-btn {
+      font-size: 2rem;
+      margin-top: 18rem;
+      position: fixed;
+      left: 45%;
+      background-color: #673ab7;
+      border: 0;
+
+      &:hover {
+        background-color: #7c4dff;
+      }
+    }
+  }
+}

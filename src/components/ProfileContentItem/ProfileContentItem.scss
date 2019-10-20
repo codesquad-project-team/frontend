@@ -1,0 +1,20 @@
+.profile-edit-page-content-item {
+  font-size: 2rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+
+  label {
+    font-weight: 500;
+    width: 30%;
+    text-align: right;
+    padding-right: 3rem;
+  }
+
+  input {
+    width: 60%;
+    border: none;
+    border: 1px solid lightgray;
+    border-radius: 0.5rem;
+  }
+}
