@@ -5,6 +5,8 @@ import MainPage from './pages/MainPage/MainPage';
 import DetailPage from '../src/pages/DetailPage/DetailPage';
 import ProfileEditPage from '../src/pages/ProfileEditPage/ProfileEditPage';
 
+
+
 const Root = () => {
   return (
     <>

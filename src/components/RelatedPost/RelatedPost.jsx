@@ -18,7 +18,7 @@ const RelatedPost = () => {
     }
 
     fetchData();
-  });
+  }, []);
 
   const makeCarouselItem = () => {
     const items = [...data];
