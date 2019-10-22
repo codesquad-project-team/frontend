@@ -3,9 +3,9 @@ import './PostItem.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 
 const PostItem = ({
-  writerImageUrl,
+  writerImageURL,
   writerNickname,
-  representativePostImage,
+  representativePostImageURL,
   titlePlace,
   titleCompanion,
   titleActivity,
@@ -17,11 +17,11 @@ const PostItem = ({
     <div className="post-item">
       {headerOn && (
         <div className="post-item-header">
-          <ProfileImage small src={writerImageUrl} />
+          <ProfileImage small src={writerImageURL} />
           <span>{writerNickname}</span>
         </div>
       )}
-      <img className="post-item-img" src={representativePostImage} alt="" />
+      <img className="post-item-img" src={representativePostImageURL} alt="" />
       <div className="post-item-title">
         {titlePlace}에서 {titleCompanion}랑 {titleActivity}
       </div>
