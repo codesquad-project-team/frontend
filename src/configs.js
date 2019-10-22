@@ -8,4 +8,4 @@ export const VIEWPORT_HEIGHT = Math.max(
   window.innerHeight || 0
 );
 
-export const MAIN_COLOR = '#123abc';
+export const MAIN_COLOR = '#fe7c96';
