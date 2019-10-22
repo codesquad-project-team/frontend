@@ -1,6 +1,19 @@
-.DetailPage {
+@import '../../stylesheets/util.scss';
+
+.detail-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 10rem;
+  background-image: $sub-gradient;
+
+  &-contents {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5rem;
+    padding: 3rem 2rem;
+    background-color: #fff;
+    border-radius: 5px;
+  }
 }

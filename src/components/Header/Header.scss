@@ -1,3 +1,5 @@
+@import '../../stylesheets/util.scss';
+
 .header {
   position: fixed;
   top: 0;
@@ -9,12 +11,15 @@
   padding: 0 2rem;
   background: #fff;
   border: 1px solid #d4d4d4;
-  border-radius: 5px;
   z-index: 1000;
 
   h1 {
     flex: 1;
     margin-right: 2rem;
+    color: $main-color;
+    font-size: 6rem;
+    font-weight: bold;
+    font-family: 'godoMaum';
   }
 
   form {

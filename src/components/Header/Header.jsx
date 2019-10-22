@@ -27,7 +27,7 @@ const Header = () => {
 
   return (
     <div className="header">
-      <h1>Logo</h1>
+      <h1>Connect Flavor</h1>
       <form onSubmit={handleSubmit}>
         <div className="header-searchbar-icon-wrapper">
           <img

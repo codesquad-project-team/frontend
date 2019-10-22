@@ -1,4 +1,18 @@
 // style 초기화 코드
+@font-face {
+  font-family: 'godoMaum';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/godoMaum.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'KCC-eunyoung';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/KCC-eunyoung-Regular.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 
 html {
   font-size: 8px;
@@ -8,7 +22,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Apple SD Gothic Neo';
+  font-family: 'Nanum Gothic', sans-serif;
 }
 
 * {

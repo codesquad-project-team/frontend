@@ -1,8 +1,31 @@
+@import '../../stylesheets/util.scss';
+
 .main-page {
   display: flex;
   flex-direction: column;
 
   .post-container-wrapper {
     padding-top: 8rem;
+  }
+
+  &-banner {
+    position: relative;
+    width: 100%;
+    height: 50rem;
+    background-image: $main-gradient;
+
+    &-text {
+      position: absolute;
+      width: 70rem;
+      top: 20rem;
+      right: 5rem;
+      padding: 0 5rem;
+      color: #fff;
+      font-size: 5rem;
+      font-family: 'KCC-eunyoung';
+      b {
+        color: #fff59d;
+      }
+    }
   }
 }
