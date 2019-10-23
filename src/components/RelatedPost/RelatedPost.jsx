@@ -38,14 +38,14 @@ const RelatedPost = () => {
 
     if (!len) {
       return (
-        <div class="related-post-carousel-wrap">
+        <div className="related-post-carousel-wrap">
           <h3>아직 이 장소를 방문한 다른 사람이 없네요. 🥺</h3>;
         </div>
       );
     } else {
       return (
         <div
-          class="related-post-carousel-wrap"
+          className="related-post-carousel-wrap"
           style={{
             transform: `translateX(${positionX}px)`,
             transition: `transform 1s ease 0s`
@@ -78,21 +78,21 @@ const RelatedPost = () => {
   };
 
   return (
-    <div class="related-post">
+    <div className="related-post">
       <hr></hr>
-      <h2 class="related-post-header">이 장소를 방문한 사람들</h2>
+      <h2 className="related-post-header">이 장소를 방문한 사람들</h2>
 
-      <div class="related-post-carousel">{makeCarouselJsx()}</div>
+      <div className="related-post-carousel">{makeCarouselJsx()}</div>
       {data.length > 5 && (
-        <div class="related-post-carousel-btns">
+        <div className="related-post-carousel-btns">
           <button
-            class="carousel-btns-common prev-btn"
+            className="carousel-btns-common prev-btn"
             onClick={prevBtnHandler}
           >
             &lt;
           </button>
           <button
-            class="carousel-btns-common next-btn"
+            className="carousel-btns-common next-btn"
             onClick={nextBtnHandler}
           >
             &gt;
