@@ -7,13 +7,13 @@ import PostItem from '../PostItem/PostItem';
 import useFetch from '../../hooks/useFetch';
 import { WEB_SERVER_URL, VIEWPORT_HEIGHT, MAIN_COLOR } from '../../configs';
 
-const PostContainer = ({ headerOn }) => {
+const PostContainer = ({ headerOn, api }) => {
   const [page, setPage] = useState(1);
   const [response, setResponse] = useState(null);
   const items = response ? response.posts : [];
 
   const { error, loading } = useFetch(
-    `${WEB_SERVER_URL}/post?page=${page}`,
+    `${WEB_SERVER_URL}${api}${page}`,
     {},
     json => mergeResponse(response, json)
   );
