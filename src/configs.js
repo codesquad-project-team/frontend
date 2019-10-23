@@ -8,4 +8,6 @@ export const VIEWPORT_HEIGHT = Math.max(
   window.innerHeight || 0
 );
 
+export const TRIGGER_POINT = 700;
+
 export const MAIN_COLOR = '#fe7c96';

@@ -5,7 +5,13 @@ import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 import PostItem from '../PostItem/PostItem';
 import useFetch from '../../hooks/useFetch';
-import { WEB_SERVER_URL, VIEWPORT_HEIGHT, MAIN_COLOR } from '../../configs';
+import {
+  WEB_SERVER_URL,
+  VIEWPORT_HEIGHT,
+  TRIGGER_POINT,
+  MAIN_COLOR
+} from '../../configs';
+import { throttle } from '../../utils/utils';
 
 const PostContainer = ({ headerOn, api }) => {
   const [page, setPage] = useState(1);
@@ -34,14 +40,14 @@ const PostContainer = ({ headerOn, api }) => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [response]);
+  }, [loading]);
 
-  const handleScroll = () => {
+  const handleScroll = throttle(() => {
     if (hasNoMorePage(response)) return;
     if (isScrollEnd()) {
-      setPage(() => page + 1);
+      setPage(prevPage => prevPage + 1);
     }
-  };
+  });
 
   const hasNoMorePage = response => {
     return response && !response.hasNextPage;
@@ -50,9 +56,8 @@ const PostContainer = ({ headerOn, api }) => {
   const isScrollEnd = () => {
     const pageYOffset = window.pageYOffset;
     const documentHeight = document.body.offsetHeight; //TODO: 새로운 items를 렌더링 할 때만 값을 캐싱하도록 수정필요
-    const viewportBottomPosition = VIEWPORT_HEIGHT + pageYOffset;
-    const distanceToBottom = documentHeight - viewportBottomPosition;
-    return distanceToBottom === 0;
+    const scrollBottom = VIEWPORT_HEIGHT + pageYOffset;
+    return !loading && scrollBottom + TRIGGER_POINT >= documentHeight;
   };
 
   const postItems = items.map(item => (

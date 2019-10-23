@@ -6,3 +6,14 @@ export const getClassName = ({ props, prefix }) => {
   if (large) className = `${prefix}-large`;
   return className;
 };
+
+export const throttle = (callback, delay = 200) => {
+  let lastCall = 0;
+  return (...param) => {
+    const now = new Date().getTime();
+    if (now - lastCall > delay) {
+      lastCall = now;
+      return callback(...param);
+    }
+  };
+};
