@@ -14,7 +14,7 @@ const Root = () => {
           <Route exact path="/" render={() => <MainPage />}></Route>
           <Route path="/post" render={() => <DetailPage />}></Route>
           <Route
-            path="/profile-edit"
+            path="/profile/edit"
             render={() => <ProfileEditPage />}
           ></Route>
           <Route path="/profile" render={() => <ProfilePage />}></Route>
