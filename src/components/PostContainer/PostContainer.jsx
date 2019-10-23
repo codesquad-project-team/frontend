@@ -56,10 +56,7 @@ const PostContainer = ({ headerOn }) => {
   };
 
   const postItems = items.map(item => (
-    <Link
-      to={`/post/${item.postId}`}
-      key={item.postId || Math.floor(Math.random() * 10000)}
-    >
+    <Link to={`/post/${item.postId}`} key={item.postId}>
       <PostItem headerOn={headerOn} {...item}></PostItem>
     </Link>
   ));
