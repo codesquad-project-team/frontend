@@ -1,36 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DetailPost from '../../components/DetailPost/DetailPost';
 import LocationCarousel from '../../components/LocationCarousel/LocationCarousel';
 import RelatedPost from '../../components/RelatedPost/RelatedPost';
 import './DetailPage.scss';
 import Header from '../../components/Header/Header';
 import MapView from '../../components/MapView/MapView';
+import useFetch from '../../hooks/useFetch';
+import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
+import { css } from '@emotion/core';
+import FadeLoader from 'react-spinners/FadeLoader';
 
-const data = {
-  titlePlace: '공공거실',
-  titleCompanion: '친구랑',
-  titleActivity: '맥주 한잔 하기',
-  description: 'string',
-  postImageUrls: ['string'],
-  locationName: '공공거실',
-  locationAddress: '서울특별시 종로구 창경궁로33길 12',
-  locationPhoneNumber: '000-0000-0000',
-  locationLinkAddress: 'http://www.instagram.com/public_place_',
-  locationLatitude: 37.5843342,
-  locationLongitude: 126.9992411,
-  writerNickname: 'string',
-  writerImageUrl: 'string'
-};
+const DetailPage = props => {
+  console.log(props);
+  const postId = props.location.postId;
+  const [data, setData] = useState({});
 
-const DetailPage = () => {
-  //fetch(url) + if(loading) render(spinner)
+  const { error, loading } = useFetch(
+    `${WEB_SERVER_URL}/post/${postId}`,
+    {},
+    json => setData(json)
+  );
+
   return (
     <div className="detail-page">
       <Header />
       <div className="detail-page-contents">
+        <FadeLoader
+          css={override}
+          sizeUnit={'px'}
+          size={150}
+          color={MAIN_COLOR}
+          loading={loading}
+        />
         <LocationCarousel></LocationCarousel>
         <DetailPost />
-        <MapView data={data} />
+        <MapView data />
         <RelatedPost></RelatedPost>
       </div>
     </div>
@@ -38,3 +42,8 @@ const DetailPage = () => {
 };
 
 export default DetailPage;
+
+const override = css`
+  display: block;
+  margin: 10rem auto;
+`;
