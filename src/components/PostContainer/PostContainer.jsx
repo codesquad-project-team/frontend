@@ -7,7 +7,7 @@ import PostItem from '../PostItem/PostItem';
 import useFetch from '../../hooks/useFetch';
 import { WEB_SERVER_URL, VIEWPORT_HEIGHT, MAIN_COLOR } from '../../configs';
 
-const PostContainer = ({ header }) => {
+const PostContainer = ({ headerOn }) => {
   const [page, setPage] = useState(1);
   const [response, setResponse] = useState(null);
   const items = response ? response.posts : [];
@@ -60,7 +60,7 @@ const PostContainer = ({ header }) => {
       to={`/post/${item.postId}`}
       key={item.postId || Math.floor(Math.random() * 10000)}
     >
-      <PostItem headerOn={header} {...item}></PostItem>
+      <PostItem headerOn={headerOn} {...item}></PostItem>
     </Link>
   ));
 
