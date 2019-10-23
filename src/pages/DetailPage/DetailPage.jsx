@@ -25,12 +25,14 @@ const data = {
 const DetailPage = () => {
   //fetch(url) + if(loading) render(spinner)
   return (
-    <div className="DetailPage">
+    <div className="detail-page">
       <Header />
-      <LocationCarousel></LocationCarousel>
-      <DetailPost />
-      <MapView data={data} />
-      <RelatedPost></RelatedPost>
+      <div className="detail-page-contents">
+        <LocationCarousel></LocationCarousel>
+        <DetailPost />
+        <MapView data={data} />
+        <RelatedPost></RelatedPost>
+      </div>
     </div>
   );
 };

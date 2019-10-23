@@ -1,0 +1,15 @@
+$main-color: #fe7c96;
+
+$point-color: #fff59d;
+
+$main-gradient: radial-gradient(
+  circle farthest-corner at 10% 20%,
+  rgba(255, 168, 114, 1) 0%,
+  rgba(254, 106, 164, 1) 100.2%
+);
+
+$sub-gradient: radial-gradient(
+  circle farthest-corner at 10% 20%,
+  rgba(255, 195, 140, 1) 0%,
+  rgba(255, 134, 191, 1) 100.2%
+);
