@@ -6,7 +6,7 @@ import PostItem from '../PostItem/PostItem';
 const PostContainer = ({ items, header }) => {
   const postItems = (items || []).map(item => (
     <Link
-      to={{ pathname: `/post/${item.postId}`, postId: item.postId }}
+      to={`/post/${item.postId}`}
       key={item.postId || Math.floor(Math.random() * 10000)}
     >
       <PostItem headerOn={header} {...item}></PostItem>

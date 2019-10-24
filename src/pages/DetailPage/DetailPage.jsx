@@ -11,8 +11,7 @@ import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 
 const DetailPage = props => {
-  console.log(props);
-  const postId = props.location.postId;
+  const postId = props.postId;
   const [data, setData] = useState({});
 
   const { error, loading } = useFetch(
@@ -32,10 +31,14 @@ const DetailPage = props => {
           color={MAIN_COLOR}
           loading={loading}
         />
-        <LocationCarousel></LocationCarousel>
-        <DetailPost />
-        <MapView data />
-        <RelatedPost></RelatedPost>
+        {!loading && (
+          <>
+            <LocationCarousel></LocationCarousel>
+            <DetailPost />
+            <MapView data={data} />
+            <RelatedPost></RelatedPost>
+          </>
+        )}
       </div>
     </div>
   );
@@ -45,5 +48,5 @@ export default DetailPage;
 
 const override = css`
   display: block;
-  margin: 10rem auto;
+  margin: 25rem auto;
 `;
