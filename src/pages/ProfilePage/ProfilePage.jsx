@@ -6,17 +6,19 @@ import useFetch from '../../hooks/useFetch';
 import { WEB_SERVER_URL } from '../../configs';
 
 const data = {
+  isMyProfile: true,
   nickname: 'Mi-Shell',
   totalPost: 5331,
   totalFollower: 10128,
   totalFollowing: 1079,
-  introduction: "I'm Coffee Holic!",
+  introduction: 'Coffee Holic. Love Beer.',
   profileImage:
     'https://team-project-s3-bucket.s3.ap-northeast-2.amazonaws.com/profile-images/dummyUser%40google.com/myProfile.png'
 };
 
-const ProfilePage = () => {
+const ProfilePage = props => {
   //TODO: api완성 시 수정 예정
+  // const userId = props.userId //match.params에서 넘겨주는 userId
   // const [data, setData] = useState(null);
   // const {error, loading} = useFetch(`${WEB_SERVER_URL}/someapi...`, {}, setData)
   return (

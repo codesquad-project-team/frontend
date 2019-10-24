@@ -1,3 +1,5 @@
+@import '../../stylesheets/util.scss';
+
 .profile-info-wrapper {
   display: flex;
   justify-content: center;
@@ -26,11 +28,18 @@
   }
 
   &-username {
+    display: flex;
+    align-items: center;
     font-size: 3rem;
     font-weight: bold;
     padding-bottom: 2rem;
   }
 
+  button {
+    width: 8rem;
+    margin: 0 2rem;
+    padding: 0;
+  }
   &-overview {
     font-size: 2rem;
   }

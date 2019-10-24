@@ -5,6 +5,7 @@ import CommonBtn from '../CommonBtn/CommonBtn';
 
 const ProfileInfo = ({ data }) => {
   const {
+    isMyProfile,
     nickname,
     totalPost,
     totalFollower,
@@ -20,7 +21,14 @@ const ProfileInfo = ({ data }) => {
           <CommonBtn>팔로우</CommonBtn>
         </div>
         <div className="profile-info-right-column">
-          <div className="profile-info-username">{nickname}</div>
+          <div className="profile-info-username">
+            {nickname}
+            {isMyProfile && (
+              <CommonBtn className="profile-info-edit-btn">
+                프로필편집
+              </CommonBtn>
+            )}
+          </div>
           <div className="profile-info-overview">게시글 {totalPost}개</div>
           <div className="profile-info-overview">팔로워 {totalFollower}명</div>
           <div className="profile-info-overview">팔로잉 {totalFollowing}명</div>
