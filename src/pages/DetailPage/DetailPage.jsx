@@ -34,7 +34,7 @@ const DetailPage = props => {
         {!loading && (
           <>
             <LocationCarousel></LocationCarousel>
-            <DetailPost />
+            <DetailPost data={data} />
             <MapView data={data} />
             <RelatedPost></RelatedPost>
           </>
