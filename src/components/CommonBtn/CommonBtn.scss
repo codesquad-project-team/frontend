@@ -1,20 +1,18 @@
 @import '../../stylesheets/util.scss';
 
 .common-btn {
-  button {
-    height: 3rem;
-    margin: 1rem;
-    padding: 0 2rem;
-    font-size: 1.5rem;
-    border: 1px solid $main-color;
-    border-radius: 5px;
-    background-color: #fff;
-    white-space: nowrap;
-    cursor: pointer;
+  height: 3rem;
+  margin: 1rem;
+  padding: 0 2rem;
+  font-size: 1.5rem;
+  border: 1px solid $main-color;
+  border-radius: 5px;
+  background-color: #fff;
+  white-space: nowrap;
+  cursor: pointer;
 
-    &:hover {
-      background-color: $main-color;
-      color: #fff;
-    }
+  &:hover {
+    background-color: $main-color;
+    color: #fff;
   }
 }
