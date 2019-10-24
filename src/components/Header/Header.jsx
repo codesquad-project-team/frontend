@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Header.scss';
 import useInput from '../../hooks/useInput';
 import ProfileImage from '../ProfileImage/ProfileImage';
-import CommonBtn from './CommonBtn';
+import CommonBtn from '../CommonBtn/CommonBtn';
 import CommonModal from '../CommonModal/CommonModal';
 
 const isLoggedIn = false; //TODO: 로그인 기능 구현시 수정
