@@ -11,3 +11,6 @@ export const VIEWPORT_HEIGHT = Math.max(
 export const TRIGGER_POINT = 700;
 
 export const MAIN_COLOR = '#fe7c96';
+
+export const NEW_POST_FLOAT_IMG_URL =
+  'https://user-images.githubusercontent.com/42905468/67497195-9bcf9a00-f6b8-11e9-81f4-106ccfad8889.jpeg';
