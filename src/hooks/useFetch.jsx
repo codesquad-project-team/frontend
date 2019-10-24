@@ -18,7 +18,7 @@ const useFetch = (url, options, callback) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        await makeDelay(2000); //TODO: 배포시 제거
+        await makeDelay(500); //TODO: 배포시 제거
         const res = await fetch(url, options);
         if (res instanceof Promise) throw Error('REQUEST FAILED');
         if (!res.ok) throw Error(`STATUS CODE : ${res.status}`);
