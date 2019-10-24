@@ -8,8 +8,7 @@ const DetailPost = props => {
     titleCompanion,
     titlePlace,
     writerImageURL,
-    writerNickname,
-    postImageURLs
+    writerNickname
   } = props.data;
 
   const description = Buffer.from(props.data.description).toString();
