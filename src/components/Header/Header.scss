@@ -1,5 +1,10 @@
 @import '../../stylesheets/util.scss';
 
+.header-wrapper {
+  width: 100%;
+  height: 8rem;
+}
+
 .header {
   position: fixed;
   top: 0;
@@ -7,7 +12,7 @@
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  height: 8rem;
+  height: inherit;
   padding: 0 2rem;
   background: #fff;
   border: 1px solid #d4d4d4;

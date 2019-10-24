@@ -26,50 +26,52 @@ const Header = () => {
   };
 
   return (
-    <div className="header">
-      <h1>Connect Flavor</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="header-searchbar-icon-wrapper">
-          <img
-            className="header-searchbar-icon"
-            src="./resources/magnifier_icon.png"
-            alt=""
+    <div className="header-wrapper">
+      <div className="header">
+        <h1>Connect Flavor</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="header-searchbar-icon-wrapper">
+            <img
+              className="header-searchbar-icon"
+              src="./resources/magnifier_icon.png"
+              alt=""
+            />
+          </div>
+          <input
+            name="searchBar"
+            value={inputValue.searchBar}
+            onChange={handleChange}
           />
+        </form>
+        <div className="header-btns">
+          {isLoggedIn ? (
+            <ProfileImage small />
+          ) : (
+            <>
+              <CommonBtn className="signin-btn" onClick={handleSignin}>
+                로그인
+              </CommonBtn>
+              <CommonBtn className="signup-btn" onClick={handleSignup}>
+                회원가입
+              </CommonBtn>
+            </>
+          )}
         </div>
-        <input
-          name="searchBar"
-          value={inputValue.searchBar}
-          onChange={handleChange}
-        />
-      </form>
-      <div className="header-btns">
-        {isLoggedIn ? (
-          <ProfileImage small />
-        ) : (
-          <>
-            <CommonBtn className="signin-btn" onClick={handleSignin}>
-              로그인
-            </CommonBtn>
-            <CommonBtn className="signup-btn" onClick={handleSignup}>
-              회원가입
-            </CommonBtn>
-          </>
+
+        {!isLoggedIn && clickedSignin && (
+          <CommonModal
+            clickHandler={handleSignin}
+            target={'signin'}
+          ></CommonModal>
+        )}
+
+        {!isLoggedIn && clickedSignup && (
+          <CommonModal
+            clickHandler={handleSignup}
+            target={'signup'}
+          ></CommonModal>
         )}
       </div>
-
-      {!isLoggedIn && clickedSignin && (
-        <CommonModal
-          clickHandler={handleSignin}
-          target={'signin'}
-        ></CommonModal>
-      )}
-
-      {!isLoggedIn && clickedSignup && (
-        <CommonModal
-          clickHandler={handleSignup}
-          target={'signup'}
-        ></CommonModal>
-      )}
     </div>
   );
 };
