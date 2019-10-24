@@ -1,6 +1,7 @@
 import React from 'react';
 import './ProfileInfo.scss';
-import ProfileImage from '../../components/ProfileImage/ProfileImage';
+import ProfileImage from '../ProfileImage/ProfileImage';
+import CommonBtn from '../CommonBtn/CommonBtn';
 
 const ProfileInfo = ({ data }) => {
   const {
@@ -16,7 +17,7 @@ const ProfileInfo = ({ data }) => {
       <div className="profile-info">
         <div className="profile-info-left-column">
           <ProfileImage large src={profileImage} />
-          <button>팔로우</button>
+          <CommonBtn>팔로우</CommonBtn>
         </div>
         <div className="profile-info-right-column">
           <div className="profile-info-username">{nickname}</div>
