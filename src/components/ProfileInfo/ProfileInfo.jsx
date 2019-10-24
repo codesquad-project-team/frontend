@@ -1,5 +1,6 @@
 import React from 'react';
 import './ProfileInfo.scss';
+import { Link } from 'react-router-dom';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 
@@ -24,9 +25,11 @@ const ProfileInfo = ({ data }) => {
           <div className="profile-info-username">
             {nickname}
             {isMyProfile && (
-              <CommonBtn className="profile-info-edit-btn">
-                프로필편집
-              </CommonBtn>
+              <Link to="/profile/edit">
+                <CommonBtn className="profile-info-edit-btn">
+                  프로필편집
+                </CommonBtn>
+              </Link>
             )}
           </div>
           <div className="profile-info-overview">게시글 {totalPost}개</div>
