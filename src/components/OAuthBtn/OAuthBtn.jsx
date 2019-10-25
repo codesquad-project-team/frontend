@@ -1,9 +1,10 @@
 import React from 'react';
 import './OAuthBtn.scss';
 
-const OAuthBtn = ({ company, color, imgUrl, msg }) => {
+const OAuthBtn = ({ company, imgUrl, msg }) => {
   return (
-    <div className="OAuth-btn" style={{ backgroundColor: color }}>
+    <div className="OAuth-btn">
+      <img src={imgUrl}></img>
       <a className="OAuth-btn-company" href="">
         {company} 계정으로 {msg}
       </a>
