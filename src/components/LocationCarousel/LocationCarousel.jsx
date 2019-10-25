@@ -6,9 +6,9 @@ const LocationCarousel = ({ data }) => {
   const { postImageURLs } = data;
 
   const makeCarouselItem = imgUrls => {
-    return imgUrls.map(url => {
+    return imgUrls.map((url, index) => {
       return (
-        <Carousel.Item>
+        <Carousel.Item key={index}>
           <img className="d-block w-100" src={url} alt="Location Image" />
         </Carousel.Item>
       );
@@ -16,7 +16,7 @@ const LocationCarousel = ({ data }) => {
   };
 
   return (
-    <div class="location-carousel">
+    <div className="location-carousel">
       <Carousel>{makeCarouselItem(postImageURLs)}</Carousel>
     </div>
   );
