@@ -2,9 +2,10 @@ import { hot } from 'react-hot-loader/root';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage';
-import DetailPage from '../src/pages/DetailPage/DetailPage';
-import ProfileEditPage from '../src/pages/ProfileEditPage/ProfileEditPage';
+import DetailPage from './pages/DetailPage/DetailPage';
+import ProfileEditPage from './pages/ProfileEditPage/ProfileEditPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
+import PostUploadPage from './pages/PostUploadPage/PostUploadPage';
 
 const Root = () => {
   return (
@@ -18,6 +19,7 @@ const Root = () => {
           />
           <Route path="/profile/edit" render={() => <ProfileEditPage />} />
           <Route path="/profile" render={() => <ProfilePage />} />
+          <Route path="/post_upload" render={() => <PostUploadPage />} />
         </Switch>
       </Router>
     </>
