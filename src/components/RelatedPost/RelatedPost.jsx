@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './RelatedPost.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
-import RelatedPostComment from '../RelatedPostComment/RelatedPostComment';
+import RelatedPostComment from './RelatedPostComment';
+import { TRANSITION_DURATION_TIME, TRANSITION_DELAY_TIME } from '../../configs';
 
 const RelatedPost = () => {
   const [data, setData] = useState([]);
@@ -36,19 +37,17 @@ const RelatedPost = () => {
   const makeCarouselJsx = () => {
     const len = data.length;
 
-    if (!len) {
-      return (
+    {
+      return !len ? (
         <div className="related-post-carousel-wrap">
           <h3>아직 이 장소를 방문한 다른 사람이 없네요. 🥺</h3>;
         </div>
-      );
-    } else {
-      return (
+      ) : (
         <div
           className="related-post-carousel-wrap"
           style={{
             transform: `translateX(${positionX}px)`,
-            transition: `transform 1s ease 0s`
+            transition: `transform ${TRANSITION_DURATION_TIME} ease ${TRANSITION_DELAY_TIME}`
           }}
         >
           {makeCarouselItem()}

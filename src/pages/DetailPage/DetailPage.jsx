@@ -33,10 +33,10 @@ const DetailPage = props => {
         />
         {!loading && (
           <>
-            <LocationCarousel data={data}></LocationCarousel>
+            <LocationCarousel data={data} />
             <DetailPost data={data} />
             <MapView data={data} />
-            <RelatedPost></RelatedPost>
+            <RelatedPost />
           </>
         )}
       </div>

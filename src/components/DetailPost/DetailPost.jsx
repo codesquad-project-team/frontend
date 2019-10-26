@@ -8,15 +8,16 @@ const DetailPost = props => {
     titleCompanion,
     titlePlace,
     writerImageURL,
-    writerNickname
+    writerNickname,
+    description
   } = props.data;
 
-  const description = Buffer.from(props.data.description).toString();
+  const desc = Buffer.from(description).toString();
 
   return (
     <div className="detail-post">
       <h1 className="detail-post-title">
-        {titleCompanion}랑 {titlePlace}에서 {titleActivity}
+        {titlePlace}에서 {titleCompanion}랑 {titleActivity}
       </h1>
       <div className="detail-post-content">
         <div className="detail-post-writer-img">
@@ -24,7 +25,7 @@ const DetailPost = props => {
         </div>
         <div>
           <h3 className="detail-post-writer-name">{writerNickname}</h3>
-          <p className="detail-post-desc">{description}</p>
+          <p className="detail-post-desc">{desc}</p>
         </div>
       </div>
     </div>

@@ -1,5 +1,4 @@
 import React from 'react';
-import './RelatedPostComment.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 
 const RelatedPostComment = ({ titleCompanion, titleActivity }) => {
