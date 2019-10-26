@@ -12,7 +12,10 @@ const Root = () => {
       <Router>
         <Switch>
           <Route exact path="/" render={() => <MainPage />}></Route>
-          <Route path="/post" render={() => <DetailPage />}></Route>
+          <Route
+            path="/post/:postId"
+            render={({ match }) => <DetailPage postId={match.params.postId} />}
+          ></Route>
           <Route
             path="/profile/edit"
             render={() => <ProfileEditPage />}

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './RelatedPost.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
-import RelatedPostComment from '../RelatedPostComment/RelatedPostComment';
+import RelatedPostComment from './RelatedPostComment';
+import { TRANSITION_DURATION_TIME, TRANSITION_DELAY_TIME } from '../../configs';
 
 const RelatedPost = () => {
   const [data, setData] = useState([]);
@@ -36,19 +37,17 @@ const RelatedPost = () => {
   const makeCarouselJsx = () => {
     const len = data.length;
 
-    if (!len) {
-      return (
-        <div class="related-post-carousel-wrap">
+    {
+      return !len ? (
+        <div className="related-post-carousel-wrap">
           <h3>아직 이 장소를 방문한 다른 사람이 없네요. 🥺</h3>;
         </div>
-      );
-    } else {
-      return (
+      ) : (
         <div
-          class="related-post-carousel-wrap"
+          className="related-post-carousel-wrap"
           style={{
             transform: `translateX(${positionX}px)`,
-            transition: `transform 1s ease 0s`
+            transition: `transform ${TRANSITION_DURATION_TIME} ease ${TRANSITION_DELAY_TIME}`
           }}
         >
           {makeCarouselItem()}
@@ -78,21 +77,21 @@ const RelatedPost = () => {
   };
 
   return (
-    <div class="related-post">
+    <div className="related-post">
       <hr></hr>
-      <h2 class="related-post-header">이 장소를 방문한 사람들</h2>
+      <h2 className="related-post-header">이 장소를 방문한 사람들</h2>
 
-      <div class="related-post-carousel">{makeCarouselJsx()}</div>
+      <div className="related-post-carousel">{makeCarouselJsx()}</div>
       {data.length > 5 && (
-        <div class="related-post-carousel-btns">
+        <div className="related-post-carousel-btns">
           <button
-            class="carousel-btns-common prev-btn"
+            className="carousel-btns-common prev-btn"
             onClick={prevBtnHandler}
           >
             &lt;
           </button>
           <button
-            class="carousel-btns-common next-btn"
+            className="carousel-btns-common next-btn"
             onClick={nextBtnHandler}
           >
             &gt;
