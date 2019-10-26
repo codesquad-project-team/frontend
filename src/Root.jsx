@@ -5,15 +5,16 @@ import MainPage from './pages/MainPage/MainPage';
 import DetailPage from '../src/pages/DetailPage/DetailPage';
 import ProfileEditPage from '../src/pages/ProfileEditPage/ProfileEditPage';
 
-
-
 const Root = () => {
   return (
     <>
       <Router>
         <Switch>
           <Route exact path="/" render={() => <MainPage />}></Route>
-          <Route path="/post" render={() => <DetailPage />}></Route>
+          <Route
+            path="/post/:postId"
+            render={({ match }) => <DetailPage postId={match.params.postId} />}
+          ></Route>
           <Route
             path="/profile-edit"
             render={() => <ProfileEditPage />}

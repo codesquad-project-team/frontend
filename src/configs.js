@@ -9,3 +9,6 @@ export const VIEWPORT_HEIGHT = Math.max(
 );
 
 export const MAIN_COLOR = '#fe7c96';
+
+export const TRANSITION_DURATION_TIME = '1s';
+export const TRANSITION_DELAY_TIME = '0s';
