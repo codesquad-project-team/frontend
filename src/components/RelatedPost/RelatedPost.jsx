@@ -29,7 +29,7 @@ const RelatedPost = () => {
         <RelatedPostComment
           titleCompanion={item.titleCompanion}
           titleActivity={item.titleActivity}
-        ></RelatedPostComment>
+         />
       );
     });
   };
@@ -78,7 +78,7 @@ const RelatedPost = () => {
 
   return (
     <div className="related-post">
-      <hr></hr>
+      <hr />
       <h2 className="related-post-header">이 장소를 방문한 사람들</h2>
 
       <div className="related-post-carousel">{makeCarouselJsx()}</div>

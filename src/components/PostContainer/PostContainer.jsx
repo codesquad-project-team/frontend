@@ -62,7 +62,7 @@ const PostContainer = ({ headerOn, api }) => {
 
   const postItems = items.map(item => (
     <Link to={`/post/${item.postId}`} key={item.postId}>
-      <PostItem headerOn={headerOn} {...item}></PostItem>
+      <PostItem headerOn={headerOn} {...item} />
     </Link>
   ));
 

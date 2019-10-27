@@ -21,7 +21,7 @@ const DetailPost = props => {
       </h1>
       <div className="detail-post-content">
         <div className="detail-post-writer-img">
-          <ProfileImage small src={writerImageURL}></ProfileImage>
+          <ProfileImage small src={writerImageURL} />
         </div>
         <div>
           <h3 className="detail-post-writer-name">{writerNickname}</h3>

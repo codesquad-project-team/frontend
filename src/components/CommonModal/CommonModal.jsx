@@ -36,7 +36,7 @@ const CommonModal = ({ clickHandler, target }) => {
         </button>
         <div className="common-modal-content">
           <div className="common-modal-header">
-            <img src="../../../resources/logo.png"></img>
+            <img src="../../../resources/logo.png" />
             <h1>서비스 {content.title}</h1>
           </div>
           <p>{content.desc}</p>
@@ -45,17 +45,17 @@ const CommonModal = ({ clickHandler, target }) => {
               company="카카오"
               msg={content.title}
               imgUrl="../../../resources/kakao-logo.png"
-            ></OAuthBtn>
+             />
             <OAuthBtn
               company="페이스북"
               msg={content.title}
               imgUrl="../../../resources/facebook-logo.png"
-            ></OAuthBtn>
+             />
             <OAuthBtn
               company="인스타그램"
               msg={content.title}
               imgUrl="../../../resources/insta-logo.png"
-            ></OAuthBtn>
+             />
           </div>
           <p>
             {content.reminderMsg} <a href="">{content.hyperlinkMsg}</a>

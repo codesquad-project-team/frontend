@@ -62,14 +62,14 @@ const Header = () => {
           <CommonModal
             clickHandler={handleSignin}
             target={'signin'}
-          ></CommonModal>
+           />
         )}
 
         {!isLoggedIn && clickedSignup && (
           <CommonModal
             clickHandler={handleSignup}
             target={'signup'}
-          ></CommonModal>
+           />
         )}
       </div>
     </div>

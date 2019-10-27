@@ -5,7 +5,7 @@ const RelatedPostComment = ({ titleCompanion, titleActivity }) => {
   return (
     <div className="related-post-carousel-item">
       <h3 className="related-post-comment">
-        <ProfileImage medium></ProfileImage>
+        <ProfileImage medium />
         {titleCompanion}
         <br />
         {titleActivity}

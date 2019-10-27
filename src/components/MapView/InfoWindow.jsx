@@ -51,7 +51,7 @@ const InfoWindow = props => {
       <img
         className="info-window-close-image"
         src="./resources/times-solid.png"
-      ></img>
+       />
     </>
   );
 };
