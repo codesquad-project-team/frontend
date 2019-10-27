@@ -1,11 +1,13 @@
+@import '../../stylesheets/util.scss';
+
 .profile-edit-page-content-item {
   font-size: 2rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
   display: flex;
   align-items: center;
 
   label {
-    font-weight: 500;
+    font-weight: bold;
     width: 30%;
     text-align: right;
     padding-right: 3rem;
@@ -13,8 +15,8 @@
 
   input {
     width: 60%;
-    border: none;
-    border: 1px solid lightgray;
-    border-radius: 0.5rem;
+    border: 1px solid $gray-border-color;
+    border-radius: 0.3rem;
+    padding-left: 1rem;
   }
 }
