@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Header from '../../components/Header/Header';
 import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
 import PostContainer from '../../components/PostContainer/PostContainer';
-import NewPostFloat from '../../components/NewPostFloat/NewPostFloat';
+import NewPostBtn from '../../components/NewPostBtn/NewPostBtn';
 import useFetch from '../../hooks/useFetch';
 import { WEB_SERVER_URL } from '../../configs';
 
@@ -25,7 +25,7 @@ const ProfilePage = props => {
   return (
     <div className="profile-page">
       <Header />
-      <NewPostFloat />
+      <NewPostBtn />
       <ProfileInfo data={data} />
       <PostContainer api="/post?page=" />
     </div>
