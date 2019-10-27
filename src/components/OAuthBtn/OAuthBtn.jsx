@@ -5,7 +5,7 @@ const OAuthBtn = ({ company, imgUrl, msg }) => {
   return (
     <div className="OAuth-btn">
       <img src={imgUrl}></img>
-      <a className="OAuth-btn-company" href="">
+      <a className="OAuth-btn-text" href="">
         {company} 계정으로 {msg}
       </a>
     </div>

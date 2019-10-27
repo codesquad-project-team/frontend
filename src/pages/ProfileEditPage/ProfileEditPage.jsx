@@ -33,8 +33,8 @@ const ProfileEditPage = () => {
 
   return (
     <>
-      <Header></Header>
-      <div className="profile-edit-page-dimmed">
+      <Header />
+      <div className="profile-edit-page-dimmed-background">
         <div className="profile-edit-page">
           <div className="profile-edit-page-nav">
             <div className="profile-edit-page-nav-item">프로필 편집</div>
