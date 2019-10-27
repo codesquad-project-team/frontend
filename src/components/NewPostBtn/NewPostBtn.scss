@@ -1,0 +1,35 @@
+@import '../../stylesheets/util.scss';
+
+.new-post-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 10rem;
+  right: 10rem;
+  width: 15rem;
+  height: 15rem;
+  border: 1px solid $main-color;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    animation: bounce 0.75s linear;
+  }
+
+  @keyframes bounce {
+    0%,
+    50%,
+    100% {
+      transform: translateY(0);
+    }
+    30%,
+    40% {
+      transform: translateY(-2rem);
+    }
+    70%,
+    85% {
+      transform: translateY(-1.5rem);
+    }
+  }
+}

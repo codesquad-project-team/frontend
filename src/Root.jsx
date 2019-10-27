@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage';
 import DetailPage from '../src/pages/DetailPage/DetailPage';
 import ProfileEditPage from '../src/pages/ProfileEditPage/ProfileEditPage';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
 
 const Root = () => {
   return (
@@ -16,9 +17,10 @@ const Root = () => {
             render={({ match }) => <DetailPage postId={match.params.postId} />}
           ></Route>
           <Route
-            path="/profile-edit"
+            path="/profile/edit"
             render={() => <ProfileEditPage />}
           ></Route>
+          <Route path="/profile" render={() => <ProfilePage />}></Route>
         </Switch>
       </Router>
     </>

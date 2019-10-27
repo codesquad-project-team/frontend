@@ -1,0 +1,59 @@
+@import '../../stylesheets/util.scss';
+
+.profile-info-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.profile-info {
+  display: grid;
+  grid-template-columns: 25% 25% 50%;
+  grid-template-areas: '. left right';
+  width: 94rem;
+  height: 27rem;
+  padding: 5rem 0 2rem 0;
+
+  &-left-column {
+    grid-area: left;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &-right-column {
+    grid-area: right;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+  }
+
+  &-username {
+    display: flex;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: bold;
+    padding-bottom: 2rem;
+
+    a {
+      display: flex;
+      margin: 0 2rem;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  button {
+    width: 8rem;
+    margin: 0;
+    padding: 0;
+  }
+  &-overview {
+    font-size: 2rem;
+  }
+
+  &-introduction {
+    font-size: 2rem;
+    padding: 1rem 0;
+  }
+}
