@@ -10,6 +10,5 @@ const NewPostBtn = () => {
       src={`${IMAGE_BUCKET_URL}/new-post-btn-image.jpeg`}
     />
   );
-};
 
 export default NewPostBtn;

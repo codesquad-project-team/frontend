@@ -13,3 +13,6 @@ export const TRANSITION_DURATION_TIME = '1s';
 export const TRANSITION_DELAY_TIME = '0s';
 
 export const IMAGE_BUCKET_URL = `https://team-project-s3-bucket.s3.ap-northeast-2.amazonaws.com/resources`;
+
+export const TRANSITION_DURATION_TIME = '1s';
+export const TRANSITION_DELAY_TIME = '0s';

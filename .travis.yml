@@ -26,7 +26,7 @@ deploy: # 배포
   - provider: s3 # AWS S3를 의미
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
     secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
-    bucket: deploy-connect-flavor # S3에 생성한 버킷
+    bucket: team-project-s3-bucket # S3에 생성한 버킷
     region: ap-northeast-2
     skip_cleanup: true
     local_dir: dist # deploy 디렉터리에 있는 파일을 s3로 업로드 하겠다는 의미
