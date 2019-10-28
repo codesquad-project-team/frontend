@@ -4,6 +4,7 @@ import useInput from '../../hooks/useInput';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CommonModal from '../CommonModal/CommonModal';
+import { IMAGE_BUCKET_URL } from '../../configs';
 
 const isLoggedIn = false; //TODO: 로그인 기능 구현시 수정
 
@@ -33,7 +34,7 @@ const Header = () => {
           <div className="header-searchbar-icon-wrapper">
             <img
               className="header-searchbar-icon"
-              src="./resources/magnifier_icon.png"
+              src={`${IMAGE_BUCKET_URL}/magnifier_icon.png`}
               alt=""
             />
           </div>
@@ -59,17 +60,11 @@ const Header = () => {
         </div>
 
         {!isLoggedIn && clickedSignin && (
-          <CommonModal
-            clickHandler={handleSignin}
-            target={'signin'}
-           />
+          <CommonModal clickHandler={handleSignin} target={'signin'} />
         )}
 
         {!isLoggedIn && clickedSignup && (
-          <CommonModal
-            clickHandler={handleSignup}
-            target={'signup'}
-           />
+          <CommonModal clickHandler={handleSignup} target={'signup'} />
         )}
       </div>
     </div>
