@@ -10,9 +10,9 @@ script:
 branches:
   only:
     - master
-# env:
-#   global:
-#     - TRAVIS_BUILD_DIR: './build'
+
+env:
+  - NAVER_MAP_CLIENT_ID=$NAVER_MAP_CLIENT_ID
 
 before_deploy: # 배포하기전 하는 작업들
   - rm -rf node_modules # travis가 설치한 node_moduels를 삭제
