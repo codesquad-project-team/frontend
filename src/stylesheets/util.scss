@@ -1,0 +1,21 @@
+$main-color: #fe7c96;
+$main-color-light: #ff9eb1;
+
+$point-color: #fff59d;
+
+$main-gradient: radial-gradient(
+  circle farthest-corner at 10% 20%,
+  rgba(255, 168, 114, 1) 0%,
+  rgba(254, 106, 164, 1) 100.2%
+);
+
+$sub-gradient: radial-gradient(
+  circle farthest-corner at 10% 20%,
+  rgba(255, 195, 140, 1) 0%,
+  rgba(255, 134, 191, 1) 100.2%
+);
+
+$gray-background-color: #f5f5f5;
+$gray-border-color: #e0e0e0;
+$gray-font-color: #bdbdbd;
+$dark-gray-font-color: #616161;
