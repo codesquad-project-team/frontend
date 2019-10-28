@@ -1,0 +1,13 @@
+language: node_js # 언어는 node_js
+node_js:
+  - '12.8' # node_js에 버전 10.14
+before_install: # 패키지를 다운로드 받기 전
+  - npm install -g yarn # yarn을 글로벌로 설치
+branches:
+  only:
+    - master
+notifications: # 성공 실패 여부 알림
+  email:
+    recipients:
+      - hwrng2@gmail.com
+      - revenoir7@gmail.com
