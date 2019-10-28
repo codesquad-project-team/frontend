@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './CommonModal.scss';
 import OAuthBtn from '../OAuthBtn/OAuthBtn';
+import { IMAGE_BUCKET_URL } from '../../configs';
 
 const CommonModal = ({ clickHandler, target }) => {
   const content =
@@ -36,7 +37,7 @@ const CommonModal = ({ clickHandler, target }) => {
         </button>
         <div className="common-modal-content">
           <div className="common-modal-header">
-            <img src="../../../resources/logo.png" />
+            <img src={`${IMAGE_BUCKET_URL}/logo.png`} />
             <h1>서비스 {content.title}</h1>
           </div>
           <p>{content.desc}</p>
@@ -44,18 +45,18 @@ const CommonModal = ({ clickHandler, target }) => {
             <OAuthBtn
               company="카카오"
               msg={content.title}
-              imgUrl="../../../resources/kakao-logo.png"
-             />
+              imgUrl={`${IMAGE_BUCKET_URL}/kakao-logo.png`}
+            />
             <OAuthBtn
               company="페이스북"
               msg={content.title}
-              imgUrl="../../../resources/facebook-logo.png"
-             />
+              imgUrl={`${IMAGE_BUCKET_URL}/facebook-logo.png`}
+            />
             <OAuthBtn
               company="인스타그램"
               msg={content.title}
-              imgUrl="../../../resources/insta-logo.png"
-             />
+              imgUrl={`${IMAGE_BUCKET_URL}/insta-logo.png`}
+            />
           </div>
           <p>
             {content.reminderMsg} <a href="">{content.hyperlinkMsg}</a>

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './InfoWindow.scss';
+import { IMAGE_BUCKET_URL } from '../../configs';
 
 const InfoWindow = props => {
   const {
@@ -45,13 +46,13 @@ const InfoWindow = props => {
       </div>
       <img
         className="info-window-arrow-image"
-        src="./resources/info-window-arrow.png"
+        src={`${IMAGE_BUCKET_URL}/info-window-arrow.png`}
         alt=""
       />
       <img
         className="info-window-close-image"
-        src="./resources/times-solid.png"
-       />
+        src={`${IMAGE_BUCKET_URL}/times-solid.png`}
+      />
     </>
   );
 };
