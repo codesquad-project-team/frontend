@@ -1,2 +1,51 @@
+@import '../../stylesheets/util.scss';
+
 .post-upload-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 4rem 0;
+    width: 60rem;
+    height: 40rem;
+    border: 1px solid $gray-border-color;
+  }
+
+  &-title {
+    input {
+      width: 20rem;
+      height: 5rem;
+      font-size: 4rem;
+      border: none;
+      border-bottom: 1px solid $gray-border-color;
+      text-align: center;
+    }
+
+    span {
+      font-size: 4rem;
+      margin-right: 2rem;
+    }
+
+    select {
+      font-size: 4rem;
+    }
+  }
+
+  textarea {
+    margin: 4rem 0;
+    width: 60rem;
+    height: 10rem;
+    font-size: 3rem;
+    border: 1px solid $gray-border-color;
+  }
+
+  &-btns {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 4rem;
+  }
 }
