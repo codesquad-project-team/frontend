@@ -15,16 +15,16 @@
 
   &-small {
     width: 10rem;
-    height: 10rem;
+    min-height: 10rem;
   }
 
   &-medium {
     width: 20rem;
-    height: 20rem;
+    min-height: 20rem;
   }
 
   &-large {
     width: 80rem;
-    height: 60rem;
+    min-height: 60rem;
   }
 }
