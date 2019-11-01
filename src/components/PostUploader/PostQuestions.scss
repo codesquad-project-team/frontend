@@ -1,0 +1,31 @@
+@import '../../stylesheets/util.scss';
+
+.post-questions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 20rem;
+
+  &-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  div {
+    font-size: 2rem;
+  }
+
+  button {
+    font-size: 1.5rem;
+    background-color: #fff;
+    border: 1px solid $gray-border-color;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: $main-color;
+      color: #fff;
+    }
+  }
+}

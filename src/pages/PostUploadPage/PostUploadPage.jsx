@@ -6,6 +6,7 @@ import ImageUploader from '../../components/PostUploader/ImageUploader';
 import LocationUploader from '../../components/PostUploader/LocationUploader';
 import TitleUploader from '../../components/PostUploader/TitleUploader';
 import CommentUploader from '../../components/PostUploader/CommentUploader';
+import PostQuestions from '../../components/PostUploader/PostQuestions';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 
 const PostUploadPage = () => {
@@ -18,6 +19,7 @@ const PostUploadPage = () => {
           <LocationUploader />
           <TitleUploader />
           <CommentUploader />
+          <PostQuestions />
           <div className="post-upload-page-btns">
             <CommonBtn>작성</CommonBtn>
             <CommonBtn>취소</CommonBtn>
