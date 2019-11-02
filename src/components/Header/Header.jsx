@@ -7,10 +7,10 @@ import CommonBtn from '../CommonBtn/CommonBtn';
 import CommonModal from '../CommonModal/CommonModal';
 import { IMAGE_BUCKET_URL } from '../../configs';
 
-const isLoggedIn = true; //TODO: 로그인 기능 구현시 수정
+const isLoggedIn = false; //TODO: 로그인 기능 구현시 수정
 
 const Header = () => {
-  const [inputValue, handleChange, restore] = useInput();
+  const { inputValue, handleChange, restore } = useInput();
   const [clickedSignup, setClickedSignup] = useState(false);
   const [clickedSignin, setClickedSignin] = useState(false);
 
