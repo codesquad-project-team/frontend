@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './LocationFinder.scss';
 import NaverMap, { Overlay, Marker } from 'react-naver-map';
 import useFetch from '../../hooks/useFetch';
@@ -17,6 +17,11 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
   const { locationKeyword } = inputValue;
 
   const [searchResult, setSearchResult] = useState(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   return (
     <div className="location-finder">
@@ -27,6 +32,7 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
             className="location-finder-search-icon"
           />
           <input
+            ref={inputRef}
             type="text"
             name="locationKeyword"
             value={locationKeyword}
