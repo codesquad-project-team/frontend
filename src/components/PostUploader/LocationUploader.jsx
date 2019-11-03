@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import useModal from './Modal';
+import LocationFinder from './LocationFinder';
 
 const LocationUploader = () => {
   const { Modal, handleClick, open } = useModal();
   return (
-    <div>
+    <>
       <button onClick={handleClick}>장소검색</button>
       {open && (
         <Modal onClick={handleClick}>
-          <div style={{ width: '100px', height: '100px', background: '#fff' }}>
-            test
-            <button onClick={handleClick}>close</button>
-          </div>
+          <LocationFinder onClick={handleClick} />
         </Modal>
       )}
-    </div>
+    </>
   );
 };
 
