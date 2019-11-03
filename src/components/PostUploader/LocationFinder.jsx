@@ -5,6 +5,7 @@ import useFetch from '../../hooks/useFetch';
 import useInput from '../../hooks/useInput';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import { NAVER_MAP_CLIENT_ID } from '../../../map_constants';
+import { IMAGE_BUCKET_URL } from '../../configs';
 
 const LocationFinder = ({ className = '', onClick, ...restProps }) => {
   //TODO: 추후 기능 구현 시 fetch로 수정
@@ -21,6 +22,10 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
     <div className="location-finder">
       <div className="location-finder-header">
         <form onSubmit={() => {}}>
+          <img
+            src={`${IMAGE_BUCKET_URL}/magnifier_icon.png`}
+            className="location-finder-search-icon"
+          />
           <input
             type="text"
             name="locationKeyword"
@@ -28,10 +33,7 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
             onChange={handleChange}
           />
         </form>
-        <button
-          onClick={onClick}
-          className="location-finder-close-btn"
-         />
+        <button onClick={onClick} className="location-finder-close-btn" />
       </div>
       <div className="location-finder-content">
         <div className="location-finder-search-result">{searchResult}</div>
