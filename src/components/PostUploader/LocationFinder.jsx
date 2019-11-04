@@ -31,13 +31,14 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
 
   const [searchResult, setSearchResult] = useState(tempData);
   const results = searchResult.map(item => (
-    <div className="location-finder-result-item">
+    <div key={item.locationLatitude} className="location-finder-result-item">
       <div className="location-finder-result-item-name">{item.name}</div>
       <div className="location-finder-result-item-address">{item.address}</div>
     </div>
   ));
   const markers = searchResult.map(item => (
     <Marker
+      key={item.locationLatitude}
       lat={item.locationLatitude}
       lng={item.locationLongitude}
       onClick={() => {}} // id: given id, event: PointerEvent
