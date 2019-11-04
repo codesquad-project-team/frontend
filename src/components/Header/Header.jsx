@@ -27,10 +27,14 @@ const Header = () => {
     clickedSignup ? setClickedSignup(false) : setClickedSignup(true);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="header-wrapper">
       <div className="header">
-        <Link to="/" className="header-title">
+        <Link to="/" className="header-title" onClick={scrollToTop}>
           <h1>Connect Flavor</h1>
         </Link>
         <form onSubmit={handleSubmit}>
