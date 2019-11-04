@@ -36,44 +36,6 @@
     }
   }
 
-  &-close-btn {
-    position: relative;
-    width: 4rem;
-    height: inherit;
-    background-color: transparent;
-    border: 0;
-    transition: all 0.25s;
-    &:hover {
-      transform: rotate(180deg);
-    }
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: auto;
-      width: 1px;
-      height: 20px;
-      background-color: #000;
-      transform: rotate(45deg);
-    }
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: auto;
-      width: 1px;
-      height: 20px;
-      background-color: #000;
-      transform: rotate(-45deg);
-    }
-  }
-
   &-content {
     display: flex;
     border-top: 1px solid $gray-border-color;

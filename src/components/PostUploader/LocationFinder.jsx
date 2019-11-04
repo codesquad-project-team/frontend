@@ -3,6 +3,7 @@ import './LocationFinder.scss';
 import NaverMap, { Marker } from 'react-naver-map';
 import useInput from '../../hooks/useInput';
 import CommonBtn from '../CommonBtn/CommonBtn';
+import CloseBtn from '../CommonBtn/CloseBtn';
 import { NAVER_MAP_CLIENT_ID } from '../../../map_constants';
 import { WEB_SERVER_URL, IMAGE_BUCKET_URL } from '../../configs';
 
@@ -86,7 +87,7 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
             placeholder="장소명을 입력해주세요"
           />
         </form>
-        <button onClick={onClick} className="location-finder-close-btn" />
+        <CloseBtn onClick={onClick} />
       </div>
       <div className="location-finder-content">
         <div className="location-finder-search-result">{results}</div>

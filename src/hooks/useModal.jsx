@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Modal.scss';
+import './useModal.scss';
 
 const Modal = ({ className = '', onClick, children }) => {
   useEffect(() => {
