@@ -30,7 +30,9 @@ const Header = () => {
   return (
     <div className="header-wrapper">
       <div className="header">
-        <h1>Connect Flavor</h1>
+        <Link to="/" className="header-title">
+          <h1>Connect Flavor</h1>
+        </Link>
         <form onSubmit={handleSubmit}>
           <div className="header-searchbar-icon-wrapper">
             <img

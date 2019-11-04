@@ -15,11 +15,8 @@ const Root = () => {
           <Route
             path="/post/:postId"
             render={({ match }) => <DetailPage postId={match.params.postId} />}
-           />
-          <Route
-            path="/profile/edit"
-            render={() => <ProfileEditPage />}
-           />
+          />
+          <Route path="/profile/edit" render={() => <ProfileEditPage />} />
           <Route path="/profile" render={() => <ProfilePage />} />
         </Switch>
       </Router>
