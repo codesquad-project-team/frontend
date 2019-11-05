@@ -1,12 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const ToolTip = ({ id, children }) => {
+const ToolTip = ({ width, height, padding, id, children }) => {
+  const [layout, setLayout] = useState(null);
   useEffect(() => {
-    const target = document.querySelector(`[data-tooltip="${id}"]`);
-    console.log(target);
+    const { offsetTop, offsetLeft, clientWidth } = document.querySelector(
+      `[data-tooltip="${id}"]`
+    );
+    setLayout({
+      top: `${offsetTop}px`,
+      left: `${offsetLeft + clientWidth / 2}px`
+    });
   }, []);
   return (
-    <div className="tooltip-background">
+    <div
+      className="tooltip-background"
+      style={{
+        position: 'fixed',
+        ...layout,
+        transform: 'translate(-50%, -200%)'
+      }}
+    >
       <div className="tooltip-arrow" />
       <div className="tooltip-label">{children}</div>
     </div>
