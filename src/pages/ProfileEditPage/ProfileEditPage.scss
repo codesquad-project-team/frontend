@@ -37,23 +37,14 @@
 
       .submit-btn {
         font-size: 2rem;
-        background-color: $main-color;
-        border: 0;
         margin: 4rem 0 0 3rem;
-
-        &:hover {
-          background-color: $main-color-light;
-        }
+        padding: 0.5rem 2rem;
+        border-radius: 5px;
+        white-space: nowrap;
       }
     }
 
     &-item {
-      button {
-        border: none;
-        font-weight: bold;
-        color: $main-color;
-      }
-
       .profile-image {
         margin: 0 2rem 2rem 18rem;
       }

@@ -9,6 +9,7 @@ import useFetch from '../../hooks/useFetch';
 import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
+import CommonBtn from '../../components/CommonBtn/CommonBtn';
 
 const ProfileEditPage = () => {
   const [inputValue, setInputValue, handleChange, restore] = useInput();
@@ -52,7 +53,7 @@ const ProfileEditPage = () => {
             <form className="profile-edit-page-content-form">
               <div className="profile-edit-page-content-item">
                 <ProfileImage medium src={profileImage} />
-                <button>프로필 사진 바꾸기</button>
+                <CommonBtn styleType="underline">프로필 사진 바꾸기</CommonBtn>
               </div>
               <ProfileContentItem
                 label="닉네임"
@@ -78,9 +79,13 @@ const ProfileEditPage = () => {
                 name="phone"
                 changeHandler={handleChange}
               />
-              <Button type="submit" className="submit-btn">
+              <CommonBtn
+                className="submit-btn"
+                type="submit"
+                styleType="emphasize"
+              >
                 제출
-              </Button>
+              </CommonBtn>
             </form>
           )}
         </div>
