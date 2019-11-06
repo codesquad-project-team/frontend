@@ -4,7 +4,6 @@ import NaverMap, { Marker } from 'react-naver-map';
 import useInput from '../../hooks/useInput';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CloseBtn from '../CommonBtn/CloseBtn';
-import { NAVER_MAP_CLIENT_ID } from '../../../map_constants';
 import { WEB_SERVER_URL, IMAGE_BUCKET_URL } from '../../configs';
 
 const locationLatitude = 37.5845218; //initial location
@@ -93,6 +92,7 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
       <div className="location-finder-content">
         <div className="location-finder-search-result">{results}</div>
         <NaverMap
+          // eslint-disable-next-line no-undef
           clientId={NAVER_MAP_CLIENT_ID}
           ncp
           style={{ width: '570px', height: '400px' }}
