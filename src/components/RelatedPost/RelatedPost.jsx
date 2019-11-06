@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './RelatedPost.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import RelatedPostComment from './RelatedPostComment';
-import { TRANSITION_DURATION_TIME, TRANSITION_DELAY_TIME } from '../../configs';
+import {
+  TRANSITION_DURATION_TIME,
+  TRANSITION_DELAY_TIME,
+  WEB_SERVER_URL
+} from '../../configs';
 
 const RelatedPost = () => {
   const [data, setData] = useState([]);
@@ -12,7 +16,7 @@ const RelatedPost = () => {
   useEffect(() => {
     async function fetchData() {
       const response = await fetch(
-        'http://13.124.93.76/post/related-to?post-id=1&page=1'
+        `${WEB_SERVER_URL}/post/related-to?post-id=1&page=1`
       );
       const json = await response.json();
       setData(json);
@@ -29,7 +33,7 @@ const RelatedPost = () => {
         <RelatedPostComment
           titleCompanion={item.titleCompanion}
           titleActivity={item.titleActivity}
-         />
+        />
       );
     });
   };

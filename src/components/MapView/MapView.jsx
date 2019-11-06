@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import NaverMap, { Overlay, Marker } from 'react-naver-map';
-import { NAVER_MAP_CLIENT_ID } from '../../../map_constants';
 import InfoWindow from '../MapView/InfoWindow';
 
 const MapView = props => {
@@ -11,6 +10,7 @@ const MapView = props => {
   return (
     <div>
       <NaverMap
+        // eslint-disable-next-line no-undef
         clientId={NAVER_MAP_CLIENT_ID}
         ncp
         style={{ width: '800px', height: '500px' }}

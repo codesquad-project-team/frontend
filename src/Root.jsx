@@ -11,16 +11,16 @@ const Root = () => {
     <>
       <Router>
         <Switch>
-          <Route exact path="/" render={() => <MainPage />}></Route>
+          <Route exact path="/" render={() => <MainPage />} />
           <Route
             path="/post/:postId"
             render={({ match }) => <DetailPage postId={match.params.postId} />}
-          ></Route>
+           />
           <Route
             path="/profile/edit"
             render={() => <ProfileEditPage />}
-          ></Route>
-          <Route path="/profile" render={() => <ProfilePage />}></Route>
+           />
+          <Route path="/profile" render={() => <ProfilePage />} />
         </Switch>
       </Router>
     </>

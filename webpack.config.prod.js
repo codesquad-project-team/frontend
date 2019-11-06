@@ -1,6 +1,9 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
+const { DefinePlugin } = require('webpack');
+
+const { NAVER_MAP_CLIENT_ID } = process.env;
 
 module.exports = {
   mode: 'production',
@@ -62,6 +65,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/index.html'
     }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
+    new DefinePlugin({
+      NAVER_MAP_CLIENT_ID: JSON.stringify(NAVER_MAP_CLIENT_ID)
+    })
   ]
 };

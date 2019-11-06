@@ -14,8 +14,10 @@ const ProfileEditPage = () => {
   const [inputValue, setInputValue, handleChange, restore] = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
 
-  const { loading, error } = useFetch(`${WEB_SERVER_URL}/user/info`, {}, json =>
-    initUserInfo(json)
+  const { loading, error } = useFetch(
+    `${WEB_SERVER_URL}/user/myinfo`,
+    {},
+    json => initUserInfo(json)
   );
 
   const initUserInfo = userInfo => {
@@ -57,25 +59,25 @@ const ProfileEditPage = () => {
                 value={nickname}
                 name="nickname"
                 changeHandler={handleChange}
-               />
+              />
               <ProfileContentItem
                 label="소개"
                 value={introduction}
                 name="introduction"
                 changeHandler={handleChange}
-               />
+              />
               <ProfileContentItem
                 label="이메일"
                 value={email}
                 name="email"
                 changeHandler={handleChange}
-               />
+              />
               <ProfileContentItem
                 label="휴대폰 번호"
                 value={phone}
                 name="phone"
                 changeHandler={handleChange}
-               />
+              />
               <Button type="submit" className="submit-btn">
                 제출
               </Button>
