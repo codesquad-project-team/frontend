@@ -7,7 +7,7 @@ const CommonBtn = props => {
   const { children, className = '', styleType = 'none', ...restProps } = props;
 
   const styleClassName = getStyleClassName({
-    props: styleType,
+    styleType,
     prefix: `common-btn`
   });
 
