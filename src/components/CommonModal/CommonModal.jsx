@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './CommonModal.scss';
 import OAuthBtn from '../OAuthBtn/OAuthBtn';
 import { IMAGE_BUCKET_URL } from '../../configs';
+import CommonBtn from '../CommonBtn/CommonBtn';
 
 const CommonModal = ({ clickHandler, target }) => {
   const content =
@@ -59,7 +60,8 @@ const CommonModal = ({ clickHandler, target }) => {
             />
           </div>
           <p>
-            {content.reminderMsg} <a href="">{content.hyperlinkMsg}</a>
+            {content.reminderMsg}
+            <CommonBtn styleType="underline">{content.hyperlinkMsg}</CommonBtn>
           </p>
         </div>
       </div>
