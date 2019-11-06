@@ -1,0 +1,25 @@
+@import '../../stylesheets/util.scss';
+
+.OAuth-btn {
+  margin-top: 2rem;
+  font-size: 1.8rem;
+  border-radius: 0.8rem;
+  padding: 0.6rem;
+  border: 1px solid $main-color;
+
+  img {
+    width: 3rem;
+    height: 3rem;
+    margin-right: 1rem;
+  }
+
+  &-text {
+    text-decoration: none;
+    color: $dark-gray-font-color;
+
+    &:hover {
+      text-decoration: none;
+      color: $dark-gray-font-color;
+    }
+  }
+}

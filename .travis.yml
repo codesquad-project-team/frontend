@@ -1,0 +1,33 @@
+language: node_js
+node_js:
+  - '12.8'
+before_install: # 패키지를 다운로드 받기 전
+  - npm install -g yarn # travis 환경에 yarn을 글로벌 설치
+branches:
+  only:
+    - master
+
+env:
+  - NAVER_MAP_CLIENT_ID=$NAVER_MAP_CLIENT_ID
+
+before_deploy: # 배포하기전 하는 작업들
+  - rm -rf node_modules # travis가 설치한 node_moduels를 삭제
+
+deploy: # 배포
+  - provider: s3 # AWS S3를 의미
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: connectflavor.cf # S3에 생성한 버킷
+    region: ap-northeast-2
+    skip_cleanup: true
+    local_dir: dist # dist 디렉터리에 있는 파일을 s3로 업로드 하겠다는 의미
+    wait-until-deployed: true
+    on:
+      repo: codesquad-project-team/frontend #Github 주소
+      branch: master
+
+notifications: # 성공 실패 여부 알림
+  email:
+    recipients:
+      - hwrng2@gmail.com
+      - revenoir7@gmail.com
