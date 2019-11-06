@@ -49,10 +49,18 @@ const Header = () => {
             <ProfileImage small />
           ) : (
             <>
-              <CommonBtn className="signin-btn" onClick={handleSignin}>
+              <CommonBtn
+                className="signin-btn"
+                onClick={handleSignin}
+                styleType="normal"
+              >
                 로그인
               </CommonBtn>
-              <CommonBtn className="signup-btn" onClick={handleSignup}>
+              <CommonBtn
+                className="signup-btn"
+                onClick={handleSignup}
+                styleType="normal"
+              >
                 회원가입
               </CommonBtn>
             </>

@@ -61,5 +61,15 @@
     flex: 1;
     display: flex;
     justify-content: flex-end;
+
+    .signin-btn,
+    .signup-btn {
+      height: 3rem;
+      margin: 1rem;
+      padding: 0 2rem;
+      font-size: 1.5rem;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
   }
 }
