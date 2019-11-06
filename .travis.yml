@@ -7,6 +7,9 @@ branches:
   only:
     - master
 
+script:
+  - yarn build
+
 env:
   - NAVER_MAP_CLIENT_ID=$NAVER_MAP_CLIENT_ID
 
