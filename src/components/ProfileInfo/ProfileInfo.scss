@@ -43,11 +43,14 @@
     }
   }
 
-  button {
+  &-follow-btn,
+  &-edit-btn {
     width: 8rem;
-    margin: 0;
-    padding: 0;
+    font-size: 1.5rem;
+    height: 3rem;
+    border-radius: 5px;
   }
+
   &-overview {
     font-size: 2rem;
   }

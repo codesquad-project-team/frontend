@@ -19,14 +19,16 @@ const ProfileInfo = ({ data }) => {
       <div className="profile-info">
         <div className="profile-info-left-column">
           <ProfileImage large src={profileImage} />
-          <CommonBtn>팔로우</CommonBtn>
+          <CommonBtn className="profile-info-follow-btn" styleType="normal">
+            팔로우
+          </CommonBtn>
         </div>
         <div className="profile-info-right-column">
           <div className="profile-info-username">
             {nickname}
             {isMyProfile && (
               <Link to="/profile/edit">
-                <CommonBtn className="profile-info-edit-btn">
+                <CommonBtn className="profile-info-edit-btn" styleType="normal">
                   프로필편집
                 </CommonBtn>
               </Link>
