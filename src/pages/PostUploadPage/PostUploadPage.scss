@@ -1,5 +1,9 @@
 @import '../../stylesheets/util.scss';
 
+.post-upload-page-background {
+  background: $sub-gradient;
+}
+
 .post-upload-page {
   display: flex;
   flex-direction: column;

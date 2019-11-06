@@ -13,7 +13,7 @@ const PostUploadPage = () => {
   return (
     <>
       <Header />
-      <CommonCard.background>
+      <CommonCard.background className="post-upload-page-background">
         <CommonCard large className="post-upload-page">
           <ImageUploader />
           <LocationUploader />
