@@ -26,7 +26,7 @@ const ProfilePage = props => {
   return (
     <div className="profile-page">
       <Header />
-      <Link to="/post_upload">
+      <Link to="/post/upload">
         <NewPostBtn />
       </Link>
       <ProfileInfo data={data} />

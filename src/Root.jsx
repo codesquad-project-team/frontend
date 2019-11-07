@@ -13,13 +13,13 @@ const Root = () => {
       <Router>
         <Switch>
           <Route exact path="/" render={() => <MainPage />} />
+          <Route path="/profile/edit" render={() => <ProfileEditPage />} />
+          <Route path="/profile" render={() => <ProfilePage />} />
+          <Route path="/post/upload" render={() => <PostUploadPage />} />
           <Route
             path="/post/:postId"
             render={({ match }) => <DetailPage postId={match.params.postId} />}
           />
-          <Route path="/profile/edit" render={() => <ProfileEditPage />} />
-          <Route path="/profile" render={() => <ProfilePage />} />
-          <Route path="/post_upload" render={() => <PostUploadPage />} />
         </Switch>
       </Router>
     </>
