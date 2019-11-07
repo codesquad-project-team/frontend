@@ -34,9 +34,11 @@ const Header = () => {
   return (
     <div className="header-wrapper">
       <div className="header">
-        <Link to="/" className="header-title" onClick={scrollToTop}>
-          <h1>Connect Flavor</h1>
-        </Link>
+        <div className="header-title">
+          <Link to="/" onClick={scrollToTop}>
+            <h1>Connect Flavor</h1>
+          </Link>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="header-searchbar-icon-wrapper">
             <img
@@ -53,7 +55,7 @@ const Header = () => {
         </form>
         <div className="header-btns">
           {isLoggedIn ? (
-            <Link to={`/profile`}>
+            <Link to="/profile">
               <ProfileImage small />
             </Link>
           ) : (

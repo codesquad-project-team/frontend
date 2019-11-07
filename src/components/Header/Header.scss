@@ -19,16 +19,17 @@
   z-index: 1000;
 
   &-title {
+    display: flex;
     flex: 1;
-    &:hover {
+    a:hover {
       text-decoration: none;
     }
     h1 {
-      margin-right: 2rem;
       color: $main-color;
       font-size: 6rem;
       font-weight: bold;
       font-family: 'godoMaum';
+      white-space: nowrap;
       &:hover {
         color: $main-color-light;
       }
