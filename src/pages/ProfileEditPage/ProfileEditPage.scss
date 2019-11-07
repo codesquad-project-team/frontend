@@ -34,20 +34,26 @@
   &-content {
     &-form {
       width: 70%;
-
-      .submit-btn {
-        font-size: 2rem;
-        margin: 4rem 0 0 3rem;
-        padding: 0.5rem 2rem;
-        border-radius: 5px;
-        white-space: nowrap;
-      }
     }
 
     &-item {
       .profile-image {
         margin: 0 2rem 2rem 18rem;
       }
+    }
+  }
+
+  &-submit-btn {
+    margin: 4rem 0 0 3rem;
+
+    span {
+      font-size: 2rem;
+    }
+  }
+
+  &-image-change-btn {
+    span {
+      font-size: 2rem;
     }
   }
 }

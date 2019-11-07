@@ -3,7 +3,6 @@ import './ProfileEditPage.scss';
 import Header from '../../components/Header/Header';
 import ProfileImage from '../../components/ProfileImage/ProfileImage';
 import ProfileContentItem from '../../components/ProfileContentItem/ProfileContentItem';
-import Button from 'react-bootstrap/Button';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
 import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
@@ -53,7 +52,12 @@ const ProfileEditPage = () => {
             <form className="profile-edit-page-content-form">
               <div className="profile-edit-page-content-item">
                 <ProfileImage medium src={profileImage} />
-                <CommonBtn styleType="underline">프로필 사진 바꾸기</CommonBtn>
+                <CommonBtn
+                  className="profile-edit-page-image-change-btn"
+                  styleType="underline"
+                >
+                  프로필 사진 바꾸기
+                </CommonBtn>
               </div>
               <ProfileContentItem
                 label="닉네임"
@@ -80,7 +84,7 @@ const ProfileEditPage = () => {
                 changeHandler={handleChange}
               />
               <CommonBtn
-                className="submit-btn"
+                className="profile-edit-page-submit-btn"
                 type="submit"
                 styleType="emphasize"
               >

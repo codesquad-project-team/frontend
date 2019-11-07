@@ -33,7 +33,7 @@ const CommonModal = ({ clickHandler, target }) => {
     <>
       <div className="common-modal-overlay" />
       <div className="common-modal">
-        <button className="common-modal-btn" onClick={clickHandler}>
+        <button className="common-modal-close-btn" onClick={clickHandler}>
           닫기
         </button>
         <div className="common-modal-content">
@@ -61,7 +61,12 @@ const CommonModal = ({ clickHandler, target }) => {
           </div>
           <p>
             {content.reminderMsg}
-            <CommonBtn styleType="underline">{content.hyperlinkMsg}</CommonBtn>
+            <CommonBtn
+              className="common-modal-reminder-btn"
+              styleType="underline"
+            >
+              {content.hyperlinkMsg}
+            </CommonBtn>
           </p>
         </div>
       </div>
