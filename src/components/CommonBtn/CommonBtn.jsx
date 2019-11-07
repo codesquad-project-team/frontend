@@ -1,19 +1,18 @@
 import React from 'react';
 import './CommonBtn.scss';
 import PropTypes from 'prop-types';
-import { getStyleClassName } from '../../utils/utils';
 
 const CommonBtn = props => {
   const { children, className = '', styleType = 'none', ...restProps } = props;
 
-  const styleClassName = getStyleClassName({
-    styleType,
-    prefix: `common-btn`
-  });
+  const styleClassName = `common-btn-${styleType}`;
 
   return (
-    <button className={`${className} ${styleClassName}`} {...restProps}>
-      {children}
+    <button
+      className={`common-btn ${className} ${styleClassName}`}
+      {...restProps}
+    >
+      <span>{children}</span>
     </button>
   );
 };

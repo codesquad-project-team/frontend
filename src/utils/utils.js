@@ -7,10 +7,6 @@ export const getClassName = ({ props, prefix }) => {
   return className;
 };
 
-export const getStyleClassName = ({ styleType, prefix }) => {
-  return `${prefix}-${styleType}`;
-};
-
 export const throttle = (callback, delay = 200) => {
   let lastCall = 0;
   return (...param) => {
