@@ -60,8 +60,12 @@ const PostContainer = ({ headerOn, api }) => {
     return !loading && scrollBottom + TRIGGER_POINT >= documentHeight;
   };
 
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   const postItems = items.map(item => (
-    <Link to={`/post/${item.postId}`} key={item.postId}>
+    <Link to={`/post/${item.postId}`} onClick={scrollToTop} key={item.postId}>
       <PostItem headerOn={headerOn} {...item} />
     </Link>
   ));
