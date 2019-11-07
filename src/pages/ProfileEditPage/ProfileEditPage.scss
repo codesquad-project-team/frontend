@@ -34,29 +34,26 @@
   &-content {
     &-form {
       width: 70%;
-
-      .submit-btn {
-        font-size: 2rem;
-        background-color: $main-color;
-        border: 0;
-        margin: 4rem 0 0 3rem;
-
-        &:hover {
-          background-color: $main-color-light;
-        }
-      }
     }
 
     &-item {
-      button {
-        border: none;
-        font-weight: bold;
-        color: $main-color;
-      }
-
       .profile-image {
         margin: 0 2rem 2rem 18rem;
       }
+    }
+  }
+
+  &-submit-btn {
+    margin: 4rem 0 0 3rem;
+
+    span {
+      font-size: 2rem;
+    }
+  }
+
+  &-image-change-btn {
+    span {
+      font-size: 2rem;
     }
   }
 }

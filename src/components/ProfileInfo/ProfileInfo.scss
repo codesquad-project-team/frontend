@@ -43,11 +43,6 @@
     }
   }
 
-  button {
-    width: 8rem;
-    margin: 0;
-    padding: 0;
-  }
   &-overview {
     font-size: 2rem;
   }
@@ -55,5 +50,9 @@
   &-introduction {
     font-size: 2rem;
     padding: 1rem 0;
+  }
+
+  &-edit-btn {
+    padding: 0;
   }
 }
