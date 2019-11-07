@@ -10,6 +10,9 @@ import PostQuestions from '../../components/PostUploader/PostQuestions';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 
 const PostUploadPage = () => {
+  const handleSubmit = e => {
+    e.preventDefault();
+  };
   return (
     <>
       <Header />
@@ -20,10 +23,10 @@ const PostUploadPage = () => {
           <TitleUploader />
           <CommentUploader />
           <PostQuestions />
-          <div className="post-upload-page-btns">
+          <form className="post-upload-page-btns" onSubmit={handleSubmit}>
             <CommonBtn>작성</CommonBtn>
             <CommonBtn>취소</CommonBtn>
-          </div>
+          </form>
         </CommonCard>
       </CommonCard.background>
     </>

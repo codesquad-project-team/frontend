@@ -1,8 +1,8 @@
 import React from 'react';
-import './CommonCard.scss';
+import './CommonPost.scss';
 import { getClassName } from '../../utils/utils';
 
-const CommonCard = ({
+const CommonPost = ({
   small,
   medium,
   large,
@@ -12,10 +12,10 @@ const CommonCard = ({
 }) => {
   const sizeClassName = getClassName({
     props: { small, medium, large },
-    prefix: 'common-card'
+    prefix: 'common-post'
   });
   return (
-    <div className={`common-card ${sizeClassName} ${className}`} {...restProps}>
+    <div className={`common-post ${sizeClassName} ${className}`} {...restProps}>
       {children}
     </div>
   );
@@ -33,6 +33,6 @@ export const CommonBackground = ({
   );
 };
 
-CommonCard.background = CommonBackground;
+CommonPost.background = CommonBackground;
 
-export default CommonCard;
+export default CommonPost;
