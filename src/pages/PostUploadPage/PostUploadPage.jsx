@@ -1,6 +1,6 @@
 import React from 'react';
 import './PostUploadPage.scss';
-import CommonCard from '../../components/CommonCard/CommonCard';
+import CommonPost from '../../components/CommonPost/CommonPost';
 import Header from '../../components/Header/Header';
 import ImageUploader from '../../components/PostUploader/ImageUploader';
 import LocationUploader from '../../components/PostUploader/LocationUploader';
@@ -16,8 +16,8 @@ const PostUploadPage = () => {
   return (
     <>
       <Header />
-      <CommonCard.background className="post-upload-page-background">
-        <CommonCard large className="post-upload-page">
+      <CommonPost.background className="post-upload-page-background">
+        <CommonPost large className="post-upload-page">
           <ImageUploader />
           <LocationUploader />
           <TitleUploader />
@@ -27,8 +27,8 @@ const PostUploadPage = () => {
             <CommonBtn>작성</CommonBtn>
             <CommonBtn>취소</CommonBtn>
           </form>
-        </CommonCard>
-      </CommonCard.background>
+        </CommonPost>
+      </CommonPost.background>
     </>
   );
 };
