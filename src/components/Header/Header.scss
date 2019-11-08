@@ -2,7 +2,7 @@
 
 .header-wrapper {
   width: 100%;
-  height: 8rem;
+  height: $header-height;
 }
 
 .header {
@@ -16,7 +16,7 @@
   padding: 0 2rem;
   background: #fff;
   border: 1px solid #d4d4d4;
-  z-index: 1000;
+  z-index: 100;
 
   &-title {
     display: flex;

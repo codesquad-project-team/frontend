@@ -1,0 +1,30 @@
+@import '../../stylesheets/util.scss';
+
+.common-background {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  min-height: calc(100vh - #{$header-height});
+  padding: 5rem;
+  background-color: $gray-background-color;
+}
+
+.common-post {
+  background-color: #fff;
+  border-radius: 5px;
+
+  &-small {
+    width: 10rem;
+    min-height: 10rem;
+  }
+
+  &-medium {
+    width: 20rem;
+    min-height: 20rem;
+  }
+
+  &-large {
+    width: 80rem;
+    min-height: 60rem;
+  }
+}

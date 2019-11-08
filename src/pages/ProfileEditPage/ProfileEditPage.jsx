@@ -11,7 +11,7 @@ import FadeLoader from 'react-spinners/FadeLoader';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 
 const ProfileEditPage = () => {
-  const [inputValue, setInputValue, handleChange, restore] = useInput();
+  const { inputValue, setInputValue, handleChange, restore } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
 
   const { loading, error } = useFetch(

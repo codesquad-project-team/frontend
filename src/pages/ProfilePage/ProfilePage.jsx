@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
 import PostContainer from '../../components/PostContainer/PostContainer';
@@ -25,7 +26,9 @@ const ProfilePage = props => {
   return (
     <div className="profile-page">
       <Header />
-      <NewPostBtn />
+      <Link to="/post/upload">
+        <NewPostBtn />
+      </Link>
       <ProfileInfo data={data} />
       <PostContainer api="/post?page=" />
     </div>
