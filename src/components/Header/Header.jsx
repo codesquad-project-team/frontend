@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import './Header.scss';
+import { Link } from 'react-router-dom';
 import useInput from '../../hooks/useInput';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CommonModal from '../CommonModal/CommonModal';
 import { IMAGE_BUCKET_URL } from '../../configs';
 
-const isLoggedIn = false; //TODO: 로그인 기능 구현시 수정
+const isLoggedIn = true; //TODO: 로그인 기능 구현시 수정
 
 const Header = () => {
   const [inputValue, handleChange, restore] = useInput();
@@ -26,10 +27,18 @@ const Header = () => {
     clickedSignup ? setClickedSignup(false) : setClickedSignup(true);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="header-wrapper">
       <div className="header">
-        <h1>Connect Flavor</h1>
+        <div className="header-title">
+          <Link to="/" onClick={scrollToTop}>
+            <h1>Connect Flavor</h1>
+          </Link>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="header-searchbar-icon-wrapper">
             <img
@@ -46,7 +55,9 @@ const Header = () => {
         </form>
         <div className="header-btns">
           {isLoggedIn ? (
-            <ProfileImage small />
+            <Link to="/profile">
+              <ProfileImage small />
+            </Link>
           ) : (
             <>
               <CommonBtn

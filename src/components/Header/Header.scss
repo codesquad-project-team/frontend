@@ -18,13 +18,22 @@
   border: 1px solid #d4d4d4;
   z-index: 1000;
 
-  h1 {
+  &-title {
+    display: flex;
     flex: 1;
-    margin-right: 2rem;
-    color: $main-color;
-    font-size: 6rem;
-    font-weight: bold;
-    font-family: 'godoMaum';
+    a:hover {
+      text-decoration: none;
+    }
+    h1 {
+      color: $main-color;
+      font-size: 6rem;
+      font-weight: bold;
+      font-family: 'godoMaum';
+      white-space: nowrap;
+      &:hover {
+        color: $main-color-light;
+      }
+    }
   }
 
   form {
