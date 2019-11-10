@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import './ToolTip.scss';
 
 const ToolTip = ({ place, id, children }) => {
   const ref = useRef(null);
