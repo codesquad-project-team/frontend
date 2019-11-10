@@ -10,36 +10,42 @@ import {
 } from '../../configs';
 
 const RelatedPost = () => {
-  const [data, setData] = useState([]);
   const [currentActiveIndex, setCurrentActiveIndex] = useState(1);
   const [positionX, setPositionX] = useState(0);
   const [page, setPage] = useState(1);
-  const [hasNextPage, setHasNextPage] = useState(true);
+  const [response, setResponse] = useState(null);
+  const posts = response ? response.posts : [];
 
   const { error, loading } = useFetch(
     `${WEB_SERVER_URL}/post/related-to?postid=1&page=${page}`,
     {},
-    json => {
-      setData(json.posts);
-      setHasNextPage(json.hasNextPage);
-    }
+    json => mergeResponse(response, json)
   );
 
-  const makeCarouselItem = () => {
-    const items = [...data];
+  const mergeResponse = (prevResponse, response) => {
+    const isFirstFetch = prevResponse === null;
+    if (isFirstFetch) return setResponse(response);
+    setResponse({
+      hasNextPage: response.hasNextPage,
+      posts: [...prevResponse.posts, ...response.posts]
+    });
+  };
 
-    return items.map(item => {
+  const makeCarouselItem = () => {
+    const items = [...posts];
+    return items.map((item, index) => {
       return (
         <RelatedPostComment
           titleCompanion={item.titleCompanion}
           titleActivity={item.titleActivity}
+          key={index}
         />
       );
     });
   };
 
   const makeCarouselJsx = () => {
-    const len = data.length;
+    const len = posts.length;
 
     {
       return !len ? (
@@ -61,9 +67,9 @@ const RelatedPost = () => {
   };
 
   const getMaximamIndex = () => {
-    return data.length % 5 === 0
-      ? parseInt(data.length / 5)
-      : parseInt(data.length / 5) + 1;
+    return posts.length % 5 === 0
+      ? parseInt(posts.length / 5)
+      : parseInt(posts.length / 5) + 1;
   };
 
   const prevBtnHandler = ({ target }) => {
@@ -76,6 +82,7 @@ const RelatedPost = () => {
   const nextBtnHandler = ({ target }) => {
     const maximamIndex = getMaximamIndex();
     if (currentActiveIndex === maximamIndex) return;
+    if (response.hasNextPage && currentActiveIndex % 3 === 0) setPage(page + 1);
     setCurrentActiveIndex(currentActiveIndex + 1);
     setPositionX(positionX - 500);
   };
@@ -86,7 +93,7 @@ const RelatedPost = () => {
       <h2 className="related-post-header">이 장소를 방문한 사람들</h2>
 
       <div className="related-post-carousel">{makeCarouselJsx()}</div>
-      {data.length > 5 && (
+      {posts.length > 5 && (
         <div className="related-post-carousel-btns">
           <button
             className="carousel-btns-common prev-btn"
