@@ -7,7 +7,9 @@ import { NEW_POST_BTN_IMG_URL } from '../../configs';
 const NewPostBtn = () => {
   return (
     <>
-      <ToolTip id="new-post-btn">멍멍!(어제 다녀온 곳 올리자!)</ToolTip>
+      <ToolTip place="top" id="new-post-btn">
+        멍멍!(어제 다녀온 곳 올리자!)
+      </ToolTip>
       <img
         data-tooltip="new-post-btn"
         className="new-post-btn"
