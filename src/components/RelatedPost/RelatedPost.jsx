@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './RelatedPost.scss';
+import useFetch from '../../hooks/useFetch';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import RelatedPostComment from './RelatedPostComment';
 import {
@@ -12,18 +13,17 @@ const RelatedPost = () => {
   const [data, setData] = useState([]);
   const [currentActiveIndex, setCurrentActiveIndex] = useState(1);
   const [positionX, setPositionX] = useState(0);
+  const [page, setPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(true);
 
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetch(
-        `${WEB_SERVER_URL}/post/related-to?post-id=1&page=1`
-      );
-      const json = await response.json();
-      setData(json);
+  const { error, loading } = useFetch(
+    `${WEB_SERVER_URL}/post/related-to?postid=1&page=${page}`,
+    {},
+    json => {
+      setData(json.posts);
+      setHasNextPage(json.hasNextPage);
     }
-
-    fetchData();
-  }, []);
+  );
 
   const makeCarouselItem = () => {
     const items = [...data];
@@ -60,22 +60,22 @@ const RelatedPost = () => {
     }
   };
 
-  const getMaximalIndex = () => {
+  const getMaximamIndex = () => {
     return data.length % 5 === 0
       ? parseInt(data.length / 5)
       : parseInt(data.length / 5) + 1;
   };
 
   const prevBtnHandler = ({ target }) => {
-    const maximalIndex = getMaximalIndex();
+    const maximamIndex = getMaximamIndex();
     if (currentActiveIndex === 1) return;
     setCurrentActiveIndex(currentActiveIndex - 1);
     setPositionX(positionX + 500);
   };
 
   const nextBtnHandler = ({ target }) => {
-    const maximalIndex = getMaximalIndex();
-    if (currentActiveIndex === maximalIndex) return;
+    const maximamIndex = getMaximamIndex();
+    if (currentActiveIndex === maximamIndex) return;
     setCurrentActiveIndex(currentActiveIndex + 1);
     setPositionX(positionX - 500);
   };
