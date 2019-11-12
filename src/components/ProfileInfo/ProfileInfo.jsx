@@ -24,8 +24,8 @@ const ProfileInfo = ({ data }) => {
           </CommonBtn>
         </div>
         <div className="profile-info-right-column">
-          <div className="profile-info-username">
-            {nickname}
+          <div className="profile-info-header">
+            <span className="profile-info-username">{nickname}</span>
             {isMyProfile && (
               <Link to="/profile/edit">
                 <CommonBtn className="profile-info-edit-btn" styleType="normal">

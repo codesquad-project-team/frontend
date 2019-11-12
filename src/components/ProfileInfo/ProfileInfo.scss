@@ -27,10 +27,9 @@
     flex-direction: column;
   }
 
-  &-username {
+  &-header {
     display: flex;
     align-items: center;
-    font-size: 3rem;
     font-weight: bold;
     padding-bottom: 2rem;
 
@@ -43,6 +42,14 @@
     }
   }
 
+  &-username {
+    font-size: 3rem;
+  }
+
+  &-edit-btn {
+    margin: 0;
+  }
+
   &-overview {
     font-size: 2rem;
   }
@@ -50,9 +57,5 @@
   &-introduction {
     font-size: 2rem;
     padding: 1rem 0;
-  }
-
-  &-edit-btn {
-    padding: 0;
   }
 }
