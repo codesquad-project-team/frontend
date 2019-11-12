@@ -82,7 +82,8 @@ const RelatedPost = () => {
   const nextBtnHandler = ({ target }) => {
     const maximumIndex = getMaximumIndex();
     if (currentActiveIndex === maximumIndex) return;
-    if (response.hasNextPage && currentActiveIndex % 3 === 0) setPage(page + 1);
+    if (response.hasNextPage && currentActiveIndex === maximumIndex - 1)
+      setPage(page + 1);
     setCurrentActiveIndex(currentActiveIndex + 1);
     setPositionX(positionX - 500);
   };
