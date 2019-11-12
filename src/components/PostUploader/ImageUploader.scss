@@ -1,0 +1,10 @@
+@import '../../stylesheets/util.scss';
+
+.image-uploader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60rem;
+  height: 40rem;
+  border: 1px solid $gray-border-color;
+}

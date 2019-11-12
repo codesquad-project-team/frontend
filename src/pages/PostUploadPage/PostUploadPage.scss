@@ -1,0 +1,20 @@
+@import '../../stylesheets/util.scss';
+
+.post-upload-page-background {
+  background: $sub-gradient;
+}
+
+.post-upload-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4rem 0;
+  height: 110rem;
+  border: 1px solid $gray-border-color;
+
+  &-btns {
+    display: flex;
+    justify-content: space-around;
+  }
+}

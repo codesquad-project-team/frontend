@@ -3,11 +3,16 @@ import './CommonBtn.scss';
 import PropTypes from 'prop-types';
 
 const CommonBtn = props => {
-  const { className = '', ...restProps } = props;
+  const { children, className = '', styleType = 'none', ...restProps } = props;
+
+  const styleClassName = `common-btn-${styleType}`;
 
   return (
-    <button className={`common-btn ${className}`} {...restProps}>
-      {props.children}
+    <button
+      className={`common-btn ${className} ${styleClassName}`}
+      {...restProps}
+    >
+      <span>{children}</span>
     </button>
   );
 };

@@ -1,0 +1,21 @@
+@import '../../stylesheets/util.scss';
+
+.title-uploader {
+  input {
+    width: 20rem;
+    height: 5rem;
+    font-size: 4rem;
+    border: none;
+    border-bottom: 1px solid $gray-border-color;
+    text-align: center;
+  }
+
+  span {
+    font-size: 4rem;
+    margin-right: 2rem;
+  }
+
+  select {
+    font-size: 4rem;
+  }
+}

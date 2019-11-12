@@ -1,18 +1,49 @@
 @import '../../stylesheets/util.scss';
 
 .common-btn {
-  height: 3rem;
-  margin: 1rem;
-  padding: 0 2rem;
-  font-size: 1.5rem;
-  border: 1px solid $main-color;
   border-radius: 5px;
-  background-color: #fff;
-  white-space: nowrap;
+  padding: 0.6rem 1rem;
+  margin: 1rem;
   cursor: pointer;
 
-  &:hover {
+  span {
+    margin: 1rem;
+    font-size: 1.5rem;
+    white-space: nowrap;
+  }
+
+  &-normal {
+    border: 1px solid $main-color;
+    background-color: #fff;
+
+    &:hover {
+      background-color: $main-color;
+      color: #fff;
+    }
+  }
+
+  &-emphasize {
+    border: 0;
     background-color: $main-color;
     color: #fff;
+
+    &:hover {
+      background-color: $main-color-light;
+    }
+  }
+
+  &-underline {
+    border: 0;
+    color: $main-color;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &-none {
+    border: 1px solid $main-color;
+    background-color: #fff;
   }
 }

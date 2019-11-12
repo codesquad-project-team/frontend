@@ -1,0 +1,32 @@
+@import '../../stylesheets/util.scss';
+
+$arrow-height: 13px;
+$arrow-width: 10px;
+
+.tooltip {
+  &-background {
+    background-color: #fff;
+    border: 1px solid $main-color;
+    border-radius: 4px;
+  }
+
+  &-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    bottom: calc(-#{$arrow-height} - 1px);
+    left: 50%;
+    margin-left: -$arrow-width;
+    border-width: $arrow-height $arrow-width 0 $arrow-width;
+    border-top-color: $main-color;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    border-style: solid;
+  }
+
+  &-label {
+    padding: 0.25rem 1rem;
+    font-size: 1.5rem;
+    color: #000;
+  }
+}

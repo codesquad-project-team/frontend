@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './RelatedPost.scss';
+import useFetch from '../../hooks/useFetch';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import RelatedPostComment from './RelatedPostComment';
 import {
@@ -9,37 +10,43 @@ import {
 } from '../../configs';
 
 const RelatedPost = () => {
-  const [data, setData] = useState([]);
   const [currentActiveIndex, setCurrentActiveIndex] = useState(1);
   const [positionX, setPositionX] = useState(0);
+  const [page, setPage] = useState(1);
+  const [response, setResponse] = useState(null);
+  const posts = response ? response.posts : [];
 
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetch(
-        `${WEB_SERVER_URL}/post/related-to?post-id=1&page=1`
-      );
-      const json = await response.json();
-      setData(json);
-    }
+  const { error, loading } = useFetch(
+    `${WEB_SERVER_URL}/post/related-to?postid=1&page=${page}`,
+    {},
+    json => mergeResponse(response, json)
+  );
 
-    fetchData();
-  }, []);
+  const mergeResponse = (prevResponse, response) => {
+    const isFirstFetch = prevResponse === null;
+    if (isFirstFetch) return setResponse(response);
+    setResponse({
+      hasNextPage: response.hasNextPage,
+      posts: [...prevResponse.posts, ...response.posts]
+    });
+  };
 
   const makeCarouselItem = () => {
-    const items = [...data];
-
+    const items = [...posts];
     return items.map(item => {
       return (
         <RelatedPostComment
           titleCompanion={item.titleCompanion}
           titleActivity={item.titleActivity}
+          profileImageURL={item.profileImageURL}
+          key={item.postId}
         />
       );
     });
   };
 
   const makeCarouselJsx = () => {
-    const len = data.length;
+    const len = posts.length;
 
     {
       return !len ? (
@@ -60,22 +67,23 @@ const RelatedPost = () => {
     }
   };
 
-  const getMaximalIndex = () => {
-    return data.length % 5 === 0
-      ? parseInt(data.length / 5)
-      : parseInt(data.length / 5) + 1;
+  const getMaximumIndex = () => {
+    return posts.length % 5 === 0
+      ? parseInt(posts.length / 5)
+      : parseInt(posts.length / 5) + 1;
   };
 
   const prevBtnHandler = ({ target }) => {
-    const maximalIndex = getMaximalIndex();
     if (currentActiveIndex === 1) return;
     setCurrentActiveIndex(currentActiveIndex - 1);
     setPositionX(positionX + 500);
   };
 
   const nextBtnHandler = ({ target }) => {
-    const maximalIndex = getMaximalIndex();
-    if (currentActiveIndex === maximalIndex) return;
+    const maximumIndex = getMaximumIndex();
+    if (currentActiveIndex === maximumIndex) return;
+    if (response.hasNextPage && currentActiveIndex === maximumIndex - 1)
+      setPage(page + 1);
     setCurrentActiveIndex(currentActiveIndex + 1);
     setPositionX(positionX - 500);
   };
@@ -86,7 +94,7 @@ const RelatedPost = () => {
       <h2 className="related-post-header">이 장소를 방문한 사람들</h2>
 
       <div className="related-post-carousel">{makeCarouselJsx()}</div>
-      {data.length > 5 && (
+      {posts.length > 5 && (
         <div className="related-post-carousel-btns">
           <button
             className="carousel-btns-common prev-btn"
