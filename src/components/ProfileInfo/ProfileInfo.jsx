@@ -14,6 +14,7 @@ const ProfileInfo = ({ data }) => {
     introduction,
     profileImage
   } = data;
+  const selfIntro = Buffer.from(introduction).toString();
   return (
     <div className="profile-info-wrapper">
       <div className="profile-info">
@@ -37,7 +38,7 @@ const ProfileInfo = ({ data }) => {
           <div className="profile-info-overview">게시글 {totalPost}개</div>
           <div className="profile-info-overview">팔로워 {totalFollower}명</div>
           <div className="profile-info-overview">팔로잉 {totalFollowing}명</div>
-          <div className="profile-info-introduction">{introduction}</div>
+          <div className="profile-info-introduction">{selfIntro}</div>
         </div>
       </div>
     </div>
