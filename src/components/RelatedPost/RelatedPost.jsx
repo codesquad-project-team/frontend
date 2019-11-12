@@ -33,12 +33,13 @@ const RelatedPost = () => {
 
   const makeCarouselItem = () => {
     const items = [...posts];
-    return items.map((item, index) => {
+    return items.map(item => {
       return (
         <RelatedPostComment
           titleCompanion={item.titleCompanion}
           titleActivity={item.titleActivity}
-          key={index}
+          profileImageURL={item.profileImageURL}
+          key={item.postId}
         />
       );
     });
@@ -66,22 +67,21 @@ const RelatedPost = () => {
     }
   };
 
-  const getMaximamIndex = () => {
+  const getMaximumIndex = () => {
     return posts.length % 5 === 0
       ? parseInt(posts.length / 5)
       : parseInt(posts.length / 5) + 1;
   };
 
   const prevBtnHandler = ({ target }) => {
-    const maximamIndex = getMaximamIndex();
     if (currentActiveIndex === 1) return;
     setCurrentActiveIndex(currentActiveIndex - 1);
     setPositionX(positionX + 500);
   };
 
   const nextBtnHandler = ({ target }) => {
-    const maximamIndex = getMaximamIndex();
-    if (currentActiveIndex === maximamIndex) return;
+    const maximumIndex = getMaximumIndex();
+    if (currentActiveIndex === maximumIndex) return;
     if (response.hasNextPage && currentActiveIndex % 3 === 0) setPage(page + 1);
     setCurrentActiveIndex(currentActiveIndex + 1);
     setPositionX(positionX - 500);
