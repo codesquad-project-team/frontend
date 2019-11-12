@@ -5,7 +5,9 @@ import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
 import PostContainer from '../../components/PostContainer/PostContainer';
 import NewPostBtn from '../../components/NewPostBtn/NewPostBtn';
 import useFetch from '../../hooks/useFetch';
-import { WEB_SERVER_URL } from '../../configs';
+import { css } from '@emotion/core';
+import FadeLoader from 'react-spinners/FadeLoader';
+import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 
 const ProfilePage = props => {
   //TODO: userId를 넘겨받아서 요청보내도록 수정 예정
@@ -23,6 +25,13 @@ const ProfilePage = props => {
       <Link to="/post/upload">
         <NewPostBtn />
       </Link>
+      <FadeLoader
+        css={override}
+        sizeUnit={'px'}
+        size={150}
+        color={MAIN_COLOR}
+        loading={loading}
+      />
       {data && <ProfileInfo data={data} />}
       <PostContainer api="/post?page=" />
     </div>
@@ -30,3 +39,8 @@ const ProfilePage = props => {
 };
 
 export default ProfilePage;
+
+const override = css`
+  display: block;
+  margin: 17rem auto;
+`;
