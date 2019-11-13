@@ -24,39 +24,56 @@ const SignupPage = () => {
   const { provider } = authData || { provider: '' };
   const postposition = provider === '카카오' ? '로' : '으로';
 
-  //닉네임 검증
-  const [isValidNickname, setIsValidNickname] = useState(null);
+  const [reason, setReason] = useState(null);
 
-  const checkNickname = useCallback(
-    debounce(async nickname => {
-      const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
-        method: 'POST',
-        mode: 'cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nickname })
-      });
-      switch (res.status) {
-        case 200:
-          console.log('ok');
-          break;
-        case 400:
-          console.log('공백있음');
-          break;
-        case 409:
-          console.log('중복');
-          break;
-        case 500:
-          console.log('server error');
-          break;
-        default:
-          break;
+  const checkNickname = useCallback(async nickname => {
+    const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nickname })
+    });
+    switch (res.status) {
+      case 200:
+        setReason('사용 가능한 닉네임이에요.');
+        break;
+      case 400:
+        setReason('닉네임에 공백이 있어요.');
+        break;
+      case 409:
+        setReason('중복된 닉네임이에요.');
+        break;
+      case 500:
+        setReason('서버에서 에러가 발생했어요. 잠시후에 다시 시도해주세요.');
+        break;
+      default:
+        break;
+    }
+  }, []);
+
+  const checkValidNickname = useCallback(
+    debounce(nickname => {
+      const hasBlank = /\s/.test(nickname);
+      const isValid = /^[a-z][a-z0-9_-]{3,14}$/.test(nickname);
+      //4~15자 영문 소문자, 숫자, 하이픈, 언더바
+      //영문으로 시작, 공백 불가
+      if (hasBlank) {
+        setReason('닉네임에 공백이 있어요.');
+      } else if (isValid) {
+        checkNickname(nickname);
+      } else {
+        setReason('');
       }
-    }, 500),
+    }),
     []
   );
 
   useEffect(() => {
-    if (nickname) checkNickname(nickname);
+    if (nickname) {
+      checkValidNickname(nickname);
+    } else {
+      setReason('');
+    }
   }, [nickname]);
 
   return (
@@ -79,8 +96,13 @@ const SignupPage = () => {
             type="text"
             placeholder="4~15자로 입력해주세요."
           />
+          <div>
+            <span>{reason}</span>
+          </div>
         </div>
-        <CommonBtn className="signup-page-signup-btn">회원가입</CommonBtn>
+        <CommonBtn styleType="normal" className="signup-page-signup-btn">
+          회원가입
+        </CommonBtn>
       </div>
     </div>
   );
