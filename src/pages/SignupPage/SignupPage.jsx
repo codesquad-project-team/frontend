@@ -1,26 +1,63 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './SignupPage.scss';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
+import { debounce } from '../../utils/utils';
 import { WEB_SERVER_URL } from '../../configs';
 
 const authData = {
-  organization: '카카오'
+  provider: '카카오'
 };
 
 const SignupPage = () => {
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
 
+  //임시 토큰 검증
   // const [authData, setAuthData] = useState(null);
   // const { loading } = useFetch(
-  //   `${WEB_SERVER_URL}/auth/api`,
-  //   { method: 'POST' },
+  //   `${WEB_SERVER_URL}/validate/tempToken`,
+  //   { method: 'POST', credentials: 'include' },
   //   json => setAuthData(json)
   // );
-  const { organization } = authData;
-  const postposition = organization === '카카오' ? '로' : '으로';
+  const { provider } = authData || { provider: '' };
+  const postposition = provider === '카카오' ? '로' : '으로';
+
+  //닉네임 검증
+  const [isValidNickname, setIsValidNickname] = useState(null);
+
+  const checkNickname = useCallback(
+    debounce(async nickname => {
+      const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nickname })
+      });
+      switch (res.status) {
+        case 200:
+          console.log('ok');
+          break;
+        case 400:
+          console.log('공백있음');
+          break;
+        case 409:
+          console.log('중복');
+          break;
+        case 500:
+          console.log('server error');
+          break;
+        default:
+          break;
+      }
+    }, 500),
+    []
+  );
+
+  useEffect(() => {
+    if (nickname) checkNickname(nickname);
+  }, [nickname]);
 
   return (
     <div className="signup-page">
@@ -29,7 +66,7 @@ const SignupPage = () => {
       </header>
       <div className="signup-page-body">
         <h2>
-          {organization}
+          {provider}
           {postposition} 회원가입
         </h2>
         <div className="signup-page-auth-checker">인증완료</div>
@@ -42,9 +79,6 @@ const SignupPage = () => {
             type="text"
             placeholder="4~15자로 입력해주세요."
           />
-          <CommonBtn className="signup-page-duplicate-check-btn">
-            중복검사
-          </CommonBtn>
         </div>
         <CommonBtn className="signup-page-signup-btn">회원가입</CommonBtn>
       </div>
