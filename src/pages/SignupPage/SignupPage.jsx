@@ -51,18 +51,18 @@ const SignupPage = () => {
     }
   }, []);
 
-  const checkValidNickname = useCallback(
+  const checkNicknameValidation = useCallback(
     debounce(nickname => {
       const hasBlank = /\s/.test(nickname);
       const isValid = /^[a-z][a-z0-9_-]{3,14}$/.test(nickname);
       //4~15자 영문 소문자, 숫자, 하이픈, 언더바
       //영문으로 시작, 공백 불가
-      if (hasBlank) {
-        setReason('닉네임에 공백이 있어요.');
-      } else if (isValid) {
+      if (isValid) {
         checkNickname(nickname);
+      } else if (hasBlank) {
+        setReason('닉네임에 공백이 있어요.');
       } else {
-        setReason('');
+        setReason('영문으로 시작하는 4~15자의 영문, 숫자 조합을 만들어주세요.');
       }
     }),
     []
@@ -70,7 +70,7 @@ const SignupPage = () => {
 
   useEffect(() => {
     if (nickname) {
-      checkValidNickname(nickname);
+      checkNicknameValidation(nickname);
     } else {
       setReason('');
     }
