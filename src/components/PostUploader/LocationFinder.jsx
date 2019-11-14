@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './LocationFinder.scss';
-import NaverMap, { Marker } from 'react-naver-map';
+import { KakaoMap, Marker } from 'react-kakao-maps';
 import useInput from '../../hooks/useInput';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CloseBtn from '../CommonBtn/CloseBtn';
@@ -40,14 +40,9 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
       key={item.locationLatitude}
       lat={item.locationLatitude}
       lng={item.locationLongitude}
-      onClick={() => {}} // id: given id, event: PointerEvent
-      icon={{
-        url:
-          'https://editor-static.pstatic.net/c/resources/common/img/common-icon-places-dot-x2-20180830.png',
-        size: { width: 24, height: 24 },
-        scaledSize: { width: 24, height: 24 },
-        anchor: { x: 12, y: 32 }
-      }}
+      width="32"
+      height="32"
+      image="https://editor-static.pstatic.net/c/resources/common/img/common-icon-places-dot-x2-20180830.png"
     />
   ));
 
@@ -91,17 +86,17 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
       </div>
       <div className="location-finder-content">
         <div className="location-finder-search-result">{results}</div>
-        <NaverMap
+        <KakaoMap
           // eslint-disable-next-line no-undef
-          clientId={NAVER_MAP_CLIENT_ID}
-          ncp
-          style={{ width: '570px', height: '400px' }}
-          initialPosition={{ lat: locationLatitude, lng: locationLongitude }}
-          initialZoom={11}
-          submodules={['drawing', 'geocoder']}
+          apiUrl={KAKAO_MAP_API_URL}
+          width="570px"
+          height="400px"
+          level={3}
+          lat={locationLatitude}
+          lng={locationLongitude}
         >
           {markers}
-        </NaverMap>
+        </KakaoMap>
       </div>
       <div className="location-finder-footer">
         <CommonBtn>확인</CommonBtn>
