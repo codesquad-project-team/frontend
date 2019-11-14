@@ -12,7 +12,6 @@ const SignupPage = () => {
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
 
-  //임시 토큰 검증
   const [authData, setAuthData] = useState(null);
   const { loading } = useFetch(
     `${WEB_SERVER_URL}/validate/tempToken`,
@@ -57,8 +56,6 @@ const SignupPage = () => {
     debounce(nickname => {
       const hasBlank = /\s/.test(nickname);
       const isValid = /^[a-z][a-z0-9_-]{3,14}$/.test(nickname);
-      //4~15자 영문 소문자, 숫자, 하이픈, 언더바
-      //영문으로 시작, 공백 불가
       if (isValid) {
         checkNicknameFromServer(nickname);
       } else if (hasBlank) {
