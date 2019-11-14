@@ -1,50 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import './LocationFinder.scss';
 import { KakaoMap, Marker } from 'react-kakao-maps';
 import useInput from '../../hooks/useInput';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CloseBtn from '../CommonBtn/CloseBtn';
-import { WEB_SERVER_URL, IMAGE_BUCKET_URL } from '../../configs';
+import { IMAGE_BUCKET_URL } from '../../configs';
 
-const locationLatitude = 37.5845218; //initial location
-const locationLongitude = 126.9975588;
-
-const tempData = [
-  {
-    name: '스타벅스 한국프레스센터점',
-    address: '서울특별시 중구 세종대로 124',
-    locationLatitude: 37.5846208,
-    locationLongitude: 126.9975798
-  },
-  {
-    name: '스타벅스 시청점',
-    address: '서울특별시 중구 을지로 19',
-    locationLatitude: 37.5838228,
-    locationLongitude: 126.9969598
-  }
-];
+const initialLat = 37.5845218; //initial location
+const initialLong = 126.9975588;
 
 const LocationFinder = ({ className = '', onClick, ...restProps }) => {
   const { inputValue, handleChange } = useInput();
   const { locationKeyword } = inputValue;
-
-  const [searchResult, setSearchResult] = useState(tempData);
-  const results = searchResult.map(item => (
-    <div key={item.locationLatitude} className="location-finder-result-item">
-      <div className="location-finder-result-item-name">{item.name}</div>
-      <div className="location-finder-result-item-address">{item.address}</div>
-    </div>
-  ));
-  const markers = searchResult.map(item => (
-    <Marker
-      key={item.locationLatitude}
-      lat={item.locationLatitude}
-      lng={item.locationLongitude}
-      width="32"
-      height="32"
-      image="https://editor-static.pstatic.net/c/resources/common/img/common-icon-places-dot-x2-20180830.png"
-    />
-  ));
 
   const inputRef = useRef(null);
 
@@ -52,18 +19,61 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
     inputRef.current.focus();
   }, []);
 
-  const fetchData = async () => {
-    const data = await fetch(`${WEB_SERVER_URL}/location?=${locationKeyword}`);
-    const json = await data.json();
-    setSearchResult(json);
-  };
+  const [kakao, setKakao] = useState(null);
+  if (!kakao && locationKeyword) {
+    setKakao(window.kakao);
+  }
+  const [placeService, setPlaceService] = useState(null);
+  useEffect(() => {
+    if (!kakao) return;
+    setPlaceService(new kakao.maps.services.Places());
+  }, [kakao]);
 
   const handleSubmit = e => {
     e.preventDefault();
-    //TODO: locationKeyword를 사용해서 지역검색data fetch하기
     console.log(locationKeyword);
-    // fetchData();
+    placeService.keywordSearch(
+      locationKeyword,
+      response => setSearchResult(response),
+      {}
+    );
   };
+
+  const [searchResult, setSearchResult] = useState([]);
+
+  const results = searchResult.map(item => (
+    <div key={item.x} className="location-finder-result-item">
+      <div className="location-finder-result-item-name">{item.place_name}</div>
+      <div className="location-finder-result-item-address">
+        {item.address_name}
+      </div>
+    </div>
+  ));
+
+  const markers = searchResult.map(item => (
+    <Marker
+      key={item.y}
+      lat={item.y}
+      lng={item.x}
+      width="32"
+      height="32"
+      image="https://editor-static.pstatic.net/c/resources/common/img/common-icon-places-dot-x2-20180830.png"
+    />
+  ));
+
+  //검색어 자동완성
+  // const searchPlaces = useCallback(
+  //   debounce(keyword => {
+  //     placeService.keywordSearch(keyword, d => console.log(d));
+  //   }),
+  //   [placeService]
+  // );
+
+  // useEffect(() => {
+  //   if (!locationKeyword || !placeService) return;
+  //   console.log(locationKeyword);
+  //   searchPlaces(locationKeyword);
+  // }, [locationKeyword]);
 
   return (
     <div className="location-finder">
@@ -92,8 +102,8 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
           width="570px"
           height="400px"
           level={3}
-          lat={locationLatitude}
-          lng={locationLongitude}
+          lat={initialLat}
+          lng={initialLong}
         >
           {markers}
         </KakaoMap>
