@@ -38,13 +38,16 @@
 
   &-content {
     display: flex;
+    height: 40rem;
     border-top: 1px solid $gray-border-color;
     border-bottom: 1px solid $gray-border-color;
   }
 
   &-search-result {
+    height: 100%;
     flex: 1;
     border-right: 1px solid $gray-border-color;
+    overflow: auto;
   }
 
   &-result-item {
