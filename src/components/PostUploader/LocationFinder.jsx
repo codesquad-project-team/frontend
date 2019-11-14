@@ -5,6 +5,7 @@ import useInput from '../../hooks/useInput';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CloseBtn from '../CommonBtn/CloseBtn';
 import useMapContext from './useMapContext';
+import usePlaceService from './usePlaceService';
 import { IMAGE_BUCKET_URL } from '../../configs';
 
 const initialLat = 37.5845218; //initial location
@@ -24,14 +25,9 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
   const [currentLng, setCurrentLng] = useState(initialLng);
 
   const { MapContextForwarder, kakao, map } = useMapContext();
-  const [placeService, setPlaceService] = useState(null);
+  const { placeService } = usePlaceService(kakao);
   const [searchResult, setSearchResult] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
-
-  useEffect(() => {
-    if (!kakao) return;
-    setPlaceService(new kakao.maps.services.Places());
-  }, [kakao]);
 
   const handleSubmit = e => {
     e.preventDefault();
