@@ -1,13 +1,14 @@
-import React, { useCallback, useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './LocationFinder.scss';
 import { KakaoMap, Marker } from 'react-kakao-maps';
 import useInput from '../../hooks/useInput';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CloseBtn from '../CommonBtn/CloseBtn';
+import MapContextForwarder from './MapContextForwarder';
 import { IMAGE_BUCKET_URL } from '../../configs';
 
 const initialLat = 37.5845218; //initial location
-const initialLong = 126.9975588;
+const initialLng = 126.9975588;
 
 const LocationFinder = ({ className = '', onClick, ...restProps }) => {
   const { inputValue, handleChange } = useInput();
@@ -19,11 +20,15 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
     inputRef.current.focus();
   }, []);
 
+  const [currentLat, setCurrentLat] = useState(initialLat);
+  const [currentLng, setCurrentLng] = useState(initialLng);
+
   const [kakao, setKakao] = useState(null);
-  if (!kakao && locationKeyword) {
-    setKakao(window.kakao);
-  }
+  const [map, setMap] = useState(null);
   const [placeService, setPlaceService] = useState(null);
+  const [searchResult, setSearchResult] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
   useEffect(() => {
     if (!kakao) return;
     setPlaceService(new kakao.maps.services.Places());
@@ -31,18 +36,31 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(locationKeyword);
     placeService.keywordSearch(
       locationKeyword,
       response => setSearchResult(response),
-      {}
+      { location: new kakao.maps.LatLng(currentLat, currentLng), page: 10 }
     );
   };
 
-  const [searchResult, setSearchResult] = useState([]);
+  const handleClick = ({ currentTarget }) => {
+    const index = currentTarget.dataset.index;
+    const targetData = searchResult[index];
+    const { x, y } = targetData;
 
-  const results = searchResult.map(item => (
-    <div key={item.x} className="location-finder-result-item">
+    setSelectedLocation(targetData);
+    setCurrentLng(x);
+    setCurrentLat(y);
+    map.setCenter(new kakao.maps.LatLng(y, x));
+  };
+
+  const results = searchResult.map((item, index) => (
+    <div
+      key={item.x}
+      data-index={index}
+      className="location-finder-result-item"
+      onClick={handleClick}
+    >
       <div className="location-finder-result-item-name">{item.place_name}</div>
       <div className="location-finder-result-item-address">
         {item.address_name}
@@ -103,9 +121,10 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
           height="400px"
           level={3}
           lat={initialLat}
-          lng={initialLong}
+          lng={initialLng}
         >
           {markers}
+          <MapContextForwarder setKakao={setKakao} setMap={setMap} />
         </KakaoMap>
       </div>
       <div className="location-finder-footer">
