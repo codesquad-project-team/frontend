@@ -25,7 +25,7 @@ const SignupPage = () => {
 
   const [reason, setReason] = useState(null);
 
-  const checkNickname = useCallback(async nickname => {
+  const checkNicknameFromServer = useCallback(async nickname => {
     const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
       method: 'POST',
       mode: 'cors',
@@ -60,7 +60,7 @@ const SignupPage = () => {
       //4~15자 영문 소문자, 숫자, 하이픈, 언더바
       //영문으로 시작, 공백 불가
       if (isValid) {
-        checkNickname(nickname);
+        checkNicknameFromServer(nickname);
       } else if (hasBlank) {
         setReason({ valid: false, message: '닉네임에 공백이 있어요.' });
       } else if (nickname.length === 1) {
