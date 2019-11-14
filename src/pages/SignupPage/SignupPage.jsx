@@ -35,16 +35,19 @@ const SignupPage = () => {
     });
     switch (res.status) {
       case 200:
-        setReason('사용 가능한 닉네임이에요.');
+        setReason({ valid: true, message: '사용 가능한 닉네임이에요.' });
         break;
       case 400:
-        setReason('닉네임에 공백이 있어요.');
+        setReason({ valid: false, message: '닉네임에 공백이 있어요.' });
         break;
       case 409:
-        setReason('중복된 닉네임이에요.');
+        setReason({ valid: false, message: '이미 사용중인 닉네임이에요.' });
         break;
       case 500:
-        setReason('서버에서 에러가 발생했어요. 잠시후에 다시 시도해주세요.');
+        setReason({
+          valid: false,
+          message: '서버에서 에러가 발생했어요. 잠시후에 다시 시도해주세요.'
+        });
         break;
       default:
         break;
@@ -60,9 +63,14 @@ const SignupPage = () => {
       if (isValid) {
         checkNickname(nickname);
       } else if (hasBlank) {
-        setReason('닉네임에 공백이 있어요.');
+        setReason({ valid: false, message: '닉네임에 공백이 있어요.' });
+      } else if (nickname.length === 1) {
+        setReason({ valid: false, message: '' });
       } else {
-        setReason('영문으로 시작하는 4~15자의 영문, 숫자 조합을 만들어주세요.');
+        setReason({
+          valid: false,
+          message: '영문으로 시작하는 4~15자의 영문, 숫자 조합을 만들어주세요.'
+        });
       }
     }),
     []
@@ -72,7 +80,7 @@ const SignupPage = () => {
     if (nickname) {
       checkNicknameValidation(nickname);
     } else {
-      setReason('');
+      setReason(null);
     }
   }, [nickname]);
 
@@ -97,7 +105,15 @@ const SignupPage = () => {
             placeholder="4~15자로 입력해주세요."
           />
           <div>
-            <span>{reason}</span>
+            {reason && (
+              <span
+                className={
+                  reason.valid ? 'signup-page-reason-ok' : 'signup-page-reason'
+                }
+              >
+                {reason.message}
+              </span>
+            )}
           </div>
         </div>
         <CommonBtn styleType="normal" className="signup-page-signup-btn">
