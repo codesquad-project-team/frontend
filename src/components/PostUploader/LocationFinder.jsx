@@ -4,7 +4,7 @@ import { KakaoMap, Marker } from 'react-kakao-maps';
 import useInput from '../../hooks/useInput';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CloseBtn from '../CommonBtn/CloseBtn';
-import MapContextForwarder from './MapContextForwarder';
+import useMapContext from './useMapContext';
 import { IMAGE_BUCKET_URL } from '../../configs';
 
 const initialLat = 37.5845218; //initial location
@@ -23,8 +23,7 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
   const [currentLat, setCurrentLat] = useState(initialLat);
   const [currentLng, setCurrentLng] = useState(initialLng);
 
-  const [kakao, setKakao] = useState(null);
-  const [map, setMap] = useState(null);
+  const { MapContextForwarder, kakao, map } = useMapContext();
   const [placeService, setPlaceService] = useState(null);
   const [searchResult, setSearchResult] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -124,7 +123,7 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
           lng={initialLng}
         >
           {markers}
-          <MapContextForwarder setKakao={setKakao} setMap={setMap} />
+          <MapContextForwarder />
         </KakaoMap>
       </div>
       <div className="location-finder-footer">
