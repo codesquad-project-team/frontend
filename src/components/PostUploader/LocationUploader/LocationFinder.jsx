@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './LocationFinder.scss';
 import { KakaoMap, Marker } from 'react-kakao-maps';
-import useInput from '../../hooks/useInput';
-import CommonBtn from '../CommonBtn/CommonBtn';
-import CloseBtn from '../CommonBtn/CloseBtn';
+import useInput from '../../../hooks/useInput';
+import CommonBtn from '../../CommonBtn/CommonBtn';
+import CloseBtn from '../../CommonBtn/CloseBtn';
 import useMapContext from './useMapContext';
 import usePlaceService from './usePlaceService';
-import { IMAGE_BUCKET_URL } from '../../configs';
+import { IMAGE_BUCKET_URL } from '../../../configs';
 
 const initialLat = 37.5845218; //initial location
 const initialLng = 126.9975588;

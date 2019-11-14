@@ -1,5 +1,5 @@
 import React from 'react';
-import useModal from '../../hooks/useModal';
+import useModal from '../../../hooks/useModal';
 import LocationFinder from './LocationFinder';
 
 const LocationUploader = () => {
