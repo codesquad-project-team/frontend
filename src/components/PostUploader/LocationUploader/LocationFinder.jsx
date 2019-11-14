@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import './LocationFinder.scss';
 import { KakaoMap, Marker } from 'react-kakao-maps';
 import useInput from '../../../hooks/useInput';
@@ -28,6 +28,14 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
   const { placeService } = usePlaceService(kakao);
   const [searchResult, setSearchResult] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
+
+  useMemo(() => {
+    if (map) {
+      const firstItemLat = searchResult[0].y;
+      const firstItemLng = searchResult[0].x;
+      map.setCenter(new kakao.maps.LatLng(firstItemLat, firstItemLng));
+    }
+  }, [searchResult]);
 
   const handleSubmit = e => {
     e.preventDefault();
