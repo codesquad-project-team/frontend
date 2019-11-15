@@ -11,6 +11,12 @@ const ImageUploader = ({
 
   const getImage = ({ target }) => {
     const files = Array.from(target.files);
+
+    if (files.length + selectedImages.length > 5) {
+      alert("업로드 할 수 있는 이미지의 최대 개수는 5개 입니다!");
+      return;
+    }
+
     addImageHandler(files);
   };
 
@@ -24,10 +30,6 @@ const ImageUploader = ({
       />
     );
   });
-
-  const uploadFile = async e => {
-    e.preventDefault();
-  };
 
   return (
     <div className="image-uploader">
