@@ -2,27 +2,49 @@
 
 .image-uploader {
   display: flex;
-  justify-content: center;
   align-items: center;
   width: 60rem;
   height: 20rem;
   border: 1px solid $gray-border-color;
 
-  &-preview {
-    height: 20rem;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: row;
+  &-preview-img {
+    width: 12rem;
+    height: 12rem;
 
-    &-img {
-      width: 15rem;
-      height: 15rem;
-      border: 1px dashed #fe7c96;
-
-      & + & {
-        margin-left: 2rem;
-      }
+    & + & {
+      margin-left: 2rem;
     }
+  }
+
+  &-extra-add-div {
+    width: 12rem;
+    height: 12rem;
+    margin-left: 2rem;
+    border: 2px dashed $main-color-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-extra-add-label {
+    display: inline-block;
+    padding: 1.5rem 2rem;
+    border-radius: 50%;
+    background-color: $main-color-light;
+    color: white;
+    font-size: 3rem;
+    line-height: normal;
+    cursor: pointer;
+  }
+
+  &-extra-add-btn {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
   }
 }

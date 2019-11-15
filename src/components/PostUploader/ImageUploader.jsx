@@ -7,6 +7,8 @@ const ImageUploader = ({
   addImageHandler,
   deleteImageHandler
 }) => {
+  const maximumCnt = 5;
+
   const getImage = ({ target }) => {
     const files = Array.from(target.files);
     addImageHandler(files);
@@ -15,9 +17,11 @@ const ImageUploader = ({
   const previewImages = selectedImages.map((image, index) => {
     const previewUrl = URL.createObjectURL(image);
     return (
-      <li key={index}>
-        <img className="image-uploader-preview-img" src={previewUrl} />
-      </li>
+      <img
+        className="image-uploader-preview-img"
+        src={previewUrl}
+        key={index}
+      />
     );
   });
 
@@ -27,8 +31,23 @@ const ImageUploader = ({
 
   return (
     <div className="image-uploader">
-      <ul className="image-uploader-preview" />
       {previewImages}
+      {0 < previewImages.length && previewImages.length < maximumCnt && (
+        <div className="image-uploader-extra-add-div">
+          <label className="image-uploader-extra-add-label" htmlFor="extra-add">
+            +
+          </label>
+          <input
+            className="image-uploader-extra-add-btn"
+            id="extra-add"
+            type="file"
+            accept="image/*"
+            onChange={getImage}
+            multiple
+            name="filename[]"
+          />
+        </div>
+      )}
       <input
         id="upload-image"
         type="file"
