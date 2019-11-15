@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const usePlaceService = kakao => {
+const usePlaceService = (kakao = window.kakao) => {
   const [placeService, setPlaceService] = useState(null);
 
   useEffect(() => {
