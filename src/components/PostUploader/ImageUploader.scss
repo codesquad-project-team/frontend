@@ -1,10 +1,28 @@
-@import '../../stylesheets/util.scss';
+@import "../../stylesheets/util.scss";
 
 .image-uploader {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 60rem;
-  height: 40rem;
+  height: 20rem;
   border: 1px solid $gray-border-color;
+
+  &-preview {
+    height: 20rem;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+
+    &-img {
+      width: 15rem;
+      height: 15rem;
+      border: 1px dashed #fe7c96;
+
+      & + & {
+        margin-left: 2rem;
+      }
+    }
+  }
 }
