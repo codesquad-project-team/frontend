@@ -6,17 +6,49 @@
   flex-wrap: wrap;
   width: 60rem;
 
-  &-preview-img {
-    width: 15rem;
-    height: 15rem;
-    margin-bottom: 3rem;
+  &-preview {
+    &-wrapper {
+      position: relative;
 
-    & + & {
-      margin-left: 2rem;
+      & + & {
+        margin-left: 2rem;
+      }
+    }
+
+    &-img {
+      width: 15rem;
+      height: 15rem;
+      margin-bottom: 3rem;
+      border: 1px solid $main-color-light;
+
+      &:hover ~ &-close-btn {
+        cursor: pointer;
+        display: block;
+      }
+
+      &-close-btn {
+        width: 2rem;
+        height: 2rem;
+        font-weight: bold;
+        position: absolute;
+        border-radius: 50%;
+        border: 1px solid $main-color;
+        background-color: $gray-background-color;
+        color: $main-color;
+        right: 0.5rem;
+        top: 0.5rem;
+        display: none;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          display: flex;
+        }
+      }
     }
   }
 
-  &-extra-add-div {
+  &-extra-add-wrapper {
     width: 15rem;
     height: 15rem;
     margin-left: 2rem;
