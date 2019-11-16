@@ -1,15 +1,15 @@
-@import "../../stylesheets/util.scss";
+@import '../../stylesheets/util.scss';
 
 .image-uploader {
   display: flex;
-  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
   width: 60rem;
-  height: 20rem;
-  border: 1px solid $gray-border-color;
 
   &-preview-img {
-    width: 12rem;
-    height: 12rem;
+    width: 15rem;
+    height: 15rem;
+    margin-bottom: 3rem;
 
     & + & {
       margin-left: 2rem;
@@ -17,8 +17,8 @@
   }
 
   &-extra-add-div {
-    width: 12rem;
-    height: 12rem;
+    width: 15rem;
+    height: 15rem;
     margin-left: 2rem;
     border: 2px dashed $main-color-light;
     display: flex;
