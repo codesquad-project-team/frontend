@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import './ImageUploader.scss';
 import { PRE_SIGNED_URL } from '../../configs';
 
-const ImageUploader = ({
-  selectedImages,
-  addImageHandler,
-  deleteImageHandler
-}) => {
+const ImageUploader = ({ images, addImageHandler, deleteImageHandler }) => {
   const maximumCnt = 5;
+  const { selectedImages, previewUrls } = images;
 
   const getImage = ({ target }) => {
     const files = Array.from(target.files);
@@ -20,7 +17,7 @@ const ImageUploader = ({
     addImageHandler(files);
   };
 
-  const previewImages = selectedImages.map((image, index) => {
+  const previewImages = previewUrls.map((image, index) => {
     return (
       <div className="image-uploader-preview-wrapper" key={index}>
         <img className="image-uploader-preview-img" src={image} />
@@ -59,7 +56,9 @@ const ImageUploader = ({
         accept="image/*"
         className="image-uploader-input"
         onChange={getImage}
-        style={{ display: !previewImages.length ? 'block' : 'none' }}
+        style={{
+          display: !previewUrls.length ? 'block' : 'none'
+        }}
         multiple
         name="filename[]"
       />
