@@ -21,10 +21,9 @@ const ImageUploader = ({
   };
 
   const previewImages = selectedImages.map((image, index) => {
-    const previewUrl = URL.createObjectURL(image);
     return (
       <div className="image-uploader-preview-wrapper" key={index}>
-        <img className="image-uploader-preview-img" src={previewUrl} />
+        <img className="image-uploader-preview-img" src={image} />
         <button
           className="image-uploader-preview-img-close-btn"
           onClick={deleteImageHandler}
