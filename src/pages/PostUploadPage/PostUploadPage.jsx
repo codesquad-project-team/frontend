@@ -17,7 +17,6 @@ const PostUploadPage = () => {
 
   const addImageHandler = files => {
     /* Map each file to a promise that resolves to an array of image URI's */
-
     Promise.all(
       files.map(file => {
         return new Promise((resolve, reject) => {
@@ -44,15 +43,22 @@ const PostUploadPage = () => {
 
   const deleteImageHandler = e => {
     e.preventDefault();
-    // const deletedImage = e.target.previousSibling.src;
 
-    // console.log(deletedImage);
+    const deletedImage = e.target.previousSibling.src;
+    const targetIndex = images.previewUrls.findIndex(
+      url => url === deletedImage
+    );
 
-    // const newSelectedImages = imagesPreviewUrls.filter(
-    //   el => el !== deletedImage
-    // );
-    // console.log(newSelectedImages);
-    // 해당 이미지를 selectedImage 에서 삭제하고 다시 addImageHandler 실행?
+    setImages({
+      selectedImages: removeItemWithSlice(images.selectedImages, targetIndex),
+      previewUrls: removeItemWithSlice(images.previewUrls, targetIndex)
+    });
+  };
+
+  const removeItemWithSlice = (arr, index) => {
+    const firstArr = arr.slice(0, index);
+    const secondArr = arr.slice(index + 1);
+    return [...firstArr, ...secondArr];
   };
 
   const handleSubmit = e => {
