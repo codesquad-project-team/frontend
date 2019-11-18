@@ -22,7 +22,7 @@ const SignupPage = () => {
   const { provider } = authData || { provider: '(테스트)' }; //TODO: 토큰검증 기능 안정되면 제거
   const postposition = provider === '카카오' ? '로' : '으로';
 
-  const [reason, setReason] = useState(null);
+  const [nicknameValidity, setNicknameValidity] = useState(null);
 
   const checkNicknameFromServer = useCallback(async nickname => {
     const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
@@ -33,16 +33,25 @@ const SignupPage = () => {
     });
     switch (res.status) {
       case 200:
-        setReason({ valid: true, message: '사용 가능한 닉네임이에요.' });
+        setNicknameValidity({
+          valid: true,
+          message: '사용 가능한 닉네임이에요.'
+        });
         break;
       case 400:
-        setReason({ valid: false, message: '닉네임에 공백이 있어요.' });
+        setNicknameValidity({
+          valid: false,
+          message: '닉네임에 공백이 있어요.'
+        });
         break;
       case 409:
-        setReason({ valid: false, message: '이미 사용중인 닉네임이에요.' });
+        setNicknameValidity({
+          valid: false,
+          message: '이미 사용중인 닉네임이에요.'
+        });
         break;
       case 500:
-        setReason({
+        setNicknameValidity({
           valid: false,
           message: '서버에서 에러가 발생했어요. 잠시후에 다시 시도해주세요.'
         });
@@ -54,19 +63,29 @@ const SignupPage = () => {
 
   const checkNicknameValidation = useCallback(
     debounce(nickname => {
-      const hasBlank = /\s/.test(nickname);
       const isValid = /^[a-z][a-z0-9_-]{3,14}$/.test(nickname);
-      if (isValid) {
-        checkNicknameFromServer(nickname);
-      } else if (hasBlank) {
-        setReason({ valid: false, message: '닉네임에 공백이 있어요.' });
-      } else if (nickname.length === 1) {
-        setReason({ valid: false, message: '' });
-      } else {
-        setReason({
-          valid: false,
-          message: '영문으로 시작하는 4~15자의 영문, 숫자 조합을 만들어주세요.'
-        });
+      const hasBlank = /\s/.test(nickname);
+      const onlyOneCharacter = nickname.length === 1;
+      switch (true) {
+        case isValid:
+          checkNicknameFromServer(nickname);
+          break;
+        case hasBlank:
+          setNicknameValidity({
+            valid: false,
+            message: '닉네임에 공백이 있어요.'
+          });
+          break;
+        case onlyOneCharacter:
+          setNicknameValidity({ valid: false, message: '' });
+          break;
+        default:
+          setNicknameValidity({
+            valid: false,
+            message:
+              '영문으로 시작하는 4~15자의 영문, 숫자 조합을 만들어주세요.'
+          });
+          break;
       }
     }),
     []
@@ -76,7 +95,7 @@ const SignupPage = () => {
     if (nickname) {
       checkNicknameValidation(nickname);
     } else {
-      setReason(null);
+      setNicknameValidity(null);
     }
   }, [nickname]);
 
@@ -102,20 +121,20 @@ const SignupPage = () => {
               placeholder="4~15자로 입력해주세요."
             />
             <div>
-              {reason && (
+              {nicknameValidity && (
                 <span
                   className={
-                    reason.valid
+                    nicknameValidity.valid
                       ? 'signup-page-reason-ok'
                       : 'signup-page-reason'
                   }
                 >
-                  {reason.message}
+                  {nicknameValidity.message}
                 </span>
               )}
             </div>
           </div>
-          <CommonBtn styleType="normal" className="signup-page-signup-btn">
+          <CommonBtn styleType="emphasize" className="signup-page-signup-btn">
             회원가입
           </CommonBtn>
         </div>
