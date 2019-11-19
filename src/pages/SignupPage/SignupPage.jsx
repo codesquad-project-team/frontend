@@ -64,7 +64,7 @@ const SignupPage = () => {
 
   const checkNicknameValidation = useCallback(
     debounce(nickname => {
-      const isValid = /^[a-z][a-z0-9_-]{3,14}$/.test(nickname);
+      const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
       const hasBlank = /\s/.test(nickname);
       const onlyOneCharacter = nickname.length === 1;
       switch (true) {
