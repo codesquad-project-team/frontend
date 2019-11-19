@@ -100,6 +100,8 @@ const SignupPage = () => {
     }
   }, [nickname]);
 
+  const [signupFailed, setSignupFailed] = useState(false);
+
   const signUp = useCallback(async nickname => {
     const res = await fetch(`${WEB_SERVER_URL}/auth/signup`, {
       method: 'POST',
@@ -110,26 +112,40 @@ const SignupPage = () => {
       credentials: 'include',
       body: JSON.stringify({ nickname })
     });
-    console.log(res);
     switch (res.status) {
       case 400:
-        console.log('제출된 닉네임이 없어요.');
+        setSignupFailed(true);
+        setNicknameValidity({
+          valid: false,
+          message: '제출된 닉네임이 없어요.'
+        });
         break;
       case 401:
-        console.log(
-          '토큰이 유효하지 않아요. 메인으로 돌아가서 다시 시도해주세요.'
-        );
+        setSignupFailed(true);
+        setNicknameValidity({
+          valid: false,
+          message:
+            '토큰이 유효하지 않아요. 메인으로 돌아가서 다시 시도해주세요.'
+        });
         break;
       default:
         break;
     }
   }, []);
 
+  useEffect(() => {
+    if (signupFailed) {
+      setTimeout(() => {
+        setSignupFailed(false);
+      }, 300);
+    }
+  }, [signupFailed]);
+
   const handleSubmit = () => {
     if (nicknameValidity.valid) {
       signUp(nickname);
     } else {
-      //TODO: input창 흔들리는 인터렉션
+      setSignupFailed(true);
     }
   };
 
@@ -148,7 +164,10 @@ const SignupPage = () => {
           </h2>
           <div className="signup-page-auth-checker">인증완료</div>
           <span>닉네임을 만들어주세요</span>
-          <div className="signup-page-input-section">
+          <div
+            className={`signup-page-input-section ${signupFailed &&
+              'signup-page-input-section-failed'}`}
+          >
             <input
               name="nickname"
               value={nickname}
