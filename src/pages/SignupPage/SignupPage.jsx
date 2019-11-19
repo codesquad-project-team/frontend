@@ -9,6 +9,8 @@ import FadeLoader from 'react-spinners/FadeLoader';
 import { debounce } from '../../utils/utils';
 import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 
+const ANIMATION_DELAY = 300;
+
 const SignupPage = () => {
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
@@ -137,7 +139,7 @@ const SignupPage = () => {
     if (signupFailed) {
       setTimeout(() => {
         setSignupFailed(false);
-      }, 300);
+      }, ANIMATION_DELAY);
     }
   }, [signupFailed]);
 

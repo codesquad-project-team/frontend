@@ -1,5 +1,7 @@
 @import '../../stylesheets/util.scss';
 
+$ANIMATION_DELAY: 0.3s;
+
 .signup-page {
   display: flex;
   flex-direction: column;
@@ -103,7 +105,7 @@
           transform: translate3d(12px, 0, 0);
         }
       }
-      animation: shake 0.3s;
+      animation: shake $ANIMATION_DELAY;
     }
   }
 
