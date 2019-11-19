@@ -12,15 +12,15 @@ const SignupPage = () => {
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
 
-  const [authData, setAuthData] = useState(null);
+  const [authData, setAuthData] = useState({});
   const { loading } = useFetch(
     `${WEB_SERVER_URL}/validate/tempToken`,
     { method: 'POST', credentials: 'include' },
     json => setAuthData(json)
   );
 
-  const { provider } = authData || { provider: '(테스트)' }; //TODO: 토큰검증 기능 안정되면 제거
-  const postposition = provider === '카카오' ? '로' : '으로';
+  const { provider } = authData;
+  const postposition = provider === 'kakao' ? '로' : '으로';
 
   const [nicknameValidity, setNicknameValidity] = useState(null);
 
