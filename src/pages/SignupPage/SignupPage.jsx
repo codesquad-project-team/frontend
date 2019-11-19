@@ -100,6 +100,39 @@ const SignupPage = () => {
     }
   }, [nickname]);
 
+  const signUp = useCallback(async nickname => {
+    const res = await fetch(`${WEB_SERVER_URL}/auth/signup`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({ nickname })
+    });
+    console.log(res);
+    switch (res.status) {
+      case 400:
+        console.log('제출된 닉네임이 없어요.');
+        break;
+      case 401:
+        console.log(
+          '토큰이 유효하지 않아요. 메인으로 돌아가서 다시 시도해주세요.'
+        );
+        break;
+      default:
+        break;
+    }
+  }, []);
+
+  const handleSubmit = () => {
+    if (nicknameValidity.valid) {
+      signUp(nickname);
+    } else {
+      //TODO: input창 흔들리는 인터렉션
+    }
+  };
+
   return (
     <div className="signup-page">
       <header>
@@ -137,7 +170,11 @@ const SignupPage = () => {
               )}
             </div>
           </div>
-          <CommonBtn styleType="emphasize" className="signup-page-signup-btn">
+          <CommonBtn
+            styleType="emphasize"
+            className="signup-page-signup-btn"
+            onClick={handleSubmit}
+          >
             회원가입
           </CommonBtn>
         </div>
