@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './SignupPage.scss';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
+import CommonLink from '../../components/CommonLink/CommonLink';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
 import { css } from '@emotion/core';
@@ -102,7 +103,9 @@ const SignupPage = () => {
   return (
     <div className="signup-page">
       <header>
-        <h1>Connect Flavor</h1>
+        <CommonLink to="/">
+          <h1>Connect Flavor</h1>
+        </CommonLink>
       </header>
       {!loading && (
         <div className="signup-page-body">
