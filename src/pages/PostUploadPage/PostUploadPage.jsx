@@ -17,6 +17,8 @@ const PostUploadPage = () => {
     previewUrls: []
   });
 
+  const [representativeIndex, setRepresentativeIndex] = useState(0);
+
   // TODO : 브라우저의 토큰에 저장되어 있는 쿠키에서 user nickname 가져오는 코드 추가
 
   const { s3, createAlbum, addImage } = useS3();
@@ -69,11 +71,22 @@ const PostUploadPage = () => {
     return [...firstArr, ...secondArr];
   };
 
-  const handleSubmit = e => {
+  const selectRepresentativeImage = e => {
+    e.preventDefault();
+    const represenTativeImage = e.target.previousSibling.previousSibling.src;
+    const represenTativeIndex = images.previewUrls.findIndex(
+      el => el === represenTativeImage
+    );
+
+    setRepresentativeIndex(represenTativeIndex);
+  };
+
+  const handleSubmit = async e => {
     e.preventDefault();
 
-    const albumName = createAlbum("michelle", YYYYMMDDHHMMSS(new Date()));
-    addImage(images.selectedImages, albumName);
+    const albumName = await createAlbum("michelle", YYYYMMDDHHMMSS(new Date()));
+    const uploadedUrl = await addImage(images.selectedImages, albumName);
+    console.log(uploadedUrl);
   };
 
   return (
@@ -85,6 +98,8 @@ const PostUploadPage = () => {
             images={images}
             addImageHandler={addImageHandler}
             deleteImageHandler={deleteImageHandler}
+            representativeImageHandler={selectRepresentativeImage}
+            representativeIndex={representativeIndex}
           />
           <LocationUploader />
           <TitleUploader />

@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import './ImageUploader.scss';
-import { PRE_SIGNED_URL } from '../../configs';
+import React, { useState } from "react";
+import "./ImageUploader.scss";
+import { PRE_SIGNED_URL } from "../../configs";
 
-const ImageUploader = ({ images, addImageHandler, deleteImageHandler }) => {
+const ImageUploader = ({
+  images,
+  addImageHandler,
+  deleteImageHandler,
+  representativeImageHandler,
+  representativeIndex
+}) => {
   const maximumCnt = 5;
   const { selectedImages, previewUrls } = images;
 
@@ -10,7 +16,7 @@ const ImageUploader = ({ images, addImageHandler, deleteImageHandler }) => {
     const files = Array.from(target.files);
 
     if (files.length + selectedImages.length > 5) {
-      alert('업로드 할 수 있는 이미지의 최대 개수는 5개 입니다!');
+      alert("업로드 할 수 있는 이미지의 최대 개수는 5개 입니다!");
       return;
     }
 
@@ -18,14 +24,25 @@ const ImageUploader = ({ images, addImageHandler, deleteImageHandler }) => {
   };
 
   const previewImages = previewUrls.map((image, index) => {
+    const representativeClassName =
+      index === representativeIndex ? "representative" : "non-representative";
     return (
       <div className="image-uploader-preview-wrapper" key={index}>
-        <img className="image-uploader-preview-img" src={image} />
+        <img
+          className={`image-uploader-preview-img ${representativeClassName}`}
+          src={image}
+        />
         <button
           className="image-uploader-preview-img-close-btn"
           onClick={deleteImageHandler}
         >
           X
+        </button>
+        <button
+          className="image-uploader-preview-img-select-btn"
+          onClick={representativeImageHandler}
+        >
+          *
         </button>
       </div>
     );
@@ -57,7 +74,7 @@ const ImageUploader = ({ images, addImageHandler, deleteImageHandler }) => {
         className="image-uploader-input"
         onChange={getImage}
         style={{
-          display: !previewUrls.length ? 'block' : 'none'
+          display: !previewUrls.length ? "block" : "none"
         }}
         multiple
         name="filename[]"
