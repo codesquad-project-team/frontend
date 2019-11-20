@@ -46,7 +46,7 @@ const useS3 = () => {
       return alert("Please choose a file to upload first.");
     }
 
-    Promise.all(
+    const response = Promise.all(
       files.map(file => {
         const fileName = file.name;
         const albumPhotosKey =
@@ -66,13 +66,14 @@ const useS3 = () => {
         return upload.promise();
       })
     ).then(
-      uploadPromise => {
+      uploadedUrl => {
         alert("Successfully uploaded photo.");
+        return uploadedUrl;
       },
-      err => {
-        return alert("There was an error uploading your photo: ", err.message);
-      }
+      err => alert("There was an error uploading your photo: ", err.message)
     );
+
+    return response;
   };
 
   useEffect(() => {
