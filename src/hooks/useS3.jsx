@@ -45,28 +45,31 @@ const useS3 = () => {
     if (!files.length) {
       return alert("Please choose a file to upload first.");
     }
-    var file = files[0];
-    var fileName = file.name;
-    var albumPhotosKey = "post-images/" + encodeURIComponent(albumName) + "//";
-    var photoKey = albumPhotosKey + fileName;
 
-    var upload = new AWS.S3.ManagedUpload({
-      params: {
-        // eslint-disable-next-line no-undef
-        Bucket: `${ALBUM_BUCKET_NAME}`,
-        Key: photoKey,
-        Body: file,
-        ACL: "public-read"
-      }
-    });
+    Promise.all(
+      files.map(file => {
+        const fileName = file.name;
+        const albumPhotosKey =
+          "post-images/" + encodeURIComponent(albumName) + "//";
+        const photoKey = albumPhotosKey + fileName;
 
-    var promise = upload.promise();
+        const upload = new AWS.S3.ManagedUpload({
+          params: {
+            // eslint-disable-next-line no-undef
+            Bucket: `${ALBUM_BUCKET_NAME}`,
+            Key: photoKey,
+            Body: file,
+            ACL: "public-read"
+          }
+        });
 
-    promise.then(
-      function(data) {
+        return upload.promise();
+      })
+    ).then(
+      uploadPromise => {
         alert("Successfully uploaded photo.");
       },
-      function(err) {
+      err => {
         return alert("There was an error uploading your photo: ", err.message);
       }
     );
