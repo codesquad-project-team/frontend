@@ -15,14 +15,13 @@ const SignupPage = () => {
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
 
-  const [authData, setAuthData] = useState({});
+  const [provider, setProvider] = useState(null);
   const { loading } = useFetch(
     `${WEB_SERVER_URL}/validate/tempToken`,
     { method: 'POST', credentials: 'include' },
-    json => setAuthData(json)
+    json => setProvider(json.provider)
   );
 
-  const { provider } = authData;
   const postposition = provider === 'kakao' ? '로' : '으로';
 
   const [nicknameValidity, setNicknameValidity] = useState(null);
@@ -135,6 +134,15 @@ const SignupPage = () => {
     }
   }, []);
 
+  const requestSignup = () => {
+    if (!nicknameValidity) return setSignupFailed(true);
+    if (nicknameValidity.valid) {
+      signUp(nickname);
+    } else {
+      setSignupFailed(true);
+    }
+  };
+
   useEffect(() => {
     if (signupFailed) {
       setTimeout(() => {
@@ -142,14 +150,6 @@ const SignupPage = () => {
       }, ANIMATION_DELAY);
     }
   }, [signupFailed]);
-
-  const handleSubmit = () => {
-    if (nicknameValidity.valid) {
-      signUp(nickname);
-    } else {
-      setSignupFailed(true);
-    }
-  };
 
   return (
     <div className="signup-page">
@@ -194,7 +194,7 @@ const SignupPage = () => {
           <CommonBtn
             styleType="emphasize"
             className="signup-page-signup-btn"
-            onClick={handleSubmit}
+            onClick={requestSignup}
           >
             회원가입
           </CommonBtn>
