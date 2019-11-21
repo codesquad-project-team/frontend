@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import './SignupPage.scss';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import CommonLink from '../../components/CommonLink/CommonLink';
@@ -9,8 +9,8 @@ import { debounce } from '../../utils/utils';
 import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { useLoginContext } from '../../contexts/LoginContext';
 import useTempTokenValidation from '../../hooks/useTempTokenValidation';
+import useShakeAnimation from '../../hooks/useShakeAnimation';
 
-const ANIMATION_DELAY = 300;
 const NICKNAME_AVAILABLE = {
   valid: true,
   message: '사용 가능한 닉네임이에요.'
@@ -42,10 +42,12 @@ const SignupPage = ({ history }) => {
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
 
-  const [nicknameValidity, setNicknameValidity] = useState({});
-  const [signupFailed, setSignupFailed] = useState(false);
-
   const { loading, provider } = useTempTokenValidation(history);
+
+  const [nicknameValidity, setNicknameValidity] = useState({});
+
+  const shakeTarget = useRef(null);
+  const { setSignupFailed } = useShakeAnimation(shakeTarget);
 
   const checkNicknameFromServer = useCallback(async nickname => {
     const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
@@ -143,14 +145,6 @@ const SignupPage = ({ history }) => {
     }
   }, [nickname]);
 
-  useEffect(() => {
-    if (signupFailed) {
-      setTimeout(() => {
-        setSignupFailed(false);
-      }, ANIMATION_DELAY);
-    }
-  }, [signupFailed]);
-
   return (
     <div className="signup-page">
       <header>
@@ -163,10 +157,7 @@ const SignupPage = ({ history }) => {
           <h2>{provider} 회원가입</h2>
           <div className="signup-page-auth-checker">인증완료</div>
           <span>닉네임을 만들어주세요</span>
-          <div
-            className={`signup-page-input-section ${signupFailed &&
-              'signup-page-input-section-failed'}`}
-          >
+          <div ref={shakeTarget} className={`signup-page-input-section`}>
             <input
               name="nickname"
               value={nickname}
