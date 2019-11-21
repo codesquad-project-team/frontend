@@ -3,12 +3,12 @@ import './SignupPage.scss';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import CommonLink from '../../components/CommonLink/CommonLink';
 import useInput from '../../hooks/useInput';
-import useFetch from '../../hooks/useFetch';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { debounce } from '../../utils/utils';
 import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { useLoginContext } from '../../contexts/LoginContext';
+import useTempTokenValidation from '../../hooks/useTempTokenValidation';
 
 const ANIMATION_DELAY = 300;
 const NICKNAME_AVAILABLE = {
@@ -42,17 +42,10 @@ const SignupPage = ({ history }) => {
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
 
-  const [provider, setProvider] = useState(null);
-  const postposition = provider === 'kakao' ? '로' : '으로';
-
   const [nicknameValidity, setNicknameValidity] = useState({});
   const [signupFailed, setSignupFailed] = useState(false);
 
-  const { loading, error } = useFetch(
-    `${WEB_SERVER_URL}/validate/tempToken`,
-    { method: 'POST', credentials: 'include' },
-    json => setProvider(json.provider)
-  );
+  const { loading, provider } = useTempTokenValidation(history);
 
   const checkNicknameFromServer = useCallback(async nickname => {
     const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
@@ -143,10 +136,6 @@ const SignupPage = ({ history }) => {
   };
 
   useEffect(() => {
-    if (error && error.message === '401') history.push('/');
-  }, []);
-
-  useEffect(() => {
     if (nickname) {
       checkNicknameValidation(nickname);
     } else {
@@ -171,10 +160,7 @@ const SignupPage = ({ history }) => {
       </header>
       {!loading && (
         <div className="signup-page-body">
-          <h2>
-            {provider}
-            {postposition} 회원가입
-          </h2>
+          <h2>{provider} 회원가입</h2>
           <div className="signup-page-auth-checker">인증완료</div>
           <span>닉네임을 만들어주세요</span>
           <div
