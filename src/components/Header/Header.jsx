@@ -5,14 +5,14 @@ import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CommonModal from '../CommonModal/CommonModal';
 import CommonLink from '../CommonLink/CommonLink';
+import { useLoginContext } from '../../contexts/LoginContext';
 import { IMAGE_BUCKET_URL } from '../../configs';
-
-const isLoggedIn = false; //TODO: 로그인 기능 구현시 수정
 
 const Header = () => {
   const { inputValue, handleChange, restore } = useInput();
   const [clickedSignup, setClickedSignup] = useState(false);
   const [clickedSignin, setClickedSignin] = useState(false);
+  const { loggedIn } = useLoginContext();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -25,10 +25,6 @@ const Header = () => {
 
   const handleSignup = () => {
     clickedSignup ? setClickedSignup(false) : setClickedSignup(true);
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo(0, 0);
   };
 
   return (
@@ -54,7 +50,7 @@ const Header = () => {
           />
         </form>
         <div className="header-btns">
-          {isLoggedIn ? (
+          {loggedIn ? (
             <CommonLink to="/profile">
               <ProfileImage small />
             </CommonLink>
@@ -78,11 +74,11 @@ const Header = () => {
           )}
         </div>
 
-        {!isLoggedIn && clickedSignin && (
+        {!loggedIn && clickedSignin && (
           <CommonModal clickHandler={handleSignin} target={'signin'} />
         )}
 
-        {!isLoggedIn && clickedSignup && (
+        {!loggedIn && clickedSignup && (
           <CommonModal clickHandler={handleSignup} target={'signup'} />
         )}
       </div>

@@ -8,10 +8,12 @@ import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { debounce } from '../../utils/utils';
 import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
+import { useLoginContext } from '../../contexts/LoginContext';
 
 const ANIMATION_DELAY = 300;
 
 const SignupPage = ({ history }) => {
+  const { setLoggedIn } = useLoginContext();
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
 
@@ -118,6 +120,7 @@ const SignupPage = ({ history }) => {
     const referer = json.referer.replace(domainRegExp, '');
     switch (res.status) {
       case 200:
+        setLoggedIn(true);
         history.push(referer);
         break;
       case 400:

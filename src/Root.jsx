@@ -7,10 +7,11 @@ import ProfileEditPage from './pages/ProfileEditPage/ProfileEditPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import PostUploadPage from './pages/PostUploadPage/PostUploadPage';
 import SignupPage from './pages/SignupPage/SignupPage';
+import LoginContextProvider from './contexts/LoginContext';
 
 const Root = () => {
   return (
-    <>
+    <LoginContextProvider>
       <Router>
         <Switch>
           <Route exact path="/" render={() => <MainPage />} />
@@ -27,7 +28,7 @@ const Root = () => {
           />
         </Switch>
       </Router>
-    </>
+    </LoginContextProvider>
   );
 };
 
