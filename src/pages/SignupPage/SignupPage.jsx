@@ -10,32 +10,7 @@ import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { useLoginContext } from '../../contexts/LoginContext';
 import useTempTokenValidation from '../../hooks/useTempTokenValidation';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
-
-const NICKNAME_AVAILABLE = {
-  valid: true,
-  message: '사용 가능한 닉네임이에요.'
-};
-const NICKNAME_HAS_BLANKS = {
-  valid: false,
-  message: '닉네임에 공백이 있어요.'
-};
-const NICKNAME_ALREADY_IN_USE = {
-  valid: false,
-  message: '이미 사용중인 닉네임이에요.'
-};
-const SERVER_ERROR = {
-  valid: false,
-  message: '서버에서 에러가 발생했어요. 잠시후에 다시 시도해주세요.'
-};
-const NO_MESSAGE = { valid: false, message: '' };
-const INFO_MESSAGE = {
-  valid: false,
-  message: '영문으로 시작하는 4~15자의 영문, 숫자 조합을 만들어주세요.'
-};
-const INVALID_TOKEN = {
-  valid: false,
-  message: '유효한 토큰이 아니에요. 메인으로 돌아가서 다시 시도해주세요.'
-};
+import ValidityMessage from './ValidityMessage';
 
 const SignupPage = ({ history }) => {
   const { setLoggedIn } = useLoginContext();
@@ -43,7 +18,6 @@ const SignupPage = ({ history }) => {
   const { nickname } = inputValue;
 
   const { loading, provider } = useTempTokenValidation(history);
-
   const [nicknameValidity, setNicknameValidity] = useState({});
 
   const shakeTarget = useRef(null);
@@ -58,16 +32,16 @@ const SignupPage = ({ history }) => {
     });
     switch (res.status) {
       case 200:
-        setNicknameValidity(NICKNAME_AVAILABLE);
+        setNicknameValidity('AVAILABLE');
         break;
       case 400:
-        setNicknameValidity(NICKNAME_HAS_BLANKS);
+        setNicknameValidity('HAS_BLANKS');
         break;
       case 409:
-        setNicknameValidity(NICKNAME_ALREADY_IN_USE);
+        setNicknameValidity('ALREADY_IN_USE');
         break;
       case 500:
-        setNicknameValidity(SERVER_ERROR);
+        setNicknameValidity('SERVER_ERROR');
         break;
       default:
         break;
@@ -84,13 +58,13 @@ const SignupPage = ({ history }) => {
           checkNicknameFromServer(nickname);
           break;
         case hasBlank:
-          setNicknameValidity(NICKNAME_HAS_BLANKS);
+          setNicknameValidity('HAS_BLANKS');
           break;
         case onlyOneCharacter:
-          setNicknameValidity(NO_MESSAGE);
+          setNicknameValidity('NO_MESSAGE');
           break;
         default:
-          setNicknameValidity(INFO_MESSAGE);
+          setNicknameValidity('INFO_MESSAGE');
           break;
       }
     }),
@@ -117,11 +91,11 @@ const SignupPage = ({ history }) => {
         break;
       case 400:
         setSignupFailed(true);
-        setNicknameValidity(INFO_MESSAGE);
+        setNicknameValidity('INFO_MESSAGE');
         break;
       case 401:
         setSignupFailed(true);
-        setNicknameValidity(INVALID_TOKEN);
+        setNicknameValidity('INVALID_TOKEN');
         break;
       default:
         break;
@@ -129,11 +103,11 @@ const SignupPage = ({ history }) => {
   }, []);
 
   const requestSignup = () => {
-    if (nicknameValidity.valid) {
+    if (nicknameValidity === 'AVAILABLE') {
       signUp(nickname);
     } else {
       setSignupFailed(true);
-      setNicknameValidity(INFO_MESSAGE);
+      setNicknameValidity('INFO_MESSAGE');
     }
   };
 
@@ -141,7 +115,7 @@ const SignupPage = ({ history }) => {
     if (nickname) {
       checkNicknameValidation(nickname);
     } else {
-      setNicknameValidity({});
+      setNicknameValidity('');
     }
   }, [nickname]);
 
@@ -165,19 +139,7 @@ const SignupPage = ({ history }) => {
               type="text"
               placeholder="4~15자로 입력해주세요."
             />
-            <div>
-              {nicknameValidity && (
-                <span
-                  className={
-                    nicknameValidity.valid
-                      ? 'signup-page-reason-ok'
-                      : 'signup-page-reason'
-                  }
-                >
-                  {nicknameValidity.message}
-                </span>
-              )}
-            </div>
+            <ValidityMessage nicknameValidity={nicknameValidity} />
           </div>
           <CommonBtn
             styleType="emphasize"

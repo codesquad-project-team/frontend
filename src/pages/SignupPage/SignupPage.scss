@@ -72,27 +72,6 @@
         color: $gray-font-color;
       }
     }
-
-    > div {
-      display: flex;
-      position: absolute;
-      right: 1rem;
-      pointer-events: none;
-    }
-  }
-
-  &-reason {
-    color: red;
-    &-ok {
-      color: green;
-    }
-  }
-
-  &-duplicate-check-btn {
-    margin: 0;
-    > span {
-      font-size: 2rem;
-    }
   }
 
   &-signup-btn {
