@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import './SignupPage.scss';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import CommonLink from '../../components/CommonLink/CommonLink';
@@ -18,15 +18,18 @@ const SignupPage = ({ history }) => {
   const { nickname } = inputValue;
 
   const [provider, setProvider] = useState(null);
-  const { loading } = useFetch(
+  const [nicknameValidity, setNicknameValidity] = useState({});
+  const postposition = provider === 'kakao' ? '로' : '으로';
+
+  const { loading, error } = useFetch(
     `${WEB_SERVER_URL}/validate/tempToken`,
     { method: 'POST', credentials: 'include' },
     json => setProvider(json.provider)
   );
 
-  const postposition = provider === 'kakao' ? '로' : '으로';
-
-  const [nicknameValidity, setNicknameValidity] = useState(null);
+  useEffect(() => {
+    if (error && error.message === '401') history.push('/');
+  }, [error]);
 
   const checkNicknameFromServer = useCallback(async nickname => {
     const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
@@ -99,7 +102,7 @@ const SignupPage = ({ history }) => {
     if (nickname) {
       checkNicknameValidation(nickname);
     } else {
-      setNicknameValidity(null);
+      setNicknameValidity({});
     }
   }, [nickname]);
 
@@ -135,7 +138,7 @@ const SignupPage = ({ history }) => {
         setNicknameValidity({
           valid: false,
           message:
-            '토큰이 유효하지 않아요. 메인으로 돌아가서 다시 시도해주세요.'
+            '유효한 토큰이 아니에요. 메인으로 돌아가서 다시 시도해주세요.'
         });
         break;
       default:
@@ -144,7 +147,6 @@ const SignupPage = ({ history }) => {
   }, []);
 
   const requestSignup = () => {
-    if (!nicknameValidity) return setSignupFailed(true);
     if (nicknameValidity.valid) {
       signUp(nickname);
     } else {
