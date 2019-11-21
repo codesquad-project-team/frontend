@@ -11,6 +11,31 @@ import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { useLoginContext } from '../../contexts/LoginContext';
 
 const ANIMATION_DELAY = 300;
+const NICKNAME_AVAILABLE = {
+  valid: true,
+  message: '사용 가능한 닉네임이에요.'
+};
+const NICKNAME_HAS_BLANKS = {
+  valid: false,
+  message: '닉네임에 공백이 있어요.'
+};
+const NICKNAME_ALREADY_IN_USE = {
+  valid: false,
+  message: '이미 사용중인 닉네임이에요.'
+};
+const SERVER_ERROR = {
+  valid: false,
+  message: '서버에서 에러가 발생했어요. 잠시후에 다시 시도해주세요.'
+};
+const NO_MESSAGE = { valid: false, message: '' };
+const INFO_MESSAGE = {
+  valid: false,
+  message: '영문으로 시작하는 4~15자의 영문, 숫자 조합을 만들어주세요.'
+};
+const INVALID_TOKEN = {
+  valid: false,
+  message: '유효한 토큰이 아니에요. 메인으로 돌아가서 다시 시도해주세요.'
+};
 
 const SignupPage = ({ history }) => {
   const { setLoggedIn } = useLoginContext();
@@ -18,18 +43,16 @@ const SignupPage = ({ history }) => {
   const { nickname } = inputValue;
 
   const [provider, setProvider] = useState(null);
-  const [nicknameValidity, setNicknameValidity] = useState({});
   const postposition = provider === 'kakao' ? '로' : '으로';
+
+  const [nicknameValidity, setNicknameValidity] = useState({});
+  const [signupFailed, setSignupFailed] = useState(false);
 
   const { loading, error } = useFetch(
     `${WEB_SERVER_URL}/validate/tempToken`,
     { method: 'POST', credentials: 'include' },
     json => setProvider(json.provider)
   );
-
-  useEffect(() => {
-    if (error && error.message === '401') history.push('/');
-  }, [error]);
 
   const checkNicknameFromServer = useCallback(async nickname => {
     const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
@@ -40,28 +63,16 @@ const SignupPage = ({ history }) => {
     });
     switch (res.status) {
       case 200:
-        setNicknameValidity({
-          valid: true,
-          message: '사용 가능한 닉네임이에요.'
-        });
+        setNicknameValidity(NICKNAME_AVAILABLE);
         break;
       case 400:
-        setNicknameValidity({
-          valid: false,
-          message: '닉네임에 공백이 있어요.'
-        });
+        setNicknameValidity(NICKNAME_HAS_BLANKS);
         break;
       case 409:
-        setNicknameValidity({
-          valid: false,
-          message: '이미 사용중인 닉네임이에요.'
-        });
+        setNicknameValidity(NICKNAME_ALREADY_IN_USE);
         break;
       case 500:
-        setNicknameValidity({
-          valid: false,
-          message: '서버에서 에러가 발생했어요. 잠시후에 다시 시도해주세요.'
-        });
+        setNicknameValidity(SERVER_ERROR);
         break;
       default:
         break;
@@ -78,35 +89,18 @@ const SignupPage = ({ history }) => {
           checkNicknameFromServer(nickname);
           break;
         case hasBlank:
-          setNicknameValidity({
-            valid: false,
-            message: '닉네임에 공백이 있어요.'
-          });
+          setNicknameValidity(NICKNAME_HAS_BLANKS);
           break;
         case onlyOneCharacter:
-          setNicknameValidity({ valid: false, message: '' });
+          setNicknameValidity(NO_MESSAGE);
           break;
         default:
-          setNicknameValidity({
-            valid: false,
-            message:
-              '영문으로 시작하는 4~15자의 영문, 숫자 조합을 만들어주세요.'
-          });
+          setNicknameValidity(INFO_MESSAGE);
           break;
       }
     }),
     []
   );
-
-  useEffect(() => {
-    if (nickname) {
-      checkNicknameValidation(nickname);
-    } else {
-      setNicknameValidity({});
-    }
-  }, [nickname]);
-
-  const [signupFailed, setSignupFailed] = useState(false);
 
   const signUp = useCallback(async nickname => {
     const res = await fetch(`${WEB_SERVER_URL}/auth/signup`, {
@@ -128,18 +122,11 @@ const SignupPage = ({ history }) => {
         break;
       case 400:
         setSignupFailed(true);
-        setNicknameValidity({
-          valid: false,
-          message: '제출된 닉네임이 없어요.'
-        });
+        setNicknameValidity(INFO_MESSAGE);
         break;
       case 401:
         setSignupFailed(true);
-        setNicknameValidity({
-          valid: false,
-          message:
-            '유효한 토큰이 아니에요. 메인으로 돌아가서 다시 시도해주세요.'
-        });
+        setNicknameValidity(INVALID_TOKEN);
         break;
       default:
         break;
@@ -151,8 +138,21 @@ const SignupPage = ({ history }) => {
       signUp(nickname);
     } else {
       setSignupFailed(true);
+      setNicknameValidity(INFO_MESSAGE);
     }
   };
+
+  useEffect(() => {
+    if (error && error.message === '401') history.push('/');
+  }, []);
+
+  useEffect(() => {
+    if (nickname) {
+      checkNicknameValidation(nickname);
+    } else {
+      setNicknameValidity({});
+    }
+  }, [nickname]);
 
   useEffect(() => {
     if (signupFailed) {
