@@ -21,7 +21,10 @@ const Root = () => {
             path="/post/:postId"
             render={({ match }) => <DetailPage postId={match.params.postId} />}
           />
-          <Route path="/signup" render={() => <SignupPage />} />
+          <Route
+            path="/signup"
+            render={({ history }) => <SignupPage history={history} />}
+          />
         </Switch>
       </Router>
     </>

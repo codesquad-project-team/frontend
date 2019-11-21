@@ -11,7 +11,7 @@ import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 
 const ANIMATION_DELAY = 300;
 
-const SignupPage = () => {
+const SignupPage = ({ history }) => {
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
 
@@ -113,7 +113,13 @@ const SignupPage = () => {
       credentials: 'include',
       body: JSON.stringify({ nickname })
     });
+    const json = await res.json();
+    const domainRegExp = /^(((http(s?)):\/\/)?)([0-9a-zA-Z-]+(\.|:))([a-z]{2,3}|[0-9]{4})/;
+    const referer = json.referer.replace(domainRegExp, '');
     switch (res.status) {
+      case 200:
+        history.push(referer);
+        break;
       case 400:
         setSignupFailed(true);
         setNicknameValidity({
