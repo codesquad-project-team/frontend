@@ -33,18 +33,19 @@ const ImageUploader = ({
           className={`image-uploader-preview-img ${representativeClassName}`}
           src={image}
         />
-        <button
+        <input
+          type="image"
           className="image-uploader-preview-img-close-btn"
+          src={`${IMAGE_BUCKET_URL}/image-delete-icon-2.png`}
           onClick={deleteImageHandler}
-        >
-          X
-        </button>
-        <button
+        />
+
+        <input
+          type="image"
           className="image-uploader-preview-img-select-btn"
+          src={`${IMAGE_BUCKET_URL}/star-icon.png`}
           onClick={representativeImageHandler}
-        >
-          *
-        </button>
+        />
       </div>
     );
   });
