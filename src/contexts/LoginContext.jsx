@@ -20,7 +20,7 @@ const LoginContextProvider = ({ children }) => {
         setUserInfo(await res.json());
       }
     })();
-  }, [loggedIn]);
+  }, []);
 
   return (
     <LoginContext.Provider
