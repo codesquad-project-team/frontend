@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./ImageUploader.scss";
 import { PRE_SIGNED_URL } from "../../configs";
+import { IMAGE_BUCKET_URL } from "../../configs";
 
 const ImageUploader = ({
   images,
@@ -70,18 +71,30 @@ const ImageUploader = ({
           />
         </div>
       )}
-      <input
-        id="image-uploader-first-input"
-        type="file"
-        accept="image/*"
-        className="image-uploader-first-input"
-        onChange={getImage}
-        style={{
-          display: !previewUrls.length ? "block" : "none"
-        }}
-        multiple
-        name="filename[]"
-      />
+      <div className="image-uploader-first-input-wrapper">
+        <img
+          className="image-uploader-first-input-icon"
+          src={`${IMAGE_BUCKET_URL}/image-upload-icon.png`}
+        />
+        <label
+          className="image-uploader-first-input-label"
+          htmlFor="first-input"
+        >
+          이미지 선택
+        </label>
+        <input
+          id="first-input"
+          type="file"
+          accept="image/*"
+          className="image-uploader-first-input-btn"
+          onChange={getImage}
+          style={{
+            display: !previewUrls.length ? "block" : "none"
+          }}
+          multiple
+          name="filename[]"
+        />
+      </div>
     </div>
   );
 };
