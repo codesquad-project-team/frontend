@@ -12,7 +12,7 @@ const Header = () => {
   const { inputValue, handleChange, restore } = useInput();
   const [clickedSignup, setClickedSignup] = useState(false);
   const [clickedSignin, setClickedSignin] = useState(false);
-  const { loggedIn } = useLoginContext();
+  const { loggedIn, profileImage } = useLoginContext();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -52,7 +52,7 @@ const Header = () => {
         <div className="header-btns">
           {loggedIn ? (
             <CommonLink to="/profile">
-              <ProfileImage small />
+              <ProfileImage small src={profileImage} />
             </CommonLink>
           ) : (
             <>
