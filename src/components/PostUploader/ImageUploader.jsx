@@ -71,7 +71,12 @@ const ImageUploader = ({
           />
         </div>
       )}
-      <div className="image-uploader-first-input-wrapper">
+      <div
+        className="image-uploader-first-input-wrapper"
+        style={{
+          display: !previewUrls.length ? "inline-block" : "none"
+        }}
+      >
         <img
           className="image-uploader-first-input-icon"
           src={`${IMAGE_BUCKET_URL}/image-upload-icon.png`}
@@ -88,9 +93,6 @@ const ImageUploader = ({
           accept="image/*"
           className="image-uploader-first-input-btn"
           onChange={getImage}
-          style={{
-            display: !previewUrls.length ? "block" : "none"
-          }}
           multiple
           name="filename[]"
         />
