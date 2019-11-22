@@ -8,31 +8,30 @@ const useS3 = () => {
     let albumName = nickname.concat("_", date).trim();
 
     if (!albumName) {
-      return alert(
-        "Album names must contain at least one non-space character."
-      );
+      console.log("Album names must contain at least one non-space character.");
+      return;
     }
 
     if (albumName.indexOf("/") !== -1) {
-      return alert("Album names cannot contain slashes.");
+      console.log("Album names cannot contain slashes.");
+      return;
     }
 
     var albumKey = "post-images/" + encodeURIComponent(albumName) + "/";
 
     s3.headObject({ Key: albumKey }, function(err, data) {
       if (!err) {
-        return alert("Album already exists.");
-      }
-      if (err.code !== "NotFound") {
-        return alert("There was an error creating your album: " + err.message);
+        console.log("Album already exists.");
+        return;
       }
 
       if (err.code === "NotFound") {
         s3.putObject({ Key: albumKey }, function(err, data) {
           if (err) {
-            return alert(
+            console.log(
               "There was an error creating your album: " + err.message
             );
+            return;
           }
         });
       }
@@ -67,10 +66,11 @@ const useS3 = () => {
       })
     ).then(
       uploadedUrl => {
-        alert("Successfully uploaded photo.");
+        console.log("Successfully uploaded photo.");
         return uploadedUrl;
       },
-      err => alert("There was an error uploading your photo: ", err.message)
+      err =>
+        console.log("There was an error uploading your photo: ", err.message)
     );
 
     return response;
