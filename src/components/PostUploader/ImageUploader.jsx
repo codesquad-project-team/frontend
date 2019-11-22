@@ -52,13 +52,16 @@ const ImageUploader = ({
     <div className="image-uploader">
       {previewImages}
       {0 < selectedImages.length && selectedImages.length < maximumCnt && (
-        <div className="image-uploader-extra-add-wrapper">
-          <label className="image-uploader-extra-add-label" htmlFor="extra-add">
+        <div className="image-uploader-second-input-wrapper">
+          <label
+            className="image-uploader-second-input-label"
+            htmlFor="second-input"
+          >
             +
           </label>
           <input
-            className="image-uploader-extra-add-btn"
-            id="extra-add"
+            className="image-uploader-second-input-btn"
+            id="second-input"
             type="file"
             accept="image/*"
             onChange={getImage}
@@ -68,10 +71,10 @@ const ImageUploader = ({
         </div>
       )}
       <input
-        id="upload-image"
+        id="image-uploader-first-input"
         type="file"
         accept="image/*"
-        className="image-uploader-input"
+        className="image-uploader-first-input"
         onChange={getImage}
         style={{
           display: !previewUrls.length ? "block" : "none"

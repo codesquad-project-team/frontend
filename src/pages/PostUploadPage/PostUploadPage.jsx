@@ -19,11 +19,7 @@ const PostUploadPage = () => {
 
   const [representativeIndex, setRepresentativeIndex] = useState(0);
 
-  // TODO : 브라우저의 토큰에 저장되어 있는 쿠키에서 user nickname 가져오는 코드 추가
-
   const { s3, createAlbum, addImage } = useS3();
-
-  console.log(s3);
 
   const addImageHandler = files => {
     /* Map each file to a promise that resolves to an array of image URI's */
@@ -84,9 +80,9 @@ const PostUploadPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
+    // TODO : 브라우저의 토큰에 저장되어 있는 쿠키에서 user nickname 가져오는 코드 추가
     const albumName = await createAlbum("michelle", YYYYMMDDHHMMSS(new Date()));
     const uploadedUrl = await addImage(images.selectedImages, albumName);
-    console.log(uploadedUrl);
   };
 
   return (
