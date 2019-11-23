@@ -55,6 +55,9 @@ const PostUploadPage = () => {
       url => url === deletedImage
     );
 
+    if (targetIndex === representativeIndex)
+      setRepresentativeIndex(targetIndex - 1);
+
     setImages({
       selectedImages: removeItemWithSlice(images.selectedImages, targetIndex),
       previewUrls: removeItemWithSlice(images.previewUrls, targetIndex)
