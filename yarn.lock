@@ -5659,10 +5659,10 @@ react-is@^16.6.0, react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.11.0.tgz#b85dfecd48ad1ce469ff558a882ca8e8313928fa"
   integrity sha512-gbBVYR2p8mnriqAwWx9LbuUrShnAuSCNnuPGyc7GJrMVQtPDAh8iLpv7FRuMPFb56KkaVZIYSz1PrjI9q0QPCw==
 
-react-kakao-maps@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/react-kakao-maps/-/react-kakao-maps-0.0.10.tgz#574781a3d8080c03d1c8957e85c2db0a96b6efbe"
-  integrity sha512-ZCQ0AlWPOzEzbUopBhk98HlZkXDq1ed1lV7WtEhhiqNoz9zGbOADBO0fVUNYRzS3UllJeWojfaS/YAc7mdRqCQ==
+react-kakao-maps@^0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/react-kakao-maps/-/react-kakao-maps-0.0.11.tgz#39e17d5edd611e8e9a466c3d1a6dcfdbccb590bc"
+  integrity sha512-9QG3wIiJVvJI0w48KfLHKvTrUaJYPkicyYu4SKuO5GGx4+mNDosLqUTxte3h7axiQBSPQwfISH9V5+zhyORCCw==
   dependencies:
     "@babel/runtime-corejs3" "^7.6.2"
     babel-runtime "^6.26.0"
