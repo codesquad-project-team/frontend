@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo, useReducer } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import './LocationFinder.scss';
 import { KakaoMap } from 'react-kakao-maps';
 import useInput from '../../../hooks/useInput';
@@ -116,7 +116,12 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
           lat={initialLat}
           lng={initialLng}
         >
-          <SearchResultMarkers searchResult={searchResult} />
+          <SearchResultMarkers
+            kakao={kakao}
+            map={map}
+            selectedIndex={selectedIndex}
+            searchResult={searchResult}
+          />
           <MapContextForwarder />
         </KakaoMap>
       </div>

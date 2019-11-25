@@ -1,18 +1,43 @@
-import React from 'react';
-import { Marker } from 'react-kakao-maps';
+import React, { useEffect } from 'react';
+import useMarker from './useMarker';
 
-const SearchResultMarkers = ({ searchResult }) => {
-  const markers = searchResult.map(item => (
-    <Marker
-      key={item.y}
-      lat={Number(item.y)}
-      lng={Number(item.x)}
-      width="32"
-      height="32"
-      image="https://editor-static.pstatic.net/c/resources/common/img/common-icon-places-dot-x2-20180830.png"
-    />
-  ));
-  return <>{markers}</>;
+const defaultShape = {};
+
+const SearchResultMarkers = ({
+  kakao,
+  map,
+  selectedIndex,
+  searchResult,
+  children
+}) => {
+  const { markers } = useMarker(kakao, map, searchResult);
+
+  useEffect(() => {
+    if (!markers) return;
+
+    markers.forEach(marker =>
+      kakao.maps.event.addListener(marker, 'click', function() {
+        console.log('click');
+      })
+    );
+    return () => {
+      markers.forEach(marker => marker.setMap(null));
+    };
+  }, [markers]);
+
+  // const getShape = (selectedIndex, index) => {
+  //   return selectedIndex === index ? defaultShape : dotShape;
+  // };
+  // const markers = searchResult.map((item, index) => (
+  //   <Marker
+  //     key={item.y}
+  //     lat={Number(item.y)}
+  //     lng={Number(item.x)}
+  //     {...dotShape}
+  //   />
+  // ));
+
+  return <></>;
 };
 
 export default SearchResultMarkers;
