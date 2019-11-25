@@ -1,11 +1,13 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useReducer } from 'react';
 import './LocationFinder.scss';
-import { KakaoMap, Marker } from 'react-kakao-maps';
+import { KakaoMap } from 'react-kakao-maps';
 import useInput from '../../../hooks/useInput';
 import CommonBtn from '../../CommonBtn/CommonBtn';
 import CloseBtn from '../../CommonBtn/CloseBtn';
 import useMapContext from './useMapContext';
 import usePlaceService from './usePlaceService';
+import SearchResultLists from './SearchResultLists';
+import SearchResultMarkers from './SearchResultMarkers';
 import { IMAGE_BUCKET_URL } from '../../../configs';
 
 const initialLat = 37.5845218; //initial location
@@ -28,6 +30,7 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
   const { placeService } = usePlaceService(kakao);
   const [searchResult, setSearchResult] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   useMemo(() => {
     if (map) {
@@ -47,40 +50,22 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
   };
 
   const handleClick = ({ currentTarget }) => {
-    const index = currentTarget.dataset.index;
+    const index = Number(currentTarget.dataset.index);
     const targetData = searchResult[index];
     const { x = Number(x), y = Number(y) } = targetData;
 
+    setSelectedIndex(index);
     setSelectedLocation(targetData);
     setCurrentLng(x);
     setCurrentLat(y);
     map.setCenter(new kakao.maps.LatLng(y, x));
   };
 
-  const results = searchResult.map((item, index) => (
-    <div
-      key={item.x}
-      data-index={index}
-      className="location-finder-result-item"
-      onClick={handleClick}
-    >
-      <div className="location-finder-result-item-name">{item.place_name}</div>
-      <div className="location-finder-result-item-address">
-        {item.address_name}
-      </div>
-    </div>
-  ));
-
-  const markers = searchResult.map(item => (
-    <Marker
-      key={item.y}
-      lat={Number(item.y)}
-      lng={Number(item.x)}
-      width="32"
-      height="32"
-      image="https://editor-static.pstatic.net/c/resources/common/img/common-icon-places-dot-x2-20180830.png"
-    />
-  ));
+  // const handleListHover = ({ currentTarget }) => {
+  //   kakao.maps.event.addListener(marker, 'mouseover', function() {
+  //   alert('marker mouseover!');
+  //   });
+  // };
 
   //검색어 자동완성
   // const searchPlaces = useCallback(
@@ -116,7 +101,12 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
         <CloseBtn onClick={onClick} />
       </div>
       <div className="location-finder-content">
-        <div className="location-finder-search-result">{results}</div>
+        <SearchResultLists
+          className="location-finder-search-result"
+          searchResult={searchResult}
+          selectedIndex={selectedIndex}
+          handleClick={handleClick}
+        />
         <KakaoMap
           // eslint-disable-next-line no-undef
           apiUrl={KAKAO_MAP_API_URL}
@@ -126,7 +116,7 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
           lat={initialLat}
           lng={initialLng}
         >
-          {markers}
+          <SearchResultMarkers searchResult={searchResult} />
           <MapContextForwarder />
         </KakaoMap>
       </div>
