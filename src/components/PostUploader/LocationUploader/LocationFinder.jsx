@@ -120,6 +120,7 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
             kakao={kakao}
             map={map}
             selectedIndex={selectedIndex}
+            setSelectedIndex={setSelectedIndex}
             searchResult={searchResult}
           />
           <MapContextForwarder />

@@ -1,12 +1,5 @@
 import { useState, useEffect } from 'react';
 
-const dotShape = {
-  width: '32',
-  height: '32',
-  image:
-    'https://editor-static.pstatic.net/c/resources/common/img/common-icon-places-dot-x2-20180830.png'
-};
-
 const useMarker = (kakao = window.kakao, map, positionList) => {
   const [markers, setMarkers] = useState(null);
   useEffect(() => {
