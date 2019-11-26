@@ -5,7 +5,7 @@ const useS3 = () => {
   const [s3, setS3] = useState(null);
 
   const createAlbum = (nickname, date) => {
-    let albumName = nickname.concat("_", date).trim();
+    const albumName = nickname.concat("_", date).trim();
 
     if (!albumName) {
       console.log("Album names must contain at least one non-space character.");
@@ -17,7 +17,7 @@ const useS3 = () => {
       return;
     }
 
-    var albumKey = "post-images/" + encodeURIComponent(albumName) + "/";
+    const albumKey = "post-images/" + encodeURIComponent(albumName) + "/";
 
     s3.headObject({ Key: albumKey }, function(err, data) {
       if (!err) {

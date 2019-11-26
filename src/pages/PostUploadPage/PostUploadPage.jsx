@@ -48,15 +48,13 @@ const PostUploadPage = () => {
   };
 
   const deleteImageHandler = e => {
-    e.preventDefault();
-
     const deletedImage = e.target.previousSibling.src;
     const targetIndex = images.previewUrls.findIndex(
       url => url === deletedImage
     );
 
     if (targetIndex === representativeIndex) {
-      targetIndex === 0
+      !targetIndex
         ? setRepresentativeIndex(0)
         : setRepresentativeIndex(targetIndex - 1);
     }
@@ -74,7 +72,6 @@ const PostUploadPage = () => {
   };
 
   const selectRepresentativeImage = e => {
-    e.preventDefault();
     const represenTativeImage = e.target.previousSibling.previousSibling.src;
     const represenTativeIndex = images.previewUrls.findIndex(
       el => el === represenTativeImage
@@ -88,7 +85,12 @@ const PostUploadPage = () => {
 
     // TODO : 브라우저의 토큰에 저장되어 있는 쿠키에서 user nickname 가져오는 코드 추가
     const albumName = await createAlbum("michelle", YYYYMMDDHHMMSS(new Date()));
-    const uploadedUrl = await addImage(images.selectedImages, albumName);
+
+    const result = await addImage(images.selectedImages, albumName);
+
+    const uploadedUrl = result.reduce((acc, cur) => {
+      return acc.concat(cur.Location);
+    }, []);
   };
 
   return (

@@ -24,7 +24,6 @@ const FirstInputButton = ({ onChangeHandler, previewUrls }) => {
         className="image-uploader-first-input-btn"
         onChange={onChangeHandler}
         multiple
-        name="filename[]"
       />
     </div>
   );

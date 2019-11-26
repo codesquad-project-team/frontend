@@ -17,7 +17,6 @@ const SecondInputButton = ({ onChangeHandler }) => {
         accept="image/*"
         onChange={onChangeHandler}
         multiple
-        name="filename[]"
       />
     </div>
   );
