@@ -6,6 +6,7 @@ import DetailPage from './pages/DetailPage/DetailPage';
 import ProfileEditPage from './pages/ProfileEditPage/ProfileEditPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import PostUploadPage from './pages/PostUploadPage/PostUploadPage';
+import SignupPage from './pages/SignupPage/SignupPage';
 
 const Root = () => {
   return (
@@ -20,6 +21,7 @@ const Root = () => {
             path="/post/:postId"
             render={({ match }) => <DetailPage postId={match.params.postId} />}
           />
+          <Route path="/signup" render={() => <SignupPage />} />
         </Switch>
       </Router>
     </>

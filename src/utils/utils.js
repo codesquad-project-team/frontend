@@ -30,4 +30,12 @@ export const YYYYMMDDHHMMSS = dateObj => {
     pad2(dateObj.getMinutes()) +
     pad2(dateObj.getSeconds())
   );
+}
+
+export const debounce = (callback, delay = 300) => {
+  let timer;
+  return (...param) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => callback(...param), delay);
+  };
 };
