@@ -1,0 +1,37 @@
+@import "../../../stylesheets/util.scss";
+
+.image-uploader-first-input {
+  &-wrapper {
+    padding: 0 1.5rem;
+    height: 4rem;
+    line-height: 3.5rem;
+    border: 1px solid $main-color;
+    border-radius: 2rem;
+    background-color: $main-color-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-icon {
+    max-width: 80%;
+    max-height: 80%;
+  }
+
+  &-label {
+    font-weight: bold;
+    color: white;
+    font-size: 1.5rem;
+  }
+
+  &-btn {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+}

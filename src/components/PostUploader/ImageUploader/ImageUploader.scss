@@ -1,0 +1,8 @@
+@import "../../../stylesheets/util.scss";
+
+.image-uploader {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 60rem;
+}
