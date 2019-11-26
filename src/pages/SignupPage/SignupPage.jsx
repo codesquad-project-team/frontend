@@ -78,11 +78,13 @@ const SignupPage = ({ history }) => {
       headers: {
         'Content-Type': 'application/json'
       },
+      //tempToken의 id를 보내기 위해 credentials 옵션 설정
       credentials: 'include',
       body: JSON.stringify({ nickname })
     });
     const json = await res.json();
     const domainRegExp = /^(((http(s?)):\/\/)?)([0-9a-zA-Z-]+(\.|:))([a-z]{2,3}|[0-9]{4})/;
+    //사용자가 회원가입 하기 이전에 보고 있던 페이지 url
     const referer = json.referer.replace(domainRegExp, '');
     switch (res.status) {
       case 200:
