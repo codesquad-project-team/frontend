@@ -55,8 +55,11 @@ const PostUploadPage = () => {
       url => url === deletedImage
     );
 
-    if (targetIndex === representativeIndex)
-      setRepresentativeIndex(targetIndex - 1);
+    if (targetIndex === representativeIndex) {
+      targetIndex === 0
+        ? setRepresentativeIndex(0)
+        : setRepresentativeIndex(targetIndex - 1);
+    }
 
     setImages({
       selectedImages: removeItemWithSlice(images.selectedImages, targetIndex),
