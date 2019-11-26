@@ -28,7 +28,7 @@ const ImageUploader = ({
 
   return (
     <div className="image-uploader">
-      {selectedImages ? (
+      {selectedImages.length ? (
         <>
           <PreviewImages
             previewUrls={previewUrls}
@@ -36,7 +36,9 @@ const ImageUploader = ({
             representativeIndex={representativeIndex}
             representativeImageHandler={representativeImageHandler}
           />
-          <SecondInputButton onChangeHandler={getImage} />
+          {selectedImages.length < 5 && (
+            <SecondInputButton onChangeHandler={getImage} />
+          )}
         </>
       ) : (
         <FirstInputButton
