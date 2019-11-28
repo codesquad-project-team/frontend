@@ -1,0 +1,30 @@
+@import "../../../stylesheets/util.scss";
+
+.image-uploader-second-input {
+  &-wrapper {
+    width: 15rem;
+    height: 15rem;
+    margin-left: 2rem;
+    border: 2px dashed $main-color-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-label {
+    display: inline-block;
+    padding: 1.5rem 2rem;
+    border-radius: 50%;
+    background-color: $main-color-light;
+    color: white;
+    font-size: 3rem;
+    line-height: normal;
+    cursor: pointer;
+  }
+
+  &-btn {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}

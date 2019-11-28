@@ -1,3 +1,4 @@
 node_modules
 .DS_Store
 map_constants.js
+aws_s3.js
