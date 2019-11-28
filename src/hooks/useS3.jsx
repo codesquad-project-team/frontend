@@ -49,7 +49,7 @@ const useS3 = () => {
       files.map(file => {
         const fileName = file.name;
         const albumPhotosKey =
-          "post-images/" + encodeURIComponent(albumName) + "//";
+          "post-images/" + encodeURIComponent(albumName) + "/";
         const photoKey = albumPhotosKey + fileName;
 
         const upload = new AWS.S3.ManagedUpload({
@@ -66,8 +66,9 @@ const useS3 = () => {
       })
     ).then(
       uploadedUrl => {
-        console.log("Successfully uploaded photo.");
-        return uploadedUrl;
+        return uploadedUrl.reduce((acc, cur) => {
+          return acc.concat(cur.Location);
+        }, []);
       },
       err =>
         console.log("There was an error uploading your photo: ", err.message)

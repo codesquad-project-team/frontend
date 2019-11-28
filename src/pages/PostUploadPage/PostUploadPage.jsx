@@ -86,11 +86,7 @@ const PostUploadPage = () => {
     // TODO : 브라우저의 토큰에 저장되어 있는 쿠키에서 user nickname 가져오는 코드 추가
     const albumName = await createAlbum("michelle", YYYYMMDDHHMMSS(new Date()));
 
-    const result = await addImage(images.selectedImages, albumName);
-
-    const uploadedUrl = result.reduce((acc, cur) => {
-      return acc.concat(cur.Location);
-    }, []);
+    const uploadedUrl = await addImage(images.selectedImages, albumName);
   };
 
   return (
