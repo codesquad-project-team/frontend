@@ -13,7 +13,12 @@ import { IMAGE_BUCKET_URL } from '../../../configs';
 const initialLat = 37.5845218; //initial location
 const initialLng = 126.9975588;
 
-const LocationFinder = ({ className = '', onClick, ...restProps }) => {
+const LocationFinder = ({
+  className = '',
+  closeModal,
+  setSelectedLocation,
+  ...restProps
+}) => {
   const { inputValue, handleChange } = useInput();
   const { locationKeyword } = inputValue;
 
@@ -29,7 +34,6 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
   const { MapContextForwarder, kakao, map } = useMapContext();
   const { placeService } = usePlaceService(kakao);
   const [searchResult, setSearchResult] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
 
   useMemo(() => {
@@ -55,31 +59,15 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
     const { x = Number(x), y = Number(y) } = targetData;
 
     setSelectedIndex(index);
-    setSelectedLocation(targetData);
     setCurrentLng(x);
     setCurrentLat(y);
     map.setCenter(new kakao.maps.LatLng(y, x));
   };
 
-  // const handleListHover = ({ currentTarget }) => {
-  //   kakao.maps.event.addListener(marker, 'mouseover', function() {
-  //   alert('marker mouseover!');
-  //   });
-  // };
-
-  //검색어 자동완성
-  // const searchPlaces = useCallback(
-  //   debounce(keyword => {
-  //     placeService.keywordSearch(keyword, d => console.log(d));
-  //   }),
-  //   [placeService]
-  // );
-
-  // useEffect(() => {
-  //   if (!locationKeyword || !placeService) return;
-  //   console.log(locationKeyword);
-  //   searchPlaces(locationKeyword);
-  // }, [locationKeyword]);
+  const saveLocation = () => {
+    setSelectedLocation(searchResult[selectedIndex]);
+    closeModal();
+  };
 
   return (
     <div className="location-finder">
@@ -98,7 +86,7 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
             placeholder="장소명을 입력해주세요"
           />
         </form>
-        <CloseBtn onClick={onClick} />
+        <CloseBtn onClick={closeModal} />
       </div>
       <div className="location-finder-content">
         <SearchResultLists
@@ -127,7 +115,7 @@ const LocationFinder = ({ className = '', onClick, ...restProps }) => {
         </KakaoMap>
       </div>
       <div className="location-finder-footer">
-        <CommonBtn>확인</CommonBtn>
+        <CommonBtn onClick={saveLocation}>확인</CommonBtn>
       </div>
     </div>
   );

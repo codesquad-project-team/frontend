@@ -89,18 +89,6 @@ const SearchResultMarkers = ({
     });
   }, [selectedIndex]);
 
-  // const getShape = (selectedIndex, index) => {
-  //   return selectedIndex === index ? defaultShape : dotShape;
-  // };
-  // const markers = searchResult.map((item, index) => (
-  //   <Marker
-  //     key={item.y}
-  //     lat={Number(item.y)}
-  //     lng={Number(item.x)}
-  //     {...dotShape}
-  //   />
-  // ));
-
   return <></>;
 };
 

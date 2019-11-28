@@ -12,6 +12,8 @@ import useS3 from '../../hooks/useS3';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 
 const PostUploadPage = () => {
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
   const [images, setImages] = useState({
     selectedImages: [],
     previewUrls: []
@@ -101,7 +103,7 @@ const PostUploadPage = () => {
             representativeImageHandler={selectRepresentativeImage}
             representativeIndex={representativeIndex}
           />
-          <LocationUploader />
+          <LocationUploader setSelectedLocation={setSelectedLocation} />
           <TitleUploader />
           <CommentUploader />
           <PostQuestions />
