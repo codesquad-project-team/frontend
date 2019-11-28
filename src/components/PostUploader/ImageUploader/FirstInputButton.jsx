@@ -4,12 +4,7 @@ import { IMAGE_BUCKET_URL } from "../../../configs";
 
 const FirstInputButton = ({ onChangeHandler, previewUrls }) => {
   return (
-    <div
-      className="image-uploader-first-input-wrapper"
-      style={{
-        display: !previewUrls.length ? "inline-block" : "none"
-      }}
-    >
+    <div className="image-uploader-first-input-wrapper">
       <img
         className="image-uploader-first-input-icon"
         src={`${IMAGE_BUCKET_URL}/image-upload-icon.png`}
