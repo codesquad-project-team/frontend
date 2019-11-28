@@ -1,14 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './TitleUploader.scss';
+import useInput from '../../hooks/useInput';
 
-const TitleUploader = () => {
+const TitleUploader = ({ placeName }) => {
+  const {
+    inputValue,
+    setInputValue,
+    handleChange: handleInputChange
+  } = useInput();
+  const { titlePlace } = inputValue;
+
+  useMemo(() => setInputValue({ titlePlace: placeName }), [placeName]);
+
   const [select, setSelect] = useState('');
   const handleChange = ({ target }) => {
     setSelect(target.value);
   };
   return (
     <div className="title-uploader">
-      <input type="text" placeholder="어디" />
+      <input
+        type="text"
+        placeholder="어디"
+        name="titlePlace"
+        value={titlePlace}
+        onChange={handleInputChange}
+      />
       <span>에서</span>
       <select name="companion" value={select} onChange={handleChange}>
         <option value="" disabled>
