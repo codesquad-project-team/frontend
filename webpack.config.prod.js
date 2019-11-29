@@ -2,8 +2,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
 const { DefinePlugin } = require('webpack');
-
-const { NAVER_MAP_CLIENT_ID } = process.env;
+const {
+  NAVER_MAP_CLIENT_ID,
+  ALBUM_BUCKET_NAME,
+  BUCKET_REGION,
+  IDENTITY_POOL_ID
+} = process.env;
 
 module.exports = {
   mode: 'production',
@@ -67,7 +71,10 @@ module.exports = {
     }),
     new CleanWebpackPlugin(),
     new DefinePlugin({
-      NAVER_MAP_CLIENT_ID: JSON.stringify(NAVER_MAP_CLIENT_ID)
+      NAVER_MAP_CLIENT_ID: JSON.stringify(NAVER_MAP_CLIENT_ID),
+      ALBUM_BUCKET_NAME: JSON.stringify(ALBUM_BUCKET_NAME),
+      BUCKET_REGION: JSON.stringify(BUCKET_REGION),
+      IDENTITY_POOL_ID: JSON.stringify(IDENTITY_POOL_ID)
     })
   ]
 };
