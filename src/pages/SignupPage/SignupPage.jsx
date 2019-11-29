@@ -1,28 +1,27 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import './SignupPage.scss';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
+import CommonLink from '../../components/CommonLink/CommonLink';
 import useInput from '../../hooks/useInput';
-import useFetch from '../../hooks/useFetch';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { debounce } from '../../utils/utils';
 import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
+import { useLoginContext } from '../../contexts/LoginContext';
+import useTempTokenValidation from '../../hooks/useTempTokenValidation';
+import useShakeAnimation from '../../hooks/useShakeAnimation';
+import ValidityMessage from './ValidityMessage';
 
-const SignupPage = () => {
+const SignupPage = ({ history }) => {
+  const { setLoggedIn } = useLoginContext();
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
 
-  const [authData, setAuthData] = useState(null);
-  const { loading } = useFetch(
-    `${WEB_SERVER_URL}/validate/tempToken`,
-    { method: 'POST', credentials: 'include' },
-    json => setAuthData(json)
-  );
+  const { loading, provider } = useTempTokenValidation(history);
+  const [nicknameValidity, setNicknameValidity] = useState({});
 
-  const { provider } = authData || { provider: '(테스트)' }; //TODO: 토큰검증 기능 안정되면 제거
-  const postposition = provider === '카카오' ? '로' : '으로';
-
-  const [nicknameValidity, setNicknameValidity] = useState(null);
+  const shakeTarget = useRef(null);
+  const { setSignupFailed } = useShakeAnimation(shakeTarget);
 
   const checkNicknameFromServer = useCallback(async nickname => {
     const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
@@ -33,28 +32,16 @@ const SignupPage = () => {
     });
     switch (res.status) {
       case 200:
-        setNicknameValidity({
-          valid: true,
-          message: '사용 가능한 닉네임이에요.'
-        });
+        setNicknameValidity('AVAILABLE');
         break;
       case 400:
-        setNicknameValidity({
-          valid: false,
-          message: '닉네임에 공백이 있어요.'
-        });
+        setNicknameValidity('HAS_BLANKS');
         break;
       case 409:
-        setNicknameValidity({
-          valid: false,
-          message: '이미 사용중인 닉네임이에요.'
-        });
+        setNicknameValidity('ALREADY_IN_USE');
         break;
       case 500:
-        setNicknameValidity({
-          valid: false,
-          message: '서버에서 에러가 발생했어요. 잠시후에 다시 시도해주세요.'
-        });
+        setNicknameValidity('SERVER_ERROR');
         break;
       default:
         break;
@@ -63,7 +50,7 @@ const SignupPage = () => {
 
   const checkNicknameValidation = useCallback(
     debounce(nickname => {
-      const isValid = /^[a-z][a-z0-9_-]{3,14}$/.test(nickname);
+      const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
       const hasBlank = /\s/.test(nickname);
       const onlyOneCharacter = nickname.length === 1;
       switch (true) {
@@ -71,48 +58,82 @@ const SignupPage = () => {
           checkNicknameFromServer(nickname);
           break;
         case hasBlank:
-          setNicknameValidity({
-            valid: false,
-            message: '닉네임에 공백이 있어요.'
-          });
+          setNicknameValidity('HAS_BLANKS');
           break;
         case onlyOneCharacter:
-          setNicknameValidity({ valid: false, message: '' });
+          setNicknameValidity('NO_MESSAGE');
           break;
         default:
-          setNicknameValidity({
-            valid: false,
-            message:
-              '영문으로 시작하는 4~15자의 영문, 숫자 조합을 만들어주세요.'
-          });
+          setNicknameValidity('INFO_MESSAGE');
           break;
       }
     }),
     []
   );
 
+  const signUp = useCallback(async nickname => {
+    const res = await fetch(`${WEB_SERVER_URL}/auth/signup`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      //tempToken의 id를 보내기 위해 credentials 옵션 설정
+      credentials: 'include',
+      body: JSON.stringify({ nickname })
+    });
+    const json = await res.json();
+    const domainRegExp = /^(((http(s?)):\/\/)?)([0-9a-zA-Z-]+(\.|:))([a-z]{2,3}|[0-9]{4})/;
+    //사용자가 회원가입 하기 이전에 보고 있던 페이지 url
+    const referer = json.referer.replace(domainRegExp, '');
+    switch (res.status) {
+      case 200:
+        setLoggedIn(true);
+        history.push(referer);
+        break;
+      case 400:
+        setSignupFailed(true);
+        setNicknameValidity('INFO_MESSAGE');
+        break;
+      case 401:
+        setSignupFailed(true);
+        setNicknameValidity('INVALID_TOKEN');
+        break;
+      default:
+        break;
+    }
+  }, []);
+
+  const requestSignup = () => {
+    if (nicknameValidity === 'AVAILABLE') {
+      signUp(nickname);
+    } else {
+      setSignupFailed(true);
+      setNicknameValidity('INFO_MESSAGE');
+    }
+  };
+
   useEffect(() => {
     if (nickname) {
       checkNicknameValidation(nickname);
     } else {
-      setNicknameValidity(null);
+      setNicknameValidity('');
     }
   }, [nickname]);
 
   return (
     <div className="signup-page">
       <header>
-        <h1>Connect Flavor</h1>
+        <CommonLink to="/">
+          <h1>Connect Flavor</h1>
+        </CommonLink>
       </header>
       {!loading && (
         <div className="signup-page-body">
-          <h2>
-            {provider}
-            {postposition} 회원가입
-          </h2>
+          <h2>{provider} 회원가입</h2>
           <div className="signup-page-auth-checker">인증완료</div>
           <span>닉네임을 만들어주세요</span>
-          <div className="signup-page-input-section">
+          <div ref={shakeTarget} className={`signup-page-input-section`}>
             <input
               name="nickname"
               value={nickname}
@@ -120,21 +141,13 @@ const SignupPage = () => {
               type="text"
               placeholder="4~15자로 입력해주세요."
             />
-            <div>
-              {nicknameValidity && (
-                <span
-                  className={
-                    nicknameValidity.valid
-                      ? 'signup-page-reason-ok'
-                      : 'signup-page-reason'
-                  }
-                >
-                  {nicknameValidity.message}
-                </span>
-              )}
-            </div>
+            <ValidityMessage nicknameValidity={nicknameValidity} />
           </div>
-          <CommonBtn styleType="emphasize" className="signup-page-signup-btn">
+          <CommonBtn
+            styleType="emphasize"
+            className="signup-page-signup-btn"
+            onClick={requestSignup}
+          >
             회원가입
           </CommonBtn>
         </div>
