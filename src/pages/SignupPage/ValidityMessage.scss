@@ -1,0 +1,12 @@
+.validity-message {
+  display: flex;
+  position: absolute;
+  right: 1rem;
+  pointer-events: none;
+}
+.validity-message-ok {
+  color: green;
+}
+.validity-message-not-ok {
+  color: red;
+}

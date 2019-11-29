@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import './Header.scss';
-import { Link } from 'react-router-dom';
 import useInput from '../../hooks/useInput';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CommonModal from '../CommonModal/CommonModal';
+import CommonLink from '../CommonLink/CommonLink';
+import { useLoginContext } from '../../contexts/LoginContext';
 import { IMAGE_BUCKET_URL } from '../../configs';
-
-const isLoggedIn = false; //TODO: 로그인 기능 구현시 수정
 
 const Header = () => {
   const { inputValue, handleChange, restore } = useInput();
   const [clickedSignup, setClickedSignup] = useState(false);
   const [clickedSignin, setClickedSignin] = useState(false);
+  const { loggedIn, profileImage } = useLoginContext();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -27,17 +27,13 @@ const Header = () => {
     clickedSignup ? setClickedSignup(false) : setClickedSignup(true);
   };
 
-  const scrollToTop = () => {
-    window.scrollTo(0, 0);
-  };
-
   return (
     <div className="header-wrapper">
       <div className="header">
         <div className="header-title">
-          <Link to="/" onClick={scrollToTop}>
+          <CommonLink to="/">
             <h1>Connect Flavor</h1>
-          </Link>
+          </CommonLink>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="header-searchbar-icon-wrapper">
@@ -54,10 +50,10 @@ const Header = () => {
           />
         </form>
         <div className="header-btns">
-          {isLoggedIn ? (
-            <Link to="/profile">
-              <ProfileImage small />
-            </Link>
+          {loggedIn ? (
+            <CommonLink to="/profile">
+              <ProfileImage small src={profileImage} />
+            </CommonLink>
           ) : (
             <>
               <CommonBtn
@@ -78,11 +74,11 @@ const Header = () => {
           )}
         </div>
 
-        {!isLoggedIn && clickedSignin && (
+        {!loggedIn && clickedSignin && (
           <CommonModal clickHandler={handleSignin} target={'signin'} />
         )}
 
-        {!isLoggedIn && clickedSignup && (
+        {!loggedIn && clickedSignup && (
           <CommonModal clickHandler={handleSignup} target={'signup'} />
         )}
       </div>

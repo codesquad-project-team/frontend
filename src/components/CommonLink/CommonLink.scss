@@ -1,0 +1,7 @@
+.common-link {
+  color: black;
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}

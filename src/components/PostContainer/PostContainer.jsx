@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './PostContainer.scss';
-import { Link } from 'react-router-dom';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 import PostItem from '../PostItem/PostItem';
+import CommonLink from '../CommonLink/CommonLink';
 import useFetch from '../../hooks/useFetch';
 import {
   WEB_SERVER_URL,
@@ -60,14 +60,10 @@ const PostContainer = ({ headerOn, api }) => {
     return !loading && scrollBottom + TRIGGER_POINT >= documentHeight;
   };
 
-  const scrollToTop = () => {
-    window.scrollTo(0, 0);
-  };
-
   const postItems = items.map(item => (
-    <Link to={`/post/${item.postId}`} onClick={scrollToTop} key={item.postId}>
+    <CommonLink to={`/post/${item.postId}`} key={item.postId}>
       <PostItem headerOn={headerOn} {...item} />
-    </Link>
+    </CommonLink>
   ));
 
   return (
