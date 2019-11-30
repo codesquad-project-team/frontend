@@ -13,7 +13,7 @@ import { YYYYMMDDHHMMSS } from '../../utils/utils';
 
 const PostUploadPage = () => {
   const [selectedLocation, setSelectedLocation] = useState({});
-  const { place_name: placeName } = selectedLocation;
+  const { x: lng, y: lat, place_name: placeName } = selectedLocation;
 
   const [images, setImages] = useState({
     selectedImages: [],
@@ -104,7 +104,11 @@ const PostUploadPage = () => {
             representativeImageHandler={selectRepresentativeImage}
             representativeIndex={representativeIndex}
           />
-          <LocationUploader setSelectedLocation={setSelectedLocation} />
+          <LocationUploader
+            lat={lat}
+            lng={lng}
+            setSelectedLocation={setSelectedLocation}
+          />
           <TitleUploader placeName={placeName} />
           <CommentUploader />
           <PostQuestions />

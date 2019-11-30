@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 
 const useMarker = (kakao = window.kakao, map, positionList) => {
   const [markers, setMarkers] = useState(null);
-  useEffect(() => {
-    if (!kakao) return;
+  useMemo(() => {
+    if (!map) return;
 
     setMarkers(
       positionList.map(item => {
