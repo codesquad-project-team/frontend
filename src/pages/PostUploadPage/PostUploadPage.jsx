@@ -10,6 +10,7 @@ import PostQuestions from '../../components/PostUploader/PostQuestions';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import useS3 from '../../hooks/useS3';
 import useScript from '../../hooks/useScript';
+import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 
 const PostUploadPage = () => {
@@ -19,6 +20,8 @@ const PostUploadPage = () => {
   });
 
   const [representativeIndex, setRepresentativeIndex] = useState(0);
+
+  const { nickname } = useLoginContext();
 
   const { loading, error } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
@@ -88,11 +91,10 @@ const PostUploadPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    // TODO : 브라우저의 토큰에 저장되어 있는 쿠키에서 user nickname 가져오는 코드 추가
     const s3 = await initS3();
     const albumKey = await createAlbum(
       s3,
-      'michelle',
+      nickname,
       YYYYMMDDHHMMSS(new Date())
     );
     const uploadedUrl = await addImage(images.selectedImages, albumKey);
