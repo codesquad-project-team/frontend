@@ -23,11 +23,11 @@ const PostUploadPage = () => {
 
   const { nickname } = useLoginContext();
 
-  const { loading, error } = useScript(
+  const { loadError } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
   );
 
-  const { initS3, deleteS3, createAlbum, addImage } = useS3(loading, error);
+  const { initS3, deleteS3, createAlbum, addImage } = useS3(loadError);
 
   const addImageHandler = files => {
     /* Map each file to a promise that resolves to an array of image URI's */

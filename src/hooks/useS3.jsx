@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const useS3 = (loading, error) => {
+const useS3 = error => {
   const initS3 = () => {
     // eslint-disable-next-line no-undef
     AWS.config.update({
