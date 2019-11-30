@@ -19,11 +19,11 @@ const useS3 = () => {
     });
   };
 
-  const deleteS3 = s3 => {
+  const deleteS3 = (s3, albumKey) => {
     const params = {
       // eslint-disable-next-line no-undef
       Bucket: `${ALBUM_BUCKET_NAME}`,
-      Key: 'objectkey.jpg'
+      Key: `${albumKey}`
     };
     s3.deleteObject(params, (err, data) => {
       if (err) console.log(err, err.stack);
@@ -65,10 +65,10 @@ const useS3 = () => {
       }
     });
 
-    return albumName;
+    return albumKey;
   };
 
-  const addImage = (files, albumName) => {
+  const addImage = (files, albumKey) => {
     if (!files.length) {
       return alert('Please choose a file to upload first.');
     }
@@ -76,9 +76,8 @@ const useS3 = () => {
     const response = Promise.all(
       files.map(file => {
         const fileName = file.name;
-        const albumPhotosKey =
-          'post-images/' + encodeURIComponent(albumName) + '/';
-        const photoKey = albumPhotosKey + fileName;
+
+        const photoKey = albumKey + fileName;
 
         const upload = new AWS.S3.ManagedUpload({
           params: {

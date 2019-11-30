@@ -85,13 +85,13 @@ const PostUploadPage = () => {
 
     // TODO : 브라우저의 토큰에 저장되어 있는 쿠키에서 user nickname 가져오는 코드 추가
     const s3 = await initS3();
-    const albumName = await createAlbum(
+    const albumKey = await createAlbum(
       s3,
       'michelle',
       YYYYMMDDHHMMSS(new Date())
     );
-    const uploadedUrl = await addImage(images.selectedImages, albumName);
-    await deleteS3(s3);
+    const uploadedUrl = await addImage(images.selectedImages, albumKey);
+    await deleteS3(s3, albumKey);
   };
 
   return (
