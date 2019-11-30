@@ -2,9 +2,37 @@ import React, { useState, useEffect } from 'react';
 const AWS = require('aws-sdk');
 
 const useS3 = () => {
-  const [s3, setS3] = useState(null);
+  const initS3 = () => {
+    AWS.config.update({
+      // eslint-disable-next-line no-undef
+      region: `${BUCKET_REGION}`,
+      credentials: new AWS.CognitoIdentityCredentials({
+        // eslint-disable-next-line no-undef
+        IdentityPoolId: `${IDENTITY_POOL_ID}`
+      })
+    });
 
-  const createAlbum = (nickname, date) => {
+    return new AWS.S3({
+      apiVersion: '2006-03-01',
+      // eslint-disable-next-line no-undef
+      params: { Bucket: `${ALBUM_BUCKET_NAME}` }
+    });
+  };
+
+  const deleteS3 = s3 => {
+    const params = {
+      // eslint-disable-next-line no-undef
+      Bucket: `${ALBUM_BUCKET_NAME}`,
+      Key: 'objectkey.jpg'
+    };
+    s3.deleteObject(params, (err, data) => {
+      if (err) console.log(err, err.stack);
+      // an error occurred
+      else console.log(data); // successful response
+    });
+  };
+
+  const createAlbum = (s3, nickname, date) => {
     const albumName = nickname.concat('_', date).trim();
 
     if (!albumName) {
@@ -77,26 +105,7 @@ const useS3 = () => {
     return response;
   };
 
-  useEffect(() => {
-    AWS.config.update({
-      // eslint-disable-next-line no-undef
-      region: `${BUCKET_REGION}`,
-      credentials: new AWS.CognitoIdentityCredentials({
-        // eslint-disable-next-line no-undef
-        IdentityPoolId: `${IDENTITY_POOL_ID}`
-      })
-    });
-
-    setS3(
-      new AWS.S3({
-        apiVersion: '2006-03-01',
-        // eslint-disable-next-line no-undef
-        params: { Bucket: `${ALBUM_BUCKET_NAME}` }
-      })
-    );
-  }, []);
-
-  return { s3, createAlbum, addImage };
+  return { initS3, deleteS3, createAlbum, addImage };
 };
 
 export default useS3;

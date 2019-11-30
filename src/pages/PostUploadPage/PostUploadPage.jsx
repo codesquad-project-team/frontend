@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import "./PostUploadPage.scss";
-import CommonPost from "../../components/CommonPost/CommonPost";
-import Header from "../../components/Header/Header";
-import ImageUploader from "../../components/PostUploader/ImageUploader/ImageUploader";
-import LocationUploader from "../../components/PostUploader/LocationUploader";
-import TitleUploader from "../../components/PostUploader/TitleUploader";
-import CommentUploader from "../../components/PostUploader/CommentUploader";
-import PostQuestions from "../../components/PostUploader/PostQuestions";
-import CommonBtn from "../../components/CommonBtn/CommonBtn";
-import useS3 from "../../hooks/useS3";
-import { YYYYMMDDHHMMSS } from "../../utils/utils";
+import React, { useState } from 'react';
+import './PostUploadPage.scss';
+import CommonPost from '../../components/CommonPost/CommonPost';
+import Header from '../../components/Header/Header';
+import ImageUploader from '../../components/PostUploader/ImageUploader/ImageUploader';
+import LocationUploader from '../../components/PostUploader/LocationUploader';
+import TitleUploader from '../../components/PostUploader/TitleUploader';
+import CommentUploader from '../../components/PostUploader/CommentUploader';
+import PostQuestions from '../../components/PostUploader/PostQuestions';
+import CommonBtn from '../../components/CommonBtn/CommonBtn';
+import useS3 from '../../hooks/useS3';
+import { YYYYMMDDHHMMSS } from '../../utils/utils';
 
 const PostUploadPage = () => {
   const [images, setImages] = useState({
@@ -19,7 +19,7 @@ const PostUploadPage = () => {
 
   const [representativeIndex, setRepresentativeIndex] = useState(0);
 
-  const { s3, createAlbum, addImage } = useS3();
+  const { initS3, deleteS3, createAlbum, addImage } = useS3();
 
   const addImageHandler = files => {
     /* Map each file to a promise that resolves to an array of image URI's */
@@ -27,7 +27,7 @@ const PostUploadPage = () => {
       files.map(file => {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
-          reader.addEventListener("load", ({ target }) => {
+          reader.addEventListener('load', ({ target }) => {
             resolve(target.result);
           });
           reader.readAsDataURL(file); // file을 읽기 가능한 url로 변환하여 target의 result 속성에 넣는다.
@@ -84,9 +84,14 @@ const PostUploadPage = () => {
     e.preventDefault();
 
     // TODO : 브라우저의 토큰에 저장되어 있는 쿠키에서 user nickname 가져오는 코드 추가
-    const albumName = await createAlbum("michelle", YYYYMMDDHHMMSS(new Date()));
-
+    const s3 = await initS3();
+    const albumName = await createAlbum(
+      s3,
+      'michelle',
+      YYYYMMDDHHMMSS(new Date())
+    );
     const uploadedUrl = await addImage(images.selectedImages, albumName);
+    await deleteS3(s3);
   };
 
   return (
