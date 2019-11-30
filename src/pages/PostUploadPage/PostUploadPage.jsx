@@ -9,6 +9,7 @@ import CommentUploader from '../../components/PostUploader/CommentUploader';
 import PostQuestions from '../../components/PostUploader/PostQuestions';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import useS3 from '../../hooks/useS3';
+import useScript from '../../hooks/useScript';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 
 const PostUploadPage = () => {
@@ -19,7 +20,11 @@ const PostUploadPage = () => {
 
   const [representativeIndex, setRepresentativeIndex] = useState(0);
 
-  const { initS3, deleteS3, createAlbum, addImage } = useS3();
+  const { loading, error } = useScript(
+    'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
+  );
+
+  const { initS3, deleteS3, createAlbum, addImage } = useS3(loading, error);
 
   const addImageHandler = files => {
     /* Map each file to a promise that resolves to an array of image URI's */

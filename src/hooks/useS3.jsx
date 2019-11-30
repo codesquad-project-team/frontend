@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-const AWS = require('aws-sdk');
 
-const useS3 = () => {
+const useS3 = (loading, error) => {
   const initS3 = () => {
+    // eslint-disable-next-line no-undef
     AWS.config.update({
       // eslint-disable-next-line no-undef
       region: `${BUCKET_REGION}`,
+      // eslint-disable-next-line no-undef
       credentials: new AWS.CognitoIdentityCredentials({
         // eslint-disable-next-line no-undef
         IdentityPoolId: `${IDENTITY_POOL_ID}`
       })
     });
-
+    // eslint-disable-next-line no-undef
     return new AWS.S3({
       apiVersion: '2006-03-01',
       // eslint-disable-next-line no-undef
@@ -78,7 +79,7 @@ const useS3 = () => {
         const fileName = file.name;
 
         const photoKey = albumKey + fileName;
-
+        // eslint-disable-next-line no-undef
         const upload = new AWS.S3.ManagedUpload({
           params: {
             // eslint-disable-next-line no-undef
@@ -104,7 +105,9 @@ const useS3 = () => {
     return response;
   };
 
-  return { initS3, deleteS3, createAlbum, addImage };
+  if (error) return;
+  // 에러 처리 필요
+  else return { initS3, deleteS3, createAlbum, addImage };
 };
 
 export default useS3;
