@@ -6,29 +6,28 @@ const useScript = scriptName => {
   let script;
 
   useEffect(() => {
-    try {
-      setLoading(true);
-      script = document.createElement('script');
-      script.src = `${scriptName}`;
-      document.body.appendChild(script);
+    setLoading(true);
+    script = document.createElement('script');
+    script.src = `${scriptName}`;
+    document.body.appendChild(script);
 
-      script.onload = () => {
-        setLoading(false);
-      };
+    script.onload = () => {
+      setLoading(false);
+    };
 
-      script.onerror = () => {
-        throw Error(`SCRIPT LOAD ERROR : ${scriptName}`);
-      };
-    } catch (error) {
-      setLoadError(error);
-    }
+    script.onerror = () => {
+      console.log(`AWS S3 SCRIPT LOAD ERROR`);
+      document.body.removeChild(script);
+      setLoading(false);
+      setLoadError(true);
+    };
 
     return () => {
       document.body.removeChild(script);
     };
   }, []);
 
-  return { loading, loadError };
+  return { loadError };
 };
 
 export default useScript;
