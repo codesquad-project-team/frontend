@@ -41,5 +41,8 @@ export const debounce = (callback, delay = 300) => {
 };
 
 export const isEmptyArray = arr => {
-  return arr.length ? false : true;
+  if (Array.isArray(arr)) {
+    return arr.length ? false : true;
+  }
+  return 'IS_NOT_ARRAY';
 };

@@ -9,6 +9,7 @@ const useMarker = (kakao = window.kakao, map, positionList) => {
 
   useMemo(() => {
     if (!map) return;
+    if (!Array.isArray(positionList)) return;
 
     clearMarkers();
     setMarkers(

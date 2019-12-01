@@ -32,11 +32,12 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
 
   const { MapContextForwarder, kakao, map } = useMapContext();
   const { placeService } = usePlaceService(kakao);
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchResult, setSearchResult] = useState('INITIAL');
   const [selectedIndex, setSelectedIndex] = useState(null);
 
   const setMapCenterToFirstItem = (map, searchResult) => {
-    if (!map || isEmptyArray(searchResult)) return;
+    if (!map || searchResult === 'NO_RESULT' || searchResult === 'INITIAL')
+      return;
     const { x: firstItemLng, y: firstItemLat } = searchResult[0];
     map.setCenter(new kakao.maps.LatLng(firstItemLat, firstItemLng));
   };
@@ -48,6 +49,10 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
 
   const handleSearchResponse = response => {
     if (response === 'ERROR') return;
+    if (isEmptyArray(response)) {
+      setSearchResult('NO_RESULT');
+      return;
+    }
     setSearchResult(response);
   };
 
