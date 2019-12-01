@@ -5,23 +5,30 @@ import useMapContext from './useMapContext';
 
 const LocationPreview = ({ lat, lng, onClick: openLocationFinder }) => {
   const { MapContextForwarder, kakao, map } = useMapContext();
+
   const position = useMemo(() => {
     return [{ y: lat, x: lng }];
   }, [lat, lng, map]);
 
   const { markers } = useMarker(kakao, map, position);
 
-  useEffect(() => {
+  useMemo(() => {
     if (!map) return;
-    kakao.maps.event.addListener(map, 'click', () => {
-      openLocationFinder();
-    });
+    // map.setDraggable(false);
+    map.setZoomable(false);
+    map.setMinLevel(3);
+    map.setMaxLevel(3);
   }, [map]);
 
   useMemo(() => {
     if (!map) return;
     map.setCenter(new kakao.maps.LatLng(lat, lng));
   }, [lat, lng]);
+
+  useEffect(() => {
+    if (!map) return;
+    kakao.maps.event.addListener(map, 'click', openLocationFinder);
+  }, [map]);
 
   return (
     <KakaoMap
