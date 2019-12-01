@@ -1,15 +1,27 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { KakaoMap } from 'react-kakao-maps';
 import useMarker from './useMarker';
 import useMapContext from './useMapContext';
 
-const LocationPreview = ({ lat, lng }) => {
+const LocationPreview = ({ lat, lng, onClick: openLocationFinder }) => {
   const { MapContextForwarder, kakao, map } = useMapContext();
   const position = useMemo(() => {
     return [{ y: lat, x: lng }];
-  }, [map]);
+  }, [lat, lng, map]);
 
   const { markers } = useMarker(kakao, map, position);
+
+  useEffect(() => {
+    if (!map) return;
+    kakao.maps.event.addListener(map, 'click', () => {
+      openLocationFinder();
+    });
+  }, [map]);
+
+  useMemo(() => {
+    if (!map) return;
+    map.setCenter(new kakao.maps.LatLng(lat, lng));
+  }, [lat, lng]);
 
   return (
     <KakaoMap

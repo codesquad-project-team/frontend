@@ -48,11 +48,6 @@ const SearchResultMarkers = ({
         marker.setImage(dotMarkerImage);
       });
     });
-
-    return () => {
-      //markers변경 시 지도에서 제거
-      markers.forEach(marker => marker.setMap(null));
-    };
   }, [markers]);
 
   useMemo(() => {

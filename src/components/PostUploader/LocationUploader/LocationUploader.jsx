@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useModal from '../../../hooks/useModal';
 import LocationFinder from './LocationFinder';
 import LocationFindButton from './LocationFindButton';
@@ -11,7 +11,7 @@ const LocationUploader = ({ lat, lng, setSelectedLocation }) => {
   return (
     <>
       {existsSelectedLocation ? (
-        <LocationPreview lat={lat} lng={lng} />
+        <LocationPreview lat={lat} lng={lng} onClick={handleClick} />
       ) : (
         <LocationFindButton onClick={handleClick}>장소검색</LocationFindButton>
       )}
