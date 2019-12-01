@@ -27,7 +27,7 @@ const PostUploadPage = () => {
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
   );
 
-  const { initS3, deleteS3, createAlbum, addImage } = useS3(loadError);
+  const { initS3, deleteS3, createAlbum, addImage } = useS3();
 
   const addImageHandler = files => {
     /* Map each file to a promise that resolves to an array of image URI's */
@@ -50,7 +50,7 @@ const PostUploadPage = () => {
         });
       },
       error => {
-        console.error(error);
+        console.log(error);
       }
     );
   };
@@ -91,14 +91,34 @@ const PostUploadPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const s3 = await initS3();
-    const albumKey = await createAlbum(
-      s3,
-      nickname,
-      YYYYMMDDHHMMSS(new Date())
-    );
-    const uploadedUrl = await addImage(images.selectedImages, albumKey);
-    await deleteS3(s3, albumKey);
+    try {
+      if (loadError) {
+        throw Error(
+          `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
+        );
+      }
+      const s3 = await initS3();
+
+      const createAlbumResponse = await createAlbum(
+        s3,
+        nickname,
+        YYYYMMDDHHMMSS(new Date())
+      );
+
+      if (createAlbumResponse.error) throw Error(createAlbumResponse.msg);
+      const albumKey = createAlbumResponse.msg;
+
+      const addImageResponse = await addImage(images.selectedImages, albumKey);
+
+      if (addImageResponse.error) throw Error(addImageResponse.msg);
+
+      const uploadedUrl = addImageResponse.msg;
+
+      await deleteS3(s3, albumKey);
+    } catch (err) {
+      if (err === `업로드 할 이미지를 최소 1개 이상 선택해주세요.`) alert(err);
+      else alert('Server Error가 발생했습니다. 잠시 후에 다시 실행해주세요.');
+    }
   };
 
   return (
