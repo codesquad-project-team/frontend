@@ -1,12 +1,16 @@
 @import '../../../stylesheets/util.scss';
 
+$lists-item-height: 5rem;
+$lists-item-padding: 1rem;
+
 .search-result-lists {
   &-selected-item {
     background-color: #eee;
   }
+
   &-item {
-    padding: 1rem;
-    height: 5rem;
+    padding: $lists-item-padding;
+    height: $lists-item-height;
     border-bottom: 1px solid $gray-border-color;
     &:hover {
       cursor: pointer;
@@ -18,5 +22,14 @@
   }
   &-address {
     color: #888;
+  }
+
+  &-no-result {
+    padding: $lists-item-padding;
+    height: $lists-item-height;
+    line-height: calc(#{$lists-item-height} - (#{$lists-item-padding} * 2));
+    text-align: center;
+    border-bottom: 1px solid $gray-border-color;
+    font-size: 1.5rem;
   }
 }

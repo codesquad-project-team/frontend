@@ -9,6 +9,7 @@ import usePlaceService from './usePlaceService';
 import SearchResultLists from './SearchResultLists';
 import SearchResultMarkers from './SearchResultMarkers';
 import { IMAGE_BUCKET_URL } from '../../../configs';
+import { isEmptyArray } from '../../../utils/utils';
 
 const initialLat = 37.5845218; //initial location
 const initialLng = 126.9975588;
@@ -16,8 +17,7 @@ const initialLng = 126.9975588;
 const LocationFinder = ({
   className = '',
   closeModal,
-  setSelectedLocation,
-  ...restProps
+  setSelectedLocation
 }) => {
   const { inputValue, handleChange } = useInput();
   const { locationKeyword } = inputValue;
@@ -36,27 +36,34 @@ const LocationFinder = ({
   const [searchResult, setSearchResult] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
 
-  useMemo(() => {
-    if (map) {
-      const firstItemLat = searchResult[0].y;
-      const firstItemLng = searchResult[0].x;
-      map.setCenter(new kakao.maps.LatLng(firstItemLat, firstItemLng));
-    }
-  }, [searchResult]);
+  const setMapCenterToFirstItem = (map, searchResult) => {
+    if (!map || isEmptyArray(searchResult)) return;
+    const { x: firstItemLng, y: firstItemLat } = searchResult[0];
+    map.setCenter(new kakao.maps.LatLng(firstItemLat, firstItemLng));
+  };
+
+  useMemo(() => setMapCenterToFirstItem(map, searchResult), [
+    map,
+    searchResult
+  ]);
+
+  const handleSearchResponse = response => {
+    if (response === 'ERROR') return;
+    setSearchResult(response);
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
-    placeService.keywordSearch(
-      locationKeyword,
-      response => setSearchResult(response),
-      { location: new kakao.maps.LatLng(currentLat, currentLng), page: 10 }
-    );
+    placeService.keywordSearch(locationKeyword, handleSearchResponse, {
+      location: new kakao.maps.LatLng(currentLat, currentLng),
+      page: 10
+    });
   };
 
   const handleClick = ({ currentTarget }) => {
     const index = Number(currentTarget.dataset.index);
     const targetData = searchResult[index];
-    const { x = Number(x), y = Number(y) } = targetData;
+    const { x, y } = targetData;
 
     setSelectedIndex(index);
     setCurrentLng(x);
@@ -65,6 +72,7 @@ const LocationFinder = ({
   };
 
   const saveLocation = () => {
+    //TODO: 장소 선택 전에 확인버튼 누른경우 에러처리
     setSelectedLocation(searchResult[selectedIndex]);
     closeModal();
   };

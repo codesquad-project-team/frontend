@@ -39,3 +39,7 @@ export const debounce = (callback, delay = 300) => {
     timer = setTimeout(() => callback(...param), delay);
   };
 };
+
+export const isEmptyArray = arr => {
+  return arr.length ? false : true;
+};
