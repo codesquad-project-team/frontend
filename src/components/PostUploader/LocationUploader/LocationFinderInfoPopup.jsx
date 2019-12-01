@@ -14,7 +14,7 @@ const LocationFinderInfoPopup = ({
   setInfoPopupState,
   closeLocationFinder
 }) => {
-  const { open, handleClick: togglePopup } = useModal();
+  const { open, toggleModal: togglePopup } = useModal();
 
   const getMessage = infoPopupState => {
     if (infoPopupState === 'INITIAL' || infoPopupState === 'CLOSED') return;

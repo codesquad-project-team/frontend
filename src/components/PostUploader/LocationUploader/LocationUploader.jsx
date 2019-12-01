@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import useModal from '../../../hooks/useModal';
 import LocationFinder from './LocationFinder';
 import LocationFindButton from './LocationFindButton';
 import LocationPreview from './LocationPreview';
 
 const LocationUploader = ({ lat, lng, setSelectedLocation }) => {
-  const { Modal, handleClick, open } = useModal();
+  const { Modal, toggleModal, open } = useModal();
   const existsSelectedLocation = lat ? true : false;
 
   return (
     <>
       {existsSelectedLocation ? (
-        <LocationPreview lat={lat} lng={lng} onClick={handleClick} />
+        <LocationPreview lat={lat} lng={lng} onClick={toggleModal} />
       ) : (
-        <LocationFindButton onClick={handleClick}>장소검색</LocationFindButton>
+        <LocationFindButton onClick={toggleModal}>장소검색</LocationFindButton>
       )}
       {open && (
-        <Modal onClick={handleClick}>
+        <Modal onClick={toggleModal}>
           <LocationFinder
-            closeModal={handleClick}
+            closeModal={toggleModal}
             setSelectedLocation={setSelectedLocation}
           />
         </Modal>

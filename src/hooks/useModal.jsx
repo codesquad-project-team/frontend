@@ -17,11 +17,11 @@ const Modal = ({ className = '', onClick, children }) => {
 
 const useModal = () => {
   const [open, setOpen] = useState(false);
-  const handleClick = () => {
+  const toggleModal = () => {
     setOpen(!open);
   };
 
-  return { Modal, handleClick, open };
+  return { Modal, toggleModal, open };
 };
 
 export default useModal;
