@@ -80,16 +80,28 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
   };
 
   useEffect(() => {
-    const timerId = setTimeout(
-      () => setInfoPopupState('CLOSED'),
-      POPUP_DURATION
-    );
+    let timerId;
+    if (infoPopupState === 'SELECTION_REQUIRED') {
+      timerId = setTimeout(() => setInfoPopupState('CLOSED'), POPUP_DURATION);
+    }
     return () => clearTimeout(timerId);
   }, [infoPopupState]);
 
+  const closeLocationFinder = () => {
+    if (selectedIndex) {
+      setInfoPopupState('SAVE_REQUIRED');
+      return;
+    }
+    closeModal();
+  };
+
   return (
     <div className="location-finder">
-      <LocationFinderInfoPopup infoPopupState={infoPopupState} />
+      <LocationFinderInfoPopup
+        infoPopupState={infoPopupState}
+        setInfoPopupState={setInfoPopupState}
+        closeLocationFinder={closeModal}
+      />
       <div className="location-finder-header">
         <form onSubmit={handleSubmit}>
           <img
@@ -105,7 +117,7 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
             placeholder="장소명을 입력해주세요"
           />
         </form>
-        <CloseBtn onClick={closeModal} />
+        <CloseBtn onClick={closeLocationFinder} />
       </div>
       <div className="location-finder-content">
         <SearchResultLists
