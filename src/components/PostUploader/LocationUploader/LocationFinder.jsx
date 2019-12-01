@@ -8,17 +8,16 @@ import useMapContext from './useMapContext';
 import usePlaceService from './usePlaceService';
 import SearchResultLists from './SearchResultLists';
 import SearchResultMarkers from './SearchResultMarkers';
+import LocationFinderInfoPopup from './LocationFinderInfoPopup';
 import { IMAGE_BUCKET_URL } from '../../../configs';
 import { isEmptyArray } from '../../../utils/utils';
 
-const initialLat = 37.5845218; //initial location
-const initialLng = 126.9975588;
+const INITIAL_LAT = 37.5845218;
+const INITIAL_LNG = 126.9975588;
+const POPUP_DURATION = 1500;
 
-const LocationFinder = ({
-  className = '',
-  closeModal,
-  setSelectedLocation
-}) => {
+const LocationFinder = ({ closeModal, setSelectedLocation }) => {
+  const [infoPopupState, setInfoPopupState] = useState('INITIAL');
   const { inputValue, handleChange } = useInput();
   const { locationKeyword } = inputValue;
 
@@ -28,8 +27,8 @@ const LocationFinder = ({
     inputRef.current.focus();
   }, []);
 
-  const [currentLat, setCurrentLat] = useState(initialLat);
-  const [currentLng, setCurrentLng] = useState(initialLng);
+  const [currentLat, setCurrentLat] = useState(INITIAL_LAT);
+  const [currentLng, setCurrentLng] = useState(INITIAL_LNG);
 
   const { MapContextForwarder, kakao, map } = useMapContext();
   const { placeService } = usePlaceService(kakao);
@@ -72,13 +71,25 @@ const LocationFinder = ({
   };
 
   const saveLocation = () => {
-    //TODO: 장소 선택 전에 확인버튼 누른경우 에러처리
+    if (!selectedIndex) {
+      setInfoPopupState('SELECTION_REQUIRED');
+      return;
+    }
     setSelectedLocation(searchResult[selectedIndex]);
     closeModal();
   };
 
+  useEffect(() => {
+    const timerId = setTimeout(
+      () => setInfoPopupState('CLOSED'),
+      POPUP_DURATION
+    );
+    return () => clearTimeout(timerId);
+  }, [infoPopupState]);
+
   return (
     <div className="location-finder">
+      <LocationFinderInfoPopup infoPopupState={infoPopupState} />
       <div className="location-finder-header">
         <form onSubmit={handleSubmit}>
           <img
@@ -109,8 +120,8 @@ const LocationFinder = ({
           width="570px"
           height="400px"
           level={3}
-          lat={initialLat}
-          lng={initialLng}
+          lat={INITIAL_LAT}
+          lng={INITIAL_LNG}
         >
           <SearchResultMarkers
             kakao={kakao}
