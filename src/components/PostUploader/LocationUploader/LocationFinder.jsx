@@ -27,9 +27,6 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
     inputRef.current.focus();
   }, []);
 
-  const [currentLat, setCurrentLat] = useState(INITIAL_LAT);
-  const [currentLng, setCurrentLng] = useState(INITIAL_LNG);
-
   const { MapContextForwarder, kakao, map } = useMapContext();
   const { placeService } = usePlaceService(kakao);
   const [searchResult, setSearchResult] = useState('INITIAL');
@@ -58,8 +55,9 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    const currentLatLng = map.getCenter();
     placeService.keywordSearch(locationKeyword, handleSearchResponse, {
-      location: new kakao.maps.LatLng(currentLat, currentLng),
+      location: currentLatLng,
       page: 10
     });
   };
@@ -70,8 +68,6 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
     const { x, y } = targetData;
 
     setSelectedIndex(index);
-    setCurrentLng(x);
-    setCurrentLat(y);
     map.setCenter(new kakao.maps.LatLng(y, x));
   };
 
