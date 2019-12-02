@@ -44,10 +44,6 @@ const MarkerController = ({
     kakao.maps.event.addListener(marker, 'mouseout', () => {
       marker.setImage(dotMarkerImage);
     });
-
-    return () => {
-      marker.setMap(null);
-    };
   }, [marker]);
 
   useMemo(() => {

@@ -4,8 +4,8 @@ import defaultMapOptions from '../constants';
 import PropTypes from 'prop-types';
 
 Marker.propTypes = {
-  lat: PropTypes.number,
-  lng: PropTypes.number,
+  lat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  lng: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   image: PropTypes.string,
   children: PropTypes.object
 };
@@ -47,11 +47,23 @@ export default function Marker({ lat, lng, image, children, ...options }) {
     return () => {
       if (state && state.marker) state.marker.setMap(null);
     };
-  }, [map]);
+  }, [map, lat, lng]);
 
   return (
     <MarkerContext.Provider value={{ ...state }}>
+      <MarkerUnmounter />
       {children}
     </MarkerContext.Provider>
   );
 }
+
+const MarkerUnmounter = () => {
+  const { marker } = useContext(MarkerContext);
+  useEffect(() => {
+    if (!marker) return;
+    return () => {
+      marker.setMap(null);
+    };
+  }, [marker]);
+  return null;
+};

@@ -1,20 +1,14 @@
 import React, { useMemo, useEffect } from 'react';
 import { KakaoMap } from 'react-kakao-maps';
-import useMarker from './useMarker';
-import useMapContext from './useMapContext';
+import Marker from './react-kakao-maps/Marker';
+import useMapContext from './react-kakao-maps/hooks/useMapContext';
 
 const LocationPreview = ({ lat, lng, onClick: openLocationFinder }) => {
   const { MapContextForwarder, kakao, map } = useMapContext();
 
-  const position = useMemo(() => {
-    return [{ y: lat, x: lng }];
-  }, [lat, lng, map]);
-
-  const { markers } = useMarker(kakao, map, position);
-
   useMemo(() => {
     if (!map) return;
-    // map.setDraggable(false);
+    // map.setDraggable(false); //적용 시 지도 클릭이벤트가 발생하지 않음
     map.setZoomable(false);
     map.setMinLevel(3);
     map.setMaxLevel(3);
@@ -40,6 +34,7 @@ const LocationPreview = ({ lat, lng, onClick: openLocationFinder }) => {
       lat={lat}
       lng={lng}
     >
+      <Marker lat={lat} lng={lng} />
       <MapContextForwarder />
     </KakaoMap>
   );
