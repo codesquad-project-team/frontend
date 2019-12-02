@@ -38,8 +38,8 @@ const MarkerController = ({
     if (!marker) return;
 
     if (isFirstRender) {
-      marker.setImage(dotMarkerImage);
       marker.setZIndex(0);
+      marker.setImage(dotMarkerImage);
       setIsFirstRender(false);
     }
 
@@ -79,8 +79,10 @@ const MarkerController = ({
     if (!marker) return;
 
     if (currentMarkerIndex === selectedIndex) {
+      marker.setZIndex(1);
       marker.setImage(selectedMarkerImage);
     } else {
+      marker.setZIndex(0);
       marker.setImage(dotMarkerImage);
     }
   }, [selectedIndex]);
