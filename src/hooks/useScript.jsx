@@ -16,7 +16,6 @@ const useScript = scriptName => {
     };
 
     script.onerror = () => {
-      console.log(`AWS S3 SCRIPT LOAD ERROR`);
       document.body.removeChild(script);
       setLoading(false);
       setLoadError(true);
