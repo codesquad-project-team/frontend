@@ -1,20 +1,26 @@
 import { useState, useContext, useMemo, useEffect } from 'react';
 import { MarkerContext } from './react-kakao-maps/Marker';
+import { IMAGE_BUCKET_URL } from '../../../configs';
 
 const MarkerController = ({
   kakao,
-  index,
+  currentMarkerIndex,
   selectedIndex,
-  setSelectedIndex
+  setSelectedIndex,
+  hoveredMarkerIndex,
+  setHoveredMarkerIndex
 }) => {
   const { marker } = useContext(MarkerContext);
-  const [selectedMarker, setSelectedMarker] = useState(null);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   const dotMarkerImage = useMemo(() => {
     if (kakao) {
       return new kakao.maps.MarkerImage(
-        'https://editor-static.pstatic.net/c/resources/common/img/common-icon-places-dot-x2-20180830.png',
-        new kakao.maps.Size(32, 32)
+        `${IMAGE_BUCKET_URL}/marker-shape-dot.png`,
+        new kakao.maps.Size(16, 16),
+        {
+          offset: new kakao.maps.Point(8, 18)
+        }
       );
     }
   }, [kakao]);
@@ -30,47 +36,50 @@ const MarkerController = ({
 
   useEffect(() => {
     if (!marker) return;
-    //마커 첫 렌더링 시 dot 모양으로 설정
-    marker.setImage(dotMarkerImage);
 
-    //마커에 이벤트핸들러 설정
-    kakao.maps.event.addListener(marker, 'click', () => {
-      setSelectedMarker(marker);
-      setSelectedIndex(index);
-    });
-    kakao.maps.event.addListener(marker, 'mouseover', () => {
-      marker.setImage(selectedMarkerImage);
-    });
-    kakao.maps.event.addListener(marker, 'mouseout', () => {
+    if (isFirstRender) {
       marker.setImage(dotMarkerImage);
-    });
-  }, [marker]);
-
-  useMemo(() => {
-    if (!marker) return;
-
-    //이전 selectedMarker를 dotMaker로 변경
-    if (marker !== selectedMarker) {
-      marker.setImage(dotMarkerImage);
+      marker.setZIndex(0);
+      setIsFirstRender(false);
     }
 
-    //이벤트핸들러 재설정
-    kakao.maps.event.addListener(marker, 'mouseout', () => {
-      //mouseout시 일단 dotMarkerImage로 변경
+    const handleClick = () => {
+      setSelectedIndex(currentMarkerIndex);
+    };
+
+    const handleMouseOver = () => {
+      if (marker.getImage() === selectedMarkerImage) return;
+
+      marker.setZIndex(1);
+      marker.setImage(selectedMarkerImage);
+      setHoveredMarkerIndex(currentMarkerIndex);
+    };
+
+    const handleMouseOut = () => {
+      if (marker.getImage() === dotMarkerImage) return;
+      if (currentMarkerIndex === selectedIndex) return;
+
+      marker.setZIndex(0);
       marker.setImage(dotMarkerImage);
-      //만약 selectedMarker라면 다시 selectedMarkerImage로 변경
-      if (marker === selectedMarker) {
-        marker.setImage(selectedMarkerImage);
-      }
-    });
-  }, [selectedMarker]);
+      setHoveredMarkerIndex('UNHOVERED');
+    };
+
+    kakao.maps.event.addListener(marker, 'click', handleClick);
+    kakao.maps.event.addListener(marker, 'mouseover', handleMouseOver);
+    kakao.maps.event.addListener(marker, 'mouseout', handleMouseOut);
+
+    return () => {
+      kakao.maps.event.removeListener(marker, 'click', handleClick);
+      kakao.maps.event.removeListener(marker, 'mouseover', handleMouseOver);
+      kakao.maps.event.removeListener(marker, 'mouseout', handleMouseOut);
+    };
+  }, [marker, hoveredMarkerIndex, selectedIndex]);
 
   useMemo(() => {
     if (!marker) return;
 
-    if (index === selectedIndex) {
+    if (currentMarkerIndex === selectedIndex) {
       marker.setImage(selectedMarkerImage);
-      setSelectedMarker(marker);
     } else {
       marker.setImage(dotMarkerImage);
     }

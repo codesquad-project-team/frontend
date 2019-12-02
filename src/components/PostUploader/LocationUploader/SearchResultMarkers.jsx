@@ -1,7 +1,8 @@
-import React, { useMemo, useEffect, useContext } from 'react';
-import { CustomOverlay } from 'react-kakao-maps';
+import React, { useState } from 'react';
 import Marker from './react-kakao-maps/Marker';
+import CustomOverlay from './react-kakao-maps/CustomOverlay';
 import MarkerController from './MarkerController';
+import MarkerInfoWindow from './MarkerInfoWindow';
 
 const SearchResultMarkers = ({
   kakao,
@@ -11,37 +12,37 @@ const SearchResultMarkers = ({
 }) => {
   const needsMarkers =
     searchResult !== 'INITIAL' && searchResult !== 'NO_RESULT';
+  const [hoveredMarkerIndex, setHoveredMarkerIndex] = useState('UNHOVERED');
 
   return (
     <>
       {needsMarkers
-        ? searchResult.map(({ x, y }, index) => {
-            const { lat, lng } = { lat: Number(y), lng: Number(x) };
-            return (
-              <Marker key={lng} lat={lat} lng={lng}>
-                <MarkerController
-                  index={index}
-                  kakao={kakao}
-                  selectedIndex={selectedIndex}
-                  setSelectedIndex={setSelectedIndex}
-                />
-                {/* <CustomOverlay
-                  content={
-                    <div
-                      style={{
-                        width: '100px',
-                        height: '100px',
-                        background: 'white'
-                      }}
+        ? searchResult.map(
+            ({ x: lng, y: lat, place_name: placeName }, index) => {
+              const isMarkerMouseOvered = hoveredMarkerIndex === index;
+              const isSelectedMarker = selectedIndex === index;
+              return (
+                <Marker key={lng} lat={lat} lng={lng}>
+                  <MarkerController
+                    kakao={kakao}
+                    currentMarkerIndex={index}
+                    selectedIndex={selectedIndex}
+                    setSelectedIndex={setSelectedIndex}
+                    hoveredMarkerIndex={hoveredMarkerIndex}
+                    setHoveredMarkerIndex={setHoveredMarkerIndex}
+                  />
+                  {isMarkerMouseOvered || isSelectedMarker ? (
+                    <CustomOverlay
+                      content={<MarkerInfoWindow placeName={placeName} />}
+                      lat={lat}
+                      lng={lng}
+                      yAnchor={1}
                     />
-                  }
-                  lat={lat}
-                  lng={lng}
-                  yAnchor={1}
-                /> */}
-              </Marker>
-            );
-          })
+                  ) : null}
+                </Marker>
+              );
+            }
+          )
         : null}
     </>
   );

@@ -23,7 +23,8 @@
     "react-hot-loader": "^4.12.14",
     "react-kakao-maps": "^0.0.11",
     "react-router-dom": "^5.1.0",
-    "react-spinners": "^0.6.1"
+    "react-spinners": "^0.6.1",
+    "styled-components": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
