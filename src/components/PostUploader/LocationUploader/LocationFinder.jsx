@@ -30,7 +30,7 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
   const { MapContextForwarder, kakao, map } = useMapContext();
   const { placeService } = usePlaceService(kakao);
   const [searchResult, setSearchResult] = useState('INITIAL');
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState('INITIAL');
 
   const setMapCenterToFirstItem = (map, searchResult) => {
     if (!map || searchResult === 'NO_RESULT' || searchResult === 'INITIAL')
@@ -72,7 +72,7 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
   };
 
   const saveLocation = () => {
-    if (!selectedIndex) {
+    if (selectedIndex === 'INITIAL') {
       setInfoPopupState('SELECTION_REQUIRED');
       return;
     }
@@ -89,7 +89,7 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
   }, [infoPopupState]);
 
   const closeLocationFinder = () => {
-    if (selectedIndex) {
+    if (selectedIndex !== 'INITIAL') {
       setInfoPopupState('SAVE_REQUIRED');
       return;
     }
