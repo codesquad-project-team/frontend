@@ -19,79 +19,17 @@ const PostUploadPage = () => {
     previewUrls: []
   });
 
-  const [uploadedUrls, setUploadedUrls] = useState([]);
-  const [imageUploadError, setImageUploadError] = useState(false);
-
-  const [representativeIndex, setRepresentativeIndex] = useState(0);
-
   const { nickname } = useLoginContext();
 
   const { loadError } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
   );
+  const [imageUploadError, setImageUploadError] = useState(false);
+  // TODO : loadError, imageUploadError 등 PostUploadPage 에서 나올 수 있는 error 를 어떻게 관리해야 할지 고민 중
 
   const { S3imageUploadHandler } = useS3();
 
-  const addImageHandler = files => {
-    /* Map each file to a promise that resolves to an array of image URI's */
-    Promise.all(
-      files.map(file => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.addEventListener('load', ({ target }) => {
-            resolve(target.result);
-          });
-          reader.readAsDataURL(file); // file을 읽기 가능한 url로 변환하여 target의 result 속성에 넣는다.
-        });
-      })
-    ).then(
-      urls => {
-        /* Once all promises are resolved, update state with image URI array */
-        setImages({
-          selectedImages: [...images.selectedImages, ...files],
-          previewUrls: [...images.previewUrls, ...urls]
-        });
-      },
-      error => {
-        console.log(error);
-      }
-    );
-  };
-
-  const deleteImageHandler = e => {
-    const deletedImage = e.target.previousSibling.src;
-    const targetIndex = images.previewUrls.findIndex(
-      url => url === deletedImage
-    );
-
-    if (targetIndex === representativeIndex) {
-      !targetIndex
-        ? setRepresentativeIndex(0)
-        : setRepresentativeIndex(targetIndex - 1);
-    }
-
-    setImages({
-      selectedImages: removeItemWithSlice(images.selectedImages, targetIndex),
-      previewUrls: removeItemWithSlice(images.previewUrls, targetIndex)
-    });
-  };
-
-  const removeItemWithSlice = (arr, index) => {
-    const firstArr = arr.slice(0, index);
-    const secondArr = arr.slice(index + 1);
-    return [...firstArr, ...secondArr];
-  };
-
-  const selectRepresentativeImage = e => {
-    const represenTativeImage = e.target.previousSibling.previousSibling.src;
-    const represenTativeIndex = images.previewUrls.findIndex(
-      el => el === represenTativeImage
-    );
-
-    setRepresentativeIndex(represenTativeIndex);
-  };
-
-  console.log(`imageUploadError : ${imageUploadError}`);
+  const [uploadedUrls, setUploadedUrls] = useState([]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -117,13 +55,7 @@ const PostUploadPage = () => {
       <Header />
       <CommonPost.background className="post-upload-page-background">
         <CommonPost large className="post-upload-page">
-          <ImageUploader
-            images={images}
-            addImageHandler={addImageHandler}
-            deleteImageHandler={deleteImageHandler}
-            representativeImageHandler={selectRepresentativeImage}
-            representativeIndex={representativeIndex}
-          />
+          <ImageUploader images={images} setImages={setImages} />
           <LocationUploader />
           <TitleUploader />
           <CommentUploader />
