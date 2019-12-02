@@ -4,8 +4,8 @@ import { KakaoMap } from 'react-kakao-maps';
 import useInput from '../../../hooks/useInput';
 import CommonBtn from '../../CommonBtn/CommonBtn';
 import CloseBtn from '../../CommonBtn/CloseBtn';
-import useMapContext from './useMapContext';
-import usePlaceService from './usePlaceService';
+import useMapContext from './react-kakao-maps/hooks/useMapContext';
+import usePlaceService from './react-kakao-maps/hooks/usePlaceService';
 import SearchResultLists from './SearchResultLists';
 import SearchResultMarkers from './SearchResultMarkers';
 import LocationFinderInfoPopup from './LocationFinderInfoPopup';
@@ -138,7 +138,6 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
         >
           <SearchResultMarkers
             kakao={kakao}
-            map={map}
             selectedIndex={selectedIndex}
             setSelectedIndex={setSelectedIndex}
             searchResult={searchResult}
