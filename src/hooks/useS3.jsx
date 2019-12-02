@@ -11,17 +11,11 @@ const errorMsgMap = (key, msg = '') => {
     IMAGE_UPLOAD_UNKNOWN_ERROR: `이미지를 업로드 하는 도중 해당 에러가 발생했습니다. ${msg}`
   };
 
-  console.log(obj[key]);
-
   return obj[key];
 };
 
-const displayUserError = () => {};
-
-const displayServerError = () => {};
-
 const useS3 = () => {
-  const initS3 = () => {
+  const updateS3 = () => {
     // eslint-disable-next-line no-undef
     AWS.config.update({
       // eslint-disable-next-line no-undef
@@ -32,6 +26,7 @@ const useS3 = () => {
         IdentityPoolId: `${IDENTITY_POOL_ID}`
       })
     });
+
     // eslint-disable-next-line no-undef
     return new AWS.S3({
       apiVersion: '2006-03-01',
@@ -40,16 +35,14 @@ const useS3 = () => {
     });
   };
 
-  const deleteS3 = (s3, albumKey) => {
-    const params = {
+  const initS3 = () => {
+    // eslint-disable-next-line no-undef
+    AWS.config.update({
+      region: null,
       // eslint-disable-next-line no-undef
-      Bucket: `${ALBUM_BUCKET_NAME}`,
-      Key: `${albumKey}`
-    };
-    s3.deleteObject(params, (err, data) => {
-      if (err) console.log(err, err.stack);
-      // an error occurred
-      else console.log(data); // successful response
+      credentials: new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: null
+      })
     });
   };
 
@@ -70,12 +63,12 @@ const useS3 = () => {
 
     const albumKey = 'post-images/' + encodeURIComponent(albumName) + '/';
 
-    s3.headObject({ Key: albumKey }, function(err, data) {
+    s3.headObject({ Key: albumKey }, (err, data) => {
       if (!err)
         return { error: true, msg: errorMsgMap('ALBUM_NAME_ALREADY_EXIST') };
 
       if (err.code === 'NotFound') {
-        s3.putObject({ Key: albumKey }, function(err, data) {
+        s3.putObject({ Key: albumKey }, (err, data) => {
           if (err)
             return {
               error: true,
@@ -96,7 +89,7 @@ const useS3 = () => {
       };
     }
 
-    const response = Promise.all(
+    return Promise.all(
       files.map(file => {
         const fileName = file.name;
 
@@ -115,10 +108,15 @@ const useS3 = () => {
         return upload.promise();
       })
     ).then(
-      uploadedUrl => {
-        return uploadedUrl.reduce((acc, cur) => {
+      response => {
+        const uploadedUrl = response.reduce((acc, cur) => {
           return acc.concat(cur.Location);
         }, []);
+
+        return {
+          error: false,
+          msg: uploadedUrl
+        };
       },
       err => {
         return {
@@ -127,14 +125,43 @@ const useS3 = () => {
         };
       }
     );
-
-    return {
-      error: false,
-      msg: response
-    };
   };
 
-  return { initS3, deleteS3, createAlbum, addImage };
+  const S3imageUploadHandler = async (
+    nickname,
+    date,
+    images,
+    setImageUploadError
+  ) => {
+    try {
+      const s3 = await updateS3();
+
+      const createAlbumResponse = await createAlbum(s3, nickname, date);
+
+      if (createAlbumResponse.error) throw createAlbumResponse.msg;
+
+      const albumKey = createAlbumResponse.msg;
+
+      const addImageResponse = await addImage(images, albumKey);
+
+      if (addImageResponse.error) throw addImageResponse.msg;
+
+      const uploadedUrl = addImageResponse.msg;
+
+      return uploadedUrl;
+    } catch (err) {
+      if (err === '업로드 할 이미지를 최소 1개 이상 선택해주세요.') alert(err);
+      else {
+        console.log(err);
+        alert('서버 에러가 발생했습니다. 다음에 다시 시도해주세요. ');
+        setImageUploadError(true);
+      }
+    } finally {
+      await initS3();
+    }
+  };
+
+  return { S3imageUploadHandler };
 };
 
 export default useS3;

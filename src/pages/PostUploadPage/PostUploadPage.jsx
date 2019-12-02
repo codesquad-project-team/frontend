@@ -19,6 +19,9 @@ const PostUploadPage = () => {
     previewUrls: []
   });
 
+  const [uploadedUrls, setUploadedUrls] = useState([]);
+  const [imageUploadError, setImageUploadError] = useState(false);
+
   const [representativeIndex, setRepresentativeIndex] = useState(0);
 
   const { nickname } = useLoginContext();
@@ -27,7 +30,7 @@ const PostUploadPage = () => {
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
   );
 
-  const { initS3, deleteS3, createAlbum, addImage } = useS3();
+  const { S3imageUploadHandler } = useS3();
 
   const addImageHandler = files => {
     /* Map each file to a promise that resolves to an array of image URI's */
@@ -88,37 +91,25 @@ const PostUploadPage = () => {
     setRepresentativeIndex(represenTativeIndex);
   };
 
-  const handleSubmit = async e => {
+  console.log(`imageUploadError : ${imageUploadError}`);
+
+  const handleSubmit = e => {
     e.preventDefault();
 
-    try {
-      if (loadError) {
-        throw Error(
-          `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
-        );
-      }
-      const s3 = await initS3();
-
-      const createAlbumResponse = await createAlbum(
-        s3,
-        nickname,
-        YYYYMMDDHHMMSS(new Date())
+    if (loadError) {
+      return alert(
+        `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
       );
-
-      if (createAlbumResponse.error) throw Error(createAlbumResponse.msg);
-      const albumKey = createAlbumResponse.msg;
-
-      const addImageResponse = await addImage(images.selectedImages, albumKey);
-
-      if (addImageResponse.error) throw Error(addImageResponse.msg);
-
-      const uploadedUrl = addImageResponse.msg;
-
-      await deleteS3(s3, albumKey);
-    } catch (err) {
-      if (err === `업로드 할 이미지를 최소 1개 이상 선택해주세요.`) alert(err);
-      else alert('Server Error가 발생했습니다. 잠시 후에 다시 실행해주세요.');
     }
+
+    S3imageUploadHandler(
+      nickname,
+      YYYYMMDDHHMMSS(new Date()),
+      images.selectedImages,
+      setImageUploadError
+    ).then(result => {
+      setUploadedUrls(result);
+    });
   };
 
   return (
