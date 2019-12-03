@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Marker from './react-kakao-maps/Marker';
 import CustomOverlay from './react-kakao-maps/CustomOverlay';
 import MarkerController from './MarkerController';
@@ -10,8 +10,9 @@ const SearchResultMarkers = ({
   setSelectedIndex,
   searchResult
 }) => {
-  const needsMarkers =
-    searchResult !== 'INITIAL' && searchResult !== 'NO_RESULT';
+  const needsMarkers = !(
+    searchResult === 'ZERO_RESULT' || searchResult === 'INITIAL'
+  );
   const [hoveredMarkerIndex, setHoveredMarkerIndex] = useState('UNHOVERED');
 
   return (

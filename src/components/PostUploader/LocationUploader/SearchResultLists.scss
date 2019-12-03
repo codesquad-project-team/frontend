@@ -24,12 +24,24 @@ $lists-item-padding: 1rem;
     color: #888;
   }
 
-  &-no-result {
+  &-zero-result {
     padding: $lists-item-padding;
     height: $lists-item-height;
     line-height: calc(#{$lists-item-height} - (#{$lists-item-padding} * 2));
     text-align: center;
     border-bottom: 1px solid $gray-border-color;
+    font-size: 1.5rem;
+  }
+}
+.search-result {
+  &-pagination {
+    display: grid;
+    grid-template-columns: 40% 20% 40%;
+    justify-items: center;
+    padding: 0.5rem 3rem;
+  }
+
+  &-current-page-number {
     font-size: 1.5rem;
   }
 }

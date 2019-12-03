@@ -4,16 +4,18 @@ import './SearchResultLists.scss';
 const SearchResultLists = ({
   className,
   selectedIndex,
+  setSelectedIndex,
   searchResult,
-  handleClick
+  onClick: setClickedItemSelected,
+  pagination
 }) => {
   const makeResults = searchResult => {
     switch (searchResult) {
       case 'INITIAL':
         break;
-      case 'NO_RESULT':
+      case 'ZERO_RESULT':
         return (
-          <div className="search-result-lists-no-result">
+          <div className="search-result-lists-zero-result">
             검색결과가 없습니다.
           </div>
         );
@@ -25,7 +27,7 @@ const SearchResultLists = ({
             className={`search-result-lists-item ${
               selectedIndex === index ? 'search-result-lists-selected-item' : ''
             }`}
-            onClick={handleClick}
+            onClick={setClickedItemSelected}
           >
             <div className="search-result-lists-name">{item.place_name}</div>
             <div className="search-result-lists-address">
@@ -37,7 +39,42 @@ const SearchResultLists = ({
   };
   const results = makeResults(searchResult);
 
-  return <div className={className}>{results}</div>;
+  const gotoPrevPage = () => {
+    pagination.prevPage();
+    setSelectedIndex('INITIAL');
+  };
+
+  const gotoNextPage = () => {
+    pagination.nextPage();
+    setSelectedIndex('INITIAL');
+  };
+
+  return (
+    <div className={className}>
+      {results}
+      {pagination && (pagination.hasPrevPage || pagination.hasNextPage) && (
+        <div className="search-result-pagination">
+          <button
+            className="search-result-pagination-prev-btn"
+            disabled={!pagination.hasPrevPage}
+            onClick={gotoPrevPage}
+          >
+            이전
+          </button>
+          <span className="search-result-current-page-number">
+            {pagination.current}
+          </span>
+          <button
+            className="search-result-pagination-next-btn"
+            disabled={!pagination.hasNextPage}
+            onClick={gotoNextPage}
+          >
+            다음
+          </button>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default SearchResultLists;

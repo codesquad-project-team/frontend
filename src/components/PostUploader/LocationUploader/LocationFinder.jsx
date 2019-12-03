@@ -10,7 +10,6 @@ import SearchResultLists from './SearchResultLists';
 import SearchResultMarkers from './SearchResultMarkers';
 import LocationFinderInfoPopup from './LocationFinderInfoPopup';
 import { IMAGE_BUCKET_URL } from '../../../configs';
-import { isEmptyArray } from '../../../utils/utils';
 
 const INITIAL_LAT = 37.5845218;
 const INITIAL_LNG = 126.9975588;
@@ -31,9 +30,10 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
   const { placeService } = usePlaceService(kakao);
   const [searchResult, setSearchResult] = useState('INITIAL');
   const [selectedIndex, setSelectedIndex] = useState('INITIAL');
+  const [pagination, setPagination] = useState({});
 
   const setMapCenterToFirstItem = (map, searchResult) => {
-    if (!map || searchResult === 'NO_RESULT' || searchResult === 'INITIAL')
+    if (!map || searchResult === 'ZERO_RESULT' || searchResult === 'INITIAL')
       return;
     const { x: firstItemLng, y: firstItemLat } = searchResult[0];
     map.setCenter(new kakao.maps.LatLng(firstItemLat, firstItemLng));
@@ -44,28 +44,31 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
     searchResult
   ]);
 
-  const handleSearchResponse = response => {
-    if (response === 'ERROR') return;
-    if (isEmptyArray(response)) {
-      setSearchResult('NO_RESULT');
-      return;
+  const handleSearchResponse = (response, status, pagination) => {
+    switch (status) {
+      case 'OK':
+        setPagination(pagination);
+        setSearchResult(response);
+        break;
+      case 'ZERO_RESULT':
+        setSearchResult('ZERO_RESULT');
+        break;
+      default:
+        break;
     }
-    setSearchResult(response);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
     const currentLatLng = map.getCenter();
     placeService.keywordSearch(locationKeyword, handleSearchResponse, {
-      location: currentLatLng,
-      page: 10
+      location: currentLatLng
     });
   };
 
-  const handleClick = ({ currentTarget }) => {
+  const setClickedItemSelected = ({ currentTarget }) => {
     const index = Number(currentTarget.dataset.index);
-    const targetData = searchResult[index];
-    const { x, y } = targetData;
+    const { x, y } = searchResult[index];
 
     setSelectedIndex(index);
     map.setCenter(new kakao.maps.LatLng(y, x));
@@ -125,7 +128,9 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
           className="location-finder-search-result"
           searchResult={searchResult}
           selectedIndex={selectedIndex}
-          handleClick={handleClick}
+          setSelectedIndex={setSelectedIndex}
+          onClick={setClickedItemSelected}
+          pagination={pagination}
         />
         <KakaoMap
           // eslint-disable-next-line no-undef
