@@ -16,19 +16,19 @@ const ProfileEditPage = () => {
 
   const { loading, error } = useFetch(
     `${WEB_SERVER_URL}/user/myinfo`,
-    {},
+    { credentials: 'include' },
     json => initUserInfo(json)
   );
 
   const initUserInfo = userInfo => {
-    const { profileImage, nickname, email, phone } = userInfo;
-    const buf = Buffer.from(userInfo.description);
+    const { profileImage, nickname, email, phone, description } = userInfo;
+
     const initialValue = {
-      profileImage,
+      profileImage: null || undefined,
       nickname,
       email,
-      phone,
-      introduction: buf.toString()
+      phone: null || undefined,
+      introduction: description === null ? undefined : description
     };
     setInputValue(initialValue);
   };
