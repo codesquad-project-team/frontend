@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './PostUploadPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
 import Header from '../../components/Header/Header';
-import ImageUploader from '../../components/PostUploader/ImageUploader';
+import ImageUploader from '../../components/PostUploader/ImageUploader/ImageUploader';
 import LocationUploader from '../../components/PostUploader/LocationUploader/LocationUploader';
 import TitleUploader from '../../components/PostUploader/TitleUploader';
 import CommentUploader from '../../components/PostUploader/CommentUploader';
