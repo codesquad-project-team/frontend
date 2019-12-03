@@ -1,6 +1,6 @@
 export const getClassName = ({ props, prefix }) => {
   const { small, medium, large } = props;
-  let className = "";
+  let className = '';
   if (small) className = `${prefix}-small`;
   if (medium) className = `${prefix}-medium`;
   if (large) className = `${prefix}-large`;
@@ -20,7 +20,7 @@ export const throttle = (callback, delay = 200) => {
 
 export const YYYYMMDDHHMMSS = dateObj => {
   function pad2(n) {
-    return (n < 10 ? "0" : "") + n;
+    return (n < 10 ? '0' : '') + n;
   }
   return (
     dateObj.getFullYear() +
@@ -30,7 +30,7 @@ export const YYYYMMDDHHMMSS = dateObj => {
     pad2(dateObj.getMinutes()) +
     pad2(dateObj.getSeconds())
   );
-}
+};
 
 export const debounce = (callback, delay = 300) => {
   let timer;
@@ -38,11 +38,4 @@ export const debounce = (callback, delay = 300) => {
     clearTimeout(timer);
     timer = setTimeout(() => callback(...param), delay);
   };
-};
-
-export const isEmptyArray = arr => {
-  if (Array.isArray(arr)) {
-    return arr.length ? false : true;
-  }
-  return 'IS_NOT_ARRAY';
 };
