@@ -15,6 +15,12 @@ const SearchResultMarkers = ({
   );
   const [hoveredMarkerIndex, setHoveredMarkerIndex] = useState('UNHOVERED');
 
+  useMemo(() => {
+    if (selectedIndex !== 'INITIAL') {
+      setHoveredMarkerIndex('UNHOVERED');
+    }
+  }, [selectedIndex]);
+
   return (
     <>
       {needsMarkers

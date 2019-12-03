@@ -64,6 +64,7 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
     placeService.keywordSearch(locationKeyword, handleSearchResponse, {
       location: currentLatLng
     });
+    setSelectedIndex('INITIAL');
   };
 
   const setClickedItemSelected = ({ currentTarget }) => {
