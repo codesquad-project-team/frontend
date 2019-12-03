@@ -8,41 +8,26 @@ import useMapContext from './react-kakao-maps/hooks/useMapContext';
 import usePlaceService from './react-kakao-maps/hooks/usePlaceService';
 import SearchResultLists from './SearchResultLists';
 import SearchResultMarkers from './SearchResultMarkers';
-import LocationFinderInfoPopup from './LocationFinderInfoPopup';
+import LocationFinderPopupMessage from './LocationFinderPopupMessage';
 import { IMAGE_BUCKET_URL } from '../../../configs';
 
 const INITIAL_LAT = 37.5845218;
 const INITIAL_LNG = 126.9975588;
-const POPUP_DURATION = 1500;
 
 const LocationFinder = ({ closeModal, setSelectedLocation }) => {
-  const [infoPopupState, setInfoPopupState] = useState('INITIAL');
   const { inputValue, handleChange } = useInput();
   const { locationKeyword } = inputValue;
-
-  const inputRef = useRef(null);
-
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
   const { MapContextForwarder, kakao, map } = useMapContext();
   const { placeService } = usePlaceService(kakao);
   const [searchResult, setSearchResult] = useState('INITIAL');
-  const [selectedIndex, setSelectedIndex] = useState('INITIAL');
+  const [clickedItemIndex, setClickedItemIndex] = useState('UNCLICKED');
+  const [popupActionType, setPopupActionType] = useState('CLOSE');
   const [pagination, setPagination] = useState({});
 
-  const setMapCenterToFirstItem = (map, searchResult) => {
-    if (!map || searchResult === 'ZERO_RESULT' || searchResult === 'INITIAL')
-      return;
-    const { x: firstItemLng, y: firstItemLat } = searchResult[0];
-    map.setCenter(new kakao.maps.LatLng(firstItemLat, firstItemLng));
-  };
-
-  useMemo(() => setMapCenterToFirstItem(map, searchResult), [
-    map,
-    searchResult
-  ]);
+  const inputRef = useRef(null);
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const handleSearchResponse = (response, status, pagination) => {
     switch (status) {
@@ -60,53 +45,49 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const currentLatLng = map.getCenter();
     placeService.keywordSearch(locationKeyword, handleSearchResponse, {
-      location: currentLatLng
+      location: map.getCenter()
     });
-    setSelectedIndex('INITIAL');
+    setClickedItemIndex('UNCLICKED');
   };
 
   const setClickedItemSelected = ({ currentTarget }) => {
     const index = Number(currentTarget.dataset.index);
     const { x, y } = searchResult[index];
 
-    setSelectedIndex(index);
+    setClickedItemIndex(index);
     map.setCenter(new kakao.maps.LatLng(y, x));
   };
 
-  const saveLocation = () => {
-    if (selectedIndex === 'INITIAL') {
-      setInfoPopupState('SELECTION_REQUIRED');
+  const selectLocation = () => {
+    if (clickedItemIndex === 'UNCLICKED') {
+      setPopupActionType('SELECTION_REQUIRED');
       return;
     }
-    setSelectedLocation(searchResult[selectedIndex]);
+    setSelectedLocation(searchResult[clickedItemIndex]);
     closeModal();
   };
-
-  useEffect(() => {
-    let timerId;
-    if (infoPopupState === 'SELECTION_REQUIRED') {
-      timerId = setTimeout(() => setInfoPopupState('CLOSED'), POPUP_DURATION);
-    }
-    return () => clearTimeout(timerId);
-  }, [infoPopupState]);
 
   const closeLocationFinder = () => {
-    if (selectedIndex !== 'INITIAL') {
-      setInfoPopupState('SAVE_REQUIRED');
+    const hasClickedItem = clickedItemIndex !== 'UNCLICKED';
+    if (hasClickedItem) {
+      setPopupActionType('SAVE_REQUIRED');
       return;
     }
     closeModal();
   };
+
+  const focusToFirstItem = (map, searchResult) => {
+    if (!map || searchResult === 'ZERO_RESULT' || searchResult === 'INITIAL')
+      return;
+    const { x: firstItemLng, y: firstItemLat } = searchResult[0];
+    map.setCenter(new kakao.maps.LatLng(firstItemLat, firstItemLng));
+  };
+
+  useMemo(() => focusToFirstItem(map, searchResult), [map, searchResult]);
 
   return (
     <div className="location-finder">
-      <LocationFinderInfoPopup
-        infoPopupState={infoPopupState}
-        setInfoPopupState={setInfoPopupState}
-        closeLocationFinder={closeModal}
-      />
       <div className="location-finder-header">
         <form onSubmit={handleSubmit}>
           <img
@@ -128,8 +109,8 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
         <SearchResultLists
           className="location-finder-search-result"
           searchResult={searchResult}
-          selectedIndex={selectedIndex}
-          setSelectedIndex={setSelectedIndex}
+          clickedItemIndex={clickedItemIndex}
+          setClickedItemIndex={setClickedItemIndex}
           onClick={setClickedItemSelected}
           pagination={pagination}
         />
@@ -144,16 +125,21 @@ const LocationFinder = ({ closeModal, setSelectedLocation }) => {
         >
           <SearchResultMarkers
             kakao={kakao}
-            selectedIndex={selectedIndex}
-            setSelectedIndex={setSelectedIndex}
+            clickedItemIndex={clickedItemIndex}
+            setClickedItemIndex={setClickedItemIndex}
             searchResult={searchResult}
           />
           <MapContextForwarder />
         </KakaoMap>
       </div>
       <div className="location-finder-footer">
-        <CommonBtn onClick={saveLocation}>확인</CommonBtn>
+        <CommonBtn onClick={selectLocation}>확인</CommonBtn>
       </div>
+      <LocationFinderPopupMessage
+        popupActionType={popupActionType}
+        setPopupActionType={setPopupActionType}
+        closeLocationFinder={closeModal}
+      />
     </div>
   );
 };

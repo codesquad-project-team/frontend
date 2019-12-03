@@ -5,8 +5,8 @@ import { IMAGE_BUCKET_URL } from '../../../configs';
 const MarkerController = ({
   kakao,
   currentMarkerIndex,
-  selectedIndex,
-  setSelectedIndex,
+  clickedItemIndex,
+  setClickedItemIndex,
   hoveredMarkerIndex,
   setHoveredMarkerIndex
 }) => {
@@ -25,7 +25,7 @@ const MarkerController = ({
     }
   }, [kakao]);
 
-  const selectedMarkerImage = useMemo(() => {
+  const clickedMarkerImage = useMemo(() => {
     if (kakao) {
       return new kakao.maps.MarkerImage(
         'http://t1.daumcdn.net/mapjsapi/images/2x/marker.png',
@@ -34,33 +34,47 @@ const MarkerController = ({
     }
   }, [kakao]);
 
+  const setDotMarkerImage = marker => {
+    marker.setZIndex(0);
+    marker.setImage(dotMarkerImage);
+  };
+
+  const setClickedMarkerImage = marker => {
+    marker.setZIndex(1);
+    marker.setImage(clickedMarkerImage);
+  };
+
   useEffect(() => {
     if (!marker) return;
 
     if (isFirstRender) {
-      marker.setZIndex(0);
-      marker.setImage(dotMarkerImage);
+      setDotMarkerImage(marker);
       setIsFirstRender(false);
     }
 
     const handleClick = () => {
-      setSelectedIndex(currentMarkerIndex);
+      setClickedItemIndex(currentMarkerIndex);
     };
 
     const handleMouseOver = () => {
-      if (marker.getImage() === selectedMarkerImage) return;
+      const isClickedMarkerImage = marker.getImage() === clickedMarkerImage;
+      if (isClickedMarkerImage) return;
 
-      marker.setZIndex(1);
-      marker.setImage(selectedMarkerImage);
+      setClickedMarkerImage(marker);
       setHoveredMarkerIndex(currentMarkerIndex);
     };
 
     const handleMouseOut = () => {
-      if (marker.getImage() === dotMarkerImage) return;
-      if (currentMarkerIndex === selectedIndex) return;
+      const isDotMarkerImage = marker.getImage() === dotMarkerImage;
+      const isClickedItem = currentMarkerIndex === clickedItemIndex;
 
-      marker.setZIndex(0);
-      marker.setImage(dotMarkerImage);
+      if (isDotMarkerImage) return;
+
+      if (isClickedItem) {
+        setHoveredMarkerIndex('UNHOVERED');
+        return;
+      }
+      setDotMarkerImage(marker);
       setHoveredMarkerIndex('UNHOVERED');
     };
 
@@ -73,19 +87,17 @@ const MarkerController = ({
       kakao.maps.event.removeListener(marker, 'mouseover', handleMouseOver);
       kakao.maps.event.removeListener(marker, 'mouseout', handleMouseOut);
     };
-  }, [marker, hoveredMarkerIndex, selectedIndex]);
+  }, [marker, hoveredMarkerIndex, clickedItemIndex]);
 
   useMemo(() => {
     if (!marker) return;
 
-    if (currentMarkerIndex === selectedIndex) {
-      marker.setZIndex(1);
-      marker.setImage(selectedMarkerImage);
+    if (currentMarkerIndex === clickedItemIndex) {
+      setClickedMarkerImage(marker);
     } else {
-      marker.setZIndex(0);
-      marker.setImage(dotMarkerImage);
+      setDotMarkerImage(marker);
     }
-  }, [selectedIndex]);
+  }, [clickedItemIndex]);
 
   return null;
 };
