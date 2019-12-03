@@ -1,0 +1,18 @@
+@import '../../stylesheets/util.scss';
+
+.profile-edit-page-image-change {
+  &-label {
+    border: 0;
+    color: $main-color;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  &-btn {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}

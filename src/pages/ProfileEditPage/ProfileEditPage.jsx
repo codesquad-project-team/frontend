@@ -9,10 +9,16 @@ import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
+import ProfileImageChangeBtn from './ProfileImageChangeBtn';
+import useScript from '../../hooks/useScript';
 
 const ProfileEditPage = () => {
   const { inputValue, setInputValue, handleChange, restore } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
+
+  const { loadError } = useScript(
+    'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
+  );
 
   const { loading, error } = useFetch(
     `${WEB_SERVER_URL}/user/myinfo`,
@@ -52,12 +58,10 @@ const ProfileEditPage = () => {
             <form className="profile-edit-page-content-form">
               <div className="profile-edit-page-content-item">
                 <ProfileImage medium src={profileImage} />
-                <CommonBtn
-                  className="profile-edit-page-image-change-btn"
-                  styleType="underline"
-                >
-                  프로필 사진 바꾸기
-                </CommonBtn>
+                <ProfileImageChangeBtn
+                  inputValue={inputValue}
+                  setInputValue={setInputValue}
+                />
               </div>
               <ProfileContentItem
                 label="닉네임"
