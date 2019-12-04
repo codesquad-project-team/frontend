@@ -4,9 +4,8 @@ import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CommonLink from '../CommonLink/CommonLink';
 
-const ProfileInfo = ({ data }) => {
+const ProfileInfo = ({ data, isMyProfile }) => {
   const {
-    isMyProfile,
     nickname,
     totalPost,
     totalFollower,
@@ -20,9 +19,9 @@ const ProfileInfo = ({ data }) => {
       <div className="profile-info">
         <div className="profile-info-left-column">
           <ProfileImage large src={profileImage} />
-          <CommonBtn className="profile-info-follow-btn" styleType="normal">
-            팔로우
-          </CommonBtn>
+          {!isMyProfile && (
+            <CommonBtn className="profile-info-follow-btn">팔로우</CommonBtn>
+          )}
         </div>
         <div className="profile-info-right-column">
           <div className="profile-info-header">
