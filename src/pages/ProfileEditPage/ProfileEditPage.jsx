@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './ProfileEditPage.scss';
 import Header from '../../components/Header/Header';
 import ProfileImage from '../../components/ProfileImage/ProfileImage';
@@ -11,10 +11,16 @@ import FadeLoader from 'react-spinners/FadeLoader';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import ProfileImageChangeBtn from './ProfileImageChangeBtn';
 import useScript from '../../hooks/useScript';
+import ValidityMessage from '../../pages/SignupPage/ValidityMessage';
+import { debounce } from '../../utils/utils';
 
 const ProfileEditPage = () => {
   const { inputValue, setInputValue, handleChange, restore } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
+
+  const [nicknameValidity, setNicknameValidity] = useState({});
+
+  const shakeTarget = useRef(null);
 
   const { loadError } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
@@ -38,6 +44,62 @@ const ProfileEditPage = () => {
     };
     setInputValue(initialValue);
   };
+
+  const checkNicknameFromServer = useCallback(async nickname => {
+    const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nickname })
+    });
+    switch (res.status) {
+      case 200:
+        setNicknameValidity('AVAILABLE');
+        break;
+      case 400:
+        setNicknameValidity('HAS_BLANKS');
+        break;
+      case 409:
+        setNicknameValidity('ALREADY_IN_USE');
+        break;
+      case 500:
+        setNicknameValidity('SERVER_ERROR');
+        break;
+      default:
+        break;
+    }
+  }, []);
+
+  const checkNicknameValidation = useCallback(
+    debounce(nickname => {
+      const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
+      const hasBlank = /\s/.test(nickname);
+      const onlyOneCharacter = nickname.length === 1;
+      switch (true) {
+        case isValid:
+          checkNicknameFromServer(nickname);
+          break;
+        case hasBlank:
+          setNicknameValidity('HAS_BLANKS');
+          break;
+        case onlyOneCharacter:
+          setNicknameValidity('NO_MESSAGE');
+          break;
+        default:
+          setNicknameValidity('INFO_MESSAGE');
+          break;
+      }
+    }),
+    []
+  );
+
+  useEffect(() => {
+    if (nickname) {
+      checkNicknameValidation(nickname);
+    } else {
+      setNicknameValidity('');
+    }
+  }, [nickname]);
 
   return (
     <>
@@ -68,6 +130,7 @@ const ProfileEditPage = () => {
                 value={nickname}
                 name="nickname"
                 changeHandler={handleChange}
+                nicknameValidity={nicknameValidity}
               />
               <ProfileContentItem
                 label="소개"
