@@ -2,6 +2,7 @@
 
 .profile-edit-page-content-item {
   font-size: 2rem;
+  line-height: 3rem;
   margin-top: 2rem;
   display: flex;
   align-items: center;
@@ -9,7 +10,7 @@
 
   > label {
     font-weight: bold;
-    width: 30%;
+    width: 20%;
     text-align: right;
     padding-right: 3rem;
   }
@@ -27,5 +28,9 @@
     &:focus {
       outline: none;
     }
+  }
+
+  &-validity-msg {
+    font-size: 1.5rem;
   }
 }

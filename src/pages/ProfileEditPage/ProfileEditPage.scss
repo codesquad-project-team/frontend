@@ -8,6 +8,7 @@
   justify-content: space-between;
   background-color: #fff;
   border: 1px solid $gray-border-color;
+  position: relative;
 
   &-dimmed-background {
     position: fixed;
@@ -33,7 +34,7 @@
 
   &-content {
     &-form {
-      width: 70%;
+      width: 80%;
     }
 
     &-item {
@@ -44,7 +45,9 @@
   }
 
   &-submit-btn {
-    margin: 4rem 0 0 3rem;
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
 
     span {
       font-size: 2rem;

@@ -4,12 +4,16 @@ import ValidityMessage from '../../pages/SignupPage/ValidityMessage';
 
 const ProfileContentItem = props => {
   const { label, name, value, changeHandler, nicknameValidity = '' } = props;
+
   return (
-    <div className={`profile-edit-page-content-item`}>
+    <div className="profile-edit-page-content-item">
       <label>{label}</label>
       <input type="text" name={name} value={value} onChange={changeHandler} />
       {nicknameValidity && (
-        <ValidityMessage nicknameValidity={nicknameValidity} />
+        <ValidityMessage
+          nicknameValidity={nicknameValidity}
+          styleObj={{ fontSize: '1.5rem' }}
+        />
       )}
     </div>
   );
