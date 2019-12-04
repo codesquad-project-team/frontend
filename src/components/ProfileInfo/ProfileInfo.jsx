@@ -28,7 +28,7 @@ const ProfileInfo = ({ data, isMyProfile }) => {
             <span className="profile-info-username">{nickname}</span>
             {isMyProfile && (
               <CommonLink to="/profile/edit">
-                <CommonBtn className="profile-info-edit-btn" styleType="normal">
+                <CommonBtn className="profile-info-edit-btn">
                   프로필편집
                 </CommonBtn>
               </CommonLink>
