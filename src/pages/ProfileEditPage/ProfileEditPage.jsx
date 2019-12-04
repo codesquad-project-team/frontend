@@ -20,7 +20,7 @@ const ProfileEditPage = () => {
 
   const [nicknameValidity, setNicknameValidity] = useState({});
 
-  const shakeTarget = useRef(null);
+  const [currentNickname, setCurrentNickname] = useState('');
 
   const { loadError } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
@@ -42,6 +42,8 @@ const ProfileEditPage = () => {
       phone: null || undefined,
       introduction: description === null ? undefined : description
     };
+
+    setCurrentNickname(initialValue.nickname);
     setInputValue(initialValue);
   };
 
@@ -75,6 +77,7 @@ const ProfileEditPage = () => {
       const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
       const hasBlank = /\s/.test(nickname);
       const onlyOneCharacter = nickname.length === 1;
+      const sameNickname = nickname === currentNickname;
       switch (true) {
         case isValid:
           checkNicknameFromServer(nickname);
@@ -95,7 +98,9 @@ const ProfileEditPage = () => {
 
   useEffect(() => {
     if (nickname) {
-      checkNicknameValidation(nickname);
+      nickname === currentNickname
+        ? setNicknameValidity('CURRENT_NICKNAME')
+        : checkNicknameValidation(nickname);
     } else {
       setNicknameValidity('');
     }
