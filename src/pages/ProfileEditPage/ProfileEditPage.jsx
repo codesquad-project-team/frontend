@@ -18,9 +18,9 @@ const ProfileEditPage = () => {
   const { inputValue, setInputValue, handleChange, restore } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
 
-  const [nicknameValidity, setNicknameValidity] = useState({});
-
   const [currentNickname, setCurrentNickname] = useState('');
+  const [nicknameValidity, setNicknameValidity] = useState({});
+  const [phoneValidity, setPhoneValidity] = useState('');
 
   const { loadError } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
@@ -96,6 +96,17 @@ const ProfileEditPage = () => {
     []
   );
 
+  const checkPhoneNumberValidation = useCallback(
+    debounce(phone => {
+      const isValid = /^[0-9]{3}[-]+[0-9]{4}[-]+[0-9]{4}$/.test(phone);
+
+      isValid
+        ? setPhoneValidity('NO_MESSAGE')
+        : setPhoneValidity('INVALID_PHONE_NUMBER');
+    }),
+    []
+  );
+
   useEffect(() => {
     if (nickname) {
       nickname === currentNickname
@@ -105,6 +116,10 @@ const ProfileEditPage = () => {
       setNicknameValidity('');
     }
   }, [nickname]);
+
+  useEffect(() => {
+    checkPhoneNumberValidation(phone);
+  }, [phone]);
 
   return (
     <>
@@ -154,6 +169,7 @@ const ProfileEditPage = () => {
                 value={phone}
                 name="phone"
                 changeHandler={handleChange}
+                nicknameValidity={phoneValidity}
               />
               <CommonBtn
                 className="profile-edit-page-submit-btn"
