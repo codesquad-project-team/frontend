@@ -13,7 +13,7 @@ const ProfileInfo = ({ data, isMyProfile }) => {
     introduction,
     profileImage
   } = data;
-  const selfIntro = Buffer.from(introduction).toString();
+  const selfIntro = introduction ? Buffer.from(introduction).toString() : null;
   return (
     <div className="profile-info-wrapper">
       <div className="profile-info">
