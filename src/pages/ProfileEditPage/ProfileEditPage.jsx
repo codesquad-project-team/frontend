@@ -123,8 +123,8 @@ const ProfileEditPage = () => {
           />
           {!loading && (
             <form className="profile-edit-page-content-form">
-              <div className="profile-edit-page-content-item">
-                <ProfileImage medium src={profileImage} />
+              <div className="profile-edit-page-content-item profile-image-section">
+                <ProfileImage large src={profileImage} />
                 <ProfileImageChangeBtn
                   inputValue={inputValue}
                   setInputValue={setInputValue}

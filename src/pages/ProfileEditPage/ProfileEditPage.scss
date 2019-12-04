@@ -38,6 +38,8 @@
     }
 
     &-item {
+      justify-content: space-evenly;
+
       .profile-image {
         margin: 0 2rem 2rem 18rem;
       }

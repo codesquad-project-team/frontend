@@ -1,5 +1,6 @@
 import React from 'react';
 import './ProfileImageChangeBtn.scss';
+import { IMAGE_BUCKET_URL } from '../../configs';
 
 const ProfileImageChangeBtn = ({ inputValue, setInputValue }) => {
   const handleProfileImage = ({ target }) => {
@@ -13,7 +14,11 @@ const ProfileImageChangeBtn = ({ inputValue, setInputValue }) => {
   };
 
   return (
-    <>
+    <div className="profile-edit-page-image-change-wrapper">
+      <img
+        className="profile-edit-page-image-change-icon"
+        src={`${IMAGE_BUCKET_URL}/profile-change-icon.png`}
+      />
       <label
         className="profile-edit-page-image-change-label"
         htmlFor="profile-image-change-btn"
@@ -27,7 +32,7 @@ const ProfileImageChangeBtn = ({ inputValue, setInputValue }) => {
         accept="image/*"
         onChange={handleProfileImage}
       />
-    </>
+    </div>
   );
 };
 
