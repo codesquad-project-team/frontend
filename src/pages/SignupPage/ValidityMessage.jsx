@@ -12,12 +12,12 @@ const messageMap = {
   INVALID_TOKEN: '유효한 토큰이 아니에요. 메인으로 돌아가서 다시 시도해주세요.'
 };
 
-const ValidityMessage = ({ nicknameValidity }) => {
+const ValidityMessage = ({ nicknameValidity, styleObj = {} }) => {
   const valid = nicknameValidity === 'AVAILABLE' ? true : false;
   const message = messageMap[nicknameValidity];
 
   return (
-    <div className="validity-message">
+    <div className="validity-message" style={styleObj}>
       <span
         className={valid ? 'validity-message-ok' : 'validity-message-not-ok'}
       >
