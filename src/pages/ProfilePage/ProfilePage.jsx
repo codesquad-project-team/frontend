@@ -19,7 +19,7 @@ const ProfilePage = () => {
   const { id } = useLoginContext();
   const isMyProfile = id === userId;
 
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({});
   const { error, loading } = useFetch(
     `${WEB_SERVER_URL}/user/profile-content?id=${userId}`,
     { credentials: 'include' },

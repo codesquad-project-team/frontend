@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './Header.scss';
 import useInput from '../../hooks/useInput';
 import ProfileImage from '../ProfileImage/ProfileImage';
@@ -12,20 +12,40 @@ const Header = () => {
   const { inputValue, handleChange, restore } = useInput();
   const [clickedSignup, setClickedSignup] = useState(false);
   const [clickedSignin, setClickedSignin] = useState(false);
-  const { loggedIn, profileImage } = useLoginContext();
+  const {
+    loggedIn,
+    profileImage,
+    needsLoginModal,
+    setNeedsLoginModal
+  } = useLoginContext();
 
   const handleSubmit = e => {
     e.preventDefault();
     restore('searchBar');
   };
 
-  const handleSignin = () => {
-    clickedSignin ? setClickedSignin(false) : setClickedSignin(true);
+  const toggleSigninModal = type => {
+    switch (type) {
+      case 'OPEN':
+        setClickedSignin(true);
+        setNeedsLoginModal(false);
+        break;
+      case 'CLOSE':
+        setClickedSignin(false);
+        break;
+      default:
+        setClickedSignin(!clickedSignin);
+        break;
+    }
   };
 
-  const handleSignup = () => {
-    clickedSignup ? setClickedSignup(false) : setClickedSignup(true);
+  const toggleSignupModal = () => {
+    setClickedSignup(!clickedSignup);
   };
+
+  useMemo(() => {
+    needsLoginModal ? toggleSigninModal('OPEN') : null;
+  }, [needsLoginModal]);
 
   return (
     <div className="header-wrapper">
@@ -58,14 +78,14 @@ const Header = () => {
             <>
               <CommonBtn
                 className="signin-btn"
-                onClick={handleSignin}
+                onClick={toggleSigninModal}
                 styleType="normal"
               >
                 로그인
               </CommonBtn>
               <CommonBtn
                 className="signup-btn"
-                onClick={handleSignup}
+                onClick={toggleSignupModal}
                 styleType="normal"
               >
                 회원가입
@@ -75,11 +95,11 @@ const Header = () => {
         </div>
 
         {!loggedIn && clickedSignin && (
-          <CommonModal clickHandler={handleSignin} target={'signin'} />
+          <CommonModal clickHandler={toggleSigninModal} target={'signin'} />
         )}
 
         {!loggedIn && clickedSignup && (
-          <CommonModal clickHandler={handleSignup} target={'signup'} />
+          <CommonModal clickHandler={toggleSignupModal} target={'signup'} />
         )}
       </div>
     </div>
