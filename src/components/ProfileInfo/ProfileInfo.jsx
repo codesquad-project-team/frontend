@@ -19,7 +19,7 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
   const [isFollowing, setIsFollowing] = useState(initialFollowStatus);
   const [error, setError] = useState(null);
 
-  const handleResponse = res => {
+  const handleRequestFollowResponse = res => {
     switch (res.status) {
       case 200:
         setIsFollowing(true);
@@ -41,7 +41,32 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
       method: 'POST',
       credentials: 'include'
     });
-    handleResponse(res);
+    handleRequestFollowResponse(res);
+  };
+
+  const handleCancelFollowResponse = res => {
+    switch (res.status) {
+      case 200:
+        setIsFollowing(false);
+        break;
+      case 400:
+        setError('INVALID_USER_ID');
+        break;
+      case 401:
+        setError('INVALID_TOKEN');
+        break;
+      case 500:
+        setError('SERVER_ERROR');
+        break;
+    }
+  };
+
+  const cancelFollow = async () => {
+    const res = await fetch(`${WEB_SERVER_URL}/user/follow/${userId}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    });
+    handleCancelFollowResponse(res);
   };
 
   return (
@@ -52,7 +77,7 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
           {!isMyProfile && (
             <CommonBtn
               className="profile-info-follow-btn"
-              onClick={requestFollow}
+              onClick={isFollowing ? cancelFollow : requestFollow}
             >
               {isFollowing ? '팔로우 취소' : '팔로우'}
             </CommonBtn>
