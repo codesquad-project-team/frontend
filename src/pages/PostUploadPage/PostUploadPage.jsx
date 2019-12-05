@@ -40,9 +40,12 @@ const PostUploadPage = () => {
       );
     }
 
+    const albumName = nickname.concat('_', YYYYMMDDHHMMSS(new Date())).trim();
+    const albumNamePrefix = 'post-images/';
+
     S3imageUploadHandler(
-      nickname,
-      YYYYMMDDHHMMSS(new Date()),
+      albumName,
+      albumNamePrefix,
       images.selectedImages,
       setImageUploadError
     ).then(result => {
