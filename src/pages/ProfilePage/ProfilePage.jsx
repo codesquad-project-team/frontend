@@ -38,7 +38,9 @@ const ProfilePage = () => {
         color={MAIN_COLOR}
         loading={loading}
       />
-      {!loading && <ProfileInfo data={data} isMyProfile={isMyProfile} />}
+      {!loading && (
+        <ProfileInfo data={data} isMyProfile={isMyProfile} userId={userId} />
+      )}
       <PostContainer api="/post?page=" query={userId} />
     </div>
   );

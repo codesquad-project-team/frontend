@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ProfileInfo.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CommonLink from '../CommonLink/CommonLink';
+import { WEB_SERVER_URL } from '../../configs';
 
-const ProfileInfo = ({ data, isMyProfile }) => {
+const ProfileInfo = ({ data, isMyProfile, userId }) => {
   const {
+    isFollowing: initialFollowStatus,
     nickname,
     totalPost,
     totalFollower,
@@ -14,13 +16,46 @@ const ProfileInfo = ({ data, isMyProfile }) => {
     profileImage
   } = data;
   const selfIntro = introduction ? Buffer.from(introduction).toString() : null;
+  const [isFollowing, setIsFollowing] = useState(initialFollowStatus);
+  const [error, setError] = useState(null);
+
+  const handleResponse = res => {
+    switch (res.status) {
+      case 200:
+        setIsFollowing(true);
+        break;
+      case 400:
+        setError('INVALID_USER_ID');
+        break;
+      case 401:
+        setError('INVALID_TOKEN');
+        break;
+      case 500:
+        setError('SERVER_ERROR');
+        break;
+    }
+  };
+
+  const requestFollow = async () => {
+    const res = await fetch(`${WEB_SERVER_URL}/user/follow/${userId}`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+    handleResponse(res);
+  };
+
   return (
     <div className="profile-info-wrapper">
       <div className="profile-info">
         <div className="profile-info-left-column">
           <ProfileImage large src={profileImage} />
           {!isMyProfile && (
-            <CommonBtn className="profile-info-follow-btn">팔로우</CommonBtn>
+            <CommonBtn
+              className="profile-info-follow-btn"
+              onClick={requestFollow}
+            >
+              {isFollowing ? '팔로우 취소' : '팔로우'}
+            </CommonBtn>
           )}
         </div>
         <div className="profile-info-right-column">
