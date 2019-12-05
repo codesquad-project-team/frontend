@@ -46,9 +46,7 @@ const useS3 = () => {
     });
   };
 
-  const createAlbum = (s3, nickname, date) => {
-    const albumName = nickname.concat('_', date).trim();
-
+  const createAlbum = (s3, albumName, albumNamePrefix) => {
     if (!albumName)
       return {
         error: true,
@@ -61,7 +59,7 @@ const useS3 = () => {
         msg: errorMsgMap('ALBUM_NAME_CANNOT_CONTAIN_SLASH')
       };
 
-    const albumKey = 'post-images/' + encodeURIComponent(albumName) + '/';
+    const albumKey = albumNamePrefix + encodeURIComponent(albumName) + '/';
 
     s3.headObject({ Key: albumKey }, (err, data) => {
       if (!err)
@@ -128,15 +126,19 @@ const useS3 = () => {
   };
 
   const S3imageUploadHandler = async (
-    nickname,
-    date,
+    albumName,
+    albumNamePrefix,
     images,
     setImageUploadError
   ) => {
     try {
       const s3 = await updateS3();
 
-      const createAlbumResponse = await createAlbum(s3, nickname, date);
+      const createAlbumResponse = await createAlbum(
+        s3,
+        albumName,
+        albumNamePrefix
+      );
 
       if (createAlbumResponse.error) throw createAlbumResponse.msg;
 
