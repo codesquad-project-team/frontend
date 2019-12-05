@@ -2,13 +2,13 @@ import React from 'react';
 import './ProfileImageChangeBtn.scss';
 import { IMAGE_BUCKET_URL } from '../../configs';
 
-const ProfileImageChangeBtn = ({ inputValue, setInputValue }) => {
+const ProfileImageChangeBtn = ({ setImage }) => {
   const handleProfileImage = ({ target }) => {
     const file = Array.from(target.files);
 
     const reader = new FileReader();
     reader.addEventListener('load', ({ target }) => {
-      setInputValue({ ...inputValue, ['profileImage']: target.result });
+      setImage({ fileType: file, previewUrl: target.result });
     });
     reader.readAsDataURL(file[0]);
   };

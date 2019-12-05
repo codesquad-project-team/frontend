@@ -11,12 +11,15 @@ import FadeLoader from 'react-spinners/FadeLoader';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import ProfileImageChangeBtn from './ProfileImageChangeBtn';
 import useScript from '../../hooks/useScript';
+import useS3 from '../../hooks/useS3';
 import ValidityMessage from '../../pages/SignupPage/ValidityMessage';
 import { debounce } from '../../utils/utils';
 
 const ProfileEditPage = () => {
   const { inputValue, setInputValue, handleChange, restore } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
+
+  const [image, setImage] = useState({ fileType: [], previewUrl: '' });
 
   const [currentNickname, setCurrentNickname] = useState('');
   const [nicknameValidity, setNicknameValidity] = useState({});
@@ -25,6 +28,10 @@ const ProfileEditPage = () => {
   const { loadError } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
   );
+
+  const [imageUploadError, setImageUploadError] = useState(false);
+
+  const { S3imageUploadHandler } = useS3();
 
   const { loading, error } = useFetch(
     `${WEB_SERVER_URL}/user/myinfo`,
@@ -107,6 +114,28 @@ const ProfileEditPage = () => {
     []
   );
 
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    if (loadError) {
+      return alert(
+        `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
+      );
+    }
+
+    const albumName = nickname;
+    const albumNamePrefix = 'profile-images/';
+
+    S3imageUploadHandler(
+      albumName,
+      albumNamePrefix,
+      image.fileType,
+      setImageUploadError
+    ).then(result => {
+      setInputValue({ ...inputValue, ['profileImage']: result[0] });
+    });
+  };
+
   useEffect(() => {
     if (nickname) {
       nickname === currentNickname
@@ -139,11 +168,8 @@ const ProfileEditPage = () => {
           {!loading && (
             <form className="profile-edit-page-content-form">
               <div className="profile-edit-page-content-item profile-image-section">
-                <ProfileImage large src={profileImage} />
-                <ProfileImageChangeBtn
-                  inputValue={inputValue}
-                  setInputValue={setInputValue}
-                />
+                <ProfileImage large src={image.previewUrl} />
+                <ProfileImageChangeBtn setImage={setImage} />
               </div>
               <ProfileContentItem
                 label="닉네임"
@@ -175,6 +201,7 @@ const ProfileEditPage = () => {
                 className="profile-edit-page-submit-btn"
                 type="submit"
                 styleType="emphasize"
+                onClick={handleSubmit}
               >
                 제출
               </CommonBtn>
