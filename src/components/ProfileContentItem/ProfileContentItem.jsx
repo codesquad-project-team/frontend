@@ -1,6 +1,6 @@
 import React from 'react';
 import './ProfileContentItem.scss';
-import ValidityMessage from '../../pages/SignupPage/ValidityMessage';
+import ValidityMessage from '../ValidityMessage/ValidityMessage';
 
 const ProfileContentItem = props => {
   const { label, name, value, changeHandler, nicknameValidity = '' } = props;

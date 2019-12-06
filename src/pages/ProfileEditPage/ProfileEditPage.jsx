@@ -12,7 +12,7 @@ import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import ProfileImageChangeBtn from './ProfileImageChangeBtn';
 import useScript from '../../hooks/useScript';
 import useS3 from '../../hooks/useS3';
-import ValidityMessage from '../../pages/SignupPage/ValidityMessage';
+import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
 import { debounce } from '../../utils/utils';
 
 const ProfileEditPage = () => {

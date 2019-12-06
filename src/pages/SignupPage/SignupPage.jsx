@@ -10,7 +10,7 @@ import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { useLoginContext } from '../../contexts/LoginContext';
 import useTempTokenValidation from '../../hooks/useTempTokenValidation';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
-import ValidityMessage from './ValidityMessage';
+import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
 
 const SignupPage = ({ history }) => {
   const { setLoggedIn } = useLoginContext();
