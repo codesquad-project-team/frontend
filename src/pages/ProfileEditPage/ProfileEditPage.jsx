@@ -17,7 +17,7 @@ import { debounce } from '../../utils/utils';
 
 const ProfileEditPage = () => {
   const { inputValue, setInputValue, handleChange, restore } = useInput();
-  const { profileImage, nickname, email, phone, introduction } = inputValue;
+  const { profile_image, nickname, email, phone, description } = inputValue;
 
   const [image, setImage] = useState({ fileType: [], previewUrl: '' });
 
@@ -43,11 +43,11 @@ const ProfileEditPage = () => {
     const { profileImage, nickname, email, phone, description } = userInfo;
 
     const initialValue = {
-      profileImage: null || undefined,
+      profile_image: profileImage === null || undefined,
       nickname,
       email,
       phone: null || undefined,
-      introduction: description === null ? undefined : description
+      description: null || undefined
     };
 
     setCurrentNickname(initialValue.nickname);
@@ -132,7 +132,7 @@ const ProfileEditPage = () => {
       image.fileType,
       setImageUploadError
     ).then(result => {
-      setInputValue({ ...inputValue, ['profileImage']: result[0] });
+      setInputValue({ ...inputValue, ['profile_image']: result[0] });
     });
   };
 
@@ -149,6 +149,39 @@ const ProfileEditPage = () => {
   useEffect(() => {
     checkPhoneNumberValidation(phone);
   }, [phone]);
+
+  useEffect(() => {
+    if (profile_image) {
+      (async () => {
+        const res = await fetch(`${WEB_SERVER_URL}/user/profile`, {
+          method: 'PUT',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify(inputValue)
+        });
+
+        switch (res.status) {
+          case 200:
+            alert('회원 정보가 수정 되었습니다!');
+            break;
+
+          case 400:
+            alert('요청이 올바르지 않습니다.');
+            break;
+
+          case 401:
+            alert('인증되지 않은 토큰입니다.');
+            break;
+
+          default:
+            break;
+        }
+      })();
+    }
+  }, [profile_image]);
 
   return (
     <>
@@ -180,8 +213,8 @@ const ProfileEditPage = () => {
               />
               <ProfileContentItem
                 label="소개"
-                value={introduction}
-                name="introduction"
+                value={description}
+                name="description"
                 changeHandler={handleChange}
               />
               <ProfileContentItem
