@@ -19,7 +19,7 @@ const PostContainer = ({ headerOn, api, query: writerId = '' }) => {
   const items = response ? response.posts : [];
 
   const { error, loading } = useFetch(
-    `${WEB_SERVER_URL}${api}${page}${writerId ? `&writerId=${writerId}` : ''}`,
+    `${WEB_SERVER_URL}${api}${page}${writerId ? `&writerid=${writerId}` : ''}`,
     {},
     json => mergeResponse(response, json)
   );
