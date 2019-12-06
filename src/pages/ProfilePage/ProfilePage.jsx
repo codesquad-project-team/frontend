@@ -15,7 +15,7 @@ const ProfilePage = () => {
   //라우터URL을 nickname으로 표시하기 때문에 prop으로는 userId를 받을 수 없음.
   //따라서 userId는 별도의 방법으로 받아야함. 전역 context를 사용해야할 듯.
   //const { userId } = useContext(someContext);
-  const userId = 100;
+  const userId = 103;
   const { id } = useLoginContext();
   const isMyProfile = id === userId;
 

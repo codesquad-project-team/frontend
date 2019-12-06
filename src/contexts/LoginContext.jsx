@@ -7,8 +7,6 @@ export const useLoginContext = () => useContext(LoginContext);
 
 const LoginContextProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [needsLoginModal, setNeedsLoginModal] = useState(false);
-
   const [userInfo, setUserInfo] = useState({});
   const { id, nickname, profileImage } = userInfo;
 
@@ -29,8 +27,6 @@ const LoginContextProvider = ({ children }) => {
       value={{
         loggedIn,
         setLoggedIn,
-        needsLoginModal,
-        setNeedsLoginModal,
         id,
         nickname,
         profileImage

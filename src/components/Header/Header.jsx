@@ -6,18 +6,18 @@ import CommonBtn from '../CommonBtn/CommonBtn';
 import CommonModal from '../CommonModal/CommonModal';
 import CommonLink from '../CommonLink/CommonLink';
 import { useLoginContext } from '../../contexts/LoginContext';
+import { useLoginModalContext } from '../../contexts/LoginModalContext';
 import { IMAGE_BUCKET_URL } from '../../configs';
 
 const Header = () => {
   const { inputValue, handleChange, restore } = useInput();
   const [clickedSignup, setClickedSignup] = useState(false);
   const [clickedSignin, setClickedSignin] = useState(false);
+  const { loggedIn, profileImage } = useLoginContext();
   const {
-    loggedIn,
-    profileImage,
-    needsLoginModal,
-    setNeedsLoginModal
-  } = useLoginContext();
+    needsLoginModal: needsSigninModal,
+    setNeedsLoginModal: setNeedsSigninModal
+  } = useLoginModalContext();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -28,7 +28,7 @@ const Header = () => {
     switch (type) {
       case 'OPEN':
         setClickedSignin(true);
-        setNeedsLoginModal(false);
+        setNeedsSigninModal(false);
         break;
       case 'CLOSE':
         setClickedSignin(false);
@@ -44,8 +44,8 @@ const Header = () => {
   };
 
   useMemo(() => {
-    needsLoginModal ? toggleSigninModal('OPEN') : null;
-  }, [needsLoginModal]);
+    needsSigninModal ? toggleSigninModal('OPEN') : null;
+  }, [needsSigninModal]);
 
   return (
     <div className="header-wrapper">

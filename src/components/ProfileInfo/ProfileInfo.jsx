@@ -4,6 +4,7 @@ import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CommonLink from '../CommonLink/CommonLink';
 import { useLoginContext } from '../../contexts/LoginContext';
+import { useLoginModalContext } from '../../contexts/LoginModalContext';
 import { WEB_SERVER_URL } from '../../configs';
 
 const ProfileInfo = ({ data, isMyProfile, userId }) => {
@@ -19,7 +20,8 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
   const selfIntro = introduction ? Buffer.from(introduction).toString() : null;
 
   const [isFollowing, setIsFollowing] = useState(initialFollowStatus);
-  const { loggedIn, setNeedsLoginModal } = useLoginContext();
+  const { loggedIn } = useLoginContext();
+  const { setNeedsLoginModal } = useLoginModalContext();
   const [error, setError] = useState(null);
 
   const handleResponse = res => {
