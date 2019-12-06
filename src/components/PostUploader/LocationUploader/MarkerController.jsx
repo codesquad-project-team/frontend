@@ -10,8 +10,13 @@ const MarkerController = ({
   hoveredMarkerIndex,
   setHoveredMarkerIndex
 }) => {
+  //marker => 카카오에서 제공하는 지도 마커 인스턴스.
+  //지도에 표시된 마커를 조작하기 위해 사용합니다.
+  //마커 1개를 의미합니다.
+  //http://apis.map.kakao.com/web/documentation/#Marker
   const { marker } = useContext(MarkerContext);
   const [isFirstRender, setIsFirstRender] = useState(true);
+  const isClickedMarker = currentMarkerIndex === clickedItemIndex;
 
   const dotMarkerImage = useMemo(() => {
     if (kakao) {
@@ -34,12 +39,12 @@ const MarkerController = ({
     }
   }, [kakao]);
 
-  const setDotMarkerImage = marker => {
+  const setThisMarkerDotImage = marker => {
     marker.setZIndex(0);
     marker.setImage(dotMarkerImage);
   };
 
-  const setClickedMarkerImage = marker => {
+  const setThisMarkerClickedImage = marker => {
     marker.setZIndex(1);
     marker.setImage(clickedMarkerImage);
   };
@@ -48,7 +53,7 @@ const MarkerController = ({
     if (!marker) return;
 
     if (isFirstRender) {
-      setDotMarkerImage(marker);
+      setThisMarkerDotImage(marker);
       setIsFirstRender(false);
     }
 
@@ -60,21 +65,19 @@ const MarkerController = ({
       const isClickedMarkerImage = marker.getImage() === clickedMarkerImage;
       if (isClickedMarkerImage) return;
 
-      setClickedMarkerImage(marker);
+      setThisMarkerClickedImage(marker);
       setHoveredMarkerIndex(currentMarkerIndex);
     };
 
     const handleMouseOut = () => {
       const isDotMarkerImage = marker.getImage() === dotMarkerImage;
-      const isClickedItem = currentMarkerIndex === clickedItemIndex;
-
       if (isDotMarkerImage) return;
 
-      if (isClickedItem) {
+      if (isClickedMarker) {
         setHoveredMarkerIndex('UNHOVERED');
         return;
       }
-      setDotMarkerImage(marker);
+      setThisMarkerDotImage(marker);
       setHoveredMarkerIndex('UNHOVERED');
     };
 
@@ -92,10 +95,10 @@ const MarkerController = ({
   useMemo(() => {
     if (!marker) return;
 
-    if (currentMarkerIndex === clickedItemIndex) {
-      setClickedMarkerImage(marker);
+    if (isClickedMarker) {
+      setThisMarkerClickedImage(marker);
     } else {
-      setDotMarkerImage(marker);
+      setThisMarkerDotImage(marker);
     }
   }, [clickedItemIndex]);
 

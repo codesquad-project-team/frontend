@@ -3,8 +3,8 @@ import './SearchResultLists.scss';
 
 const SearchResultLists = ({
   className,
-  clickedItemIndex,
-  setClickedItemIndex,
+  clickedMarkerIndex,
+  setClickedMarkerIndex,
   searchResult,
   onClick: setClickedItemSelected,
   pagination
@@ -25,7 +25,7 @@ const SearchResultLists = ({
             key={item.x}
             data-index={index}
             className={`search-result-lists-item ${
-              clickedItemIndex === index
+              clickedMarkerIndex === index
                 ? 'search-result-lists-selected-item'
                 : ''
             }`}
@@ -43,12 +43,12 @@ const SearchResultLists = ({
 
   const gotoPrevPage = () => {
     pagination.prevPage();
-    setClickedItemIndex('UNCLICKED');
+    setClickedMarkerIndex('UNCLICKED');
   };
 
   const gotoNextPage = () => {
     pagination.nextPage();
-    setClickedItemIndex('UNCLICKED');
+    setClickedMarkerIndex('UNCLICKED');
   };
 
   return (
