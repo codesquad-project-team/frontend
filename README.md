@@ -27,3 +27,4 @@
   - 매주 스프린트 회의에서 정해진 개발을 분담하여, issue로 등록합니다.
   - PR에 대한 코드 리뷰는 최대한 꼼꼼히 진행하며 피드백을 반영한 뒤에 merge 합니다.
   - Project로 각자의 진행 상황을 항상 업데이트 합니다.
+  - Git Flow를 프로젝트 상황에 맞게 변형한 브랜치 전략을 사용합니다.[링크](https://github.com/codesquad-project-team/frontend/wiki/git-%EB%B8%8C%EB%9E%9C%EC%B9%98-%EC%A0%84%EB%9E%B5)
