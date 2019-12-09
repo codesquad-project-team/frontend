@@ -5,7 +5,7 @@
 ## 팀 구성
 
 - 프론트엔드 개발자 2명, 백엔드 개발자 2명
-- 프론트 기술 스택: ReactJS, SCSS, swagger(API 설계 공유), 배포 자동화 예정
+- 프론트 기술 스택: ReactJS, SCSS, webpack, travis(배포 자동화), swagger(API 설계 공유)
 
 ## 일하는 방식
 
