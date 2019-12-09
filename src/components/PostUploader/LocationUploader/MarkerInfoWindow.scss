@@ -1,0 +1,11 @@
+@import '../../../stylesheets/util.scss';
+
+.marker-info-window {
+  padding: 0.5rem 1.5rem;
+  background-color: #fff;
+  border: 1px solid $main-color;
+  border-radius: 5px;
+  box-shadow: 0 0 10px #777777;
+
+  font-size: 1.75rem;
+}
