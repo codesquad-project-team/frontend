@@ -18,7 +18,7 @@ const LocationUploader = ({ lat, lng, setSelectedLocation }) => {
       {open && (
         <Modal onClick={toggleModal}>
           <LocationFinder
-            closeModal={toggleModal}
+            toggleModal={toggleModal}
             setSelectedLocation={setSelectedLocation}
           />
         </Modal>

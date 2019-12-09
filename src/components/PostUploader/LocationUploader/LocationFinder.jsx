@@ -14,7 +14,7 @@ import { IMAGE_BUCKET_URL } from '../../../configs';
 const INITIAL_LAT = 37.5845218;
 const INITIAL_LNG = 126.9975588;
 
-const LocationFinder = ({ closeModal, setSelectedLocation }) => {
+const LocationFinder = ({ toggleModal: closeModal, setSelectedLocation }) => {
   const { inputValue, handleChange } = useInput();
   const { locationKeyword } = inputValue;
   //kakao => 카카오 스크립트 태그를 통해 전역에 생성된 kakao객체의 인스턴스.
