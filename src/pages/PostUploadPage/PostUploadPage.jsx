@@ -9,6 +9,8 @@ import CommentUploader from '../../components/PostUploader/CommentUploader';
 import PostQuestions from '../../components/PostUploader/PostQuestions';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import useS3 from '../../hooks/useS3';
+import useScript from '../../hooks/useScript';
+import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 
 const PostUploadPage = () => {
@@ -20,8 +22,13 @@ const PostUploadPage = () => {
     previewUrls: []
   });
 
-  const [representativeIndex, setRepresentativeIndex] = useState(0);
+  const { nickname } = useLoginContext();
 
+  const { loadError } = useScript(
+    'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
+  );
+  const [imageUploadError, setImageUploadError] = useState(false);
+  // TODO : loadError, imageUploadError 등 PostUploadPage 에서 나올 수 있는 error 를 어떻게 관리해야 할지 고민 중
   const { s3, createAlbum, addImage } = useS3();
 
   const addImageHandler = files => {
@@ -67,29 +74,27 @@ const PostUploadPage = () => {
       previewUrls: removeItemWithSlice(images.previewUrls, targetIndex)
     });
   };
+  const { S3imageUploadHandler } = useS3();
 
-  const removeItemWithSlice = (arr, index) => {
-    const firstArr = arr.slice(0, index);
-    const secondArr = arr.slice(index + 1);
-    return [...firstArr, ...secondArr];
-  };
+  const [uploadedUrls, setUploadedUrls] = useState([]);
 
-  const selectRepresentativeImage = e => {
-    const represenTativeImage = e.target.previousSibling.previousSibling.src;
-    const represenTativeIndex = images.previewUrls.findIndex(
-      el => el === represenTativeImage
-    );
-
-    setRepresentativeIndex(represenTativeIndex);
-  };
-
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
 
-    // TODO : 브라우저의 토큰에 저장되어 있는 쿠키에서 user nickname 가져오는 코드 추가
-    const albumName = await createAlbum('michelle', YYYYMMDDHHMMSS(new Date()));
+    if (loadError) {
+      return alert(
+        `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
+      );
+    }
 
-    const uploadedUrl = await addImage(images.selectedImages, albumName);
+    S3imageUploadHandler(
+      nickname,
+      YYYYMMDDHHMMSS(new Date()),
+      images.selectedImages,
+      setImageUploadError
+    ).then(result => {
+      setUploadedUrls(result);
+    });
   };
 
   return (
@@ -97,13 +102,7 @@ const PostUploadPage = () => {
       <Header />
       <CommonPost.background className="post-upload-page-background">
         <CommonPost large className="post-upload-page">
-          <ImageUploader
-            images={images}
-            addImageHandler={addImageHandler}
-            deleteImageHandler={deleteImageHandler}
-            representativeImageHandler={selectRepresentativeImage}
-            representativeIndex={representativeIndex}
-          />
+          <ImageUploader images={images} setImages={setImages} />
           <LocationUploader
             lat={lat}
             lng={lng}
