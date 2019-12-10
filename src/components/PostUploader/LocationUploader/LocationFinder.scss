@@ -1,4 +1,4 @@
-@import '../../stylesheets/util.scss';
+@import '../../../stylesheets/util.scss';
 
 .location-finder {
   display: flex;
@@ -38,29 +38,16 @@
 
   &-content {
     display: flex;
+    height: 40rem;
     border-top: 1px solid $gray-border-color;
     border-bottom: 1px solid $gray-border-color;
   }
 
   &-search-result {
+    height: 100%;
     flex: 1;
     border-right: 1px solid $gray-border-color;
-  }
-
-  &-result-item {
-    padding: 1rem;
-    height: 5rem;
-    border-bottom: 1px solid $gray-border-color;
-    &:hover {
-      cursor: pointer;
-      background-color: #eee;
-    }
-    &-name {
-      font-size: 1.5rem;
-    }
-    &-address {
-      color: #888;
-    }
+    overflow: auto;
   }
 
   &-footer {

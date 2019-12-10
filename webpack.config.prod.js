@@ -3,7 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
 const { DefinePlugin } = require('webpack');
 const {
-  NAVER_MAP_CLIENT_ID,
+  KAKAO_MAP_API_URL,
   ALBUM_BUCKET_NAME,
   BUCKET_REGION,
   IDENTITY_POOL_ID
@@ -71,10 +71,10 @@ module.exports = {
     }),
     new CleanWebpackPlugin(),
     new DefinePlugin({
-      NAVER_MAP_CLIENT_ID: JSON.stringify(NAVER_MAP_CLIENT_ID),
       ALBUM_BUCKET_NAME: JSON.stringify(ALBUM_BUCKET_NAME),
       BUCKET_REGION: JSON.stringify(BUCKET_REGION),
-      IDENTITY_POOL_ID: JSON.stringify(IDENTITY_POOL_ID)
+      IDENTITY_POOL_ID: JSON.stringify(IDENTITY_POOL_ID),
+      KAKAO_MAP_API_URL: JSON.stringify(KAKAO_MAP_API_URL)
     })
   ]
 };
