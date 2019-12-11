@@ -2,17 +2,17 @@
 
 > Connect Flavor는 **비슷한 취향을 가지고 있는 사람들을 연결**합니다. 그리고 개인에게 현재의 감정 상태에 따라 할 일을 추천합니다.
 
-<center>
+<p align='center'>
 
-![travis-badge](https://travis-ci.org/codesquad-project-team/frontend.svg?branch=master)
+<img width='90' src='https://travis-ci.org/codesquad-project-team/frontend.svg?branch=master'>
 
-</center>
+</p>
 
-<center>
+<p align='center'>
 
 <img width='150' alt='connectflavor-logo' src='https://avatars3.githubusercontent.com/u/54933310?s=400&u=b1991432050b1c20ef59730588ce3a9bd7634f15&v=4'>
 
-</center>
+</p>
 
 ## 팀 구성
 
