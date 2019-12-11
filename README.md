@@ -8,6 +8,12 @@
 
 </center>
 
+<center>
+
+<img width='150' alt='connectflavor-logo' src='https://avatars3.githubusercontent.com/u/54933310?s=400&u=b1991432050b1c20ef59730588ce3a9bd7634f15&v=4'>
+
+</center>
+
 ## 팀 구성
 
 - <img width="235" alt="connectflavor-contributors" src="https://user-images.githubusercontent.com/42905468/70593746-85a67a80-1c21-11ea-9fe1-03d609b4f266.png">
