@@ -23,7 +23,7 @@
 
 - [figma](https://www.figma.com/file/3rjXMNRb7DhheV2cpCu0Ql/interest-sharing-sns?node-id=0%3A1)를 이용해 합의한 기능에 의한 프로토타입을 디자인 합니다.
 
-- Github을 협업에서 사용하는 수준과 유사한 수준으로 경험해보려고 합니다.
+- Github을 현업에서 사용하는 수준과 유사한 수준으로 경험해보려고 합니다.
   - 매주 스프린트 회의에서 정해진 개발을 분담하여, issue로 등록합니다.
   - PR에 대한 코드 리뷰는 최대한 꼼꼼히 진행하며 피드백을 반영한 뒤에 merge 합니다.
   - Project로 각자의 진행 상황을 항상 업데이트 합니다.
