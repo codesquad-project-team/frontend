@@ -10,6 +10,8 @@
 
 ## 팀 구성
 
+- <img width="235" alt="connectflavor-contributors" src="https://user-images.githubusercontent.com/42905468/70593746-85a67a80-1c21-11ea-9fe1-03d609b4f266.png">
+
 - 프론트엔드 개발자 2명, 백엔드 개발자 2명
 - 프론트 기술 스택: ReactJS, SCSS, webpack, travis(배포 자동화), swagger(API 설계 공유)
 
