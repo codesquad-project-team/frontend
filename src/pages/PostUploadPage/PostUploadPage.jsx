@@ -3,7 +3,7 @@ import './PostUploadPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
 import Header from '../../components/Header/Header';
 import ImageUploader from '../../components/PostUploader/ImageUploader/ImageUploader';
-import LocationUploader from '../../components/PostUploader/LocationUploader';
+import LocationUploader from '../../components/PostUploader/LocationUploader/LocationUploader';
 import TitleUploader from '../../components/PostUploader/TitleUploader';
 import CommentUploader from '../../components/PostUploader/CommentUploader';
 import PostQuestions from '../../components/PostUploader/PostQuestions';
@@ -14,6 +14,9 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 
 const PostUploadPage = () => {
+  const [selectedLocation, setSelectedLocation] = useState({});
+  const { x: lng, y: lat, place_name: placeName } = selectedLocation;
+
   const [images, setImages] = useState({
     selectedImages: [],
     previewUrls: []
@@ -59,8 +62,12 @@ const PostUploadPage = () => {
       <CommonPost.background className="post-upload-page-background">
         <CommonPost large className="post-upload-page">
           <ImageUploader images={images} setImages={setImages} />
-          <LocationUploader />
-          <TitleUploader />
+          <LocationUploader
+            lat={lat}
+            lng={lng}
+            setSelectedLocation={setSelectedLocation}
+          />
+          <TitleUploader placeName={placeName} />
           <CommentUploader />
           <PostQuestions />
           <form className="post-upload-page-btns" onSubmit={handleSubmit}>

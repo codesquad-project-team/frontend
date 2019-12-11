@@ -51,7 +51,6 @@ const useS3 = () => {
       return {
         error: true,
         msg: errorMsgMap('ALBUM_NAME_PREREQUISITE_CHAR')
-      };
 
     if (albumName.indexOf('/') !== -1)
       return {
@@ -60,7 +59,6 @@ const useS3 = () => {
       };
 
     const albumKey = albumNamePrefix + encodeURIComponent(albumName) + '/';
-
     s3.headObject({ Key: albumKey }, (err, data) => {
       if (!err)
         return { error: true, msg: errorMsgMap('ALBUM_NAME_ALREADY_EXIST') };
@@ -126,6 +124,7 @@ const useS3 = () => {
   };
 
   const S3imageUploadHandler = async (
+
     albumName,
     albumNamePrefix,
     images,
@@ -139,7 +138,6 @@ const useS3 = () => {
         albumName,
         albumNamePrefix
       );
-
       if (createAlbumResponse.error) throw createAlbumResponse.msg;
 
       const albumKey = createAlbumResponse.msg;

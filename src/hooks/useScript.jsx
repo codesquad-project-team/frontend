@@ -8,7 +8,6 @@ const useScript = scriptPath => {
     setLoading(true);
     const script = document.createElement('script');
     script.src = `${scriptPath}`;
-
     document.body.appendChild(script);
 
     script.onload = () => {
