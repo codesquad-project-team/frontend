@@ -18,7 +18,6 @@ import { debounce } from '../../utils/utils';
 const ProfileEditPage = () => {
   const { inputValue, setInputValue, handleChange, restore } = useInput();
   const { profile_image, nickname, email, phone, description } = inputValue;
-
   const [image, setImage] = useState({ fileType: [], previewUrl: '' });
 
   const [currentNickname, setCurrentNickname] = useState('');
@@ -121,7 +120,7 @@ const ProfileEditPage = () => {
     []
   );
 
-  const updateUserInfo = async () => {
+  const updateUserInfo = async uploadedUrl => {
     const res = await fetch(`${WEB_SERVER_URL}/user/profile`, {
       method: 'PUT',
       mode: 'cors',
@@ -129,7 +128,7 @@ const ProfileEditPage = () => {
         'Content-Type': 'application/json'
       },
       credentials: 'include',
-      body: JSON.stringify(inputValue)
+      body: JSON.stringify({ ...inputValue, profile_image: uploadedUrl })
     });
 
     switch (res.status) {
@@ -150,7 +149,7 @@ const ProfileEditPage = () => {
     }
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     if (image.previewUrl) {
@@ -163,17 +162,16 @@ const ProfileEditPage = () => {
       const albumName = nickname;
       const albumNamePrefix = 'profile-images/';
 
-      S3imageUploadHandler(
+      // await : promise의 resolve Value를 리턴
+      const uploadedUrlArr = await S3imageUploadHandler(
         albumName,
         albumNamePrefix,
         image.fileType,
         setImageUploadError
-      ).then(result => {
-        setInputValue({ ...inputValue, ['profile_image']: result[0] });
-      });
-    }
+      );
 
-    updateUserInfo();
+      updateUserInfo(uploadedUrlArr[0]);
+    }
   };
 
   useEffect(() => {
