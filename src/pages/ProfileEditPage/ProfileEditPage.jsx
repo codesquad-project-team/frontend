@@ -24,6 +24,7 @@ const ProfileEditPage = () => {
   const [currentNickname, setCurrentNickname] = useState('');
   const [nicknameValidity, setNicknameValidity] = useState({});
   const [phoneValidity, setPhoneValidity] = useState('');
+  const [initialPageEnter, setInitialPageEnter] = useState(true);
 
   const { loadError } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
@@ -40,14 +41,20 @@ const ProfileEditPage = () => {
   );
 
   const initUserInfo = userInfo => {
-    const { profileImage, nickname, email, phone, description } = userInfo;
-
-    const initialValue = {
-      profile_image: profileImage === null || undefined,
+    const {
+      profileImage,
       nickname,
       email,
-      phone: null || undefined,
-      description: null || undefined
+      phone,
+      description: desc
+    } = userInfo;
+
+    const initialValue = {
+      profile_image: profileImage === null ? undefined : profileImage,
+      nickname,
+      email: email === null ? undefined : email,
+      phone: phone === null ? undefined : phone,
+      description: desc === null ? undefined : Buffer.from(desc).toString()
     };
 
     setCurrentNickname(initialValue.nickname);
@@ -151,7 +158,7 @@ const ProfileEditPage = () => {
   }, [phone]);
 
   useEffect(() => {
-    if (profile_image) {
+    if (!initialPageEnter) {
       (async () => {
         const res = await fetch(`${WEB_SERVER_URL}/user/profile`, {
           method: 'PUT',
@@ -183,6 +190,8 @@ const ProfileEditPage = () => {
     }
   }, [profile_image]);
 
+  const imageSrc = initialPageEnter ? profile_image : image.previewUrl;
+
   return (
     <>
       <Header />
@@ -201,8 +210,11 @@ const ProfileEditPage = () => {
           {!loading && (
             <form className="profile-edit-page-content-form">
               <div className="profile-edit-page-content-item profile-image-section">
-                <ProfileImage large src={image.previewUrl} />
-                <ProfileImageChangeBtn setImage={setImage} />
+                <ProfileImage large src={imageSrc} />
+                <ProfileImageChangeBtn
+                  setImage={setImage}
+                  setInitialPageEnter={setInitialPageEnter}
+                />
               </div>
               <ProfileContentItem
                 label="닉네임"
