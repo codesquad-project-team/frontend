@@ -121,26 +121,59 @@ const ProfileEditPage = () => {
     []
   );
 
+  const updateUserInfo = async () => {
+    const res = await fetch(`${WEB_SERVER_URL}/user/profile`, {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify(inputValue)
+    });
+
+    switch (res.status) {
+      case 200:
+        alert('회원 정보가 수정 되었습니다!');
+        break;
+
+      case 400:
+        alert('요청이 올바르지 않습니다.');
+        break;
+
+      case 401:
+        alert('인증되지 않은 토큰입니다.');
+        break;
+
+      default:
+        break;
+    }
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (loadError) {
-      return alert(
-        `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
-      );
+    if (image.previewUrl) {
+      if (loadError) {
+        return alert(
+          `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
+        );
+      }
+
+      const albumName = nickname;
+      const albumNamePrefix = 'profile-images/';
+
+      S3imageUploadHandler(
+        albumName,
+        albumNamePrefix,
+        image.fileType,
+        setImageUploadError
+      ).then(result => {
+        setInputValue({ ...inputValue, ['profile_image']: result[0] });
+      });
     }
 
-    const albumName = nickname;
-    const albumNamePrefix = 'profile-images/';
-
-    S3imageUploadHandler(
-      albumName,
-      albumNamePrefix,
-      image.fileType,
-      setImageUploadError
-    ).then(result => {
-      setInputValue({ ...inputValue, ['profile_image']: result[0] });
-    });
+    updateUserInfo();
   };
 
   useEffect(() => {
@@ -156,39 +189,6 @@ const ProfileEditPage = () => {
   useEffect(() => {
     checkPhoneNumberValidation(phone);
   }, [phone]);
-
-  useEffect(() => {
-    if (!initialPageEnter) {
-      (async () => {
-        const res = await fetch(`${WEB_SERVER_URL}/user/profile`, {
-          method: 'PUT',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include',
-          body: JSON.stringify(inputValue)
-        });
-
-        switch (res.status) {
-          case 200:
-            alert('회원 정보가 수정 되었습니다!');
-            break;
-
-          case 400:
-            alert('요청이 올바르지 않습니다.');
-            break;
-
-          case 401:
-            alert('인증되지 않은 토큰입니다.');
-            break;
-
-          default:
-            break;
-        }
-      })();
-    }
-  }, [profile_image]);
 
   const imageSrc = initialPageEnter ? profile_image : image.previewUrl;
 
