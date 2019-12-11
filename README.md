@@ -2,6 +2,12 @@
 
 > Connect Flavor는 **비슷한 취향을 가지고 있는 사람들을 연결**합니다. 그리고 개인에게 현재의 감정 상태에 따라 할 일을 추천합니다.
 
+<center>
+
+![travis-badge](https://travis-ci.org/codesquad-project-team/frontend.svg?branch=master)
+
+</center>
+
 ## 팀 구성
 
 - 프론트엔드 개발자 2명, 백엔드 개발자 2명
