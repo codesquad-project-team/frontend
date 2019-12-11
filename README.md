@@ -2,10 +2,24 @@
 
 > Connect Flavor는 **비슷한 취향을 가지고 있는 사람들을 연결**합니다. 그리고 개인에게 현재의 감정 상태에 따라 할 일을 추천합니다.
 
+<center>
+
+![travis-badge](https://travis-ci.org/codesquad-project-team/frontend.svg?branch=master)
+
+</center>
+
+<center>
+
+<img width='150' alt='connectflavor-logo' src='https://avatars3.githubusercontent.com/u/54933310?s=400&u=b1991432050b1c20ef59730588ce3a9bd7634f15&v=4'>
+
+</center>
+
 ## 팀 구성
 
+- <img width="235" alt="connectflavor-contributors" src="https://user-images.githubusercontent.com/42905468/70593746-85a67a80-1c21-11ea-9fe1-03d609b4f266.png">
+
 - 프론트엔드 개발자 2명, 백엔드 개발자 2명
-- 프론트 기술 스택: ReactJS, SCSS, swagger(API 설계 공유), 배포 자동화 예정
+- 프론트 기술 스택: ReactJS, SCSS, webpack, travis(배포 자동화), swagger(API 설계 공유)
 
 ## 일하는 방식
 
@@ -23,7 +37,8 @@
 
 - [figma](https://www.figma.com/file/3rjXMNRb7DhheV2cpCu0Ql/interest-sharing-sns?node-id=0%3A1)를 이용해 합의한 기능에 의한 프로토타입을 디자인 합니다.
 
-- Github을 협업에서 사용하는 수준과 유사한 수준으로 경험해보려고 합니다.
+- Github을 현업에서 사용하는 수준과 유사한 수준으로 경험해보려고 합니다.
   - 매주 스프린트 회의에서 정해진 개발을 분담하여, issue로 등록합니다.
   - PR에 대한 코드 리뷰는 최대한 꼼꼼히 진행하며 피드백을 반영한 뒤에 merge 합니다.
   - Project로 각자의 진행 상황을 항상 업데이트 합니다.
+  - Git Flow를 프로젝트 상황에 맞게 변형한 브랜치 전략을 사용합니다.[링크](https://github.com/codesquad-project-team/frontend/wiki/git-%EB%B8%8C%EB%9E%9C%EC%B9%98-%EC%A0%84%EB%9E%B5)
