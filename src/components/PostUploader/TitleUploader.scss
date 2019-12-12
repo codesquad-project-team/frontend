@@ -10,12 +10,25 @@
     text-align: center;
   }
 
-  span {
+  > span {
     font-size: 4rem;
     margin-right: 2rem;
   }
 
-  select {
-    font-size: 4rem;
+  &-companion-section {
+    position: relative;
+
+    > select {
+      width: 20rem;
+      font-size: 4rem;
+      text-align-last: center;
+    }
+  }
+
+  &-overlay-select-box {
+    position: absolute;
+    top: 4rem;
+    left: 0;
+    margin-top: 0.5rem;
   }
 }
