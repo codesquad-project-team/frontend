@@ -120,7 +120,11 @@ const ProfileEditPage = () => {
     []
   );
 
-  const updateUserInfo = async uploadedUrl => {
+  const updateUserInfo = async (uploadedUrl = '') => {
+    const bodyObj = !uploadedUrl
+      ? inputValue
+      : { ...inputValue, profile_image: uploadedUrl };
+
     const res = await fetch(`${WEB_SERVER_URL}/user/profile`, {
       method: 'PUT',
       mode: 'cors',
@@ -128,7 +132,7 @@ const ProfileEditPage = () => {
         'Content-Type': 'application/json'
       },
       credentials: 'include',
-      body: JSON.stringify({ ...inputValue, profile_image: uploadedUrl })
+      body: JSON.stringify(bodyObj)
     });
 
     switch (res.status) {
@@ -170,8 +174,9 @@ const ProfileEditPage = () => {
         setImageUploadError
       );
 
-      updateUserInfo(uploadedUrlArr[0]);
+      return updateUserInfo(uploadedUrlArr[0]);
     }
+    return updateUserInfo();
   };
 
   useEffect(() => {
