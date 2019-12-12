@@ -69,10 +69,10 @@ const PostUploadPage = () => {
           <TitleUploader placeName={placeName} />
           <CommentUploader />
           <PostQuestions />
-          <form className="post-upload-page-btns" onSubmit={handleSubmit}>
-            <CommonBtn>작성</CommonBtn>
+          <div className="post-upload-page-btns">
+            <CommonBtn onClick={handleSubmit}>작성</CommonBtn>
             <CommonBtn>취소</CommonBtn>
-          </form>
+          </div>
         </CommonPost>
       </CommonPost.background>
     </>
