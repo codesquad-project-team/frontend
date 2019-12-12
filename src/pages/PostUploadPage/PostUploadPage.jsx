@@ -29,7 +29,6 @@ const PostUploadPage = () => {
   );
   const [imageUploadError, setImageUploadError] = useState(false);
   // TODO : loadError, imageUploadError 등 PostUploadPage 에서 나올 수 있는 error 를 어떻게 관리해야 할지 고민 중
-
   const { S3imageUploadHandler } = useS3();
 
   const [uploadedUrls, setUploadedUrls] = useState([]);
