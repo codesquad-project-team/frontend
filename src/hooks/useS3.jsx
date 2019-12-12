@@ -47,16 +47,19 @@ const useS3 = () => {
   };
 
   const createAlbum = (s3, albumName, albumNamePrefix) => {
-    if (!albumName)
+    if (!albumName) {
       return {
         error: true,
         msg: errorMsgMap('ALBUM_NAME_PREREQUISITE_CHAR')
+      };
+    }
 
-    if (albumName.indexOf('/') !== -1)
+    if (albumName.indexOf('/') !== -1) {
       return {
         error: true,
         msg: errorMsgMap('ALBUM_NAME_CANNOT_CONTAIN_SLASH')
       };
+    }
 
     const albumKey = albumNamePrefix + encodeURIComponent(albumName) + '/';
     s3.headObject({ Key: albumKey }, (err, data) => {
@@ -124,7 +127,6 @@ const useS3 = () => {
   };
 
   const S3imageUploadHandler = async (
-
     albumName,
     albumNamePrefix,
     images,
