@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import './TitleUploader.scss';
 import useInput from '../../hooks/useInput';
 
-const TitleUploader = ({ placeName }) => {
+const TitleUploader = ({ placeName, setTitle }) => {
   const {
     inputValue,
     setInputValue,
@@ -10,7 +10,9 @@ const TitleUploader = ({ placeName }) => {
   } = useInput();
   const { location, companion, activity } = inputValue;
 
-  useMemo(() => setInputValue({ location: placeName }), [placeName]);
+  useMemo(() => setInputValue({ ...inputValue, location: placeName }), [
+    placeName
+  ]);
 
   const [select, setSelect] = useState('');
   const [state, setState] = useState({});
@@ -36,13 +38,22 @@ const TitleUploader = ({ placeName }) => {
     setState({ ...state, isOverlayHovered: false });
   };
 
-  useEffect(() => {
+  useMemo(() => {
     if (select === 'free_input') {
       setState({ ...state, showsFreeInput: true });
     } else {
+      setInputValue({ ...inputValue, companion: select });
       setState({});
     }
   }, [select]);
+
+  useMemo(() => {
+    setTitle({
+      title_location: location,
+      title_companion: companion,
+      title_activity: activity
+    });
+  }, [location, companion, activity]);
 
   return (
     <div className="title-uploader">

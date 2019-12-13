@@ -15,7 +15,17 @@ import { YYYYMMDDHHMMSS } from '../../utils/utils';
 
 const PostUploadPage = () => {
   const [selectedLocation, setSelectedLocation] = useState({});
-  const { x: lng, y: lat, place_name: placeName } = selectedLocation;
+  const {
+    x: lng,
+    y: lat,
+    place_name: placeName,
+    road_address_name: address,
+    place_url: link,
+    phone
+  } = selectedLocation;
+
+  const [title, setTitle] = useState({});
+  const { title_location, title_companion, title_activity } = title;
 
   const [images, setImages] = useState({
     selectedImages: [],
@@ -29,12 +39,43 @@ const PostUploadPage = () => {
   );
   const [imageUploadError, setImageUploadError] = useState(false);
   // TODO : loadError, imageUploadError 등 PostUploadPage 에서 나올 수 있는 error 를 어떻게 관리해야 할지 고민 중
+
   const { S3imageUploadHandler } = useS3();
 
-  const [uploadedUrls, setUploadedUrls] = useState([]);
+  const getPostData = S3uploadedURLs => {
+    const postData = {
+      location: {
+        name: placeName,
+        latitude: Number(lat),
+        longitude: Number(lng),
+        address,
+        link,
+        phone
+      },
+      post: {
+        title_location,
+        title_companion,
+        title_activity,
+        description: 'string',
+        images: [
+          {
+            url: 'string',
+            is_representative: true
+          }
+        ]
+      }
+    };
+    return postData;
+  };
 
-  const handleSubmit = e => {
+  const requestPostUpload = postData => {};
+
+  const handleSubmit = async e => {
     e.preventDefault();
+
+    const existsSelectedLocation = lat ? true : false;
+    const existsTitle = title ? true : false;
+    // if (!existsSelectedLocation || !existsTitle) return;
 
     if (loadError) {
       return alert(
@@ -45,14 +86,15 @@ const PostUploadPage = () => {
     const albumName = nickname.concat('_', YYYYMMDDHHMMSS(new Date())).trim();
     const albumNamePrefix = 'post-images/';
 
-    S3imageUploadHandler(
+    const S3uploadedURLs = await S3imageUploadHandler(
       albumName,
       albumNamePrefix,
       images.selectedImages,
       setImageUploadError
-    ).then(result => {
-      setUploadedUrls(result);
-    });
+    );
+
+    const postData = getPostData(S3uploadedURLs);
+    requestPostUpload(postData);
   };
 
   return (
@@ -66,7 +108,7 @@ const PostUploadPage = () => {
             lng={lng}
             setSelectedLocation={setSelectedLocation}
           />
-          <TitleUploader placeName={placeName} />
+          <TitleUploader placeName={placeName} setTitle={setTitle} />
           <CommentUploader />
           <PostQuestions />
           <div className="post-upload-page-btns">
