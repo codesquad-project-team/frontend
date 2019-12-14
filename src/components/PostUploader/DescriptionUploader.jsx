@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './DescriptionUploader.scss';
 
-const MAX_DESCRIPTION_BYTES = 100;
+const MAX_DESCRIPTION_BYTES = 2000;
 
 const DescriptionUploader = ({
   description,
@@ -43,15 +43,22 @@ const DescriptionUploader = ({
   };
 
   return (
-    <textarea
-      name="description"
-      className={`description-uploader ${
-        showsOverLimitMessage ? 'description-over-limit' : ''
-      }`}
-      placeholder="간단한 설명을 적어주세요."
-      value={description}
-      onChange={handleChange}
-    />
+    <div>
+      <textarea
+        name="description"
+        className={`description-uploader ${
+          showsOverLimitMessage ? 'description-overlimit' : ''
+        }`}
+        placeholder="간단한 설명을 적어주세요."
+        value={description}
+        onChange={handleChange}
+      />
+      <div className="description-overlimit-message">
+        {showsOverLimitMessage && (
+          <span>{MAX_DESCRIPTION_BYTES / 2}자 이하로 작성해주세요.</span>
+        )}
+      </div>
+    </div>
   );
 };
 
