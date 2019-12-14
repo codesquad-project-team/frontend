@@ -5,7 +5,7 @@ import Header from '../../components/Header/Header';
 import ImageUploader from '../../components/PostUploader/ImageUploader/ImageUploader';
 import LocationUploader from '../../components/PostUploader/LocationUploader/LocationUploader';
 import TitleUploader from '../../components/PostUploader/TitleUploader';
-import CommentUploader from '../../components/PostUploader/CommentUploader';
+import DescriptionUploader from '../../components/PostUploader/DescriptionUploader';
 import PostQuestions from '../../components/PostUploader/PostQuestions';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import useS3 from '../../hooks/useS3';
@@ -24,6 +24,7 @@ const PostUploadPage = () => {
     phone
   } = selectedLocation;
 
+  const [description, setDescription] = useState(null);
   const [title, setTitle] = useState({});
   const { title_location, title_companion, title_activity } = title;
 
@@ -56,7 +57,7 @@ const PostUploadPage = () => {
         title_location,
         title_companion,
         title_activity,
-        description: 'string',
+        description,
         images: [
           {
             url: 'string',
@@ -109,7 +110,10 @@ const PostUploadPage = () => {
             setSelectedLocation={setSelectedLocation}
           />
           <TitleUploader placeName={placeName} setTitle={setTitle} />
-          <CommentUploader />
+          <DescriptionUploader
+            description={description}
+            setDescription={setDescription}
+          />
           <PostQuestions />
           <div className="post-upload-page-btns">
             <CommonBtn onClick={handleSubmit}>작성</CommonBtn>
