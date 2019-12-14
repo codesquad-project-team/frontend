@@ -7,7 +7,7 @@ const errorMsgMap = (key, msg = '') => {
     ALBUM_NAME_CANNOT_CONTAIN_SLASH: `폴더명에 슬래시는 포함될 수 없습니다`,
     ALBUM_NAME_ALREADY_EXIST: `동일한 폴더명을 이미 사용 중입니다. `,
     ALBUM_NAME_UNKNOWN_ERROR: `폴더를 생성 하는 중 해당 에러가 발생했습니다. ${msg}`,
-    CAN_SELECT_UPLOAD_IMAGE: '업로드 할 이미지를 최소 1개 이상 선택해주세요.',
+    NO_SELECTED_IMAGE: '업로드 할 이미지를 최소 1개 이상 선택해주세요.',
     IMAGE_UPLOAD_UNKNOWN_ERROR: `이미지를 업로드 하는 도중 해당 에러가 발생했습니다. ${msg}`
   };
 
@@ -46,23 +46,22 @@ const useS3 = () => {
     });
   };
 
-  const createAlbum = (s3, nickname, date) => {
-    const albumName = nickname.concat('_', date).trim();
-
-    if (!albumName)
+  const createAlbum = (s3, albumName, albumNamePrefix) => {
+    if (!albumName) {
       return {
         error: true,
         msg: errorMsgMap('ALBUM_NAME_PREREQUISITE_CHAR')
       };
+    }
 
-    if (albumName.indexOf('/') !== -1)
+    if (albumName.indexOf('/') !== -1) {
       return {
         error: true,
         msg: errorMsgMap('ALBUM_NAME_CANNOT_CONTAIN_SLASH')
       };
+    }
 
-    const albumKey = 'post-images/' + encodeURIComponent(albumName) + '/';
-
+    const albumKey = albumNamePrefix + encodeURIComponent(albumName) + '/';
     s3.headObject({ Key: albumKey }, (err, data) => {
       if (!err)
         return { error: true, msg: errorMsgMap('ALBUM_NAME_ALREADY_EXIST') };
@@ -85,7 +84,7 @@ const useS3 = () => {
     if (!files.length) {
       return {
         error: true,
-        msg: errorMsgMap('CAN_SELECT_UPLOAD_IMAGE')
+        msg: errorMsgMap('NO_SELECTED_IMAGE')
       };
     }
 
@@ -128,16 +127,19 @@ const useS3 = () => {
   };
 
   const S3imageUploadHandler = async (
-    nickname,
-    date,
+    albumName,
+    albumNamePrefix,
     images,
     setImageUploadError
   ) => {
     try {
-      const s3 = await updateS3();
+      const s3 = updateS3();
 
-      const createAlbumResponse = await createAlbum(s3, nickname, date);
-
+      const createAlbumResponse = await createAlbum(
+        s3,
+        albumName,
+        albumNamePrefix
+      );
       if (createAlbumResponse.error) throw createAlbumResponse.msg;
 
       const albumKey = createAlbumResponse.msg;
@@ -157,7 +159,7 @@ const useS3 = () => {
         setImageUploadError(true);
       }
     } finally {
-      await initS3();
+      initS3();
     }
   };
 

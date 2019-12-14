@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-const useScript = scriptName => {
+const useScript = scriptPath => {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
-  let script;
 
   useEffect(() => {
     setLoading(true);
-    script = document.createElement('script');
-    script.src = `${scriptName}`;
+    const script = document.createElement('script');
+    script.src = `${scriptPath}`;
     document.body.appendChild(script);
 
     script.onload = () => {

@@ -29,51 +29,7 @@ const PostUploadPage = () => {
   );
   const [imageUploadError, setImageUploadError] = useState(false);
   // TODO : loadError, imageUploadError 등 PostUploadPage 에서 나올 수 있는 error 를 어떻게 관리해야 할지 고민 중
-  const { s3, createAlbum, addImage } = useS3();
 
-  const addImageHandler = files => {
-    /* Map each file to a promise that resolves to an array of image URI's */
-    Promise.all(
-      files.map(file => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.addEventListener('load', ({ target }) => {
-            resolve(target.result);
-          });
-          reader.readAsDataURL(file); // file을 읽기 가능한 url로 변환하여 target의 result 속성에 넣는다.
-        });
-      })
-    ).then(
-      urls => {
-        /* Once all promises are resolved, update state with image URI array */
-        setImages({
-          selectedImages: [...images.selectedImages, ...files],
-          previewUrls: [...images.previewUrls, ...urls]
-        });
-      },
-      error => {
-        console.error(error);
-      }
-    );
-  };
-
-  const deleteImageHandler = e => {
-    const deletedImage = e.target.previousSibling.src;
-    const targetIndex = images.previewUrls.findIndex(
-      url => url === deletedImage
-    );
-
-    if (targetIndex === representativeIndex) {
-      !targetIndex
-        ? setRepresentativeIndex(0)
-        : setRepresentativeIndex(targetIndex - 1);
-    }
-
-    setImages({
-      selectedImages: removeItemWithSlice(images.selectedImages, targetIndex),
-      previewUrls: removeItemWithSlice(images.previewUrls, targetIndex)
-    });
-  };
   const { S3imageUploadHandler } = useS3();
 
   const [uploadedUrls, setUploadedUrls] = useState([]);
@@ -87,9 +43,12 @@ const PostUploadPage = () => {
       );
     }
 
+    const albumName = nickname.concat('_', YYYYMMDDHHMMSS(new Date())).trim();
+    const albumNamePrefix = 'post-images/';
+
     S3imageUploadHandler(
-      nickname,
-      YYYYMMDDHHMMSS(new Date()),
+      albumName,
+      albumNamePrefix,
       images.selectedImages,
       setImageUploadError
     ).then(result => {

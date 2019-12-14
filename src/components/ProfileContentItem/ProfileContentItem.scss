@@ -2,21 +2,31 @@
 
 .profile-edit-page-content-item {
   font-size: 2rem;
+  line-height: 3rem;
   margin-top: 2rem;
   display: flex;
   align-items: center;
+  position: relative;
 
-  label {
+  > label {
     font-weight: bold;
-    width: 30%;
+    width: 20%;
     text-align: right;
-    padding-right: 3rem;
+    padding-right: 2rem;
   }
 
-  input {
-    width: 60%;
+  > input {
+    width: 80%;
     border: 1px solid $gray-border-color;
     border-radius: 0.3rem;
     padding-left: 1rem;
+
+    &:hover {
+      border: 1px solid #333;
+    }
+
+    &:focus {
+      outline: none;
+    }
   }
 }

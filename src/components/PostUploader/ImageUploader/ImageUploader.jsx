@@ -42,23 +42,17 @@ const ImageUploader = ({ images, setImages }) => {
       url => url === deletedImage
     );
 
-    if (targetIndex === representativeIndex) {
-      !targetIndex
-        ? setRepresentativeIndex(0)
-        : setRepresentativeIndex(targetIndex - 1);
-    }
+    if (targetIndex === representativeIndex)
+      setRepresentativeIndex(!targetIndex ? 0 : targetIndex - 1);
 
     setImages({
-      selectedImages: removeItemWithSlice(images.selectedImages, targetIndex),
-      previewUrls: removeItemWithSlice(images.previewUrls, targetIndex)
+      selectedImages: removeItem(images.selectedImages, targetIndex),
+      previewUrls: removeItem(images.previewUrls, targetIndex)
     });
   };
 
-  const removeItemWithSlice = (arr, index) => {
-    const firstArr = arr.slice(0, index);
-    const secondArr = arr.slice(index + 1);
-    return [...firstArr, ...secondArr];
-  };
+  const removeItem = (arr, targetIndex) =>
+    arr.filter((el, idx) => idx !== targetIndex);
 
   const selectRepresentativeImage = e => {
     const represenTativeImage = e.target.previousSibling.previousSibling.src;
