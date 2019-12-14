@@ -8,7 +8,7 @@ const ProfileImageChangeBtn = ({ setImage, setInitialPageEnter }) => {
 
     const reader = new FileReader();
     reader.addEventListener('load', ({ target }) => {
-      setImage({ fileType: file, previewUrl: target.result });
+      setImage({ fileData: file, previewUrl: target.result });
       setInitialPageEnter(false);
     });
     reader.readAsDataURL(file[0]);

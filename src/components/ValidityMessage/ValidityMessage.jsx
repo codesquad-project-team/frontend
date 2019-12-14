@@ -13,15 +13,13 @@ const messageMap = {
   INVALID_PHONE_NUMBER: '010-1234-5678 형식으로 입력해주세요.'
 };
 
-// TODO : 휴대폰 번호에도 ValidityMessage 사용하고 있음. props받는 key의 이름을 ValidityMessageKey 로 바꾸면 어떨지 상의 후 결정
-
-const ValidityMessage = ({ nicknameValidity, styleObj = {} }) => {
+const ValidityMessage = ({ messageKey, styleObj = {} }) => {
   const valid =
-    nicknameValidity === 'AVAILABLE' || nicknameValidity === 'CURRENT_NICKNAME'
+    messageKey === 'AVAILABLE' || messageKey === 'CURRENT_NICKNAME'
       ? true
       : false;
 
-  const message = messageMap[nicknameValidity];
+  const message = messageMap[messageKey];
 
   return (
     <div className="validity-message" style={styleObj}>

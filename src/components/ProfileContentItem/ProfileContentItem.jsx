@@ -11,7 +11,7 @@ const ProfileContentItem = props => {
       <input type="text" name={name} value={value} onChange={changeHandler} />
       {nicknameValidity && (
         <ValidityMessage
-          nicknameValidity={nicknameValidity}
+          messageKey={nicknameValidity}
           styleObj={{ fontSize: '1.5rem' }}
         />
       )}

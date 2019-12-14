@@ -12,13 +12,12 @@ import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import ProfileImageChangeBtn from './ProfileImageChangeBtn';
 import useScript from '../../hooks/useScript';
 import useS3 from '../../hooks/useS3';
-import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
 import { debounce } from '../../utils/utils';
 
 const ProfileEditPage = () => {
   const { inputValue, setInputValue, handleChange, restore } = useInput();
   const { profile_image, nickname, email, phone, description } = inputValue;
-  const [image, setImage] = useState({ fileType: [], previewUrl: '' });
+  const [image, setImage] = useState({ fileData: [], previewUrl: '' });
 
   const [currentNickname, setCurrentNickname] = useState('');
   const [nicknameValidity, setNicknameValidity] = useState({});
@@ -47,6 +46,8 @@ const ProfileEditPage = () => {
       phone,
       description: desc
     } = userInfo;
+
+    // 리액트에서 input 태그의 비어있는 값을 null로 표현하기 보다는 undefined 으로 사용하는 것을 권고함
 
     const initialValue = {
       profile_image: profileImage === null ? undefined : profileImage,
@@ -121,9 +122,15 @@ const ProfileEditPage = () => {
   );
 
   const updateUserInfo = async (uploadedUrl = '') => {
-    const bodyObj = !uploadedUrl
-      ? inputValue
-      : { ...inputValue, profile_image: uploadedUrl };
+    if (phoneValidity === 'INVALID_PHONE_NUMBER')
+      return alert('휴대폰 정보를 형식에 맞게 입력해주세요!');
+
+    console.log('여기 오나?');
+    console.log(uploadedUrl);
+
+    const bodyObj = uploadedUrl
+      ? { ...inputValue, profile_image: uploadedUrl }
+      : inputValue;
 
     const res = await fetch(`${WEB_SERVER_URL}/user/profile`, {
       method: 'PUT',
@@ -153,30 +160,35 @@ const ProfileEditPage = () => {
     }
   };
 
+  const uploadImage = async () => {
+    if (loadError) {
+      return alert(
+        `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
+      );
+    }
+
+    const albumName = nickname;
+    const albumNamePrefix = 'profile-images/';
+
+    // await : promise의 resolve Value를 리턴
+    const uploadedUrlArr = await S3imageUploadHandler(
+      albumName,
+      albumNamePrefix,
+      image.fileData,
+      setImageUploadError
+    );
+
+    return uploadedUrlArr[0];
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (image.previewUrl) {
-      if (loadError) {
-        return alert(
-          `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
-        );
-      }
+    const hasImageToUpload = image.previewUrl ? true : false;
 
-      const albumName = nickname;
-      const albumNamePrefix = 'profile-images/';
+    const S3UploadedUrl = hasImageToUpload ? await uploadImage() : '';
 
-      // await : promise의 resolve Value를 리턴
-      const uploadedUrlArr = await S3imageUploadHandler(
-        albumName,
-        albumNamePrefix,
-        image.fileType,
-        setImageUploadError
-      );
-
-      return updateUserInfo(uploadedUrlArr[0]);
-    }
-    return updateUserInfo();
+    return updateUserInfo(S3UploadedUrl);
   };
 
   useEffect(() => {

@@ -12,7 +12,7 @@
     font-weight: bold;
     width: 20%;
     text-align: right;
-    padding-right: 3rem;
+    padding-right: 2rem;
   }
 
   > input {
@@ -28,9 +28,5 @@
     &:focus {
       outline: none;
     }
-  }
-
-  &-validity-msg {
-    font-size: 1.5rem;
   }
 }

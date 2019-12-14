@@ -141,7 +141,7 @@ const SignupPage = ({ history }) => {
               type="text"
               placeholder="4~15자로 입력해주세요."
             />
-            <ValidityMessage nicknameValidity={nicknameValidity} />
+            <ValidityMessage messageKey={nicknameValidity} />
           </div>
           <CommonBtn
             styleType="emphasize"
