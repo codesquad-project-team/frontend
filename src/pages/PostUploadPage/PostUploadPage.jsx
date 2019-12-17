@@ -12,8 +12,9 @@ import useS3 from '../../hooks/useS3';
 import useScript from '../../hooks/useScript';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
+import { WEB_SERVER_URL } from '../../configs';
 
-const PostUploadPage = () => {
+const PostUploadPage = ({ history }) => {
   const [readyToUpload, setReadyToUpload] = useState(false);
   const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
 
@@ -108,7 +109,33 @@ const PostUploadPage = () => {
     return postData;
   };
 
-  const requestPostUpload = postData => {};
+  const requestPostUpload = async postData => {
+    const res = await fetch(`${WEB_SERVER_URL}/post`, {
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(postData)
+    });
+    const json = await res.json();
+    switch (res.status) {
+      case 200:
+        history.push(`/post/${json.id}`);
+        break;
+      case 401:
+        alert('토큰이 유효하지 않습니다. 다시 로그인 해주세요.');
+        //TODO: 로그인 모달창 띄우고 지금까지 입력한 데이터는 따로 보관하기
+        //로그인 과정에서 새로고침이 발생할 것으로 보임.
+        //local storage 활용해야할 것으로 예상.
+        break;
+      case 500:
+        alert('서버에서 에러가 발생했어요. 잠시 후에 다시 시도해주세요.');
+        //TODO: 임시저장 기능?
+        break;
+    }
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();

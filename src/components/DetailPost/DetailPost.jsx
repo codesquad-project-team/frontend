@@ -12,7 +12,7 @@ const DetailPost = props => {
     description
   } = props.data;
 
-  const desc = Buffer.from(description).toString();
+  const desc = description ? Buffer.from(description).toString() : '';
 
   return (
     <div className="detail-post">
