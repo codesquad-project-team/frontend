@@ -14,6 +14,13 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 
 const PostUploadPage = () => {
+  const [readyToUpload, setReadyToUpload] = useState(false);
+  const {
+    hasSelectedLocation,
+    hasInputTitles,
+    isOverDescLimit
+  } = readyToUpload;
+
   const [selectedLocation, setSelectedLocation] = useState({});
   const {
     x: lng,
@@ -74,9 +81,7 @@ const PostUploadPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const existsSelectedLocation = lat ? true : false;
-    const existsTitle = title ? true : false;
-    // if (!existsSelectedLocation || !existsTitle) return;
+    if (!hasSelectedLocation || !hasInputTitles || isOverDescLimit) return;
 
     if (loadError) {
       return alert(
@@ -113,6 +118,7 @@ const PostUploadPage = () => {
           <DescriptionUploader
             description={description}
             setDescription={setDescription}
+            setReadyToUpload={setReadyToUpload}
           />
           <PostQuestions />
           <div className="post-upload-page-btns">
