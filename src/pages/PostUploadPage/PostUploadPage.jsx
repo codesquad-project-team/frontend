@@ -48,6 +48,9 @@ const PostUploadPage = () => {
 
   const showUploadFailReason = () => {
     switch (true) {
+      case !images.previewUrls.length:
+        alert('사진을 1개 이상 선택해주세요.');
+        break;
       case !hasSelectedLocation:
         alert('장소검색 버튼을 눌러 장소를 선택해주세요.');
         break;
@@ -58,6 +61,25 @@ const PostUploadPage = () => {
         alert('설명을 1000자 이하로 입력해주세요.');
         break;
     }
+  };
+
+  const uploadImagesToS3 = async () => {
+    if (loadError) {
+      return alert(
+        `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
+      );
+    }
+
+    const albumName = nickname.concat('_', YYYYMMDDHHMMSS(new Date())).trim();
+    const albumNamePrefix = 'post-images/';
+
+    const S3uploadedURLs = await S3imageUploadHandler(
+      albumName,
+      albumNamePrefix,
+      images.selectedImages,
+      setImageUploadError
+    );
+    return S3uploadedURLs;
   };
 
   const getPostData = S3uploadedURLs => {
@@ -91,28 +113,17 @@ const PostUploadPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    //image를 선택하지 않은 경우는 S3imageUploadHandler에서 별도로 alert
-    if (!hasSelectedLocation || !hasAllTitles || isOverDescLimit) {
+    const needsMoreData =
+      !images.previewUrls.length ||
+      !hasSelectedLocation ||
+      !hasAllTitles ||
+      isOverDescLimit;
+    if (needsMoreData) {
       showUploadFailReason();
       return;
     }
 
-    if (loadError) {
-      return alert(
-        `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
-      );
-    }
-
-    const albumName = nickname.concat('_', YYYYMMDDHHMMSS(new Date())).trim();
-    const albumNamePrefix = 'post-images/';
-
-    const S3uploadedURLs = await S3imageUploadHandler(
-      albumName,
-      albumNamePrefix,
-      images.selectedImages,
-      setImageUploadError
-    );
-
+    const S3uploadedURLs = uploadImagesToS3();
     const postData = getPostData(S3uploadedURLs);
     requestPostUpload(postData);
   };
