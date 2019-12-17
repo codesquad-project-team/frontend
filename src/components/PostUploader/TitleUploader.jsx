@@ -2,17 +2,13 @@ import React, { useState, useMemo, useEffect } from 'react';
 import './TitleUploader.scss';
 import useInput from '../../hooks/useInput';
 
-const TitleUploader = ({ placeName, setTitle }) => {
+const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
   const {
     inputValue,
     setInputValue,
     handleChange: handleInputChange
   } = useInput();
   const { location, companion, activity } = inputValue;
-
-  useMemo(() => setInputValue({ ...inputValue, location: placeName }), [
-    placeName
-  ]);
 
   const [select, setSelect] = useState('');
   const [state, setState] = useState({});
@@ -38,6 +34,10 @@ const TitleUploader = ({ placeName, setTitle }) => {
     setState({ ...state, isOverlayHovered: false });
   };
 
+  useMemo(() => setInputValue({ ...inputValue, location: placeName }), [
+    placeName
+  ]);
+
   useMemo(() => {
     if (select === 'free_input') {
       setState({ ...state, showsFreeInput: true });
@@ -53,6 +53,14 @@ const TitleUploader = ({ placeName, setTitle }) => {
       title_companion: companion,
       title_activity: activity
     });
+    const hasAllTitles = location && companion && activity ? true : false;
+    hasAllTitles
+      ? setReadyToUpload(prevState => {
+          return { ...prevState, hasAllTitles: true };
+        })
+      : setReadyToUpload(prevState => {
+          return { ...prevState, hasAllTitles: false };
+        });
   }, [location, companion, activity]);
 
   return (

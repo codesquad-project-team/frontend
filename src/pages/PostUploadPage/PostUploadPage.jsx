@@ -15,11 +15,7 @@ import { YYYYMMDDHHMMSS } from '../../utils/utils';
 
 const PostUploadPage = () => {
   const [readyToUpload, setReadyToUpload] = useState(false);
-  const {
-    hasSelectedLocation,
-    hasInputTitles,
-    isOverDescLimit
-  } = readyToUpload;
+  const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
 
   const [selectedLocation, setSelectedLocation] = useState({});
   const {
@@ -81,7 +77,7 @@ const PostUploadPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (!hasSelectedLocation || !hasInputTitles || isOverDescLimit) return;
+    if (!hasSelectedLocation || !hasAllTitles || isOverDescLimit) return;
 
     if (loadError) {
       return alert(
@@ -113,8 +109,14 @@ const PostUploadPage = () => {
             lat={lat}
             lng={lng}
             setSelectedLocation={setSelectedLocation}
+            setReadyToUpload={setReadyToUpload}
+            hasSelectedLocation={hasSelectedLocation}
           />
-          <TitleUploader placeName={placeName} setTitle={setTitle} />
+          <TitleUploader
+            placeName={placeName}
+            setTitle={setTitle}
+            setReadyToUpload={setReadyToUpload}
+          />
           <DescriptionUploader
             description={description}
             setDescription={setDescription}

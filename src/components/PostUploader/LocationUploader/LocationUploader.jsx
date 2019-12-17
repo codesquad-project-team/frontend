@@ -4,13 +4,18 @@ import LocationFinder from './LocationFinder';
 import LocationFindButton from './LocationFindButton';
 import LocationPreview from './LocationPreview';
 
-const LocationUploader = ({ lat, lng, setSelectedLocation }) => {
+const LocationUploader = ({
+  lat,
+  lng,
+  setSelectedLocation,
+  setReadyToUpload,
+  hasSelectedLocation
+}) => {
   const { Modal, toggleModal, open } = useModal();
-  const existsSelectedLocation = lat ? true : false;
 
   return (
     <>
-      {existsSelectedLocation ? (
+      {hasSelectedLocation ? (
         <LocationPreview lat={lat} lng={lng} onClick={toggleModal} />
       ) : (
         <LocationFindButton onClick={toggleModal}>장소검색</LocationFindButton>
@@ -20,6 +25,7 @@ const LocationUploader = ({ lat, lng, setSelectedLocation }) => {
           <LocationFinder
             toggleModal={toggleModal}
             setSelectedLocation={setSelectedLocation}
+            setReadyToUpload={setReadyToUpload}
           />
         </Modal>
       )}
