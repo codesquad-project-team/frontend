@@ -46,6 +46,20 @@ const PostUploadPage = () => {
 
   const { S3imageUploadHandler } = useS3();
 
+  const showUploadFailReason = () => {
+    switch (true) {
+      case !hasSelectedLocation:
+        alert('장소검색 버튼을 눌러 장소를 선택해주세요.');
+        break;
+      case !hasAllTitles:
+        alert('어디에서 누구랑 무엇을 했는지 알려주지 않을래요?');
+        break;
+      case isOverDescLimit:
+        alert('설명을 1000자 이하로 입력해주세요.');
+        break;
+    }
+  };
+
   const getPostData = S3uploadedURLs => {
     const postData = {
       location: {
@@ -77,7 +91,11 @@ const PostUploadPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (!hasSelectedLocation || !hasAllTitles || isOverDescLimit) return;
+    //image를 선택하지 않은 경우는 S3imageUploadHandler에서 별도로 alert
+    if (!hasSelectedLocation || !hasAllTitles || isOverDescLimit) {
+      showUploadFailReason();
+      return;
+    }
 
     if (loadError) {
       return alert(
