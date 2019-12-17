@@ -31,6 +31,7 @@ const PostUploadPage = () => {
   const [title, setTitle] = useState({});
   const { title_location, title_companion, title_activity } = title;
 
+  const [representativeIndex, setRepresentativeIndex] = useState(0);
   const [images, setImages] = useState({
     selectedImages: [],
     previewUrls: []
@@ -63,7 +64,7 @@ const PostUploadPage = () => {
     }
   };
 
-  const uploadImagesToS3 = async () => {
+  const uploadImagesToS3 = () => {
     if (loadError) {
       return alert(
         `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
@@ -73,7 +74,7 @@ const PostUploadPage = () => {
     const albumName = nickname.concat('_', YYYYMMDDHHMMSS(new Date())).trim();
     const albumNamePrefix = 'post-images/';
 
-    const S3uploadedURLs = await S3imageUploadHandler(
+    const S3uploadedURLs = S3imageUploadHandler(
       albumName,
       albumNamePrefix,
       images.selectedImages,
@@ -97,12 +98,11 @@ const PostUploadPage = () => {
         title_companion,
         title_activity,
         description,
-        images: [
-          {
-            url: 'string',
-            is_representative: true
-          }
-        ]
+        images: S3uploadedURLs.map((url, idx) =>
+          representativeIndex === idx
+            ? { url, is_representative: true }
+            : { url, is_representative: false }
+        )
       }
     };
     return postData;
@@ -123,7 +123,7 @@ const PostUploadPage = () => {
       return;
     }
 
-    const S3uploadedURLs = uploadImagesToS3();
+    const S3uploadedURLs = await uploadImagesToS3();
     const postData = getPostData(S3uploadedURLs);
     requestPostUpload(postData);
   };
@@ -133,7 +133,12 @@ const PostUploadPage = () => {
       <Header />
       <CommonPost.background className="post-upload-page-background">
         <CommonPost large className="post-upload-page">
-          <ImageUploader images={images} setImages={setImages} />
+          <ImageUploader
+            images={images}
+            setImages={setImages}
+            representativeIndex={representativeIndex}
+            setRepresentativeIndex={setRepresentativeIndex}
+          />
           <LocationUploader
             lat={lat}
             lng={lng}

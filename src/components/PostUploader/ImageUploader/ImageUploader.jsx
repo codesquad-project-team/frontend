@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './ImageUploader.scss';
 import FirstInputButton from './FirstInputButton';
 import SecondInputButton from './SecondInputButton';
 import PreviewImages from './PreviewImages';
-import { IMAGE_BUCKET_URL } from '../../../configs';
 
-const ImageUploader = ({ images, setImages }) => {
+const ImageUploader = ({
+  images,
+  setImages,
+  representativeIndex,
+  setRepresentativeIndex
+}) => {
   const { selectedImages, previewUrls } = images;
-  const [representativeIndex, setRepresentativeIndex] = useState(0);
   const maximumCnt = 5;
 
   const addImageHandler = files => {
@@ -44,7 +47,7 @@ const ImageUploader = ({ images, setImages }) => {
 
     if (targetIndex === representativeIndex)
       setRepresentativeIndex(!targetIndex ? 0 : targetIndex - 1);
-
+    //TODO: else 인 경우 targetIndex 하나 줄이는 코드 필요
     setImages({
       selectedImages: removeItem(images.selectedImages, targetIndex),
       previewUrls: removeItem(images.previewUrls, targetIndex)
