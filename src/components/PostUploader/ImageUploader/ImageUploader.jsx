@@ -45,9 +45,12 @@ const ImageUploader = ({
       url => url === deletedImage
     );
 
-    if (targetIndex === representativeIndex)
-      setRepresentativeIndex(!targetIndex ? 0 : targetIndex - 1);
-    //TODO: else 인 경우 targetIndex 하나 줄이는 코드 필요
+    if (targetIndex === representativeIndex) {
+      setRepresentativeIndex(!targetIndex ? 0 : representativeIndex - 1);
+    } else if (targetIndex < representativeIndex) {
+      setRepresentativeIndex(representativeIndex - 1);
+    }
+
     setImages({
       selectedImages: removeItem(images.selectedImages, targetIndex),
       previewUrls: removeItem(images.previewUrls, targetIndex)
