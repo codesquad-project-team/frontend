@@ -51,7 +51,7 @@ const DescriptionUploader = ({
         className={`description-uploader ${
           showsOverLimitMessage ? 'description-overlimit' : ''
         }`}
-        placeholder="간단한 설명을 적어주세요."
+        placeholder="간단한 설명을 적어주세요(선택)."
         value={description}
         onChange={handleChange}
       />
