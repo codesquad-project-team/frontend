@@ -24,7 +24,7 @@ const Header = () => {
     restore('searchBar');
   };
 
-  const toggleSigninModal = type => {
+  const handleSigninModal = type => {
     switch (type) {
       case 'OPEN':
         setClickedSignin(true);
@@ -44,7 +44,7 @@ const Header = () => {
   };
 
   useMemo(() => {
-    needsSigninModal ? toggleSigninModal('OPEN') : null;
+    needsSigninModal ? handleSigninModal('OPEN') : null;
   }, [needsSigninModal]);
 
   return (
@@ -78,7 +78,7 @@ const Header = () => {
             <>
               <CommonBtn
                 className="signin-btn"
-                onClick={toggleSigninModal}
+                onClick={handleSigninModal}
                 styleType="normal"
               >
                 로그인
@@ -95,7 +95,7 @@ const Header = () => {
         </div>
 
         {!loggedIn && clickedSignin && (
-          <CommonModal clickHandler={toggleSigninModal} target={'signin'} />
+          <CommonModal clickHandler={handleSigninModal} target={'signin'} />
         )}
 
         {!loggedIn && clickedSignup && (
