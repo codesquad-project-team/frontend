@@ -191,7 +191,8 @@ const PostUploadPage = ({ history }) => {
             setDescription={setDescription}
             setReadyToUpload={setReadyToUpload}
           />
-          <PostQuestions />
+          {/* TODO: 취향 매칭을 위한 질문 추가하기 */}
+          {/* <PostQuestions /> */}
           <div className="post-upload-page-btns">
             <CommonBtn onClick={handleSubmit}>작성</CommonBtn>
             <CommonBtn onClick={handleCancel}>취소</CommonBtn>
