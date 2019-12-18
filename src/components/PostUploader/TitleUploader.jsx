@@ -65,14 +65,16 @@ const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
 
   return (
     <div className="title-uploader">
-      <input
-        type="text"
-        placeholder="어디"
-        name="location"
-        value={location}
-        onChange={handleInputChange}
-      />
-      <span>에서</span>
+      <div className="title-uploader-location-section">
+        <input
+          type="text"
+          placeholder="어디"
+          name="location"
+          value={location}
+          onChange={handleInputChange}
+        />
+        <span>에서</span>
+      </div>
       <span className="title-uploader-companion-section">
         {showsFreeInput ? (
           <input

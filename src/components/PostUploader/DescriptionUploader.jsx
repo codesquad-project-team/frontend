@@ -45,7 +45,7 @@ const DescriptionUploader = ({
   };
 
   return (
-    <div>
+    <div className="description-uploader-wrapper">
       <textarea
         name="description"
         className={`description-uploader ${

@@ -1,6 +1,12 @@
 @import '../../stylesheets/util.scss';
 
 .title-uploader {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 20rem;
+
   input {
     width: 20rem;
     height: 5rem;
@@ -10,9 +16,11 @@
     text-align: center;
   }
 
-  > span {
-    font-size: 4rem;
-    margin-right: 2rem;
+  &-location-section {
+    > span {
+      font-size: 4rem;
+      margin-right: 2rem;
+    }
   }
 
   &-companion-section {
