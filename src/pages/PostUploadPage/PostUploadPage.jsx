@@ -120,6 +120,7 @@ const PostUploadPage = ({ history }) => {
       body: JSON.stringify(postData)
     });
     const json = await res.json();
+
     switch (res.status) {
       case 200:
         history.push(`/post/${json.id}`);
@@ -145,6 +146,7 @@ const PostUploadPage = ({ history }) => {
       !hasSelectedLocation ||
       !hasAllTitles ||
       isOverDescLimit;
+
     if (needsMoreData) {
       showUploadFailReason();
       return;
@@ -153,6 +155,12 @@ const PostUploadPage = ({ history }) => {
     const S3uploadedURLs = await uploadImagesToS3();
     const postData = getPostData(S3uploadedURLs);
     requestPostUpload(postData);
+  };
+
+  const handleCancel = () => {
+    if (confirm('작성을 취소하고 이전 페이지로 돌아가시겠어요?')) {
+      history.goBack();
+    }
   };
 
   return (
@@ -186,7 +194,7 @@ const PostUploadPage = ({ history }) => {
           <PostQuestions />
           <div className="post-upload-page-btns">
             <CommonBtn onClick={handleSubmit}>작성</CommonBtn>
-            <CommonBtn>취소</CommonBtn>
+            <CommonBtn onClick={handleCancel}>취소</CommonBtn>
           </div>
         </CommonPost>
       </CommonPost.background>
