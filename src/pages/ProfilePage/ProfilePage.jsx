@@ -9,13 +9,12 @@ import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { useLoginContext } from '../../contexts/LoginContext';
+import { useNavigationContext } from '../../contexts/NavigationContext';
 
 const ProfilePage = () => {
-  //TODO: userId를 전역 context에서 받아서 profile-content api 요청하기
-  //라우터URL을 nickname으로 표시하기 때문에 prop으로는 userId를 받을 수 없음.
-  //따라서 userId는 별도의 방법으로 받아야함. 전역 context를 사용해야할 듯.
-  //const { userId } = useContext(someContext);
-  const userId = 100;
+  //라우터URL을 nickname으로 표시하기 때문에 router의 prop으로는 userId를 받을 수 없음.
+  //따라서 context api를 활용하여 userId 값을 저장하여 사용함.
+  const { userId } = useNavigationContext();
   const { id } = useLoginContext();
   const isMyProfile = id === userId;
 

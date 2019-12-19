@@ -1,6 +1,8 @@
 import React from 'react';
 import './PostItem.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
+import CommonLink from '../CommonLink/CommonLink';
+import { useNavigationContext } from '../../contexts/NavigationContext';
 
 const PostItem = ({
   image,
@@ -11,12 +13,22 @@ const PostItem = ({
   writer: { id, profileImage, nickname } = {},
   headerOn
 }) => {
+  const { setUserId } = useNavigationContext();
+
+  const handleClick = () => {
+    setUserId(id);
+  };
+
   return (
     <div className="post-item">
       {headerOn && (
         <div className="post-item-header">
-          <ProfileImage small src={profileImage} />
-          <span>{nickname}</span>
+          <CommonLink to={`/profile/@${nickname}`} onClick={handleClick}>
+            <ProfileImage small src={profileImage} />
+          </CommonLink>
+          <CommonLink to={`/profile/@${nickname}`} onClick={handleClick}>
+            <span>{nickname}</span>
+          </CommonLink>
         </div>
       )}
       <img
