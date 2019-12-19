@@ -19,7 +19,11 @@ const PostItem = ({
           <span>{nickname}</span>
         </div>
       )}
-      <img className="post-item-img" src={image} alt="" />
+      <img
+        className="post-item-img"
+        src={image}
+        alt="representative post image"
+      />
       <div className="post-item-title">
         {place}에서 {companion}랑 {activity}
       </div>
