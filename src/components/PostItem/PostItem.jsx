@@ -20,7 +20,9 @@ const PostItem = ({
         </div>
       )}
       <img
-        className="post-item-img"
+        className={`${
+          headerOn ? 'post-item-img' : 'post-item-img-without-header'
+        }`}
         src={image}
         alt="representative post image"
       />

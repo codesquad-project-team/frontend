@@ -24,7 +24,12 @@
   &-img {
     width: 100%;
     height: 100%;
-    border-radius: 5px;
+  }
+
+  &-img-without-header {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px 5px 0 0;
   }
 
   &-title {
