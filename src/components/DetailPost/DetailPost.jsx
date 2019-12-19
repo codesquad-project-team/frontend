@@ -1,6 +1,8 @@
 import React from 'react';
 import './DetailPost.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
+import CommonLink from '../CommonLink/CommonLink';
+import { useNavigationContext } from '../../contexts/NavigationContext';
 
 const DetailPost = ({
   data: {
@@ -11,17 +13,29 @@ const DetailPost = ({
     writer: { id, nickname, profileImage } = {}
   }
 }) => {
+  const { setUserId } = useNavigationContext();
+
   return (
     <div className="detail-post">
       <h1 className="detail-post-title">
         {place}에서 {companion}랑 {activity}
       </h1>
       <div className="detail-post-content">
-        <div className="detail-post-writer-img">
+        <CommonLink
+          to={`/profile/@${nickname}`}
+          onClick={() => setUserId(id)}
+          className="detail-post-writer-img"
+        >
           <ProfileImage small src={profileImage} />
-        </div>
+        </CommonLink>
         <div>
-          <h3 className="detail-post-writer-name">{nickname}</h3>
+          <CommonLink
+            to={`/profile/@${nickname}`}
+            onClick={() => setUserId(id)}
+            className="detail-post-writer-name"
+          >
+            {nickname}
+          </CommonLink>
           <p className="detail-post-desc">{description}</p>
         </div>
       </div>
