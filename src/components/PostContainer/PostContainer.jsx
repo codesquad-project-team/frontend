@@ -25,7 +25,7 @@ const PostContainer = ({ headerOn, api, query: writerId = '' }) => {
   );
 
   const mergeResponse = (prevResponse, response) => {
-    const isFirstFetch = prevResponse === null;
+    const isFirstFetch = prevResponse === null || page === 1;
     if (isFirstFetch) {
       return setResponse(response);
     }
