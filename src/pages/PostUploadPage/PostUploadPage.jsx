@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import './PostUploadPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
 import Header from '../../components/Header/Header';
@@ -14,8 +14,15 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 import { WEB_SERVER_URL } from '../../configs';
 
+const readyToUploadReducer = (prevState, newState) => {
+  return { ...prevState, ...newState };
+};
+
 const PostUploadPage = ({ history }) => {
-  const [readyToUpload, setReadyToUpload] = useState(false);
+  const [readyToUpload, setReadyToUpload] = useReducer(
+    readyToUploadReducer,
+    {}
+  );
   const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
 
   const [selectedLocation, setSelectedLocation] = useState({});

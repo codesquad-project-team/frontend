@@ -33,14 +33,10 @@ const DescriptionUploader = ({
 
     if (isOverLimit(value)) {
       setShowsOverLimitMessage(true);
-      setReadyToUpload(prevState => {
-        return { ...prevState, isOverDescLimit: true };
-      });
+      setReadyToUpload({ isOverDescLimit: true });
     } else {
       setShowsOverLimitMessage(false);
-      setReadyToUpload(prevState => {
-        return { ...prevState, isOverDescLimit: false };
-      });
+      setReadyToUpload({ isOverDescLimit: true });
     }
   };
 

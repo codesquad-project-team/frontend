@@ -83,12 +83,8 @@ const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
     });
     const hasAllTitles = location && companion && activity ? true : false;
     hasAllTitles
-      ? setReadyToUpload(prevState => {
-          return { ...prevState, hasAllTitles: true };
-        })
-      : setReadyToUpload(prevState => {
-          return { ...prevState, hasAllTitles: false };
-        });
+      ? setReadyToUpload({ hasAllTitles: true })
+      : setReadyToUpload({ hasAllTitles: false });
   }, [location, companion, activity]);
 
   return (

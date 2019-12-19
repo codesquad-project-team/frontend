@@ -79,9 +79,7 @@ const LocationFinder = ({
       return;
     }
     setSelectedLocation(searchResult[clickedItemIndex]);
-    setReadyToUpload(prevState => {
-      return { ...prevState, hasSelectedLocation: true };
-    });
+    setReadyToUpload({ hasSelectedLocation: true });
     closeModal();
   };
 
