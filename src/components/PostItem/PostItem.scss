@@ -1,3 +1,5 @@
+@import '../../stylesheets/util.scss';
+
 .post-item {
   width: 40rem;
   border: 1px solid #d4d4d4;
@@ -14,10 +16,16 @@
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
-    > span {
+    img:hover {
+      box-shadow: 0 0 5px $main-color;
+    }
+    span {
       font-size: 1.6rem;
       font-weight: bold;
       padding-left: 1rem;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
