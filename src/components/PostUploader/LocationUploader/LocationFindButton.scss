@@ -4,6 +4,7 @@ $button-height: 4rem;
 $border-width: 1px;
 
 .location-find-button {
+  margin: 2rem 0;
   padding: 0 1.5rem;
   height: $button-height;
   line-height: calc(#{$button-height} - (#{$border-width} * 2));

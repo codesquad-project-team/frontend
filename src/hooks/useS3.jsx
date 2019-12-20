@@ -46,7 +46,7 @@ const useS3 = () => {
     });
   };
 
-  const createAlbum = (s3, albumName, albumNamePrefix) => {
+  const createAlbum = (s3, albumName, albumNamePrefix, files) => {
     if (!albumName) {
       return {
         error: true,
@@ -58,6 +58,13 @@ const useS3 = () => {
       return {
         error: true,
         msg: errorMsgMap('ALBUM_NAME_CANNOT_CONTAIN_SLASH')
+      };
+    }
+
+    if (!files.length) {
+      return {
+        error: true,
+        msg: errorMsgMap('NO_SELECTED_IMAGE')
       };
     }
 
@@ -81,13 +88,6 @@ const useS3 = () => {
   };
 
   const addImage = (files, albumKey) => {
-    if (!files.length) {
-      return {
-        error: true,
-        msg: errorMsgMap('NO_SELECTED_IMAGE')
-      };
-    }
-
     return Promise.all(
       files.map(file => {
         const fileName = file.name;
@@ -138,7 +138,8 @@ const useS3 = () => {
       const createAlbumResponse = await createAlbum(
         s3,
         albumName,
-        albumNamePrefix
+        albumNamePrefix,
+        images
       );
       if (createAlbumResponse.error) throw createAlbumResponse.msg;
 

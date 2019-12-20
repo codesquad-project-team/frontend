@@ -1,0 +1,27 @@
+@import '../../stylesheets/util.scss';
+
+$color-red: rgb(255, 80, 80);
+
+.description-uploader {
+  &-wrapper {
+    width: 80%;
+    margin: 2rem 0;
+  }
+
+  width: 100%;
+  height: 10rem;
+  font-size: 3rem;
+  border: 1px solid $gray-border-color;
+}
+
+.description-overlimit {
+  outline: 5px solid $color-red;
+}
+
+.description-overlimit-message {
+  height: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: right;
+  color: $color-red;
+}

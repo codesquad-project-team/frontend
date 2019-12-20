@@ -1,7 +1,8 @@
-@import "../../../stylesheets/util.scss";
+@import '../../../stylesheets/util.scss';
 
 .image-uploader-first-input {
   &-wrapper {
+    margin: 2rem 0;
     padding: 0 1.5rem;
     height: 4rem;
     line-height: 3.5rem;

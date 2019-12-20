@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './ImageUploader.scss';
 import FirstInputButton from './FirstInputButton';
 import SecondInputButton from './SecondInputButton';
 import PreviewImages from './PreviewImages';
-import { IMAGE_BUCKET_URL } from '../../../configs';
 
-const ImageUploader = ({ images, setImages }) => {
+const ImageUploader = ({
+  images,
+  setImages,
+  representativeIndex,
+  setRepresentativeIndex
+}) => {
   const { selectedImages, previewUrls } = images;
-  const [representativeIndex, setRepresentativeIndex] = useState(0);
   const maximumCnt = 5;
 
   const addImageHandler = files => {
@@ -42,8 +45,11 @@ const ImageUploader = ({ images, setImages }) => {
       url => url === deletedImage
     );
 
-    if (targetIndex === representativeIndex)
-      setRepresentativeIndex(!targetIndex ? 0 : targetIndex - 1);
+    if (targetIndex === representativeIndex) {
+      setRepresentativeIndex(!targetIndex ? 0 : representativeIndex - 1);
+    } else if (targetIndex < representativeIndex) {
+      setRepresentativeIndex(representativeIndex - 1);
+    }
 
     setImages({
       selectedImages: removeItem(images.selectedImages, targetIndex),

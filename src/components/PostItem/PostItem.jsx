@@ -12,7 +12,7 @@ const PostItem = ({
   description,
   headerOn
 }) => {
-  const desc = Buffer.from(description).toString();
+  const desc = description ? Buffer.from(description).toString() : '';
   return (
     <div className="post-item">
       {headerOn && (
