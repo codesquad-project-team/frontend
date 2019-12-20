@@ -11,7 +11,6 @@ const PostItem = ({
   writer: { id, profileImage, nickname } = {},
   headerOn
 }) => {
-  const desc = description ? Buffer.from(description).toString() : '';
   return (
     <div className="post-item">
       {headerOn && (
@@ -24,7 +23,7 @@ const PostItem = ({
       <div className="post-item-title">
         {place}에서 {companion}랑 {activity}
       </div>
-      <div className="post-item-desc">{desc}</div>
+      <div className="post-item-desc">{description}</div>
     </div>
   );
 };

@@ -17,7 +17,6 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
     introduction,
     profileImage
   } = data;
-  const selfIntro = introduction ? Buffer.from(introduction).toString() : null;
 
   const [isFollowing, setIsFollowing] = useState(initialFollowStatus);
   const { loggedIn } = useLoginContext();
@@ -83,7 +82,7 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
           <div className="profile-info-overview">
             팔로잉 {totalFollowings}명
           </div>
-          <div className="profile-info-introduction">{selfIntro}</div>
+          <div className="profile-info-introduction">{introduction}</div>
         </div>
       </div>
     </div>

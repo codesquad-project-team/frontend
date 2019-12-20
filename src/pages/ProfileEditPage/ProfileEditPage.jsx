@@ -54,7 +54,7 @@ const ProfileEditPage = () => {
       nickname,
       email: email === null ? undefined : email,
       phone: phone === null ? undefined : phone,
-      introduction: intro === null ? undefined : Buffer.from(intro).toString()
+      introduction: intro === null ? undefined : intro
     };
 
     setCurrentNickname(initialValue.nickname);
