@@ -24,7 +24,7 @@ const SignupPage = ({ history }) => {
   const { setSignupFailed } = useShakeAnimation(shakeTarget);
 
   const checkNicknameFromServer = useCallback(async nickname => {
-    const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
+    const res = await fetch(`${WEB_SERVER_URL}/user/checkNicknameDuplication`, {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
