@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import { KakaoMap, Marker, CustomOverlay } from 'react-kakao-maps';
 import InfoWindow from '../MapView/InfoWindow';
 
-const MapView = props => {
+const MapView = ({
+  data: {
+    location: { latitude, longitude, ...info }
+  }
+}) => {
   const [infoDisplay, setInfoDisplay] = useState(true);
-  const { locationLatitude, locationLongitude, ...info } = props.data;
 
   return (
     <KakaoMap
@@ -14,15 +17,15 @@ const MapView = props => {
       width="800px"
       height="500px"
       level={2}
-      lat={locationLatitude}
-      lng={locationLongitude}
+      lat={latitude}
+      lng={longitude}
     >
-      <Marker lat={locationLatitude} lng={locationLongitude} />
+      <Marker lat={latitude} lng={longitude} />
       {infoDisplay && (
         <CustomOverlay
           content={<InfoWindow info={info} />}
-          lat={locationLatitude}
-          lng={locationLongitude}
+          lat={latitude}
+          lng={longitude}
         />
       )}
     </KakaoMap>
@@ -33,7 +36,7 @@ export default MapView;
 
 MapView.propTypes = {
   data: PropTypes.shape({
-    locationLatitude: PropTypes.number,
-    locationLongitude: PropTypes.number
+    latitude: PropTypes.number,
+    longitude: PropTypes.number
   })
 };
