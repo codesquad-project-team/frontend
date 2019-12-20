@@ -3,13 +3,12 @@ import './PostItem.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 
 const PostItem = ({
-  writerImageURL,
-  writerNickname,
-  representativePostImageURL,
-  titlePlace,
-  titleCompanion,
-  titleActivity,
+  image,
+  place,
+  companion,
+  activity,
   description,
+  writer: { id, profileImage, nickname },
   headerOn
 }) => {
   const desc = description ? Buffer.from(description).toString() : '';
@@ -17,13 +16,13 @@ const PostItem = ({
     <div className="post-item">
       {headerOn && (
         <div className="post-item-header">
-          <ProfileImage small src={writerImageURL} />
-          <span>{writerNickname}</span>
+          <ProfileImage small src={profileImage} />
+          <span>{nickname}</span>
         </div>
       )}
-      <img className="post-item-img" src={representativePostImageURL} alt="" />
+      <img className="post-item-img" src={image} alt="" />
       <div className="post-item-title">
-        {titlePlace}에서 {titleCompanion}랑 {titleActivity}
+        {place}에서 {companion}랑 {activity}
       </div>
       <div className="post-item-desc">{desc}</div>
     </div>
