@@ -11,9 +11,9 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
   const {
     isFollowing: initialFollowStatus,
     nickname,
-    totalPost,
-    totalFollower,
-    totalFollowing,
+    totalPosts,
+    totalFollowers,
+    totalFollowings,
     introduction,
     profileImage
   } = data;
@@ -78,9 +78,11 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
               </CommonLink>
             )}
           </div>
-          <div className="profile-info-overview">게시글 {totalPost}개</div>
-          <div className="profile-info-overview">팔로워 {totalFollower}명</div>
-          <div className="profile-info-overview">팔로잉 {totalFollowing}명</div>
+          <div className="profile-info-overview">게시글 {totalPosts}개</div>
+          <div className="profile-info-overview">팔로워 {totalFollowers}명</div>
+          <div className="profile-info-overview">
+            팔로잉 {totalFollowings}명
+          </div>
           <div className="profile-info-introduction">{selfIntro}</div>
         </div>
       </div>
