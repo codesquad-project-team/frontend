@@ -16,7 +16,7 @@ import { debounce } from '../../utils/utils';
 
 const ProfileEditPage = () => {
   const { inputValue, setInputValue, handleChange, restore } = useInput();
-  const { profile_image, nickname, email, phone, description } = inputValue;
+  const { profile_image, nickname, email, phone, introduction } = inputValue;
   const [image, setImage] = useState({ fileData: [], previewUrl: '' });
 
   const [currentNickname, setCurrentNickname] = useState('');
@@ -44,7 +44,7 @@ const ProfileEditPage = () => {
       nickname,
       email,
       phone,
-      description: desc
+      introduction: intro
     } = userInfo;
 
     // 리액트에서 input 태그의 비어있는 값을 null로 표현하기 보다는 undefined 으로 사용하는 것을 권고함
@@ -54,7 +54,7 @@ const ProfileEditPage = () => {
       nickname,
       email: email === null ? undefined : email,
       phone: phone === null ? undefined : phone,
-      description: desc === null ? undefined : Buffer.from(desc).toString()
+      introduction: intro === null ? undefined : Buffer.from(intro).toString()
     };
 
     setCurrentNickname(initialValue.nickname);
@@ -240,8 +240,8 @@ const ProfileEditPage = () => {
               />
               <ProfileContentItem
                 label="소개"
-                value={description}
-                name="description"
+                value={introduction}
+                name="introduction"
                 changeHandler={handleChange}
               />
               <ProfileContentItem
