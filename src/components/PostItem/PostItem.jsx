@@ -8,7 +8,7 @@ const PostItem = ({
   companion,
   activity,
   description,
-  writer: { id, profileImage, nickname },
+  writer: { id, profileImage, nickname } = {},
   headerOn
 }) => {
   const desc = description ? Buffer.from(description).toString() : '';

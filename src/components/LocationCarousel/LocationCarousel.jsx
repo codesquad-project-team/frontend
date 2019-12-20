@@ -2,9 +2,7 @@ import React from 'react';
 import './LocationCarousel.scss';
 import Carousel from 'react-bootstrap/Carousel';
 
-const LocationCarousel = ({ data }) => {
-  const { images } = data;
-
+const LocationCarousel = ({ data: { images = [] } }) => {
   const carouselItems = images.map((url, index) => {
     return (
       <Carousel.Item key={index}>

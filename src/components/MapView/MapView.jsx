@@ -4,9 +4,7 @@ import { KakaoMap, Marker, CustomOverlay } from 'react-kakao-maps';
 import InfoWindow from '../MapView/InfoWindow';
 
 const MapView = ({
-  data: {
-    location: { latitude, longitude, ...info }
-  }
+  data: { location: { latitude, longitude, ...info } = {} }
 }) => {
   const [infoDisplay, setInfoDisplay] = useState(true);
 

@@ -8,7 +8,7 @@ const DetailPost = ({
     companion,
     activity,
     description,
-    writer: { id, nickname, profileImage }
+    writer: { id, nickname, profileImage } = {}
   }
 }) => {
   const desc = description ? Buffer.from(description).toString() : '';
