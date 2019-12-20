@@ -8,7 +8,7 @@ const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
     setInputValue,
     handleChange: handleInputChange
   } = useInput();
-  const { location, companion, activity } = inputValue;
+  const { place, companion, activity } = inputValue;
   const [locationInputStyle, setLocationInputStyle] = useState({});
 
   const [select, setSelect] = useState('');
@@ -35,9 +35,9 @@ const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
     setState({ ...state, isOverlayHovered: false });
   };
 
-  const adjustLocationInputWidth = (location = '') => {
+  const adjustLocationInputWidth = (place = '') => {
     //width 20rem, font-size 4rem 기준 한글 7글자에서 overflow 발생. max는 19자
-    const len = location.length;
+    const len = place.length;
     const OVERFLOW_CRITERION = 7;
     const MAX_WIDTH = 19;
     const MAX_WIDTH_REM = 59;
@@ -62,7 +62,7 @@ const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
   };
 
   useMemo(() => {
-    setInputValue({ ...inputValue, location: placeName });
+    setInputValue({ ...inputValue, place: placeName });
   }, [placeName]);
 
   useMemo(() => {
@@ -75,26 +75,26 @@ const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
   }, [select]);
 
   useMemo(() => {
-    adjustLocationInputWidth(location);
+    adjustLocationInputWidth(place);
     setTitle({
-      title_location: location,
-      title_companion: companion,
-      title_activity: activity
+      place,
+      companion,
+      activity
     });
-    const hasAllTitles = location && companion && activity ? true : false;
+    const hasAllTitles = place && companion && activity ? true : false;
     hasAllTitles
       ? setReadyToUpload({ hasAllTitles: true })
       : setReadyToUpload({ hasAllTitles: false });
-  }, [location, companion, activity]);
+  }, [place, companion, activity]);
 
   return (
     <div className="title-uploader">
-      <div className="title-uploader-location-section">
+      <div className="title-uploader-place-section">
         <input
           type="text"
           placeholder="어디"
-          name="location"
-          value={location}
+          name="place"
+          value={place}
           onChange={handleInputChange}
           style={locationInputStyle}
         />
