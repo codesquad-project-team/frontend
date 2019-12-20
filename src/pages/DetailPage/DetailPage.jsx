@@ -11,7 +11,7 @@ import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 
 const DetailPage = props => {
-  const postId = props.id;
+  const postId = props.postId;
   const [data, setData] = useState({});
 
   const { error, loading } = useFetch(
