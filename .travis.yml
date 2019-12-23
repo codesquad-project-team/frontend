@@ -11,7 +11,7 @@ script:
   - yarn build
 
 env:
-  - NAVER_MAP_CLIENT_ID=$NAVER_MAP_CLIENT_ID
+  - KAKAO_MAP_API_URL=$KAKAO_MAP_API_URL
   - ALBUM_BUCKET_NAME=$ALBUM_BUCKET_NAME
   - BUCKET_REGION=$BUCKET_REGION
   - IDENTITY_POOL_ID=$IDENTITY_POOL_ID
@@ -36,4 +36,4 @@ notifications: # 성공 실패 여부 알림
   email:
     recipients:
       - hwrng2@gmail.com
-      - revenoir7@gmail.com
+      - dev.allenk@gmail.com
