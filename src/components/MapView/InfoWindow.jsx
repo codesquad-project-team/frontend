@@ -1,59 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './InfoWindow.scss';
+import CloseBtn from '../CommonBtn/CloseBtn';
 import { IMAGE_BUCKET_URL } from '../../configs';
 
-const InfoWindow = props => {
-  const {
-    locationName,
-    locationAddress,
-    locationPhoneNumber,
-    locationLinkAddress
-  } = props.info;
-
+const InfoWindow = ({ info: { name, address, link, phone } = {} }) => {
   return (
-    <>
-      <div className="info-window">
-        <h3 className="info-window-location-name">
-          <a
-            href={locationLinkAddress}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {locationName}
-          </a>
-        </h3>
-        <hr />
-        <div>{locationAddress}</div>
-        {/* <img
+    <div className="info-window">
+      <h3 className="info-window-location-name">
+        <a href={link} target="_blank" rel="noopener noreferrer">
+          {name}
+        </a>
+      </h3>
+      <hr />
+      <div>{address}</div>
+      {/* <img
           src=""
           width="55"
           height="55"
-          alt={locationName}
+          alt={titlePlace}
           className="info-window-thumbnail"
         />
         <br />  */}
-        <div>{locationPhoneNumber}</div>
-        <span>
-          <a
-            href={locationLinkAddress}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {locationLinkAddress}
-          </a>
-        </span>
-      </div>
+      <div>{phone}</div>
+      <span>
+        <a href={link} target="_blank" rel="noopener noreferrer">
+          {link}
+        </a>
+      </span>
       <img
         className="info-window-arrow-image"
         src={`${IMAGE_BUCKET_URL}/info-window-arrow.png`}
         alt=""
       />
-      <img
-        className="info-window-close-image"
-        src={`${IMAGE_BUCKET_URL}/times-solid.png`}
-      />
-    </>
+      <CloseBtn />
+    </div>
   );
 };
 
@@ -61,9 +42,9 @@ export default InfoWindow;
 
 InfoWindow.propTypes = {
   info: PropTypes.shape({
-    locationName: PropTypes.string,
-    locationAddress: PropTypes.string,
-    locationPhoneNumber: PropTypes.string,
-    locationLinkAddress: PropTypes.string
+    name: PropTypes.string,
+    address: PropTypes.string,
+    phone: PropTypes.string,
+    link: PropTypes.string
   })
 };

@@ -1,57 +1,99 @@
 import React, { useState, useEffect } from 'react';
-const AWS = require('aws-sdk');
+
+const errorMsgMap = (key, msg = '') => {
+  const obj = {
+    ALBUM_NAME_PREREQUISITE_CHAR:
+      '폴더명은 공백을 제외한 최소 1자 이상의 문자가 포함되어야 합니다.',
+    ALBUM_NAME_CANNOT_CONTAIN_SLASH: `폴더명에 슬래시는 포함될 수 없습니다`,
+    ALBUM_NAME_ALREADY_EXIST: `동일한 폴더명을 이미 사용 중입니다. `,
+    ALBUM_NAME_UNKNOWN_ERROR: `폴더를 생성 하는 중 해당 에러가 발생했습니다. ${msg}`,
+    NO_SELECTED_IMAGE: '업로드 할 이미지를 최소 1개 이상 선택해주세요.',
+    IMAGE_UPLOAD_UNKNOWN_ERROR: `이미지를 업로드 하는 도중 해당 에러가 발생했습니다. ${msg}`
+  };
+
+  return obj[key];
+};
 
 const useS3 = () => {
-  const [s3, setS3] = useState(null);
+  const updateS3 = () => {
+    // eslint-disable-next-line no-undef
+    AWS.config.update({
+      // eslint-disable-next-line no-undef
+      region: `${BUCKET_REGION}`,
+      // eslint-disable-next-line no-undef
+      credentials: new AWS.CognitoIdentityCredentials({
+        // eslint-disable-next-line no-undef
+        IdentityPoolId: `${IDENTITY_POOL_ID}`
+      })
+    });
 
-  const createAlbum = (nickname, date) => {
-    const albumName = nickname.concat('_', date).trim();
+    // eslint-disable-next-line no-undef
+    return new AWS.S3({
+      apiVersion: '2006-03-01',
+      // eslint-disable-next-line no-undef
+      params: { Bucket: `${ALBUM_BUCKET_NAME}` }
+    });
+  };
 
+  const initS3 = () => {
+    // eslint-disable-next-line no-undef
+    AWS.config.update({
+      region: null,
+      // eslint-disable-next-line no-undef
+      credentials: new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: null
+      })
+    });
+  };
+
+  const createAlbum = (s3, albumName, albumNamePrefix, files) => {
     if (!albumName) {
-      console.log('Album names must contain at least one non-space character.');
-      return;
+      return {
+        error: true,
+        msg: errorMsgMap('ALBUM_NAME_PREREQUISITE_CHAR')
+      };
     }
 
     if (albumName.indexOf('/') !== -1) {
-      console.log('Album names cannot contain slashes.');
-      return;
+      return {
+        error: true,
+        msg: errorMsgMap('ALBUM_NAME_CANNOT_CONTAIN_SLASH')
+      };
     }
 
-    const albumKey = 'post-images/' + encodeURIComponent(albumName) + '/';
+    if (!files.length) {
+      return {
+        error: true,
+        msg: errorMsgMap('NO_SELECTED_IMAGE')
+      };
+    }
 
-    s3.headObject({ Key: albumKey }, function(err, data) {
-      if (!err) {
-        console.log('Album already exists.');
-        return;
-      }
+    const albumKey = albumNamePrefix + encodeURIComponent(albumName) + '/';
+    s3.headObject({ Key: albumKey }, (err, data) => {
+      if (!err)
+        return { error: true, msg: errorMsgMap('ALBUM_NAME_ALREADY_EXIST') };
 
       if (err.code === 'NotFound') {
-        s3.putObject({ Key: albumKey }, function(err, data) {
-          if (err) {
-            console.log(
-              'There was an error creating your album: ' + err.message
-            );
-            return;
-          }
+        s3.putObject({ Key: albumKey }, (err, data) => {
+          if (err)
+            return {
+              error: true,
+              msg: errorMsgMap('ALBUM_NAME_UNKNOWN_ERROR', err.message)
+            };
         });
       }
     });
 
-    return albumName;
+    return { error: false, msg: albumKey };
   };
 
-  const addImage = (files, albumName) => {
-    if (!files.length) {
-      return alert('Please choose a file to upload first.');
-    }
-
-    const response = Promise.all(
+  const addImage = (files, albumKey) => {
+    return Promise.all(
       files.map(file => {
         const fileName = file.name;
-        const albumPhotosKey =
-          'post-images/' + encodeURIComponent(albumName) + '/';
-        const photoKey = albumPhotosKey + fileName;
 
+        const photoKey = albumKey + fileName;
+        // eslint-disable-next-line no-undef
         const upload = new AWS.S3.ManagedUpload({
           params: {
             // eslint-disable-next-line no-undef
@@ -65,38 +107,64 @@ const useS3 = () => {
         return upload.promise();
       })
     ).then(
-      uploadedUrl => {
-        return uploadedUrl.reduce((acc, cur) => {
+      response => {
+        const uploadedUrl = response.reduce((acc, cur) => {
           return acc.concat(cur.Location);
         }, []);
-      },
-      err =>
-        console.log('There was an error uploading your photo: ', err.message)
-    );
 
-    return response;
+        return {
+          error: false,
+          msg: uploadedUrl
+        };
+      },
+      err => {
+        return {
+          error: true,
+          msg: errorMsgMap('IMAGE_UPLOAD_UNKNOWN_ERROR', err.message)
+        };
+      }
+    );
   };
 
-  useEffect(() => {
-    AWS.config.update({
-      // eslint-disable-next-line no-undef
-      region: `${BUCKET_REGION}`,
-      credentials: new AWS.CognitoIdentityCredentials({
-        // eslint-disable-next-line no-undef
-        IdentityPoolId: `${IDENTITY_POOL_ID}`
-      })
-    });
+  const S3imageUploadHandler = async (
+    albumName,
+    albumNamePrefix,
+    images,
+    setImageUploadError
+  ) => {
+    try {
+      const s3 = updateS3();
 
-    setS3(
-      new AWS.S3({
-        apiVersion: '2006-03-01',
-        // eslint-disable-next-line no-undef
-        params: { Bucket: `${ALBUM_BUCKET_NAME}` }
-      })
-    );
-  }, []);
+      const createAlbumResponse = await createAlbum(
+        s3,
+        albumName,
+        albumNamePrefix,
+        images
+      );
+      if (createAlbumResponse.error) throw createAlbumResponse.msg;
 
-  return { s3, createAlbum, addImage };
+      const albumKey = createAlbumResponse.msg;
+
+      const addImageResponse = await addImage(images, albumKey);
+
+      if (addImageResponse.error) throw addImageResponse.msg;
+
+      const uploadedUrl = addImageResponse.msg;
+
+      return uploadedUrl;
+    } catch (err) {
+      if (err === '업로드 할 이미지를 최소 1개 이상 선택해주세요.') alert(err);
+      else {
+        console.log(err);
+        alert('서버 에러가 발생했습니다. 다음에 다시 시도해주세요. ');
+        setImageUploadError(true);
+      }
+    } finally {
+      initS3();
+    }
+  };
+
+  return { S3imageUploadHandler };
 };
 
 export default useS3;

@@ -10,7 +10,7 @@ import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { useLoginContext } from '../../contexts/LoginContext';
 import useTempTokenValidation from '../../hooks/useTempTokenValidation';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
-import ValidityMessage from './ValidityMessage';
+import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
 
 const SignupPage = ({ history }) => {
   const { setLoggedIn } = useLoginContext();
@@ -24,7 +24,7 @@ const SignupPage = ({ history }) => {
   const { setSignupFailed } = useShakeAnimation(shakeTarget);
 
   const checkNicknameFromServer = useCallback(async nickname => {
-    const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
+    const res = await fetch(`${WEB_SERVER_URL}/user/checkNicknameDuplication`, {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
@@ -141,7 +141,7 @@ const SignupPage = ({ history }) => {
               type="text"
               placeholder="4~15자로 입력해주세요."
             />
-            <ValidityMessage nicknameValidity={nicknameValidity} />
+            <ValidityMessage messageKey={nicknameValidity} />
           </div>
           <CommonBtn
             styleType="emphasize"

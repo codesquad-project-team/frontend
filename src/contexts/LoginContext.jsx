@@ -24,7 +24,13 @@ const LoginContextProvider = ({ children }) => {
 
   return (
     <LoginContext.Provider
-      value={{ loggedIn, setLoggedIn, id, nickname, profileImage }}
+      value={{
+        loggedIn,
+        setLoggedIn,
+        id,
+        nickname,
+        profileImage
+      }}
     >
       {children}
     </LoginContext.Provider>

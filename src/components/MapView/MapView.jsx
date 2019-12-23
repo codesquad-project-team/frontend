@@ -1,47 +1,32 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import NaverMap, { Overlay, Marker } from 'react-naver-map';
+import { KakaoMap, Marker, CustomOverlay } from 'react-kakao-maps';
 import InfoWindow from '../MapView/InfoWindow';
 
-const MapView = props => {
+const MapView = ({
+  data: { location: { latitude, longitude, ...info } = {} }
+}) => {
   const [infoDisplay, setInfoDisplay] = useState(true);
-  const { locationLatitude, locationLongitude, ...info } = props.data;
 
   return (
-    <div>
-      <NaverMap
-        // eslint-disable-next-line no-undef
-        clientId={NAVER_MAP_CLIENT_ID}
-        ncp
-        style={{ width: '800px', height: '500px' }}
-        initialPosition={{ lat: locationLatitude, lng: locationLongitude }}
-        initialZoom={11}
-        submodules={['drawing', 'geocoder']}
-      >
-        <Marker
-          lat={locationLatitude}
-          lng={locationLongitude}
-          onClick={() => setInfoDisplay(true)} // id: given id, event: PointerEvent
-          shape={{
-            coords: [0, 12, 12, 0, 24, 12, 12, 32, 0, 12],
-            type: 'poly'
-          }} // click mask shape
+    <KakaoMap
+      // eslint-disable-next-line no-undef
+      apiUrl={KAKAO_MAP_API_URL}
+      width="800px"
+      height="500px"
+      level={2}
+      lat={latitude}
+      lng={longitude}
+    >
+      <Marker lat={latitude} lng={longitude} />
+      {infoDisplay && (
+        <CustomOverlay
+          content={<InfoWindow info={info} />}
+          lat={latitude}
+          lng={longitude}
         />
-        <Overlay
-          lat={locationLatitude}
-          lng={locationLongitude}
-          zIndex={200}
-          onClick={e => {
-            e.stopPropagation();
-            if (e.target.className === 'info-window-close-image') {
-              setInfoDisplay(false);
-            }
-          }}
-        >
-          {infoDisplay && <InfoWindow info={info} />}
-        </Overlay>
-      </NaverMap>
-    </div>
+      )}
+    </KakaoMap>
   );
 };
 
@@ -49,7 +34,7 @@ export default MapView;
 
 MapView.propTypes = {
   data: PropTypes.shape({
-    locationLatitude: PropTypes.number,
-    locationLongitude: PropTypes.number
+    latitude: PropTypes.number,
+    longitude: PropTypes.number
   })
 };

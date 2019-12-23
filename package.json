@@ -21,9 +21,10 @@
     "react-bootstrap": "^1.0.0-beta.12",
     "react-dom": "npm:@hot-loader/react-dom",
     "react-hot-loader": "^4.12.14",
-    "react-naver-map": "^0.0.23",
+    "react-kakao-maps": "^0.0.11",
     "react-router-dom": "^5.1.0",
-    "react-spinners": "^0.6.1"
+    "react-spinners": "^0.6.1",
+    "styled-components": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
