@@ -18,7 +18,7 @@ $lists-item-padding: 1rem;
     }
   }
   &-name {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
   &-address {
     color: #888;
@@ -30,7 +30,7 @@ $lists-item-padding: 1rem;
     line-height: calc(#{$lists-item-height} - (#{$lists-item-padding} * 2));
     text-align: center;
     border-bottom: 1px solid $gray-border-color;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 }
 .search-result {
@@ -42,6 +42,6 @@ $lists-item-padding: 1rem;
   }
 
   &-current-page-number {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 }

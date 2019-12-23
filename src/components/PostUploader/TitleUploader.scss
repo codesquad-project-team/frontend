@@ -11,7 +11,7 @@
   input {
     width: 20rem;
     height: 5rem;
-    font-size: 4rem;
+    font-size: 3.2rem;
     border: none;
     border-bottom: 1px solid $gray-border-color;
     text-align: center;
@@ -19,7 +19,7 @@
 
   &-location-section {
     > span {
-      font-size: 4rem;
+      font-size: 3.2rem;
       margin-right: 2rem;
     }
   }
@@ -29,7 +29,7 @@
 
     > select {
       width: 20rem;
-      font-size: 4rem;
+      font-size: 3.2rem;
       text-align-last: center;
     }
   }
