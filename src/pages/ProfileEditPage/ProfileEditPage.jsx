@@ -16,7 +16,7 @@ import { debounce } from '../../utils/utils';
 
 const ProfileEditPage = () => {
   const { inputValue, setInputValue, handleChange, restore } = useInput();
-  const { profile_image, nickname, email, phone, description } = inputValue;
+  const { profileImage, nickname, email, phone, introduction } = inputValue;
   const [image, setImage] = useState({ fileData: [], previewUrl: '' });
 
   const [currentNickname, setCurrentNickname] = useState('');
@@ -44,17 +44,17 @@ const ProfileEditPage = () => {
       nickname,
       email,
       phone,
-      description: desc
+      introduction: intro
     } = userInfo;
 
     // 리액트에서 input 태그의 비어있는 값을 null로 표현하기 보다는 undefined 으로 사용하는 것을 권고함
 
     const initialValue = {
-      profile_image: profileImage === null ? undefined : profileImage,
+      profileImage: profileImage === null ? undefined : profileImage,
       nickname,
       email: email === null ? undefined : email,
       phone: phone === null ? undefined : phone,
-      description: desc === null ? undefined : Buffer.from(desc).toString()
+      introduction: intro === null ? undefined : intro
     };
 
     setCurrentNickname(initialValue.nickname);
@@ -62,7 +62,7 @@ const ProfileEditPage = () => {
   };
 
   const checkNicknameFromServer = useCallback(async nickname => {
-    const res = await fetch(`${WEB_SERVER_URL}/validate/nickname`, {
+    const res = await fetch(`${WEB_SERVER_URL}/user/checkNicknameDuplication`, {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
@@ -125,11 +125,8 @@ const ProfileEditPage = () => {
     if (phoneValidity === 'INVALID_PHONE_NUMBER')
       return alert('휴대폰 정보를 형식에 맞게 입력해주세요!');
 
-    console.log('여기 오나?');
-    console.log(uploadedUrl);
-
     const bodyObj = uploadedUrl
-      ? { ...inputValue, profile_image: uploadedUrl }
+      ? { ...inputValue, profileImage: uploadedUrl }
       : inputValue;
 
     const res = await fetch(`${WEB_SERVER_URL}/user/profile`, {
@@ -205,7 +202,7 @@ const ProfileEditPage = () => {
     checkPhoneNumberValidation(phone);
   }, [phone]);
 
-  const imageSrc = initialPageEnter ? profile_image : image.previewUrl;
+  const imageSrc = initialPageEnter ? profileImage : image.previewUrl;
 
   return (
     <>
@@ -240,8 +237,8 @@ const ProfileEditPage = () => {
               />
               <ProfileContentItem
                 label="소개"
-                value={description}
-                name="description"
+                value={introduction}
+                name="introduction"
                 changeHandler={handleChange}
               />
               <ProfileContentItem

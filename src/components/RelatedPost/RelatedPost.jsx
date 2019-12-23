@@ -16,7 +16,10 @@ const RelatedPost = () => {
   const [response, setResponse] = useState(null);
   const posts = response ? response.posts : [];
 
-  const { error, loading } = useFetch(
+  const {
+    error,
+    loading
+  } = useFetch(
     `${WEB_SERVER_URL}/post/related-to?postid=1&page=${page}`,
     {},
     json => mergeResponse(response, json)
@@ -36,10 +39,10 @@ const RelatedPost = () => {
     return items.map(item => {
       return (
         <RelatedPostComment
-          titleCompanion={item.titleCompanion}
-          titleActivity={item.titleActivity}
-          profileImageURL={item.profileImageURL}
-          key={item.postId}
+          companion={item.companion}
+          activity={item.activity}
+          profileImageURL={item.writer.profileImage || ''}
+          key={item.id}
         />
       );
     });

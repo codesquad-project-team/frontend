@@ -61,7 +61,7 @@ const PostContainer = ({ headerOn, api, query: writerId = '' }) => {
   };
 
   const postItems = items.map(item => (
-    <CommonLink to={`/post/${item.postId}`} key={item.postId}>
+    <CommonLink to={`/post/${item.id}`} key={item.id}>
       <PostItem headerOn={headerOn} {...item} />
     </CommonLink>
   ));

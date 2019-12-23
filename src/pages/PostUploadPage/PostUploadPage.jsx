@@ -37,7 +37,7 @@ const PostUploadPage = ({ history }) => {
 
   const [description, setDescription] = useState(null);
   const [title, setTitle] = useState({});
-  const { title_location, title_companion, title_activity } = title;
+  const { place, companion, activity } = title;
 
   const [representativeIndex, setRepresentativeIndex] = useState(0);
   const [images, setImages] = useState({
@@ -102,14 +102,14 @@ const PostUploadPage = ({ history }) => {
         phone
       },
       post: {
-        title_location,
-        title_companion,
-        title_activity,
+        place,
+        companion,
+        activity,
         description,
         images: S3uploadedURLs.map((url, idx) =>
           representativeIndex === idx
-            ? { url, is_representative: true }
-            : { url, is_representative: false }
+            ? { url, isRepresentative: true }
+            : { url, isRepresentative: false }
         )
       }
     };

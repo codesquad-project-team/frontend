@@ -7,7 +7,7 @@ const useTempTokenValidation = history => {
   const postposition = provider === 'kakao' ? '로' : '으로';
 
   const { loading, error } = useFetch(
-    `${WEB_SERVER_URL}/validate/tempToken`,
+    `${WEB_SERVER_URL}/auth/tempToken`,
     { method: 'POST', credentials: 'include' },
     json => setProvider(json.provider)
   );
