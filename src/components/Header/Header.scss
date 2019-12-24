@@ -63,6 +63,16 @@
     font-size: 1.75rem;
   }
 
+  &-profile-img {
+    &:hover {
+      box-shadow: 0 0 5px $main-color;
+    }
+  }
+
+  .over-dropdown-background {
+    z-index: 1000;
+  }
+
   &-btns {
     flex: 1;
     display: flex;
