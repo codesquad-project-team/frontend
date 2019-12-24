@@ -16,15 +16,22 @@ $drop-down-btn-height: 3rem;
   top: calc(#{$header-height} - 0.5rem);
   right: 0;
   width: 10rem;
-  height: 10rem;
+  border: 1px solid $main-color;
+  border-radius: 5px;
+  box-shadow: 0 0 10px #333;
   background-color: #fff;
-  outline: 1px solid black;
 
-  &-post-upload-btn {
+  &-btns {
     width: 100%;
     height: $drop-down-btn-height;
-    border: 1px solid black;
-    text-align: center;
+    font-size: 1.2rem;
     line-height: $drop-down-btn-height;
+    border-bottom: 1px solid $main-color;
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $point-color;
+    }
   }
 }
