@@ -17,4 +17,12 @@
   height: 10rem;
   background-color: #fff;
   outline: 1px solid black;
+
+  &-post-upload-btn {
+    width: 100%;
+    height: 4rem;
+    border: 1px solid black;
+    text-align: center;
+    line-height: 4rem;
+  }
 }
