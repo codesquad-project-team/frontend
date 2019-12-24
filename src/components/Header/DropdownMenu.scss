@@ -1,5 +1,7 @@
 @import '../../stylesheets/util.scss';
 
+$drop-down-btn-height: 3rem;
+
 .drop-down-menu {
   &-wrapper {
     position: fixed;
@@ -20,9 +22,9 @@
 
   &-post-upload-btn {
     width: 100%;
-    height: 4rem;
+    height: $drop-down-btn-height;
     border: 1px solid black;
     text-align: center;
-    line-height: 4rem;
+    line-height: $drop-down-btn-height;
   }
 }
