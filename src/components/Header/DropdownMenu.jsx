@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './DropdownMenu.scss';
 import CommonLink from '../CommonLink/CommonLink';
 import { useLoginContext } from '../../contexts/LoginContext';
 
 const DropdownMenu = ({ onClick }) => {
   const { nickname } = useLoginContext();
+  const [showsMenu, setShowsMenu] = useState(false);
+
+  useEffect(() => {
+    setShowsMenu(true);
+  }, []);
+
   return (
     <>
       <div className="drop-down-menu-wrapper" onClick={onClick} />
-      <div className="drop-down-menu">
+      <div className={`drop-down-menu ${showsMenu && 'drop-down-menu-show'}`}>
         <CommonLink to="/post/upload">
           <div className="drop-down-menu-btns">글 작성</div>
         </CommonLink>
