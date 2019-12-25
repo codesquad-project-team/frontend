@@ -5,7 +5,7 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import { WEB_SERVER_URL } from '../../configs';
 
 const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
-  const { nickname, id } = useLoginContext();
+  const { nickname, id, setLoggedIn, setUserInfo } = useLoginContext();
   const [showsMenu, setShowsMenu] = useState(false);
 
   const handleLogout = async () => {
@@ -14,10 +14,10 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
       credentials: 'include'
     });
     const json = await res.json();
-    switch (res.status) {
-      case 200:
-        alert('로그아웃되었습니다.');
-        break;
+    if (res.ok) {
+      setLoggedIn(false);
+      setUserInfo({});
+      alert('로그아웃되었습니다.');
     }
   };
 
