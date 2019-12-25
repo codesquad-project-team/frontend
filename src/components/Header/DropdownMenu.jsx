@@ -43,9 +43,9 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
         <CommonLink to="/profile/edit">
           <div className="drop-down-menu-btns">프로필 편집</div>
         </CommonLink>
-        <CommonLink to={'/'} onClick={handleLogout}>
-          <div className="drop-down-menu-btns">로그아웃</div>
-        </CommonLink>
+        <div className="drop-down-menu-btns" onClick={handleLogout}>
+          로그아웃
+        </div>
       </div>
     </>
   );
