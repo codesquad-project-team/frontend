@@ -13,7 +13,6 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
       method: 'POST',
       credentials: 'include'
     });
-    const json = await res.json();
     if (res.ok) {
       setLoggedIn(false);
       setUserInfo({});
