@@ -40,20 +40,17 @@ const ImageUploader = ({
   };
 
   const deleteImageHandler = e => {
-    const deletedImage = e.target.previousSibling.src;
-    const targetIndex = images.previewUrls.findIndex(
-      url => url === deletedImage
-    );
+    const deleteTargetIndex = Number(e.target.dataset.deleteTargetIndex);
 
-    if (targetIndex === representativeIndex) {
-      setRepresentativeIndex(!targetIndex ? 0 : representativeIndex - 1);
-    } else if (targetIndex < representativeIndex) {
+    if (deleteTargetIndex === representativeIndex) {
+      setRepresentativeIndex(!deleteTargetIndex ? 0 : representativeIndex - 1);
+    } else if (deleteTargetIndex < representativeIndex) {
       setRepresentativeIndex(representativeIndex - 1);
     }
 
     setImages({
-      selectedImages: removeItem(images.selectedImages, targetIndex),
-      previewUrls: removeItem(images.previewUrls, targetIndex)
+      selectedImages: removeItem(images.selectedImages, deleteTargetIndex),
+      previewUrls: removeItem(images.previewUrls, deleteTargetIndex)
     });
   };
 
@@ -61,11 +58,7 @@ const ImageUploader = ({
     arr.filter((el, idx) => idx !== targetIndex);
 
   const selectRepresentativeImage = e => {
-    const represenTativeImage = e.target.previousSibling.previousSibling.src;
-    const represenTativeIndex = images.previewUrls.findIndex(
-      el => el === represenTativeImage
-    );
-
+    const represenTativeIndex = Number(e.target.dataset.representativeIndex);
     setRepresentativeIndex(represenTativeIndex);
   };
 
