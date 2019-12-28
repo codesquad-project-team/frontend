@@ -30,7 +30,7 @@ const PreviewImages = ({
           className="image-uploader-preview-img-select-btn"
           src={`${IMAGE_BUCKET_URL}/star-icon.png`}
           onClick={representativeImageHandler}
-          data-representatative-index={index}
+          data-representative-index={index}
         />
       </div>
     );

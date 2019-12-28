@@ -58,7 +58,7 @@ const ImageUploader = ({
     arr.filter((el, idx) => idx !== targetIndex);
 
   const selectRepresentativeImage = e => {
-    const represenTativeIndex = Number(e.target.dataset.representatativeIndex);
+    const represenTativeIndex = Number(e.target.dataset.representativeIndex);
     setRepresentativeIndex(represenTativeIndex);
   };
 
