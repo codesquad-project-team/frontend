@@ -1,6 +1,7 @@
 @import '../../stylesheets/util.scss';
 
 $drop-down-btn-height: 3rem;
+$btn-quantity: 4;
 
 .drop-down-menu {
   &-wrapper {
@@ -26,7 +27,7 @@ $drop-down-btn-height: 3rem;
   opacity: 0;
 
   &-animation {
-    height: calc(#{$drop-down-btn-height}* 4);
+    height: calc(#{$drop-down-btn-height} * #{$btn-quantity});
     opacity: 1;
   }
 

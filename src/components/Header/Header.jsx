@@ -46,7 +46,7 @@ const Header = () => {
   };
 
   const toggleDropdownMenu = () => {
-    setShowsDropdown(prevState => !prevState);
+    setShowsDropdown(state => !state);
   };
 
   useMemo(() => {
