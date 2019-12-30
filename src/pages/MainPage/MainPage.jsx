@@ -14,7 +14,7 @@ const MainPage = () => {
           추천합니다.
         </div>
       </div>
-      <PostContainer headerOn api="/post?page=" />
+      <PostContainer headerOn />
     </div>
   );
 };

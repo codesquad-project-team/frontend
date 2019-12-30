@@ -13,20 +13,24 @@ import {
 } from '../../configs';
 import { throttle } from '../../utils/utils';
 
-const PostContainer = ({ headerOn, api, query: writerId = '' }) => {
+const PostContainer = ({ headerOn, writerId = '' }) => {
   const [page, setPage] = useState(1);
   const [response, setResponse] = useState(null);
   const items = response ? response.posts : [];
 
+  //page - required
+  //writerid - optional
+  //writerid가 존재하는 경우 해당 사용자의 게시글만 받아오는 api
   const { error, loading } = useFetch(
-    `${WEB_SERVER_URL}${api}${page}${writerId ? `&writerid=${writerId}` : ''}`,
+    `${WEB_SERVER_URL}/post?page=${page}${
+      writerId ? `&writerid=${writerId}` : ''
+    }`,
     {},
     json => mergeResponse(response, json)
   );
 
   const mergeResponse = (prevResponse, response) => {
-    const isFirstFetch = prevResponse === null || page === 1;
-    if (isFirstFetch) {
+    if (page === 1) {
       return setResponse(response);
     }
     return setResponse({
@@ -43,13 +47,13 @@ const PostContainer = ({ headerOn, api, query: writerId = '' }) => {
   }, [loading]);
 
   const handleScroll = throttle(() => {
-    if (hasNoMorePage(response)) return;
+    if (!hasNextPage(response)) return;
     if (isScrollEnd()) {
       setPage(prevPage => prevPage + 1);
     }
   });
 
-  const hasNoMorePage = response => {
+  const hasNextPage = response => {
     return response && !response.hasNextPage;
   };
 

@@ -40,7 +40,7 @@ const ProfilePage = () => {
       {!loading && (
         <ProfileInfo data={data} isMyProfile={isMyProfile} userId={userId} />
       )}
-      <PostContainer api="/post?page=" query={userId} />
+      <PostContainer writerId={userId} />
     </div>
   );
 };
