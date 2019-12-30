@@ -3,7 +3,7 @@ import './DropdownMenu.scss';
 import CommonLink from '../CommonLink/CommonLink';
 import { useLoginContext } from '../../contexts/LoginContext';
 
-const DropdownMenu = ({ onClick }) => {
+const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
   const { nickname, id } = useLoginContext();
   const [showsMenu, setShowsMenu] = useState(false);
 
@@ -13,8 +13,10 @@ const DropdownMenu = ({ onClick }) => {
 
   return (
     <>
-      <div className="drop-down-menu-wrapper" onClick={onClick} />
-      <div className={`drop-down-menu ${showsMenu && 'drop-down-menu-show'}`}>
+      <div className="drop-down-menu-wrapper" onClick={toggleDropdownMenu} />
+      <div
+        className={`drop-down-menu ${showsMenu && 'drop-down-menu-animation'}`}
+      >
         <CommonLink to="/post/upload">
           <div className="drop-down-menu-btns">글 작성</div>
         </CommonLink>
