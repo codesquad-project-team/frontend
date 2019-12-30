@@ -9,35 +9,32 @@ import PostUploadPage from './pages/PostUploadPage/PostUploadPage';
 import SignupPage from './pages/SignupPage/SignupPage';
 import LoginContextProvider from './contexts/LoginContext';
 import LoginModalContextProvider from './contexts/LoginModalContext';
-import NavigationContextProvider from './contexts/NavigationContext';
 
 const Root = () => {
   return (
     <LoginContextProvider>
       <LoginModalContextProvider>
-        <NavigationContextProvider>
-          <Router>
-            <Switch>
-              <Route exact path="/" render={() => <MainPage />} />
-              <Route path="/profile/edit" render={() => <ProfileEditPage />} />
-              <Route path="/profile" render={() => <ProfilePage />} />
-              <Route
-                path="/post/upload"
-                render={({ history }) => <PostUploadPage history={history} />}
-              />
-              <Route
-                path="/post/:postId"
-                render={({ match }) => (
-                  <DetailPage postId={match.params.postId} />
-                )}
-              />
-              <Route
-                path="/signup"
-                render={({ history }) => <SignupPage history={history} />}
-              />
-            </Switch>
-          </Router>
-        </NavigationContextProvider>
+        <Router>
+          <Switch>
+            <Route exact path="/" render={() => <MainPage />} />
+            <Route path="/profile/edit" render={() => <ProfileEditPage />} />
+            <Route path="/profile" render={() => <ProfilePage />} />
+            <Route
+              path="/post/upload"
+              render={({ history }) => <PostUploadPage history={history} />}
+            />
+            <Route
+              path="/post/:postId"
+              render={({ match }) => (
+                <DetailPage postId={match.params.postId} />
+              )}
+            />
+            <Route
+              path="/signup"
+              render={({ history }) => <SignupPage history={history} />}
+            />
+          </Switch>
+        </Router>
       </LoginModalContextProvider>
     </LoginContextProvider>
   );

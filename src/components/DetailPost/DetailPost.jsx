@@ -2,7 +2,6 @@ import React from 'react';
 import './DetailPost.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonLink from '../CommonLink/CommonLink';
-import { useNavigationContext } from '../../contexts/NavigationContext';
 
 const DetailPost = ({
   data: {
@@ -13,8 +12,6 @@ const DetailPost = ({
     writer: { id, nickname, profileImage } = {}
   }
 }) => {
-  const { setUserId } = useNavigationContext();
-
   return (
     <div className="detail-post">
       <h1 className="detail-post-title">
@@ -23,7 +20,7 @@ const DetailPost = ({
       <div className="detail-post-content">
         <CommonLink
           to={`/profile/@${nickname}`}
-          onClick={() => setUserId(id)}
+          onClick={() => localStorage.setItem('targetUserId', id)}
           className="detail-post-writer-img"
         >
           <ProfileImage small src={profileImage} />
@@ -31,7 +28,7 @@ const DetailPost = ({
         <div>
           <CommonLink
             to={`/profile/@${nickname}`}
-            onClick={() => setUserId(id)}
+            onClick={() => localStorage.setItem('targetUserId', id)}
             className="detail-post-writer-name"
           >
             {nickname}

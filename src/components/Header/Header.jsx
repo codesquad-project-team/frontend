@@ -7,14 +7,12 @@ import CommonModal from '../CommonModal/CommonModal';
 import CommonLink from '../CommonLink/CommonLink';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { useLoginModalContext } from '../../contexts/LoginModalContext';
-import { useNavigationContext } from '../../contexts/NavigationContext';
 import { IMAGE_BUCKET_URL } from '../../configs';
 
 const Header = () => {
   const { inputValue, handleChange, restore } = useInput();
   const [clickedSignup, setClickedSignup] = useState(false);
   const [clickedSignin, setClickedSignin] = useState(false);
-  const { setUserId } = useNavigationContext();
   const { loggedIn, profileImage, nickname, id } = useLoginContext();
   const {
     needsLoginModal: needsSigninModal,
@@ -75,7 +73,7 @@ const Header = () => {
           {loggedIn ? (
             <CommonLink
               to={`/profile/@${nickname}`}
-              onClick={() => setUserId(id)}
+              onClick={() => localStorage.setItem('targetUserId', id)}
             >
               <ProfileImage small src={profileImage} />
             </CommonLink>

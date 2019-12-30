@@ -9,12 +9,11 @@ import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { useLoginContext } from '../../contexts/LoginContext';
-import { useNavigationContext } from '../../contexts/NavigationContext';
 
 const ProfilePage = () => {
   //라우터URL을 nickname으로 표시하기 때문에 router의 prop으로는 userId를 받을 수 없음.
-  //따라서 context api를 활용하여 userId 값을 저장하여 사용함.
-  const { userId } = useNavigationContext();
+  //따라서 localStorage를 활용하여 userId 값을 저장하여 사용함.
+  const userId = JSON.parse(localStorage.getItem('targetUserId'));
   const { id } = useLoginContext();
   const isMyProfile = id === userId;
 

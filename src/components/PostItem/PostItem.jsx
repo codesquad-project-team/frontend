@@ -2,7 +2,6 @@ import React from 'react';
 import './PostItem.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonLink from '../CommonLink/CommonLink';
-import { useNavigationContext } from '../../contexts/NavigationContext';
 
 const PostItem = ({
   image,
@@ -13,10 +12,8 @@ const PostItem = ({
   writer: { id, profileImage, nickname } = {},
   headerOn
 }) => {
-  const { setUserId } = useNavigationContext();
-
   const handleClick = () => {
-    setUserId(id);
+    localStorage.setItem('targetUserId', id);
   };
 
   return (
