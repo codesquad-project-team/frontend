@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './ProfileInfo.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
-import CommonLink from '../CommonLink/CommonLink';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { useLoginModalContext } from '../../contexts/LoginModalContext';
 import { WEB_SERVER_URL } from '../../configs';
@@ -69,13 +68,6 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
         <div className="profile-info-right-column">
           <div className="profile-info-header">
             <span className="profile-info-username">{nickname}</span>
-            {isMyProfile && (
-              <CommonLink to="/profile/edit">
-                <CommonBtn className="profile-info-edit-btn">
-                  프로필편집
-                </CommonBtn>
-              </CommonLink>
-            )}
           </div>
           <div className="profile-info-overview">게시글 {totalPosts}개</div>
           <div className="profile-info-overview">팔로워 {totalFollowers}명</div>
