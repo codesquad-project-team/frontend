@@ -1,6 +1,7 @@
 import React from 'react';
 import './DetailPost.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
+import CommonLink from '../CommonLink/CommonLink';
 
 const DetailPost = ({
   data: {
@@ -17,11 +18,21 @@ const DetailPost = ({
         {place}에서 {companion}랑 {activity}
       </h1>
       <div className="detail-post-content">
-        <div className="detail-post-writer-img">
+        <CommonLink
+          to={`/profile/@${nickname}`}
+          onClick={() => localStorage.setItem('targetUserId', id)}
+          className="detail-post-writer-img"
+        >
           <ProfileImage small src={profileImage} />
-        </div>
+        </CommonLink>
         <div>
-          <h3 className="detail-post-writer-name">{nickname}</h3>
+          <CommonLink
+            to={`/profile/@${nickname}`}
+            onClick={() => localStorage.setItem('targetUserId', id)}
+            className="detail-post-writer-name"
+          >
+            {nickname}
+          </CommonLink>
           <p className="detail-post-desc">{description}</p>
         </div>
       </div>

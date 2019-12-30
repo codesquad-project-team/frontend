@@ -13,7 +13,7 @@ const Header = () => {
   const { inputValue, handleChange, restore } = useInput();
   const [clickedSignup, setClickedSignup] = useState(false);
   const [clickedSignin, setClickedSignin] = useState(false);
-  const { loggedIn, profileImage } = useLoginContext();
+  const { loggedIn, profileImage, nickname, id } = useLoginContext();
   const {
     needsLoginModal: needsSigninModal,
     setNeedsLoginModal: setNeedsSigninModal
@@ -71,7 +71,10 @@ const Header = () => {
         </form>
         <div className="header-btns">
           {loggedIn ? (
-            <CommonLink to="/profile">
+            <CommonLink
+              to={`/profile/@${nickname}`}
+              onClick={() => localStorage.setItem('targetUserId', id)}
+            >
               <ProfileImage small src={profileImage} />
             </CommonLink>
           ) : (
