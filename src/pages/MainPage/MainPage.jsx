@@ -10,8 +10,8 @@ const MainPage = () => {
       <div className="main-page-banner">
         <div className="main-page-banner-text">
           <b>Connect Flavor</b>는 비슷한 <b>취향</b>을 가지고 있는 사람들을{' '}
-          <b>연결</b>합니다. 그리고 개인에게 현재의 감정 상태에 따라 할 일을
-          추천합니다.
+          <b>연결</b>합니다.
+          <br /> 그리고 개인의 취향에 따라 할 일을 추천합니다.
         </div>
       </div>
       <PostContainer headerOn />
