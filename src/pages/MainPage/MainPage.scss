@@ -13,13 +13,14 @@
 
     &-text {
       position: absolute;
-      width: 70rem;
-      top: 15rem;
+      top: 20rem;
       right: 5rem;
+      width: 81rem;
       padding: 0 5rem;
-      color: #fff;
+      text-align: right;
       font-size: 4rem;
       font-family: 'KCC-eunyoung';
+      color: #fff;
 
       b {
         color: $point-color;

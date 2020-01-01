@@ -5,6 +5,7 @@ import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import CommonModal from '../CommonModal/CommonModal';
 import CommonLink from '../CommonLink/CommonLink';
+import DropdownMenu from './DropdownMenu';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { useLoginModalContext } from '../../contexts/LoginModalContext';
 import { IMAGE_BUCKET_URL } from '../../configs';
@@ -13,6 +14,7 @@ const Header = () => {
   const { inputValue, handleChange, restore } = useInput();
   const [clickedSignup, setClickedSignup] = useState(false);
   const [clickedSignin, setClickedSignin] = useState(false);
+  const [showsDropdown, setShowsDropdown] = useState(false);
   const { loggedIn, profileImage } = useLoginContext();
   const {
     needsLoginModal: needsSigninModal,
@@ -43,6 +45,10 @@ const Header = () => {
     setClickedSignup(!clickedSignup);
   };
 
+  const toggleDropdownMenu = () => {
+    setShowsDropdown(state => !state);
+  };
+
   useMemo(() => {
     needsSigninModal ? handleSigninModal('OPEN') : null;
   }, [needsSigninModal]);
@@ -71,9 +77,16 @@ const Header = () => {
         </form>
         <div className="header-btns">
           {loggedIn ? (
-            <CommonLink to="/profile">
-              <ProfileImage small src={profileImage} />
-            </CommonLink>
+            <>
+              <ProfileImage
+                small
+                src={profileImage}
+                className={`header-profile-img ${showsDropdown &&
+                  'over-dropdown-background'}`}
+                onClick={toggleDropdownMenu}
+              />
+              {showsDropdown && <DropdownMenu onClick={toggleDropdownMenu} />}
+            </>
           ) : (
             <>
               <CommonBtn
