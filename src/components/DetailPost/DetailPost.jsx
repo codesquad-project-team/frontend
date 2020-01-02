@@ -15,7 +15,7 @@ const DetailPost = ({
   return (
     <div className="detail-post">
       <h1 className="detail-post-title">
-        {place}에서 {companion}랑 {activity}
+        {place}에서 {companion} {activity}
       </h1>
       <div className="detail-post-content">
         <CommonLink

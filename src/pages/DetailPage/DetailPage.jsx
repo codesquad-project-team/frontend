@@ -36,7 +36,7 @@ const DetailPage = props => {
             <LocationCarousel data={data} />
             <DetailPost data={data} />
             <MapView data={data} />
-            <RelatedPost />
+            <RelatedPost postId={postId} />
           </>
         )}
       </div>

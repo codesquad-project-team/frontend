@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './RelatedPost.scss';
 import useFetch from '../../hooks/useFetch';
-import ProfileImage from '../ProfileImage/ProfileImage';
 import RelatedPostComment from './RelatedPostComment';
 import {
   TRANSITION_DURATION_TIME,
@@ -9,7 +8,7 @@ import {
   WEB_SERVER_URL
 } from '../../configs';
 
-const RelatedPost = () => {
+const RelatedPost = ({ postId }) => {
   const [currentActiveIndex, setCurrentActiveIndex] = useState(1);
   const [positionX, setPositionX] = useState(0);
   const [page, setPage] = useState(1);
@@ -20,7 +19,7 @@ const RelatedPost = () => {
     error,
     loading
   } = useFetch(
-    `${WEB_SERVER_URL}/post/related-to?postid=1&page=${page}`,
+    `${WEB_SERVER_URL}/post/related-to?postid=${postId}&page=${page}`,
     {},
     json => mergeResponse(response, json)
   );
