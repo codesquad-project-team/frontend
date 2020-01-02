@@ -23,10 +23,11 @@ const Root = () => {
               path="/post/upload"
               render={({ history }) => <PostUploadPage history={history} />}
             />
+            <Route path="/post/edit" render={() => <PostUploadPage />} />
             <Route
               path="/post/:postId"
-              render={({ match }) => (
-                <DetailPage postId={match.params.postId} />
+              render={({ match, history }) => (
+                <DetailPage postId={match.params.postId} history={history} />
               )}
             />
             <Route
