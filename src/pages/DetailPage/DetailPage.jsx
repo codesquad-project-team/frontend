@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import DetailPost from '../../components/DetailPost/DetailPost';
-import LocationCarousel from '../../components/LocationCarousel/LocationCarousel';
-import RelatedPost from '../../components/RelatedPost/RelatedPost';
 import './DetailPage.scss';
 import Header from '../../components/Header/Header';
+import DetailPostHeader from '../../components/DetailPostHeader/DetailPostHeader';
+import LocationCarousel from '../../components/LocationCarousel/LocationCarousel';
+import DetailPost from '../../components/DetailPost/DetailPost';
 import MapView from '../../components/MapView/MapView';
+import RelatedPost from '../../components/RelatedPost/RelatedPost';
 import useFetch from '../../hooks/useFetch';
 import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { css } from '@emotion/core';
@@ -33,6 +34,7 @@ const DetailPage = props => {
         />
         {!loading && (
           <>
+            <DetailPostHeader />
             <LocationCarousel data={data} />
             <DetailPost data={data} />
             <MapView data={data} />
