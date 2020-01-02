@@ -33,7 +33,7 @@ const DetailPage = ({ history, postId }) => {
         />
         {!loading && (
           <>
-            <DetailPostHeader history={history} />
+            <DetailPostHeader history={history} writerId={data.writer.id} />
             <LocationCarousel data={data} />
             <DetailPost data={data} />
             <MapView data={data} />
