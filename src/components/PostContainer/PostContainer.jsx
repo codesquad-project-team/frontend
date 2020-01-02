@@ -54,7 +54,7 @@ const PostContainer = ({ headerOn, writerId = '' }) => {
   });
 
   const hasNextPage = response => {
-    return response && !response.hasNextPage;
+    return response && response.hasNextPage;
   };
 
   const isScrollEnd = () => {
