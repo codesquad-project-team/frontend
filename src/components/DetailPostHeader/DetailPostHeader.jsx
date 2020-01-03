@@ -1,9 +1,11 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import './DetailPostHeader.scss';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import { useLoginContext } from '../../contexts/LoginContext';
 
-const DetailPostHeader = ({ history, data }) => {
+const DetailPostHeader = ({ data }) => {
+  const history = useHistory();
   const { id } = useLoginContext();
   const isMyPost = id === data.writer.id;
 

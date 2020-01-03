@@ -26,8 +26,8 @@ const Root = () => {
             <Route path="/post/edit" render={() => <PostUploadPage />} />
             <Route
               path="/post/:postId"
-              render={({ match, history }) => (
-                <DetailPage postId={match.params.postId} history={history} />
+              render={({ match }) => (
+                <DetailPage postId={match.params.postId} />
               )}
             />
             <Route

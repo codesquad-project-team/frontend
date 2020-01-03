@@ -11,7 +11,7 @@ import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 
-const DetailPage = ({ history, postId }) => {
+const DetailPage = ({ postId }) => {
   const [data, setData] = useState({});
 
   const { error, loading } = useFetch(
@@ -33,7 +33,7 @@ const DetailPage = ({ history, postId }) => {
         />
         {!loading && (
           <>
-            <DetailPostHeader history={history} data={data} />
+            <DetailPostHeader data={data} />
             <LocationCarousel data={data} />
             <DetailPost data={data} />
             <MapView data={data} />
