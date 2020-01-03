@@ -75,7 +75,7 @@ const ImageUploader = ({
 
   return (
     <div className="image-uploader">
-      {selectedImages.length ? (
+      {selectedImages.length || previewUrls.length ? (
         <>
           <PreviewImages
             previewUrls={previewUrls}
