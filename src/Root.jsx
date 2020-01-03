@@ -19,10 +19,7 @@ const Root = () => {
             <Route exact path="/" render={() => <MainPage />} />
             <Route path="/profile/edit" render={() => <ProfileEditPage />} />
             <Route path="/profile" render={() => <ProfilePage />} />
-            <Route
-              path="/post/upload"
-              render={({ history }) => <PostUploadPage history={history} />}
-            />
+            <Route path="/post/upload" render={() => <PostUploadPage />} />
             <Route path="/post/edit" render={() => <PostUploadPage />} />
             <Route
               path="/post/:postId"

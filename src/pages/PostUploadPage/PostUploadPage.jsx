@@ -1,4 +1,5 @@
 import React, { useState, useReducer } from 'react';
+import { useHistory } from 'react-router-dom';
 import './PostUploadPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
 import Header from '../../components/Header/Header';
@@ -18,7 +19,8 @@ const readyToUploadReducer = (prevState, newState) => {
   return { ...prevState, ...newState };
 };
 
-const PostUploadPage = ({ history }) => {
+const PostUploadPage = () => {
+  const history = useHistory();
   const [readyToUpload, setReadyToUpload] = useReducer(
     readyToUploadReducer,
     {}
