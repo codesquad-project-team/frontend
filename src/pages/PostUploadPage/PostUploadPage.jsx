@@ -235,7 +235,7 @@ const PostUploadPage = () => {
             hasSelectedLocation={hasSelectedLocation}
           />
           <TitleUploader
-            name={name}
+            placeName={name}
             title={title}
             setTitle={setTitle}
             setReadyToUpload={setReadyToUpload}
