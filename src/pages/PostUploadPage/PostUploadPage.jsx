@@ -77,15 +77,8 @@ const PostUploadPage = () => {
   const [selectedLocation, setSelectedLocation] = useState(
     initialSelectedLocation
   );
-  //TODO: set 할 때부터 변수명을 맞춰야할것 같은뎅..
-  const {
-    x: lng,
-    y: lat,
-    place_name: placeName,
-    road_address_name: address,
-    place_url: link,
-    phone
-  } = selectedLocation;
+
+  const { longitude, latitude, name, address, link, phone } = selectedLocation;
 
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);
@@ -143,11 +136,12 @@ const PostUploadPage = () => {
   };
 
   const makePostData = S3uploadedURLs => {
+    //TODO: edit mode에서 변경 없는 값은 key도 불필요. 아예 안보내야함.
     const postData = {
       location: {
-        name: placeName,
-        latitude: Number(lat),
-        longitude: Number(lng),
+        name,
+        latitude,
+        longitude,
         address,
         link,
         phone
@@ -234,14 +228,14 @@ const PostUploadPage = () => {
             setRepresentativeIndex={setRepresentativeIndex}
           />
           <LocationUploader
-            lat={lat}
-            lng={lng}
+            lat={latitude}
+            lng={longitude}
             setSelectedLocation={setSelectedLocation}
             setReadyToUpload={setReadyToUpload}
             hasSelectedLocation={hasSelectedLocation}
           />
           <TitleUploader
-            placeName={placeName}
+            name={name}
             title={title}
             setTitle={setTitle}
             setReadyToUpload={setReadyToUpload}
