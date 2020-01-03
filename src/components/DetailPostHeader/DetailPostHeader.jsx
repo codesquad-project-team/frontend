@@ -3,9 +3,19 @@ import './DetailPostHeader.scss';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import { useLoginContext } from '../../contexts/LoginContext';
 
-const DetailPostHeader = ({ history, writerId }) => {
+const DetailPostHeader = ({ history, data }) => {
   const { id } = useLoginContext();
-  const isMyPost = id === writerId;
+  const isMyPost = id === data.writer.id;
+
+  const savePostData = () => {
+    localStorage.setItem('postData', JSON.stringify(data));
+  };
+
+  const handleMouseOver = () => {
+    /* TODO
+    if(!isFirstMouseOver) return; */
+    savePostData();
+  };
 
   const handleEdit = () => {
     history.push('/post/edit');
@@ -20,6 +30,7 @@ const DetailPostHeader = ({ history, writerId }) => {
           <CommonBtn
             styleType="underline"
             className="detail-post-header-btns"
+            onMouseOver={handleMouseOver}
             onClick={handleEdit}
           >
             수정
