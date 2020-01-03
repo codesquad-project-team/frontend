@@ -1,5 +1,5 @@
 import React, { useState, useReducer } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import './PostUploadPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
 import Header from '../../components/Header/Header';
@@ -19,15 +19,65 @@ const readyToUploadReducer = (prevState, newState) => {
   return { ...prevState, ...newState };
 };
 
+const getPostData = isEditMode => {
+  const {
+    id,
+    place,
+    companion,
+    activity,
+    description,
+    images,
+    location,
+    writer
+  } = JSON.parse(localStorage.getItem('postData'));
+
+  const initialData = {
+    initialReadyToUpload: {
+      hasSelectedLocation: true
+    },
+    initialSelectedLocation: location,
+    initialTitle: {
+      place,
+      companion,
+      activity
+    },
+    initialDescription: description,
+    initialRepresentativeIndex: 0,
+    initialImages: {
+      selectedImages: [],
+      previewUrls: images
+    }
+  };
+  return isEditMode ? initialData : {};
+};
+
 const PostUploadPage = () => {
   const history = useHistory();
+  const { pathname } = useLocation();
+  const isEditMode = pathname === '/post/edit';
+
+  const {
+    initialReadyToUpload = {},
+    initialSelectedLocation = {},
+    initialTitle = '',
+    initialDescription = '',
+    initialRepresentativeIndex = 0,
+    initialImages = {
+      selectedImages: [],
+      previewUrls: []
+    }
+  } = getPostData(isEditMode);
+
   const [readyToUpload, setReadyToUpload] = useReducer(
     readyToUploadReducer,
-    {}
+    initialReadyToUpload
   );
   const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
 
-  const [selectedLocation, setSelectedLocation] = useState({});
+  const [selectedLocation, setSelectedLocation] = useState(
+    initialSelectedLocation
+  );
+  //TODO: set 할 때부터 변수명을 맞춰야할것 같은뎅..
   const {
     x: lng,
     y: lat,
@@ -37,15 +87,14 @@ const PostUploadPage = () => {
     phone
   } = selectedLocation;
 
-  const [description, setDescription] = useState(null);
-  const [title, setTitle] = useState({});
+  const [title, setTitle] = useState(initialTitle);
+  const [description, setDescription] = useState(initialDescription);
   const { place, companion, activity } = title;
 
-  const [representativeIndex, setRepresentativeIndex] = useState(0);
-  const [images, setImages] = useState({
-    selectedImages: [],
-    previewUrls: []
-  });
+  const [representativeIndex, setRepresentativeIndex] = useState(
+    initialRepresentativeIndex
+  );
+  const [images, setImages] = useState(initialImages);
 
   const { nickname } = useLoginContext();
 
@@ -93,7 +142,7 @@ const PostUploadPage = () => {
     return S3uploadedURLs;
   };
 
-  const getPostData = S3uploadedURLs => {
+  const makePostData = S3uploadedURLs => {
     const postData = {
       location: {
         name: placeName,
@@ -108,6 +157,7 @@ const PostUploadPage = () => {
         companion,
         activity,
         description,
+        //TODO: edit mode에서는 initialURL과 merge하는 로직 필요
         images: S3uploadedURLs.map((url, idx) =>
           representativeIndex === idx
             ? { url, isRepresentative: true }
@@ -162,8 +212,8 @@ const PostUploadPage = () => {
     }
 
     const S3uploadedURLs = await uploadImagesToS3();
-    const postData = getPostData(S3uploadedURLs);
-    requestPostUpload(postData);
+    const postData = makePostData(S3uploadedURLs, isEditMode);
+    requestPostUpload(postData, isEditMode);
   };
 
   const handleCancel = () => {
