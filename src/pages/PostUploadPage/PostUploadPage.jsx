@@ -242,6 +242,7 @@ const PostUploadPage = () => {
           />
           <TitleUploader
             placeName={placeName}
+            title={title}
             setTitle={setTitle}
             setReadyToUpload={setReadyToUpload}
           />

@@ -2,16 +2,16 @@ import React, { useState, useMemo, useEffect } from 'react';
 import './TitleUploader.scss';
 import useInput from '../../hooks/useInput';
 
-const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
+const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
   const {
     inputValue,
     setInputValue,
     handleChange: handleInputChange
-  } = useInput();
+  } = useInput(title);
   const { place, companion, activity } = inputValue;
   const [locationInputStyle, setLocationInputStyle] = useState({});
 
-  const [select, setSelect] = useState('');
+  const [select, setSelect] = useState(companion || '');
   const [state, setState] = useState({});
   const { showsFreeInput, isCompanionInputFocused, isOverlayHovered } = state;
 
