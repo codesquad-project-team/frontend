@@ -19,7 +19,7 @@ const readyToUploadReducer = (prevState, newState) => {
   return { ...prevState, ...newState };
 };
 
-const getPostData = isEditMode => {
+const getInitialPostData = isEditMode => {
   const {
     id,
     place,
@@ -31,22 +31,24 @@ const getPostData = isEditMode => {
     writer
   } = JSON.parse(localStorage.getItem('postData'));
 
+  //diff 비교를 위해 key값을 postData와 동일하게 맞춤.
   const initialData = {
-    initialReadyToUpload: {
+    readyToUpload: {
       hasSelectedLocation: true
     },
-    initialSelectedLocation: location,
-    initialTitle: {
+    location,
+    post: {
       place,
       companion,
-      activity
-    },
-    initialDescription: description,
-    initialRepresentativeIndex: 0,
-    initialImages: {
-      selectedImages: [],
-      previewUrls: images
+      activity,
+      description,
+      images: {
+        selectedImages: [],
+        previewUrls: images
+      }
     }
+    //TODO: 객체형태의 images로 부터 isRepresentative 프로퍼티가 true인걸 찾아서 index값을 구해야함.
+    // ,representativeIndex : 0
   };
   return isEditMode ? initialData : {};
 };
@@ -56,38 +58,35 @@ const PostUploadPage = () => {
   const { pathname } = useLocation();
   const isEditMode = pathname === '/post/edit';
 
-  const {
-    initialReadyToUpload = {},
-    initialSelectedLocation = {},
-    initialTitle = '',
-    initialDescription = '',
-    initialRepresentativeIndex = 0,
-    initialImages = {
-      selectedImages: [],
-      previewUrls: []
-    }
-  } = getPostData(isEditMode);
+  const initial = getInitialPostData(isEditMode);
 
   const [readyToUpload, setReadyToUpload] = useReducer(
     readyToUploadReducer,
-    initialReadyToUpload
+    initial.readyToUpload || {}
   );
   const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
 
   const [selectedLocation, setSelectedLocation] = useState(
-    initialSelectedLocation
+    initial.location || {}
   );
 
-  const { longitude, latitude, name, address, link, phone } = selectedLocation;
+  const { longitude, latitude, name } = selectedLocation;
 
-  const [title, setTitle] = useState(initialTitle);
-  const [description, setDescription] = useState(initialDescription);
-  const { place, companion, activity } = title;
+  const _initial = initial.post;
+  const initialTitle = {
+    place: _initial.place,
+    companion: _initial.companion,
+    activity: _initial.activity
+  };
+  const [title, setTitle] = useState(initialTitle || '');
+  const [description, setDescription] = useState(_initial.description || '');
 
   const [representativeIndex, setRepresentativeIndex] = useState(
-    initialRepresentativeIndex
+    initial.representativeIndex || 0
   );
-  const [images, setImages] = useState(initialImages);
+  const [images, setImages] = useState(
+    _initial.images || { selectedImages: [], previewUrls: [] }
+  );
 
   const { nickname } = useLoginContext();
 
@@ -138,18 +137,9 @@ const PostUploadPage = () => {
   const makePostData = S3uploadedURLs => {
     //TODO: edit mode에서 변경 없는 값은 key도 불필요. 아예 안보내야함.
     const postData = {
-      location: {
-        name,
-        latitude,
-        longitude,
-        address,
-        link,
-        phone
-      },
+      location: selectedLocation,
       post: {
-        place,
-        companion,
-        activity,
+        ...title,
         description,
         //TODO: edit mode에서는 initialURL과 merge하는 로직 필요
         images: S3uploadedURLs.map((url, idx) =>
