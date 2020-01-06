@@ -17,6 +17,8 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
       setLoggedIn(false);
       setUserInfo({});
       alert('로그아웃되었습니다.');
+    } else {
+      alert('서버에 문제가 있나봐요. 잠시 후에 다시 시도해주시겠어요?');
     }
   };
 
