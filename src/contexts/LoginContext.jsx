@@ -29,7 +29,8 @@ const LoginContextProvider = ({ children }) => {
         setLoggedIn,
         id,
         nickname,
-        profileImage
+        profileImage,
+        setUserInfo
       }}
     >
       {children}
