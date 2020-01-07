@@ -20,6 +20,15 @@ const readyToUploadReducer = (prevState, newState) => {
   return { ...prevState, ...newState };
 };
 
+const getURLAndIndex = imageURLs => {
+  let representativeIndex;
+  const URLs = imageURLs.map(({ url, isRepresentative }, idx) => {
+    if (isRepresentative) representativeIndex = idx;
+    return url;
+  });
+  return { URLs, representativeIndex };
+};
+
 const getInitialPostData = isEditMode => {
   const {
     id,
@@ -28,11 +37,11 @@ const getInitialPostData = isEditMode => {
     activity,
     description,
     images,
-    location,
-    writer
+    location
   } = JSON.parse(localStorage.getItem('postData'));
 
-  //diff 비교를 위해 key값을 postData와 동일하게 맞춤.
+  const { URLs, representativeIndex } = getURLAndIndex(images);
+
   const initialData = {
     readyToUpload: {
       hasSelectedLocation: true
@@ -45,12 +54,11 @@ const getInitialPostData = isEditMode => {
       description,
       images: {
         selectedImages: [],
-        previewUrls: images
+        previewUrls: URLs
       }
     },
-    id
-    //TODO: 객체형태의 images로 부터 isRepresentative 프로퍼티가 true인걸 찾아서 index값을 구해야함.
-    // ,representativeIndex : 0
+    id,
+    representativeIndex
   };
   return isEditMode ? initialData : {};
 };
