@@ -82,7 +82,7 @@ const PostUploadPage = () => {
 
   const { longitude, latitude, name } = selectedLocation;
 
-  const _initial = initial.post;
+  const _initial = initial.post || {};
   const initialTitle = {
     place: _initial.place,
     companion: _initial.companion,
@@ -181,7 +181,7 @@ const PostUploadPage = () => {
 
   const requestPostUpload = async postData => {
     const res = await fetch(
-      `${WEB_SERVER_URL}/post${isEditMode && `/${initial.id}`}`,
+      `${WEB_SERVER_URL}/post${isEditMode ? `/${initial.id}` : ''}`,
       {
         method: isEditMode ? 'PUT' : 'POST',
         mode: 'cors',
