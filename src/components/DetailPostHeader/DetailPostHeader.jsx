@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './DetailPostHeader.scss';
 import CommonBtn from '../CommonBtn/CommonBtn';
@@ -7,6 +7,7 @@ import { WEB_SERVER_URL } from '../../configs';
 
 const DetailPostHeader = ({ data }) => {
   const history = useHistory();
+  const [isFirstMouseOver, setIsFirstMouseOver] = useState(true);
   const { id } = useLoginContext();
   const isMyPost = id === data.writer.id;
 
@@ -15,9 +16,9 @@ const DetailPostHeader = ({ data }) => {
   };
 
   const handleMouseOver = () => {
-    /* TODO
-    if(!isFirstMouseOver) return; */
+    if (!isFirstMouseOver) return;
     savePostData();
+    setIsFirstMouseOver(false);
   };
 
   const handleEdit = () => {
