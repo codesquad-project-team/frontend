@@ -13,6 +13,7 @@ import useS3 from '../../hooks/useS3';
 import useScript from '../../hooks/useScript';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
+import { deepDiff } from '../../utils/diff.js';
 import { WEB_SERVER_URL } from '../../configs';
 
 const readyToUploadReducer = (prevState, newState) => {
@@ -46,13 +47,14 @@ const getInitialPostData = isEditMode => {
         selectedImages: [],
         previewUrls: images
       }
-    }
+    },
+    id
     //TODO: 객체형태의 images로 부터 isRepresentative 프로퍼티가 true인걸 찾아서 index값을 구해야함.
     // ,representativeIndex : 0
   };
   return isEditMode ? initialData : {};
 };
-
+//TODO: 초기렌더링 이후 localStorage 초기화
 const PostUploadPage = () => {
   const history = useHistory();
   const { pathname } = useLocation();
@@ -134,39 +136,59 @@ const PostUploadPage = () => {
     return S3uploadedURLs;
   };
 
-  const makePostData = S3uploadedURLs => {
-    //TODO: edit mode에서 변경 없는 값은 key도 불필요. 아예 안보내야함.
+  const mergePreviousImages = S3uploadedURLs => {
+    return images.previewUrls
+      .filter(URL => !URL.startsWith('data'))
+      .concat(S3uploadedURLs);
+  };
+
+  const formatURLs = S3uploadedURLs => {
+    const URLs = isEditMode
+      ? mergePreviousImages(S3uploadedURLs)
+      : S3uploadedURLs;
+
+    return URLs.map((url, idx) =>
+      representativeIndex === idx
+        ? { url, isRepresentative: true }
+        : { url, isRepresentative: false }
+    );
+  };
+
+  const formatData = S3uploadedURLs => {
     const postData = {
       location: selectedLocation,
       post: {
         ...title,
         description,
-        //TODO: edit mode에서는 initialURL과 merge하는 로직 필요
-        images: S3uploadedURLs.map((url, idx) =>
-          representativeIndex === idx
-            ? { url, isRepresentative: true }
-            : { url, isRepresentative: false }
-        )
+        images: formatURLs(S3uploadedURLs)
       }
     };
     return postData;
   };
 
+  const getUpdatedValues = (initialData, postData) => {
+    const { readyToUpload, postId, ...initial } = initialData;
+    return deepDiff(initial, postData);
+  };
+
   const requestPostUpload = async postData => {
-    const res = await fetch(`${WEB_SERVER_URL}/post`, {
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(postData)
-    });
-    const json = await res.json();
+    const res = await fetch(
+      `${WEB_SERVER_URL}/post${isEditMode && `/${initial.id}`}`,
+      {
+        method: isEditMode ? 'PUT' : 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+      }
+    );
+    const { id } = isEditMode ? { id: initial.id } : await res.json();
 
     switch (res.status) {
       case 200:
-        history.push(`/post/${json.id}`);
+        history.push(`/post/${id}`);
         break;
       case 401:
         alert('토큰이 유효하지 않습니다. 다시 로그인 해주세요.');
@@ -194,10 +216,13 @@ const PostUploadPage = () => {
       showUploadFailReason();
       return;
     }
-
-    const S3uploadedURLs = await uploadImagesToS3();
-    const postData = makePostData(S3uploadedURLs, isEditMode);
-    requestPostUpload(postData, isEditMode);
+    const hasImagesToUpload = !!images.selectedImages.length;
+    const S3uploadedURLs = hasImagesToUpload ? await uploadImagesToS3() : [];
+    const formattedData = formatData(S3uploadedURLs);
+    const postData = isEditMode
+      ? getUpdatedValues(initial, formattedData)
+      : formattedData;
+    requestPostUpload(postData);
   };
 
   const handleCancel = () => {
