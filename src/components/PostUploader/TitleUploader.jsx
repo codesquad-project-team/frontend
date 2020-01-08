@@ -10,7 +10,7 @@ const companionValues = {
 };
 
 const isFreeInputValue = val => {
-  return !Object.values(companionValues).some(value => value === val);
+  return val && !Object.values(companionValues).some(value => value === val);
 };
 
 const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {

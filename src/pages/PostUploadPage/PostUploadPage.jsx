@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useMemo, useState, useReducer } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import './PostUploadPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
@@ -26,7 +26,7 @@ const getURLAndIndex = imageURLs => {
     if (isRepresentative) representativeIndex = idx;
     return url;
   });
-  return { URLs, representativeIndex };
+  return [URLs, representativeIndex];
 };
 
 const getInitialPostData = isEditMode => {
@@ -40,8 +40,6 @@ const getInitialPostData = isEditMode => {
     location
   } = JSON.parse(localStorage.getItem('postData'));
 
-  const { URLs, representativeIndex } = getURLAndIndex(images);
-
   const initialData = {
     readyToUpload: {
       hasSelectedLocation: true
@@ -52,13 +50,9 @@ const getInitialPostData = isEditMode => {
       companion,
       activity,
       description,
-      images: {
-        selectedImages: [],
-        previewUrls: URLs
-      }
+      images
     },
-    id,
-    representativeIndex
+    id
   };
   return isEditMode ? initialData : {};
 };
@@ -68,7 +62,11 @@ const PostUploadPage = () => {
   const { pathname } = useLocation();
   const isEditMode = pathname === '/post/edit';
 
-  const initial = getInitialPostData(isEditMode);
+  const initial = useMemo(() => getInitialPostData(isEditMode), []);
+  const [initialURLs, initialIdx] = useMemo(
+    () => (isEditMode ? getURLAndIndex(initial.post.images) : []),
+    []
+  );
 
   const [readyToUpload, setReadyToUpload] = useReducer(
     readyToUploadReducer,
@@ -92,11 +90,12 @@ const PostUploadPage = () => {
   const [description, setDescription] = useState(_initial.description || '');
 
   const [representativeIndex, setRepresentativeIndex] = useState(
-    initial.representativeIndex || 0
+    initialIdx || 0
   );
-  const [images, setImages] = useState(
-    _initial.images || { selectedImages: [], previewUrls: [] }
-  );
+  const [images, setImages] = useState({
+    selectedImages: [],
+    previewUrls: initialURLs || []
+  });
 
   const { nickname } = useLoginContext();
 
@@ -175,7 +174,7 @@ const PostUploadPage = () => {
   };
 
   const getUpdatedValues = (initialData, postData) => {
-    const { readyToUpload, postId, ...initial } = initialData;
+    const { readyToUpload, id, ...initial } = initialData;
     return deepDiff(initial, postData);
   };
 
