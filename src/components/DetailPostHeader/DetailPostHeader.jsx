@@ -26,11 +26,11 @@ const DetailPostHeader = ({ data }) => {
   };
 
   const handleDelete = async () => {
+    if (!confirm('정말 삭제하시겠어요?')) return;
     const res = await fetch(`${WEB_SERVER_URL}/post/${data.id}`, {
       method: 'DELETE',
       credentials: 'include'
     });
-    console.log(res);
     switch (res.status) {
       case 200:
         alert('게시글이 삭제되었습니다.');
