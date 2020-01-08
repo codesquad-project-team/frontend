@@ -41,9 +41,6 @@ const getInitialPostData = isEditMode => {
   } = JSON.parse(localStorage.getItem('postData'));
 
   const initialData = {
-    readyToUpload: {
-      hasSelectedLocation: true
-    },
     location,
     post: {
       place,
@@ -70,7 +67,7 @@ const PostUploadPage = () => {
 
   const [readyToUpload, setReadyToUpload] = useReducer(
     readyToUploadReducer,
-    initial.readyToUpload || {}
+    isEditMode ? { hasSelectedLocation: true } : {}
   );
   const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
 
@@ -174,7 +171,7 @@ const PostUploadPage = () => {
   };
 
   const getUpdatedValues = (initialData, postData) => {
-    const { readyToUpload, id, ...initial } = initialData;
+    const { id, ...initial } = initialData;
     return deepDiff(initial, postData);
   };
 
