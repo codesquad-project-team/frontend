@@ -23,5 +23,6 @@ const CommonBtn = props => {
 export default CommonBtn;
 
 CommonBtn.propTypes = {
+  styleType: PropTypes.oneOf(['normal', 'emphasize', 'underline', 'none', '']),
   children: PropTypes.string
 };
