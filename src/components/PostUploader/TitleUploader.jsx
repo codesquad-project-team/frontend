@@ -1,6 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import './TitleUploader.scss';
+import classNames from 'classnames/bind';
+import styles from './TitleUploader.scss';
 import useInput from '../../hooks/useInput';
+
+const cx = classNames.bind(styles);
 
 const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
   const {
@@ -88,8 +91,8 @@ const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
   }, [place, companion, activity]);
 
   return (
-    <div className="title-uploader">
-      <div className="title-uploader-place-section">
+    <div className={cx('wrapper')}>
+      <div className={cx('place-section')}>
         <input
           type="text"
           placeholder="어디"
@@ -100,7 +103,7 @@ const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
         />
         <span>에서</span>
       </div>
-      <span className="title-uploader-companion-section">
+      <span className={cx('companion-section')}>
         {showsFreeInput ? (
           <input
             type="text"
@@ -129,7 +132,7 @@ const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
         )}
         {isOverlayHovered || isCompanionInputFocused ? (
           <select
-            className="title-uploader-overlay-select-box"
+            className={cx('overlay-select-box')}
             name="companion"
             value={select}
             onChange={handleSelectBoxChange}

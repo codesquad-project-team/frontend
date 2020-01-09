@@ -1,5 +1,8 @@
 import React from 'react';
-import './SearchResultLists.scss';
+import classNames from 'classnames/bind';
+import styles from './SearchResultLists.scss';
+
+const cx = classNames.bind(styles);
 
 const SearchResultLists = ({
   className,
@@ -14,27 +17,20 @@ const SearchResultLists = ({
       case 'INITIAL':
         break;
       case 'ZERO_RESULT':
-        return (
-          <div className="search-result-lists-zero-result">
-            검색결과가 없습니다.
-          </div>
-        );
+        return <div className={cx('zero-result')}>검색결과가 없습니다.</div>;
       default:
         return searchResult.map((item, index) => (
           <div
             key={item.x}
             data-index={index}
-            className={`search-result-lists-item ${
-              clickedMarkerIndex === index
-                ? 'search-result-lists-selected-item'
-                : ''
-            }`}
+            className={cx(
+              'item',
+              clickedMarkerIndex === index ? 'selected-item' : ''
+            )}
             onClick={setClickedItemSelected}
           >
-            <div className="search-result-lists-name">{item.place_name}</div>
-            <div className="search-result-lists-address">
-              {item.address_name}
-            </div>
+            <div className={cx('placename')}>{item.place_name}</div>
+            <div className={cx('address')}>{item.address_name}</div>
           </div>
         ));
     }
@@ -55,19 +51,19 @@ const SearchResultLists = ({
     <div className={className}>
       {results}
       {pagination && (pagination.hasPrevPage || pagination.hasNextPage) && (
-        <div className="search-result-pagination">
+        <div className={cx('pagination')}>
           <button
-            className="search-result-pagination-prev-btn"
+            className={cx('pagination-prev-btn')}
             disabled={!pagination.hasPrevPage}
             onClick={gotoPrevPage}
           >
             이전
           </button>
-          <span className="search-result-current-page-number">
+          <span className={cx('current-page-number')}>
             {pagination.current}
           </span>
           <button
-            className="search-result-pagination-next-btn"
+            className={cx('pagination-next-btn')}
             disabled={!pagination.hasNextPage}
             onClick={gotoNextPage}
           >

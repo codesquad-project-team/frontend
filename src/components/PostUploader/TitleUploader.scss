@@ -1,6 +1,6 @@
 @import '../../stylesheets/util.scss';
 
-.title-uploader {
+.wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -17,20 +17,13 @@
     text-align: center;
   }
 
-  &-place-section {
+  .place-section {
     > span {
       font-size: 3.2rem;
     }
   }
 
-  &-location-section {
-    > span {
-      font-size: 3.2rem;
-      margin-right: 2rem;
-    }
-  }
-
-  &-companion-section {
+  .companion-section {
     position: relative;
 
     > select {
@@ -40,7 +33,7 @@
     }
   }
 
-  &-overlay-select-box {
+  .overlay-select-box {
     position: absolute;
     top: 4rem;
     left: 0;

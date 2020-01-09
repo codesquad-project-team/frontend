@@ -1,6 +1,6 @@
 @import '../../../stylesheets/util.scss';
 
-.location-finder {
+.wrapper {
   display: flex;
   flex-direction: column;
   width: 80rem;
@@ -8,13 +8,13 @@
   border: 1px solid $gray-border-color;
   border-radius: 5px;
 
-  &-search-icon {
+  .search-icon {
     margin: 1rem;
     width: 2rem;
     height: 2rem;
   }
 
-  &-header {
+  .header {
     display: flex;
     height: 4rem;
 
@@ -36,21 +36,21 @@
     }
   }
 
-  &-content {
+  .content {
     display: flex;
     height: 40rem;
     border-top: 1px solid $gray-border-color;
     border-bottom: 1px solid $gray-border-color;
   }
 
-  &-search-result {
+  .search-result {
     height: 100%;
     flex: 1;
     border-right: 1px solid $gray-border-color;
     overflow: auto;
   }
 
-  &-footer {
+  .footer {
     display: flex;
     justify-content: flex-end;
   }

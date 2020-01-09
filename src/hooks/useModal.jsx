@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './useModal.scss';
+import classNames from 'classnames/bind';
+import styles from './useModal.scss';
+
+const cx = classNames.bind(styles);
 
 const Modal = ({ className = '', onClick, children }) => {
   useEffect(() => {
@@ -9,8 +12,8 @@ const Modal = ({ className = '', onClick, children }) => {
 
   return (
     <>
-      <div className="modal-background" onClick={onClick} />
-      <div className={`modal-window ${className}`}>{children}</div>
+      <div className={cx('modal-background')} onClick={onClick} />
+      <div className={cx('modal-window', className)}>{children}</div>
     </>
   );
 };

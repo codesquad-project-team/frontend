@@ -1,22 +1,25 @@
-import React from "react";
-import "./FirstInputButton.scss";
-import { IMAGE_BUCKET_URL } from "../../../configs";
+import React from 'react';
+import classNames from 'classnames/bind';
+import styles from './FirstInputButton.scss';
+import { IMAGE_BUCKET_URL } from '../../../configs';
+
+const cx = classNames.bind(styles);
 
 const FirstInputButton = ({ onChangeHandler, previewUrls }) => {
   return (
-    <div className="image-uploader-first-input-wrapper">
+    <div className={cx('wrapper')}>
       <img
-        className="image-uploader-first-input-icon"
+        className={cx('icon')}
         src={`${IMAGE_BUCKET_URL}/image-upload-icon.png`}
       />
-      <label className="image-uploader-first-input-label" htmlFor="first-input">
+      <label className={cx('label')} htmlFor="first-input">
         이미지 선택
       </label>
       <input
         id="first-input"
         type="file"
         accept="image/*"
-        className="image-uploader-first-input-btn"
+        className={cx('btn')}
         onChange={onChangeHandler}
         multiple
       />

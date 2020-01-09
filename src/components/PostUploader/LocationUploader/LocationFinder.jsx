@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import './LocationFinder.scss';
+import classNames from 'classnames/bind';
+import styles from './LocationFinder.scss';
 import { KakaoMap } from 'react-kakao-maps';
 import useInput from '../../../hooks/useInput';
 import CommonBtn from '../../CommonBtn/CommonBtn';
@@ -10,6 +11,8 @@ import SearchResultLists from './SearchResultLists';
 import SearchResultMarkers from './SearchResultMarkers';
 import LocationFinderPopupMessage from './LocationFinderPopupMessage';
 import { IMAGE_BUCKET_URL } from '../../../configs';
+
+const cx = classNames.bind(styles);
 
 const INITIAL_LAT = 37.5845218;
 const INITIAL_LNG = 126.9975588;
@@ -102,12 +105,12 @@ const LocationFinder = ({
   useMemo(() => focusToFirstItem(map, searchResult), [map, searchResult]);
 
   return (
-    <div className="location-finder">
-      <div className="location-finder-header">
+    <div className={cx('wrapper')}>
+      <div className={cx('header')}>
         <form onSubmit={handleSubmit}>
           <img
             src={`${IMAGE_BUCKET_URL}/magnifier-icon.png`}
-            className="location-finder-search-icon"
+            className={cx('search-icon')}
           />
           <input
             ref={inputRef}
@@ -120,9 +123,9 @@ const LocationFinder = ({
         </form>
         <CloseBtn onClick={closeLocationFinder} />
       </div>
-      <div className="location-finder-content">
+      <div className={cx('content')}>
         <SearchResultLists
-          className="location-finder-search-result"
+          className={cx('search-result')}
           searchResult={searchResult}
           clickedItemIndex={clickedItemIndex}
           setClickedItemIndex={setClickedItemIndex}
@@ -147,7 +150,7 @@ const LocationFinder = ({
           <MapContextForwarder />
         </KakaoMap>
       </div>
-      <div className="location-finder-footer">
+      <div className={cx('footer')}>
         <CommonBtn onClick={selectLocation}>확인</CommonBtn>
       </div>
       <LocationFinderPopupMessage
