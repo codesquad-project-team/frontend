@@ -15,14 +15,14 @@
 }
 
 html {
-  font-size: 10px;
+  font-size: 10px !important;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Nanum Gothic', sans-serif;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  font-family: 'Nanum Gothic', sans-serif !important;
 }
 
 * {
@@ -30,9 +30,9 @@ body {
 }
 
 hr {
-  margin: 2rem 0;
-  border: 0;
-  height: 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  margin: 2rem 0 !important;
+  border: 0 !important;
+  height: 0 !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
 }
