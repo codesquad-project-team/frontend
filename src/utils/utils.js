@@ -1,10 +1,9 @@
-export const getClassName = ({ props, prefix }) => {
+export const getClassName = props => {
   const { small, medium, large } = props;
-  let className = '';
-  if (small) className = `${prefix}-small`;
-  if (medium) className = `${prefix}-medium`;
-  if (large) className = `${prefix}-large`;
-  return className;
+  if (small) return 'small';
+  if (medium) return 'medium';
+  if (large) return 'large';
+  return '';
 };
 
 export const throttle = (callback, delay = 200) => {

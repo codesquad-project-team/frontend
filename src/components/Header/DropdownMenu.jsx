@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import './DropdownMenu.scss';
+import classNames from 'classnames/bind';
+import styles from './DropdownMenu.scss';
 import CommonLink from '../CommonLink/CommonLink';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { WEB_SERVER_URL } from '../../configs';
+
+const cx = classNames.bind(styles);
 
 const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
   const { nickname, id, setLoggedIn, setUserInfo } = useLoginContext();
@@ -28,23 +31,21 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
 
   return (
     <>
-      <div className="drop-down-menu-wrapper" onClick={toggleDropdownMenu} />
-      <div
-        className={`drop-down-menu ${showsMenu && 'drop-down-menu-animation'}`}
-      >
+      <div className={cx('background')} onClick={toggleDropdownMenu} />
+      <div className={cx('wrapper', showsMenu && 'animation')}>
         <CommonLink to="/post/upload">
-          <div className="drop-down-menu-btns">글 작성</div>
+          <div className={cx('btns')}>글 작성</div>
         </CommonLink>
         <CommonLink
           to={`/profile/@${nickname}`}
           onClick={() => localStorage.setItem('targetUserId', id)}
         >
-          <div className="drop-down-menu-btns">내 프로필</div>
+          <div className={cx('btns')}>내 프로필</div>
         </CommonLink>
         <CommonLink to="/profile/edit">
-          <div className="drop-down-menu-btns">프로필 편집</div>
+          <div className={cx('btns')}>프로필 편집</div>
         </CommonLink>
-        <div className="drop-down-menu-btns" onClick={handleLogout}>
+        <div className={cx('btns')} onClick={handleLogout}>
           로그아웃
         </div>
       </div>

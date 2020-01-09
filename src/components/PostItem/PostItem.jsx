@@ -1,7 +1,10 @@
 import React from 'react';
-import './PostItem.scss';
+import classNames from 'classnames/bind';
+import styles from './PostItem.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonLink from '../CommonLink/CommonLink';
+
+const cx = classNames.bind(styles);
 
 const PostItem = ({
   image,
@@ -17,9 +20,9 @@ const PostItem = ({
   };
 
   return (
-    <div className="post-item">
+    <div className={cx('wrapper')}>
       {headerOn && (
-        <div className="post-item-header">
+        <div className={cx('header')}>
           <CommonLink to={`/profile/@${nickname}`} onClick={handleClick}>
             <ProfileImage small src={profileImage} />
           </CommonLink>
@@ -29,16 +32,14 @@ const PostItem = ({
         </div>
       )}
       <img
-        className={`${
-          headerOn ? 'post-item-img' : 'post-item-img-without-header'
-        }`}
+        className={cx(headerOn ? 'img' : 'img-without-header')}
         src={image}
         alt="representative post image"
       />
-      <div className="post-item-title">
+      <div className={cx('title')}>
         {place}에서 {companion}랑 {activity}
       </div>
-      <div className="post-item-desc">{description}</div>
+      <div className={cx('desc')}>{description}</div>
     </div>
   );
 };

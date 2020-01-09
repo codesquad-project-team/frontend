@@ -1,17 +1,16 @@
-.profile-image {
+.border {
   border: 1px solid #d4d4d4;
   border-radius: 50%;
-
-  &-small {
-    width: 6rem;
-    height: 6rem;
-  }
-  &-medium {
-    width: 8rem;
-    height: 8rem;
-  }
-  &-large {
-    width: 12rem;
-    height: 12rem;
-  }
+}
+.small {
+  width: 6rem;
+  height: 6rem;
+}
+.medium {
+  width: 8rem;
+  height: 8rem;
+}
+.large {
+  width: 12rem;
+  height: 12rem;
 }
