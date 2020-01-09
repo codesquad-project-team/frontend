@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import './ProfileInfo.scss';
+import classNames from 'classnames/bind';
+import styles from './ProfileInfo.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { useLoginModalContext } from '../../contexts/LoginModalContext';
 import { WEB_SERVER_URL } from '../../configs';
+
+const cx = classNames.bind(styles);
 
 const ProfileInfo = ({ data, isMyProfile, userId }) => {
   const {
@@ -52,30 +55,23 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
   };
 
   return (
-    <div className="profile-info-wrapper">
-      <div className="profile-info">
-        <div className="profile-info-left-column">
-          <ProfileImage large src={profileImage} />
-          {!isMyProfile && (
-            <CommonBtn
-              className="profile-info-follow-btn"
-              onClick={sendRequest}
-            >
-              {isFollowing ? '팔로우 취소' : '팔로우'}
-            </CommonBtn>
-          )}
+    <div className={cx('wrapper')}>
+      <div className={cx('left-column')}>
+        <ProfileImage large src={profileImage} />
+        {!isMyProfile && (
+          <CommonBtn className={cx('follow-btn')} onClick={sendRequest}>
+            {isFollowing ? '팔로우 취소' : '팔로우'}
+          </CommonBtn>
+        )}
+      </div>
+      <div className={cx('right-column')}>
+        <div className={cx('header')}>
+          <span className={cx('username')}>{nickname}</span>
         </div>
-        <div className="profile-info-right-column">
-          <div className="profile-info-header">
-            <span className="profile-info-username">{nickname}</span>
-          </div>
-          <div className="profile-info-overview">게시글 {totalPosts}개</div>
-          <div className="profile-info-overview">팔로워 {totalFollowers}명</div>
-          <div className="profile-info-overview">
-            팔로잉 {totalFollowings}명
-          </div>
-          <div className="profile-info-introduction">{introduction}</div>
-        </div>
+        <div className={cx('overview')}>게시글 {totalPosts}개</div>
+        <div className={cx('overview')}>팔로워 {totalFollowers}명</div>
+        <div className={cx('overview')}>팔로잉 {totalFollowings}명</div>
+        <div className={cx('introduction')}>{introduction}</div>
       </div>
     </div>
   );
