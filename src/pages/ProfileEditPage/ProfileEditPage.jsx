@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import './ProfileEditPage.scss';
+import React, { useState, useEffect, useCallback } from 'react';
+import classNames from 'classnames/bind';
+import styles from './ProfileEditPage.scss';
 import Header from '../../components/Header/Header';
 import ProfileImage from '../../components/ProfileImage/ProfileImage';
 import ProfileContentItem from '../../components/ProfileContentItem/ProfileContentItem';
@@ -14,8 +15,10 @@ import useScript from '../../hooks/useScript';
 import useS3 from '../../hooks/useS3';
 import { debounce } from '../../utils/utils';
 
+const cx = classNames.bind(styles);
+
 const ProfileEditPage = () => {
-  const { inputValue, setInputValue, handleChange, restore } = useInput();
+  const { inputValue, setInputValue, handleChange } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
   const [image, setImage] = useState({ fileData: [], previewUrl: '' });
 
@@ -207,10 +210,10 @@ const ProfileEditPage = () => {
   return (
     <>
       <Header />
-      <div className="profile-edit-page-dimmed-background">
-        <div className="profile-edit-page">
-          <div className="profile-edit-page-nav">
-            <div className="profile-edit-page-nav-item">프로필 편집</div>
+      <div className={cx('dimmed-background')}>
+        <div className={cx('wrapper')}>
+          <div className={cx('nav')}>
+            <div className={cx('nav-item')}>프로필 편집</div>
           </div>
           <FadeLoader
             css={override}
@@ -220,8 +223,8 @@ const ProfileEditPage = () => {
             loading={loading}
           />
           {!loading && (
-            <form className="profile-edit-page-content-form">
-              <div className="profile-edit-page-content-item profile-image-section">
+            <form className={cx('content-form')}>
+              <div className={cx('profile-image-section')}>
                 <ProfileImage large src={imageSrc} />
                 <ProfileImageChangeBtn
                   setImage={setImage}
@@ -255,7 +258,7 @@ const ProfileEditPage = () => {
                 nicknameValidity={phoneValidity}
               />
               <CommonBtn
-                className="profile-edit-page-submit-btn"
+                className={cx('submit-btn')}
                 type="submit"
                 styleType="emphasize"
                 onClick={handleSubmit}
