@@ -1,4 +1,4 @@
-.info-window {
+.wrapper {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -27,7 +27,7 @@
     margin: 0;
   }
 
-  &-location-name {
+  .location-name {
     margin: 0;
     font-size: 2rem;
     display: inline-block;
@@ -40,7 +40,7 @@
     }
   }
 
-  &-arrow-image {
+  .arrow-image {
     position: absolute;
     top: 12rem;
     left: 12rem;

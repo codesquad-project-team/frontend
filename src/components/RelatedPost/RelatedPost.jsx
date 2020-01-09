@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './RelatedPost.scss';
+import classNames from 'classnames/bind';
+import styles from './RelatedPost.scss';
 import useFetch from '../../hooks/useFetch';
 import RelatedPostComment from './RelatedPostComment';
 import {
@@ -7,6 +8,8 @@ import {
   TRANSITION_DELAY_TIME,
   WEB_SERVER_URL
 } from '../../configs';
+
+const cx = classNames.bind(styles);
 
 const RelatedPost = ({ postId }) => {
   const [currentActiveIndex, setCurrentActiveIndex] = useState(1);
@@ -49,24 +52,21 @@ const RelatedPost = ({ postId }) => {
 
   const makeCarouselJsx = () => {
     const len = posts.length;
-
-    {
-      return !len ? (
-        <div className="related-post-carousel-wrap">
-          <h3>아직 이 장소를 방문한 다른 사람이 없네요. 🥺</h3>;
-        </div>
-      ) : (
-        <div
-          className="related-post-carousel-wrap"
-          style={{
-            transform: `translateX(${positionX}px)`,
-            transition: `transform ${TRANSITION_DURATION_TIME} ease ${TRANSITION_DELAY_TIME}`
-          }}
-        >
-          {makeCarouselItem()}
-        </div>
-      );
-    }
+    return !len ? (
+      <div className={cx('carousel-wrap')}>
+        <h3>아직 이 장소를 방문한 다른 사람이 없네요. 🥺</h3>;
+      </div>
+    ) : (
+      <div
+        className={cx('carousel-wrap')}
+        style={{
+          transform: `translateX(${positionX}px)`,
+          transition: `transform ${TRANSITION_DURATION_TIME} ease ${TRANSITION_DELAY_TIME}`
+        }}
+      >
+        {makeCarouselItem()}
+      </div>
+    );
   };
 
   const getMaximumIndex = () => {
@@ -75,13 +75,13 @@ const RelatedPost = ({ postId }) => {
       : parseInt(posts.length / 5) + 1;
   };
 
-  const prevBtnHandler = ({ target }) => {
+  const prevBtnHandler = () => {
     if (currentActiveIndex === 1) return;
     setCurrentActiveIndex(currentActiveIndex - 1);
     setPositionX(positionX + 500);
   };
 
-  const nextBtnHandler = ({ target }) => {
+  const nextBtnHandler = () => {
     const maximumIndex = getMaximumIndex();
     if (currentActiveIndex === maximumIndex) return;
     if (response.hasNextPage && currentActiveIndex === maximumIndex - 1)
@@ -91,23 +91,17 @@ const RelatedPost = ({ postId }) => {
   };
 
   return (
-    <div className="related-post">
+    <div className={cx('wrapper')}>
       <hr />
-      <h2 className="related-post-header">이 장소를 방문한 사람들</h2>
+      <h2 className={cx('header')}>이 장소를 방문한 사람들</h2>
 
-      <div className="related-post-carousel">{makeCarouselJsx()}</div>
+      <div className={cx('carousel')}>{makeCarouselJsx()}</div>
       {posts.length > 5 && (
-        <div className="related-post-carousel-btns">
-          <button
-            className="carousel-btns-common prev-btn"
-            onClick={prevBtnHandler}
-          >
+        <div className={cx('carousel-btns')}>
+          <button className={cx('prev-btn')} onClick={prevBtnHandler}>
             &lt;
           </button>
-          <button
-            className="carousel-btns-common next-btn"
-            onClick={nextBtnHandler}
-          >
+          <button className={cx('next-btn')} onClick={nextBtnHandler}>
             &gt;
           </button>
         </div>

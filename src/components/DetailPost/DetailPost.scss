@@ -1,29 +1,29 @@
-.detail-post {
+.wrapper {
   max-width: 700px;
   margin-bottom: 3rem;
 
-  &-title {
+  .title {
     font-size: 3.6rem;
     text-align: center;
     margin-bottom: 1.5rem;
   }
 
-  &-content {
+  .content {
     display: flex;
     margin: 0 3rem;
   }
 
-  &-writer-img {
+  .writer-img {
     margin-right: 2rem;
   }
 
-  &-writer-name {
+  .writer-name {
     font-weight: bold;
     margin-bottom: 1rem;
     font-size: 1.6rem;
   }
 
-  &-desc {
+  .desc {
     font-size: 1.6rem;
   }
   .profile-image {

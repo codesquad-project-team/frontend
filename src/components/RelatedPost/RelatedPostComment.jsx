@@ -1,12 +1,15 @@
 import React from 'react';
+import classNames from 'classnames/bind';
+import styles from './RelatedPostComment.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
-import './RelatedPostComment.scss';
+
+const cx = classNames.bind(styles);
 
 const RelatedPostComment = ({ companion, activity, profileImageURL }) => {
   return (
-    <div className="related-post-carousel-item">
+    <div className={cx('wrapper')}>
       <ProfileImage medium src={profileImageURL} />
-      <h3 className="related-post-comment">
+      <h3 className={cx('comment')}>
         {companion}
         <br />
         {activity}
