@@ -14,7 +14,7 @@ const CommonBtn = props => {
   } = props;
 
   return (
-    <button className={cx('main', className, styleType)} {...restProps}>
+    <button className={cx('common', className, styleType)} {...restProps}>
       <span>{children}</span>
     </button>
   );
