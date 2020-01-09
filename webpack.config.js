@@ -41,7 +41,7 @@ module.exports = {
             options: {
               modules: {
                 mode: 'local',
-                localIdentName: '[folder]_[name]__[local]--[hash:base64:5]',
+                localIdentName: '[name]-[local]--[hash:hex:4]',
                 context: path.resolve(__dirname, 'src')
               }
             }
