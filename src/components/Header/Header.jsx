@@ -7,51 +7,28 @@ import CommonModal from '../CommonModal/CommonModal';
 import CommonLink from '../CommonLink/CommonLink';
 import DropdownMenu from './DropdownMenu';
 import { useLoginContext } from '../../contexts/LoginContext';
-import { useLoginModalContext } from '../../contexts/LoginModalContext';
 import { IMAGE_BUCKET_URL } from '../../configs';
 
 const Header = () => {
   const { inputValue, handleChange, restore } = useInput();
-  const [clickedSignup, setClickedSignup] = useState(false);
-  const [clickedSignin, setClickedSignin] = useState(false);
   const [showsDropdown, setShowsDropdown] = useState(false);
-  const { loggedIn, profileImage } = useLoginContext();
   const {
-    needsLoginModal: needsSigninModal,
-    setNeedsLoginModal: setNeedsSigninModal
-  } = useLoginModalContext();
+    loggedIn,
+    profileImage,
+    clickedSignup,
+    clickedSignin,
+    handleSigninModal,
+    toggleSignupModal
+  } = useLoginContext();
 
   const handleSubmit = e => {
     e.preventDefault();
     restore('searchBar');
   };
 
-  const handleSigninModal = type => {
-    switch (type) {
-      case 'OPEN':
-        setClickedSignin(true);
-        setNeedsSigninModal(false);
-        break;
-      case 'CLOSE':
-        setClickedSignin(false);
-        break;
-      default:
-        setClickedSignin(!clickedSignin);
-        break;
-    }
-  };
-
-  const toggleSignupModal = () => {
-    setClickedSignup(!clickedSignup);
-  };
-
   const toggleDropdownMenu = () => {
     setShowsDropdown(state => !state);
   };
-
-  useMemo(() => {
-    needsSigninModal ? handleSigninModal('OPEN') : null;
-  }, [needsSigninModal]);
 
   return (
     <div className="header-wrapper">
