@@ -7,8 +7,28 @@ export const useLoginContext = () => useContext(LoginContext);
 
 const LoginContextProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [clickedSignup, setClickedSignup] = useState(false);
+  const [clickedSignin, setClickedSignin] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const { id, nickname, profileImage } = userInfo;
+
+  const handleSigninModal = type => {
+    switch (type) {
+      case 'OPEN':
+        setClickedSignin(true);
+        break;
+      case 'CLOSE':
+        setClickedSignin(false);
+        break;
+      default:
+        setClickedSignin(!clickedSignin);
+        break;
+    }
+  };
+
+  const toggleSignupModal = () => {
+    setClickedSignup(!clickedSignup);
+  };
 
   useEffect(() => {
     (async () => {
@@ -30,6 +50,10 @@ const LoginContextProvider = ({ children }) => {
         id,
         nickname,
         profileImage,
+        clickedSignup,
+        clickedSignin,
+        handleSigninModal,
+        toggleSignupModal
         setUserInfo
       }}
     >

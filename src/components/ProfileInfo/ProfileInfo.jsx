@@ -3,7 +3,6 @@ import './ProfileInfo.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import { useLoginContext } from '../../contexts/LoginContext';
-import { useLoginModalContext } from '../../contexts/LoginModalContext';
 import { WEB_SERVER_URL } from '../../configs';
 
 const ProfileInfo = ({ data, isMyProfile, userId }) => {
@@ -18,8 +17,7 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
   } = data;
 
   const [isFollowing, setIsFollowing] = useState(initialFollowStatus);
-  const { loggedIn } = useLoginContext();
-  const { setNeedsLoginModal } = useLoginModalContext();
+  const { loggedIn, handleSigninModal, toggleSignupModal } = useLoginContext();
   const [error, setError] = useState(null);
 
   const handleResponse = res => {
@@ -41,7 +39,7 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
 
   const sendRequest = async () => {
     if (!loggedIn) {
-      setNeedsLoginModal(true);
+      handleSigninModal('OPEN');
       return;
     }
     const res = await fetch(`${WEB_SERVER_URL}/user/follow/${userId}`, {

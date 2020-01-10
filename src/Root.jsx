@@ -8,34 +8,29 @@ import ProfilePage from './pages/ProfilePage/ProfilePage';
 import PostUploadPage from './pages/PostUploadPage/PostUploadPage';
 import SignupPage from './pages/SignupPage/SignupPage';
 import LoginContextProvider from './contexts/LoginContext';
-import LoginModalContextProvider from './contexts/LoginModalContext';
 
 const Root = () => {
   return (
     <LoginContextProvider>
-      <LoginModalContextProvider>
-        <Router>
-          <Switch>
-            <Route exact path="/" render={() => <MainPage />} />
-            <Route path="/profile/edit" render={() => <ProfileEditPage />} />
-            <Route path="/profile" render={() => <ProfilePage />} />
-            <Route
-              path="/post/upload"
-              render={({ history }) => <PostUploadPage history={history} />}
-            />
-            <Route
-              path="/post/:postId"
-              render={({ match }) => (
-                <DetailPage postId={match.params.postId} />
-              )}
-            />
-            <Route
-              path="/signup"
-              render={({ history }) => <SignupPage history={history} />}
-            />
-          </Switch>
-        </Router>
-      </LoginModalContextProvider>
+      <Router>
+        <Switch>
+          <Route exact path="/" render={() => <MainPage />} />
+          <Route path="/profile/edit" render={() => <ProfileEditPage />} />
+          <Route path="/profile" render={() => <ProfilePage />} />
+          <Route
+            path="/post/upload"
+            render={({ history }) => <PostUploadPage history={history} />}
+          />
+          <Route
+            path="/post/:postId"
+            render={({ match }) => <DetailPage postId={match.params.postId} />}
+          />
+          <Route
+            path="/signup"
+            render={({ history }) => <SignupPage history={history} />}
+          />
+        </Switch>
+      </Router>
     </LoginContextProvider>
   );
 };
