@@ -53,7 +53,7 @@ const LoginContextProvider = ({ children }) => {
         clickedSignup,
         clickedSignin,
         handleSigninModal,
-        toggleSignupModal
+        toggleSignupModal,
         setUserInfo
       }}
     >
