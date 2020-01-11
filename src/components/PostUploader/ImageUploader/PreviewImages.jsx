@@ -45,27 +45,33 @@ const PreviewImages = ({
           onMouseLeave={handleImageMouseLeave}
         />
         {(isHovered || isButtonHovered) && (
-          <>
+          <div
+            className={cx('btn-wrapper')}
+            data-idx={index}
+            onMouseEnter={handleButtonMouseEnter}
+            onMouseLeave={handleButtonMouseLeave}
+          >
             <input
               type="image"
-              className={cx('close-btn')}
-              src={`${IMAGE_BUCKET_URL}/image-delete-icon-2.png`}
-              data-idx={index}
-              onClick={deleteImageHandler}
-              onMouseEnter={handleButtonMouseEnter}
-              onMouseLeave={handleButtonMouseLeave}
-            />
-
-            <input
-              type="image"
-              className={cx('select-btn')}
+              className={cx('btns')}
               src={`${IMAGE_BUCKET_URL}/star-icon.png`}
               data-idx={index}
               onClick={representativeImageHandler}
-              onMouseEnter={handleButtonMouseEnter}
-              onMouseLeave={handleButtonMouseLeave}
             />
-          </>
+            <input
+              type="image"
+              className={cx('btns')}
+              src={`${IMAGE_BUCKET_URL}/edit-icon1.png`}
+              data-idx={index}
+            />
+            <input
+              type="image"
+              className={cx('btns')}
+              src={`${IMAGE_BUCKET_URL}/image-delete-icon-2.png`}
+              data-idx={index}
+              onClick={deleteImageHandler}
+            />
+          </div>
         )}
       </div>
     );
