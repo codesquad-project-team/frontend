@@ -43,7 +43,7 @@ const ImageUploader = ({
   };
 
   const deleteImageHandler = e => {
-    const deleteTargetIndex = Number(e.target.dataset.deleteTargetIndex);
+    const deleteTargetIndex = Number(e.target.dataset.idx);
 
     if (deleteTargetIndex === representativeIndex) {
       setRepresentativeIndex(!deleteTargetIndex ? 0 : representativeIndex - 1);
@@ -61,7 +61,7 @@ const ImageUploader = ({
     arr.filter((el, idx) => idx !== targetIndex);
 
   const selectRepresentativeImage = e => {
-    const represenTativeIndex = Number(e.target.dataset.representativeIndex);
+    const represenTativeIndex = Number(e.target.dataset.idx);
     setRepresentativeIndex(represenTativeIndex);
   };
 
