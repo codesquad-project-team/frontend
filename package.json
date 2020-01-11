@@ -15,6 +15,7 @@
   "dependencies": {
     "@babel/runtime": "^7.6.2",
     "aws-sdk": "^2.574.0",
+    "blueimp-load-image": "^2.26.0",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.6",
     "prop-types": "^15.7.2",

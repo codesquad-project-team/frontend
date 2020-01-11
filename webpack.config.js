@@ -61,7 +61,8 @@ module.exports = {
   output: {
     publicPath: '/',
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: '[name].bundle.js',
+    chunkFilename: '[name].bundle.js' //dynamic import로 생성되는 chunk file의 이름을 설정.(optional)
   },
 
   plugins: [
