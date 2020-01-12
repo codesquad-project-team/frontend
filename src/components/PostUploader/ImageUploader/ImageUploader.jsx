@@ -4,6 +4,8 @@ import styles from './ImageUploader.scss';
 import FirstInputButton from './FirstInputButton';
 import SecondInputButton from './SecondInputButton';
 import PreviewImages from './PreviewImages';
+import useModal from '../../../hooks/useModal';
+import ImageEditor from './ImageEditor';
 
 const cx = classNames.bind(styles);
 
@@ -23,6 +25,8 @@ const ImageUploader = ({
   setRepresentativeIndex
 }) => {
   const { selectedImages, previewUrls } = images;
+
+  const { Modal, toggleModal: toggleImageEditor, open } = useModal();
 
   const addImageHandler = files => {
     /* Map each file to a promise that resolves to an array of image URI's */
@@ -89,6 +93,7 @@ const ImageUploader = ({
             deleteImageHandler={deleteImageHandler}
             representativeIndex={representativeIndex}
             representativeImageHandler={selectRepresentativeImage}
+            toggleImageEditor={toggleImageEditor}
           />
           {previewUrls.length < MAXIMUM_IMAGES && (
             <SecondInputButton onChangeHandler={getImage} />
@@ -96,6 +101,11 @@ const ImageUploader = ({
         </>
       ) : (
         <FirstInputButton onChangeHandler={getImage} />
+      )}
+      {open && (
+        <Modal onClick={toggleImageEditor}>
+          <ImageEditor onClick={toggleImageEditor} />
+        </Modal>
       )}
     </div>
   );
