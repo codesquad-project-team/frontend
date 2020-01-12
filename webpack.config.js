@@ -34,13 +34,7 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader, // generates css files
-            options: {
-              hmr: true,
-              esModule: true
-            }
-          },
+          'style-loader',
           {
             loader: 'css-loader', // translates CSS into CommonJS
             options: {
