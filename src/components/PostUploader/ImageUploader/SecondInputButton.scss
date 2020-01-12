@@ -1,10 +1,9 @@
-@import "../../../stylesheets/util.scss";
+@import '../../../stylesheets/util.scss';
 
 .image-uploader-second-input {
   &-wrapper {
     width: 15rem;
     height: 15rem;
-    margin-left: 2rem;
     border: 2px dashed $main-color-light;
     display: flex;
     align-items: center;
