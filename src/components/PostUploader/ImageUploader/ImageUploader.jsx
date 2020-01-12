@@ -7,6 +7,15 @@ import PreviewImages from './PreviewImages';
 
 const cx = classNames.bind(styles);
 
+const MAXIMUM_IMAGES = 5;
+
+const showAlert = key => {
+  const messages = {
+    EXCEED_MAXIMUM_IMAGES: `업로드 할 수 있는 이미지의 최대 개수는 ${MAXIMUM_IMAGES}개 입니다!`
+  };
+  alert(messages[key]);
+};
+
 const ImageUploader = ({
   images,
   setImages,
@@ -14,7 +23,6 @@ const ImageUploader = ({
   setRepresentativeIndex
 }) => {
   const { selectedImages, previewUrls } = images;
-  const maximumCnt = 5;
 
   const addImageHandler = files => {
     /* Map each file to a promise that resolves to an array of image URI's */
@@ -32,8 +40,8 @@ const ImageUploader = ({
       urls => {
         /* Once all promises are resolved, update state with image URI array */
         setImages({
-          selectedImages: [...images.selectedImages, ...files],
-          previewUrls: [...images.previewUrls, ...urls]
+          selectedImages: [...selectedImages, ...files],
+          previewUrls: [...previewUrls, ...urls]
         });
       },
       error => {
@@ -52,28 +60,24 @@ const ImageUploader = ({
     }
 
     setImages({
-      selectedImages: removeItem(images.selectedImages, deleteTargetIndex),
-      previewUrls: removeItem(images.previewUrls, deleteTargetIndex)
+      selectedImages: removeItem(selectedImages, deleteTargetIndex),
+      previewUrls: removeItem(previewUrls, deleteTargetIndex)
     });
   };
 
   const removeItem = (arr, targetIndex) =>
     arr.filter((el, idx) => idx !== targetIndex);
 
-  const selectRepresentativeImage = e => {
-    const represenTativeIndex = Number(e.target.dataset.idx);
-    setRepresentativeIndex(represenTativeIndex);
+  const selectRepresentativeImage = ({ target }) => {
+    setRepresentativeIndex(Number(target.dataset.idx));
   };
 
   const getImage = ({ target }) => {
     const files = Array.from(target.files);
 
-    if (files.length + previewUrls.length > maximumCnt) {
-      alert(`업로드 할 수 있는 이미지의 최대 개수는 ${maximumCnt}개 입니다!`);
-      return;
-    }
-
-    addImageHandler(files);
+    files.length + previewUrls.length > MAXIMUM_IMAGES
+      ? showAlert('EXCEED_MAXIMUM_IMAGES')
+      : addImageHandler(files);
   };
 
   return (
@@ -86,15 +90,12 @@ const ImageUploader = ({
             representativeIndex={representativeIndex}
             representativeImageHandler={selectRepresentativeImage}
           />
-          {previewUrls.length < maximumCnt && (
+          {previewUrls.length < MAXIMUM_IMAGES && (
             <SecondInputButton onChangeHandler={getImage} />
           )}
         </>
       ) : (
-        <FirstInputButton
-          previewUrls={previewUrls}
-          onChangeHandler={getImage}
-        />
+        <FirstInputButton onChangeHandler={getImage} />
       )}
     </div>
   );
