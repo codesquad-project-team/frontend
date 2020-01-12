@@ -68,7 +68,7 @@ const ImageUploader = ({
   const getImage = ({ target }) => {
     const files = Array.from(target.files);
 
-    if (files.length + selectedImages.length > maximumCnt) {
+    if (files.length + previewUrls.length > maximumCnt) {
       alert(`업로드 할 수 있는 이미지의 최대 개수는 ${maximumCnt}개 입니다!`);
       return;
     }
@@ -78,7 +78,7 @@ const ImageUploader = ({
 
   return (
     <div className={cx('wrapper')}>
-      {selectedImages.length ? (
+      {previewUrls.length ? (
         <>
           <PreviewImages
             previewUrls={previewUrls}
@@ -86,7 +86,7 @@ const ImageUploader = ({
             representativeIndex={representativeIndex}
             representativeImageHandler={selectRepresentativeImage}
           />
-          {selectedImages.length < maximumCnt && (
+          {previewUrls.length < maximumCnt && (
             <SecondInputButton onChangeHandler={getImage} />
           )}
         </>

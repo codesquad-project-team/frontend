@@ -1,4 +1,5 @@
-import React, { useState, useReducer } from 'react';
+import React, { useMemo, useState, useReducer } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './PostUploadPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
@@ -13,6 +14,7 @@ import useS3 from '../../hooks/useS3';
 import useScript from '../../hooks/useScript';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
+import { deepDiff } from '../../utils/diff.js';
 import { WEB_SERVER_URL } from '../../configs';
 
 const cx = classNames.bind(styles);
@@ -21,31 +23,78 @@ const readyToUploadReducer = (prevState, newState) => {
   return { ...prevState, ...newState };
 };
 
-const PostUploadPage = ({ history }) => {
+const getURLAndIndex = imageURLs => {
+  let representativeIndex;
+  const URLs = imageURLs.map(({ url, isRepresentative }, idx) => {
+    if (isRepresentative) representativeIndex = idx;
+    return url;
+  });
+  return [URLs, representativeIndex];
+};
+
+const getInitialPostData = isEditMode => {
+  const {
+    id,
+    place,
+    companion,
+    activity,
+    description,
+    images,
+    location
+  } = JSON.parse(localStorage.getItem('postData'));
+
+  const initialData = {
+    location,
+    post: {
+      place,
+      companion,
+      activity,
+      description,
+      images
+    },
+    id
+  };
+  return isEditMode ? initialData : {};
+};
+//TODO: 초기렌더링 이후 localStorage 초기화
+const PostUploadPage = () => {
+  const history = useHistory();
+  const { pathname } = useLocation();
+  const isEditMode = pathname === '/post/edit';
+
+  const initial = useMemo(() => getInitialPostData(isEditMode), []);
+  const [initialURLs, initialIdx] = useMemo(
+    () => (isEditMode ? getURLAndIndex(initial.post.images) : []),
+    []
+  );
+
   const [readyToUpload, setReadyToUpload] = useReducer(
     readyToUploadReducer,
-    {}
+    isEditMode ? { hasSelectedLocation: true } : {}
   );
   const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
 
-  const [selectedLocation, setSelectedLocation] = useState({});
-  const {
-    x: lng,
-    y: lat,
-    place_name: placeName,
-    road_address_name: address,
-    place_url: link,
-    phone
-  } = selectedLocation;
+  const [selectedLocation, setSelectedLocation] = useState(
+    initial.location || {}
+  );
 
-  const [description, setDescription] = useState(null);
-  const [title, setTitle] = useState({});
-  const { place, companion, activity } = title;
+  const { longitude, latitude, name } = selectedLocation;
 
-  const [representativeIndex, setRepresentativeIndex] = useState(0);
+  const _initial = initial.post || {};
+  const initialTitle = {
+    place: _initial.place,
+    companion: _initial.companion,
+    activity: _initial.activity
+  };
+  const [title, setTitle] = useState(initialTitle || '');
+  const [description, setDescription] = useState(_initial.description || '');
+
+  const [representativeIndex, setRepresentativeIndex] = useState(
+    initialIdx || 0
+  );
   const [images, setImages] = useState({
     selectedImages: [],
-    previewUrls: []
+    previewUrls: initialURLs || []
   });
 
   const { nickname } = useLoginContext();
@@ -94,46 +143,59 @@ const PostUploadPage = ({ history }) => {
     return S3uploadedURLs;
   };
 
-  const getPostData = S3uploadedURLs => {
+  const mergePreviousImages = S3uploadedURLs => {
+    return images.previewUrls
+      .filter(URL => !URL.startsWith('data'))
+      .concat(S3uploadedURLs);
+  };
+
+  const formatURLs = S3uploadedURLs => {
+    const URLs = isEditMode
+      ? mergePreviousImages(S3uploadedURLs)
+      : S3uploadedURLs;
+
+    return URLs.map((url, idx) =>
+      representativeIndex === idx
+        ? { url, isRepresentative: true }
+        : { url, isRepresentative: false }
+    );
+  };
+
+  const formatData = S3uploadedURLs => {
     const postData = {
-      location: {
-        name: placeName,
-        latitude: Number(lat),
-        longitude: Number(lng),
-        address,
-        link,
-        phone
-      },
+      location: selectedLocation,
       post: {
-        place,
-        companion,
-        activity,
+        ...title,
         description,
-        images: S3uploadedURLs.map((url, idx) =>
-          representativeIndex === idx
-            ? { url, isRepresentative: true }
-            : { url, isRepresentative: false }
-        )
+        images: formatURLs(S3uploadedURLs)
       }
     };
     return postData;
   };
 
+  const getUpdatedValues = (initialData, postData) => {
+    const { id, ...initial } = initialData;
+    return deepDiff(initial, postData);
+  };
+
   const requestPostUpload = async postData => {
-    const res = await fetch(`${WEB_SERVER_URL}/post`, {
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(postData)
-    });
-    const json = await res.json();
+    const res = await fetch(
+      `${WEB_SERVER_URL}/post${isEditMode ? `/${initial.id}` : ''}`,
+      {
+        method: isEditMode ? 'PUT' : 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+      }
+    );
+    const { id } = isEditMode ? { id: initial.id } : await res.json();
 
     switch (res.status) {
       case 200:
-        history.push(`/post/${json.id}`);
+        history.push(`/post/${id}`);
         break;
       case 401:
         alert('토큰이 유효하지 않습니다. 다시 로그인 해주세요.');
@@ -161,9 +223,12 @@ const PostUploadPage = ({ history }) => {
       showUploadFailReason();
       return;
     }
-
-    const S3uploadedURLs = await uploadImagesToS3();
-    const postData = getPostData(S3uploadedURLs);
+    const hasImagesToUpload = !!images.selectedImages.length;
+    const S3uploadedURLs = hasImagesToUpload ? await uploadImagesToS3() : [];
+    const formattedData = formatData(S3uploadedURLs);
+    const postData = isEditMode
+      ? getUpdatedValues(initial, formattedData)
+      : formattedData;
     requestPostUpload(postData);
   };
 
@@ -185,14 +250,15 @@ const PostUploadPage = ({ history }) => {
             setRepresentativeIndex={setRepresentativeIndex}
           />
           <LocationUploader
-            lat={lat}
-            lng={lng}
+            lat={latitude}
+            lng={longitude}
             setSelectedLocation={setSelectedLocation}
             setReadyToUpload={setReadyToUpload}
             hasSelectedLocation={hasSelectedLocation}
           />
           <TitleUploader
-            placeName={placeName}
+            placeName={name}
+            title={title}
             setTitle={setTitle}
             setReadyToUpload={setReadyToUpload}
           />

@@ -67,5 +67,12 @@
     span {
       font-size: 1.6rem;
     }
+
+    a {
+      color: $main-color;
+      &:hover {
+        color: $main-color-light;
+      }
+    }
   }
 }
