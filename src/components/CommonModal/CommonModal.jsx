@@ -66,7 +66,9 @@ const CommonModal = ({ clickHandler, target }) => {
               className="common-modal-reminder-btn"
               styleType="underline"
             >
-              {content.hyperlinkMsg}
+              <a href={`${WEB_SERVER_URL}/auth/kakao`}>
+                {content.hyperlinkMsg}
+              </a>
             </CommonBtn>
           </p>
         </div>

@@ -2,16 +2,27 @@ import React, { useState, useMemo, useEffect } from 'react';
 import './TitleUploader.scss';
 import useInput from '../../hooks/useInput';
 
-const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
+const companionValues = {
+  ALONE: '혼자서',
+  FRIENDS: '친구랑',
+  COUPLE: '연인이랑',
+  FAMILY: '가족이랑'
+};
+
+const isFreeInputValue = val => {
+  return val && !Object.values(companionValues).some(value => value === val);
+};
+
+const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
   const {
     inputValue,
     setInputValue,
     handleChange: handleInputChange
-  } = useInput();
+  } = useInput(title);
   const { place, companion, activity } = inputValue;
   const [locationInputStyle, setLocationInputStyle] = useState({});
 
-  const [select, setSelect] = useState('');
+  const [select, setSelect] = useState(companion || '');
   const [state, setState] = useState({});
   const { showsFreeInput, isCompanionInputFocused, isOverlayHovered } = state;
 
@@ -66,7 +77,7 @@ const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
   }, [placeName]);
 
   useMemo(() => {
-    if (select === 'free_input') {
+    if (isFreeInputValue(select)) {
       setState({ ...state, showsFreeInput: true });
     } else {
       setInputValue({ ...inputValue, companion: select });
@@ -124,7 +135,7 @@ const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
             <option value="친구랑">친구랑</option>
             <option value="연인이랑">연인이랑</option>
             <option value="가족이랑">가족이랑</option>
-            <option value="free_input">직접입력</option>
+            <option value="직접입력">직접입력</option>
           </select>
         )}
         {isOverlayHovered || isCompanionInputFocused ? (
@@ -136,7 +147,7 @@ const TitleUploader = ({ placeName, setTitle, setReadyToUpload }) => {
             onMouseOver={setOverlayStateHovered}
             onMouseLeave={setOverlayStateUnhovered}
           >
-            <option value="free_input" disabled>
+            <option value="직접입력" disabled>
               누구랑
             </option>
             <option value="혼자서">혼자서</option>

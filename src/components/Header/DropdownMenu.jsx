@@ -2,10 +2,25 @@ import React, { useState, useEffect } from 'react';
 import './DropdownMenu.scss';
 import CommonLink from '../CommonLink/CommonLink';
 import { useLoginContext } from '../../contexts/LoginContext';
+import { WEB_SERVER_URL } from '../../configs';
 
 const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
-  const { nickname, id } = useLoginContext();
+  const { nickname, id, setLoggedIn, setUserInfo } = useLoginContext();
   const [showsMenu, setShowsMenu] = useState(false);
+
+  const handleLogout = async () => {
+    const res = await fetch(`${WEB_SERVER_URL}/auth/logout`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+    if (res.ok) {
+      setLoggedIn(false);
+      setUserInfo({});
+      alert('로그아웃되었습니다.');
+    } else {
+      alert('서버에 문제가 있나봐요. 잠시 후에 다시 시도해주시겠어요?');
+    }
+  };
 
   useEffect(() => {
     setShowsMenu(true);
@@ -29,9 +44,9 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
         <CommonLink to="/profile/edit">
           <div className="drop-down-menu-btns">프로필 편집</div>
         </CommonLink>
-        <CommonLink to="/">
-          <div className="drop-down-menu-btns">로그아웃</div>
-        </CommonLink>
+        <div className="drop-down-menu-btns" onClick={handleLogout}>
+          로그아웃
+        </div>
       </div>
     </>
   );

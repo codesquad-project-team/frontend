@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 
-const useInput = () => {
-  const [inputValue, setInputValue] = useState({});
+const useInput = (initialValue = {}) => {
+  const [inputValue, setInputValue] = useState(initialValue);
 
   const handleChange = useCallback(
     ({ target }) => {

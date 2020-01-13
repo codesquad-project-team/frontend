@@ -1,8 +1,9 @@
-@import "../../../stylesheets/util.scss";
+@import '../../../stylesheets/util.scss';
 
 .image-uploader {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+  margin-bottom: 2rem;
   width: 60rem;
 }
