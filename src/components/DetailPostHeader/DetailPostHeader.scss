@@ -1,6 +1,6 @@
 @import '../../stylesheets/util.scss';
 
-.detail-post-header {
+.wrapper {
   display: flex;
   justify-content: flex-end;
   width: 100%;
@@ -8,9 +8,9 @@
   margin-bottom: 2rem;
   padding: 0 1rem;
   border-bottom: 1px solid $main-color;
+}
 
-  &-btns {
-    margin: 0.6rem 1rem;
-    padding: 0;
-  }
+.btns {
+  margin: 0.6rem 1rem;
+  padding: 0;
 }

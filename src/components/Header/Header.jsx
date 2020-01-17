@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import './Header.scss';
+import classNames from 'classnames/bind';
+import styles from './Header.scss';
 import useInput from '../../hooks/useInput';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
@@ -8,6 +9,8 @@ import CommonLink from '../CommonLink/CommonLink';
 import DropdownMenu from './DropdownMenu';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { IMAGE_BUCKET_URL } from '../../configs';
+
+const cx = classNames.bind(styles);
 
 const Header = () => {
   const { inputValue, handleChange, restore } = useInput();
@@ -31,17 +34,17 @@ const Header = () => {
   };
 
   return (
-    <div className="header-wrapper">
-      <div className="header">
-        <div className="header-title">
+    <div className={cx('wrapper')}>
+      <div className={cx('header')}>
+        <div className={cx('title')}>
           <CommonLink to="/">
             <h1>Connect Flavor</h1>
           </CommonLink>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="header-searchbar-icon-wrapper">
+          <div className={cx('searchbar-icon-wrapper')}>
             <img
-              className="header-searchbar-icon"
+              className={cx('searchbar-icon')}
               src={`${IMAGE_BUCKET_URL}/magnifier-icon.png`}
               alt=""
             />
@@ -52,14 +55,16 @@ const Header = () => {
             onChange={handleChange}
           />
         </form>
-        <div className="header-btns">
+        <div className={cx('btns')}>
           {loggedIn ? (
             <>
               <ProfileImage
                 small
                 src={profileImage}
-                className={`header-profile-img ${showsDropdown &&
-                  'over-dropdown-background'}`}
+                className={cx(
+                  'profile-img',
+                  showsDropdown && 'over-dropdown-background'
+                )}
                 onClick={toggleDropdownMenu}
               />
               {showsDropdown && <DropdownMenu onClick={toggleDropdownMenu} />}
@@ -67,14 +72,14 @@ const Header = () => {
           ) : (
             <>
               <CommonBtn
-                className="signin-btn"
+                className={cx('signin-btn')}
                 onClick={handleSigninModal}
                 styleType="normal"
               >
                 로그인
               </CommonBtn>
               <CommonBtn
-                className="signup-btn"
+                className={cx('signup-btn')}
                 onClick={toggleSignupModal}
                 styleType="normal"
               >

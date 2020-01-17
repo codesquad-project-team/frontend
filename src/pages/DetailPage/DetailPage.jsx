@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './DetailPage.scss';
+import classNames from 'classnames/bind';
+import styles from './DetailPage.scss';
 import Header from '../../components/Header/Header';
 import DetailPostHeader from '../../components/DetailPostHeader/DetailPostHeader';
 import LocationCarousel from '../../components/LocationCarousel/LocationCarousel';
@@ -11,6 +12,8 @@ import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 
+const cx = classNames.bind(styles);
+
 const DetailPage = ({ postId }) => {
   const [data, setData] = useState({});
 
@@ -21,9 +24,9 @@ const DetailPage = ({ postId }) => {
   );
 
   return (
-    <div className="detail-page">
+    <div className={cx('wrapper')}>
       <Header />
-      <div className="detail-page-contents">
+      <div className={cx('contents')}>
         <FadeLoader
           css={override}
           sizeUnit={'px'}

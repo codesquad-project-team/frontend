@@ -1,14 +1,14 @@
-.related-post {
+.wrapper {
   width: 700px;
   position: relative;
 
-  &-header {
+  .header {
     text-align: center;
     font-size: 2.8rem;
     margin: 2rem 0;
   }
 
-  &-carousel {
+  .carousel {
     width: 500px;
     overflow: hidden;
     display: flex;
@@ -19,24 +19,15 @@
     }
   }
 
-  &-carousel-wrap {
+  .carousel-wrap {
     display: flex;
     justify-content: space-evenly;
   }
 
-  &-carousel-item {
-    text-align: center;
-    width: 100px;
-  }
-
-  &-carousel-btns {
+  .carousel-btns {
     position: relative;
     top: -10rem;
   }
-}
-
-.related-post-comment {
-  margin-top: 1.5rem;
 }
 
 .prev-btn {

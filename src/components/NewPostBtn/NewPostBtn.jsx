@@ -1,7 +1,10 @@
 import React from 'react';
-import './NewPostBtn.scss';
+import classNames from 'classnames/bind';
+import styles from './NewPostBtn.scss';
 import ToolTip from './ToolTip.jsx';
 import { NEW_POST_BTN_IMG_URL } from '../../configs';
+
+const cx = classNames.bind(styles);
 
 const NewPostBtn = () => {
   return (
@@ -11,7 +14,7 @@ const NewPostBtn = () => {
       </ToolTip>
       <img
         data-tooltip="new-post-btn"
-        className="new-post-btn"
+        className={cx('new-post-btn')}
         src={NEW_POST_BTN_IMG_URL}
       />
     </>

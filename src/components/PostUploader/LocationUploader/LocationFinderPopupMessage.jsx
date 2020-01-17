@@ -1,7 +1,10 @@
 import React, { useMemo, useEffect } from 'react';
-import './LocationFinderPopupMessage.scss';
+import classNames from 'classnames/bind';
+import styles from './LocationFinderPopupMessage.scss';
 import useModal from '../../../hooks/useModal';
 import CommonBtn from '../../CommonBtn/CommonBtn';
+
+const cx = classNames.bind(styles);
 
 const POPUP_DURATION = 1500;
 
@@ -22,7 +25,7 @@ const LocationFinderPopupMessage = ({
 
   const makeMessageLineByLine = popupActionType => {
     return messageMap[popupActionType].split('<br/>').map((line, idx) => (
-      <span key={idx} className="location-finder-popup-message">
+      <span key={idx} className={cx('message')}>
         {line}
       </span>
     ));
@@ -51,10 +54,10 @@ const LocationFinderPopupMessage = ({
 
   return (
     open && (
-      <div className="location-finder-popup">
+      <div className={cx('wrapper')}>
         {message}
         {popupActionType === 'SAVE_REQUIRED' && (
-          <div className="location-finder-popup-buttons">
+          <div className={cx('buttons')}>
             <CommonBtn onClick={closeLocationFinder}>네</CommonBtn>
             <CommonBtn onClick={closePopup}>아니오</CommonBtn>
           </div>

@@ -1,6 +1,9 @@
 import React from 'react';
-import './PreviewImages.scss';
+import classNames from 'classnames/bind';
+import styles from './PreviewImages.scss';
 import { IMAGE_BUCKET_URL } from '../../../configs';
+
+const cx = classNames.bind(styles);
 
 const PreviewImages = ({
   previewUrls,
@@ -12,14 +15,11 @@ const PreviewImages = ({
     const representativeClassName =
       index === representativeIndex ? 'representative' : 'non-representative';
     return (
-      <div className="image-uploader-preview-wrapper" key={index}>
-        <img
-          className={`image-uploader-preview-img ${representativeClassName}`}
-          src={image}
-        />
+      <div className={cx('wrapper')} key={index}>
+        <img className={cx('img', representativeClassName)} src={image} />
         <input
           type="image"
-          className="image-uploader-preview-img-close-btn"
+          className={cx('close-btn')}
           src={`${IMAGE_BUCKET_URL}/image-delete-icon-2.png`}
           onClick={deleteImageHandler}
           data-delete-target-index={index}
@@ -27,7 +27,7 @@ const PreviewImages = ({
 
         <input
           type="image"
-          className="image-uploader-preview-img-select-btn"
+          className={cx('select-btn')}
           src={`${IMAGE_BUCKET_URL}/star-icon.png`}
           onClick={representativeImageHandler}
           data-representative-index={index}

@@ -3,7 +3,7 @@
 $button-height: 4rem;
 $border-width: 1px;
 
-.location-find-button {
+.wrapper {
   margin: 2rem 0;
   padding: 0 1.5rem;
   height: $button-height;
@@ -12,12 +12,12 @@ $border-width: 1px;
   border-radius: 2rem;
   background-color: $main-color-light;
 
-  &-icon {
+  .icon {
     max-width: 80%;
     max-height: 80%;
   }
 
-  &-label {
+  .label {
     font-weight: bold;
     color: white;
     font-size: 1.5rem;

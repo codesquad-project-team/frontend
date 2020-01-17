@@ -1,32 +1,30 @@
 @import '../../stylesheets/util.scss';
 
-.profile-edit-page-image-change {
-  &-wrapper {
-    padding: 0 1.5rem;
-    height: 4rem;
-    line-height: 3.5rem;
-    border: 1px solid $main-color;
-    border-radius: 2rem;
-    background-color: $main-color-light;
-    cursor: pointer;
-  }
+.wrapper {
+  padding: 0 1.5rem;
+  height: 4rem;
+  line-height: 3.5rem;
+  border: 1px solid $main-color;
+  border-radius: 2rem;
+  background-color: $main-color-light;
+  cursor: pointer;
+}
 
-  &-icon {
-    max-width: 80%;
-    max-height: 80%;
-  }
+.icon {
+  max-width: 80%;
+  max-height: 80%;
+}
 
-  &-label {
-    color: white;
-    font-weight: bold;
-    font-size: 1.5rem;
-    margin-left: 0.5rem;
-    cursor: pointer;
-  }
+.label {
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
 
-  &-btn {
-    display: none;
-    width: 0;
-    height: 0;
-  }
+.btn {
+  display: none;
+  width: 0;
+  height: 0;
 }

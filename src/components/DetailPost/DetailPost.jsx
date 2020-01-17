@@ -1,7 +1,10 @@
 import React from 'react';
-import './DetailPost.scss';
+import classNames from 'classnames/bind';
+import styles from './DetailPost.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonLink from '../CommonLink/CommonLink';
+
+const cx = classNames.bind(styles);
 
 const DetailPost = ({
   data: {
@@ -13,27 +16,31 @@ const DetailPost = ({
   }
 }) => {
   return (
-    <div className="detail-post">
-      <h1 className="detail-post-title">
+    <div className={cx('wrapper')}>
+      <h1 className={cx('title')}>
         {place}에서 {companion} {activity}
       </h1>
-      <div className="detail-post-content">
+      <div className={cx('content')}>
         <CommonLink
           to={`/profile/@${nickname}`}
           onClick={() => localStorage.setItem('targetUserId', id)}
-          className="detail-post-writer-img"
+          className={cx('writer-img')}
         >
-          <ProfileImage small src={profileImage} />
+          <ProfileImage
+            small
+            className={cx('profile-image')}
+            src={profileImage}
+          />
         </CommonLink>
         <div>
           <CommonLink
             to={`/profile/@${nickname}`}
             onClick={() => localStorage.setItem('targetUserId', id)}
-            className="detail-post-writer-name"
+            className={cx('writer-name')}
           >
             {nickname}
           </CommonLink>
-          <p className="detail-post-desc">{description}</p>
+          <p className={cx('desc')}>{description}</p>
         </div>
       </div>
     </div>

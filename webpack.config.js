@@ -33,11 +33,16 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
+          'style-loader',
           {
-            loader: 'style-loader' // creates style nodes from JS strings
-          },
-          {
-            loader: 'css-loader' // translates CSS into CommonJS
+            loader: 'css-loader', // translates CSS into CommonJS
+            options: {
+              modules: {
+                mode: 'local',
+                localIdentName: '[name]-[local]--[hash:hex:4]',
+                context: path.resolve(__dirname, 'src')
+              }
+            }
           },
           {
             loader: 'sass-loader' // compiles Sass to CSS
@@ -46,6 +51,7 @@ module.exports = {
         exclude: /node_modules/
       },
       {
+        //react-bootstrap 사용을 위한 loader. node_modules를 제외하지 않음.
         test: /\.css$/,
         loader: 'style-loader!css-loader'
       }

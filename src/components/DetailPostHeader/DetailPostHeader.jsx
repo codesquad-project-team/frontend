@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import './DetailPostHeader.scss';
+import classNames from 'classnames/bind';
+import styles from './DetailPostHeader.scss';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { WEB_SERVER_URL } from '../../configs';
+
+const cx = classNames.bind(styles);
 
 const DetailPostHeader = ({ data }) => {
   const history = useHistory();
@@ -49,12 +52,12 @@ const DetailPostHeader = ({ data }) => {
   };
 
   return (
-    <div className="detail-post-header">
+    <div className={cx('wrapper')}>
       {isMyPost && (
         <>
           <CommonBtn
             styleType="underline"
-            className="detail-post-header-btns"
+            className={cx('btns')}
             onMouseOver={handleMouseOver}
             onClick={handleEdit}
           >
@@ -62,7 +65,7 @@ const DetailPostHeader = ({ data }) => {
           </CommonBtn>
           <CommonBtn
             styleType="underline"
-            className="detail-post-header-btns"
+            className={cx('btns')}
             onClick={handleDelete}
           >
             삭제

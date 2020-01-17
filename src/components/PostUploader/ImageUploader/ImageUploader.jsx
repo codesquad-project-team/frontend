@@ -1,8 +1,11 @@
 import React from 'react';
-import './ImageUploader.scss';
+import classNames from 'classnames/bind';
+import styles from './ImageUploader.scss';
 import FirstInputButton from './FirstInputButton';
 import SecondInputButton from './SecondInputButton';
 import PreviewImages from './PreviewImages';
+
+const cx = classNames.bind(styles);
 
 const ImageUploader = ({
   images,
@@ -74,7 +77,7 @@ const ImageUploader = ({
   };
 
   return (
-    <div className="image-uploader">
+    <div className={cx('wrapper')}>
       {previewUrls.length ? (
         <>
           <PreviewImages

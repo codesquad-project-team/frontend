@@ -3,45 +3,42 @@
 $lists-item-height: 5rem;
 $lists-item-padding: 1rem;
 
-.search-result-lists {
-  &-selected-item {
+.selected-item {
+  background-color: #eee;
+}
+
+.item {
+  padding: $lists-item-padding;
+  height: $lists-item-height;
+  border-bottom: 1px solid $gray-border-color;
+  &:hover {
+    cursor: pointer;
     background-color: #eee;
   }
-
-  &-item {
-    padding: $lists-item-padding;
-    height: $lists-item-height;
-    border-bottom: 1px solid $gray-border-color;
-    &:hover {
-      cursor: pointer;
-      background-color: #eee;
-    }
-  }
-  &-name {
-    font-size: 1.2rem;
-  }
-  &-address {
-    color: #888;
-  }
-
-  &-zero-result {
-    padding: $lists-item-padding;
-    height: $lists-item-height;
-    line-height: calc(#{$lists-item-height} - (#{$lists-item-padding} * 2));
-    text-align: center;
-    border-bottom: 1px solid $gray-border-color;
-    font-size: 1.2rem;
-  }
 }
-.search-result {
-  &-pagination {
-    display: grid;
-    grid-template-columns: 40% 20% 40%;
-    justify-items: center;
-    padding: 0.5rem 3rem;
-  }
+.placename {
+  font-size: 1.2rem;
+}
+.address {
+  color: #888;
+}
 
-  &-current-page-number {
-    font-size: 1.2rem;
-  }
+.zero-result {
+  padding: $lists-item-padding;
+  height: $lists-item-height;
+  line-height: calc(#{$lists-item-height} - (#{$lists-item-padding} * 2));
+  text-align: center;
+  border-bottom: 1px solid $gray-border-color;
+  font-size: 1.2rem;
+}
+
+.pagination {
+  display: grid;
+  grid-template-columns: 40% 20% 40%;
+  justify-items: center;
+  padding: 0.5rem 3rem;
+}
+
+.current-page-number {
+  font-size: 1.2rem;
 }

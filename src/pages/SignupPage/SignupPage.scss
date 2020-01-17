@@ -1,6 +1,6 @@
 @import '../../stylesheets/util.scss';
 
-.signup-page {
+.wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,7 +25,7 @@
     }
   }
 
-  &-body {
+  .main {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -42,13 +42,13 @@
       font-size: 3rem;
     }
   }
-  &-auth-checker {
+  .auth-checker {
     margin-bottom: 4rem;
     font-size: 2rem;
     color: violet;
   }
 
-  &-input-section {
+  .input-section {
     position: relative;
     display: flex;
     align-items: center;
@@ -74,7 +74,7 @@
     }
   }
 
-  &-signup-btn {
+  .signup-btn {
     > span {
       font-size: 2rem;
     }

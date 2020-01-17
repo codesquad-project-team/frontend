@@ -1,6 +1,9 @@
 import React from 'react';
-import './CommonBtn.scss';
+import classNames from 'classnames/bind';
+import styles from './CommonBtn.scss';
 import PropTypes from 'prop-types';
+
+const cx = classNames.bind(styles);
 
 const CommonBtn = props => {
   const {
@@ -10,13 +13,8 @@ const CommonBtn = props => {
     ...restProps
   } = props;
 
-  const styleClassName = `common-btn-${styleType}`;
-
   return (
-    <button
-      className={`common-btn ${className} ${styleClassName}`}
-      {...restProps}
-    >
+    <button className={cx('common', className, styleType)} {...restProps}>
       <span>{children}</span>
     </button>
   );
@@ -25,5 +23,6 @@ const CommonBtn = props => {
 export default CommonBtn;
 
 CommonBtn.propTypes = {
+  styleType: PropTypes.oneOf(['normal', 'emphasize', 'underline', 'none', '']),
   children: PropTypes.string
 };

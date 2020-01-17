@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './PostContainer.scss';
+import classNames from 'classnames/bind';
+import styles from './PostContainer.scss';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 import PostItem from '../PostItem/PostItem';
@@ -12,6 +13,8 @@ import {
   MAIN_COLOR
 } from '../../configs';
 import { throttle } from '../../utils/utils';
+
+const cx = classNames.bind(styles);
 
 const PostContainer = ({ headerOn, writerId = '' }) => {
   const [page, setPage] = useState(1);
@@ -72,8 +75,8 @@ const PostContainer = ({ headerOn, writerId = '' }) => {
 
   return (
     <>
-      <div className="post-container-wrapper">
-        <div className="post-container">{postItems}</div>
+      <div className={cx('wrapper')}>
+        <div className={cx('main')}>{postItems}</div>
       </div>
       <FadeLoader
         css={override}

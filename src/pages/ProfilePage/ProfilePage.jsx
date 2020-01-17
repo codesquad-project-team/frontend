@@ -24,7 +24,7 @@ const ProfilePage = () => {
     setData
   );
   return (
-    <div className="profile-page">
+    <div>
       <Header />
       <CommonLink to="/post/upload">
         <NewPostBtn />

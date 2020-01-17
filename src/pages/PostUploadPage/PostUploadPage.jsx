@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useReducer } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import './PostUploadPage.scss';
+import classNames from 'classnames/bind';
+import styles from './PostUploadPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
 import Header from '../../components/Header/Header';
 import ImageUploader from '../../components/PostUploader/ImageUploader/ImageUploader';
@@ -15,6 +16,8 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 import { deepDiff } from '../../utils/diff.js';
 import { WEB_SERVER_URL } from '../../configs';
+
+const cx = classNames.bind(styles);
 
 const readyToUploadReducer = (prevState, newState) => {
   return { ...prevState, ...newState };
@@ -238,8 +241,8 @@ const PostUploadPage = () => {
   return (
     <>
       <Header />
-      <CommonPost.background className="post-upload-page-background">
-        <CommonPost large className="post-upload-page">
+      <CommonPost.background className={cx('background')}>
+        <CommonPost large className={cx('wrapper')}>
           <ImageUploader
             images={images}
             setImages={setImages}
@@ -266,7 +269,7 @@ const PostUploadPage = () => {
           />
           {/* TODO: 취향 매칭을 위한 질문 추가하기 */}
           {/* <PostQuestions /> */}
-          <div className="post-upload-page-btns">
+          <div className={cx('btns')}>
             <CommonBtn onClick={handleSubmit}>작성</CommonBtn>
             <CommonBtn onClick={handleCancel}>취소</CommonBtn>
           </div>

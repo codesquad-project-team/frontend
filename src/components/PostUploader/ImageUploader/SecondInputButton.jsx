@@ -1,17 +1,17 @@
-import React from "react";
-import "./SecondInputButton.scss";
+import React from 'react';
+import classNames from 'classnames/bind';
+import styles from './SecondInputButton.scss';
+
+const cx = classNames.bind(styles);
 
 const SecondInputButton = ({ onChangeHandler }) => {
   return (
-    <div className="image-uploader-second-input-wrapper">
-      <label
-        className="image-uploader-second-input-label"
-        htmlFor="second-input"
-      >
+    <div className={cx('wrapper')}>
+      <label className={cx('label')} htmlFor="second-input">
         +
       </label>
       <input
-        className="image-uploader-second-input-btn"
+        className={cx('btn')}
         id="second-input"
         type="file"
         accept="image/*"

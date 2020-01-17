@@ -1,25 +1,25 @@
 @import '../../stylesheets/util.scss';
 
-.profile-edit-page {
-  padding: 10rem 10rem 8rem 10rem;
-  margin: 13rem auto 0 auto;
-  width: 100rem;
+.dimmed-background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  background-color: $gray-background-color;
+}
+
+.wrapper {
   display: flex;
   justify-content: space-between;
-  background-color: #fff;
-  border: 1px solid $gray-border-color;
   position: relative;
+  margin: 13rem auto 0 auto;
+  padding: 10rem 10rem 8rem 10rem;
+  width: 100rem;
+  border: 1px solid $gray-border-color;
+  background-color: #fff;
 
-  &-dimmed-background {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0px;
-    left: 0px;
-    background-color: $gray-background-color;
-  }
-
-  &-nav {
+  .nav {
     width: 20%;
 
     &-item {
@@ -32,21 +32,18 @@
     }
   }
 
-  &-content {
-    &-form {
-      width: 80%;
-    }
-
-    &-item {
-      justify-content: space-evenly;
-
-      .profile-image {
-        margin: 0 2rem 2rem 18rem;
-      }
-    }
+  .content-form {
+    width: 80%;
   }
 
-  &-submit-btn {
+  .profile-image-section {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 0 2rem 2rem 18rem;
+  }
+
+  .submit-btn {
     position: absolute;
     right: 1rem;
     bottom: 1rem;

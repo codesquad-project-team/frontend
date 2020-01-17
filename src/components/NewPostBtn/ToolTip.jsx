@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import './ToolTip.scss';
+import classNames from 'classnames/bind';
+import styles from './ToolTip.scss';
+
+const cx = classNames.bind(styles);
 
 const ToolTip = ({ place, id, children }) => {
   const ref = useRef(null);
@@ -57,14 +60,14 @@ const ToolTip = ({ place, id, children }) => {
   return (
     <div
       ref={ref}
-      className="tooltip-background"
+      className={cx('tooltip-background')}
       style={{
         position: 'fixed',
         ...layout
       }}
     >
-      <div className="tooltip-arrow" />
-      <div className="tooltip-label">{children}</div>
+      <div className={cx('tooltip-arrow')} />
+      <div className={cx('tooltip-label')}>{children}</div>
     </div>
   );
 };

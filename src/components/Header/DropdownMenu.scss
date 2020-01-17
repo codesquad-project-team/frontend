@@ -3,16 +3,16 @@
 $drop-down-btn-height: 3rem;
 $btn-quantity: 4;
 
-.drop-down-menu {
-  &-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    opacity: 0;
-  }
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0;
+}
 
+.wrapper {
   position: absolute;
   top: calc(#{$header-height} - 0.5rem);
   right: 0;
@@ -26,12 +26,7 @@ $btn-quantity: 4;
   transition: height 0.2s;
   opacity: 0;
 
-  &-animation {
-    height: calc(#{$drop-down-btn-height} * #{$btn-quantity});
-    opacity: 1;
-  }
-
-  &-btns {
+  .btns {
     width: 100%;
     height: $drop-down-btn-height;
     font-size: 1.2rem;
@@ -44,4 +39,9 @@ $btn-quantity: 4;
       background-color: $point-color;
     }
   }
+}
+
+.animation {
+  height: calc(#{$drop-down-btn-height} * #{$btn-quantity});
+  opacity: 1;
 }

@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-import './useShakeAnimation.scss';
+import classNames from 'classnames/bind';
+import styles from './useShakeAnimation.scss';
+
+const cx = classNames.bind(styles);
 
 const ANIMATION_DELAY = 300;
 
@@ -8,10 +11,10 @@ const useShakeAnimation = shakeTarget => {
 
   useEffect(() => {
     if (signupFailed) {
-      shakeTarget.current.classList.add('shake');
+      shakeTarget.current.classList.add(cx('shake'));
 
       setTimeout(() => {
-        shakeTarget.current.classList.remove('shake');
+        shakeTarget.current.classList.remove(cx('shake'));
         setSignupFailed(false);
       }, ANIMATION_DELAY);
     }
