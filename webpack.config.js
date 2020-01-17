@@ -1,4 +1,3 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { DefinePlugin } = require('webpack');
@@ -66,9 +65,6 @@ module.exports = {
   },
 
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css'
-    }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/index.html'
