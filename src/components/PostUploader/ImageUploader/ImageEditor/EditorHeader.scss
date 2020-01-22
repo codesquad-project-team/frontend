@@ -1,0 +1,26 @@
+@import '../../../../stylesheets/util.scss';
+
+.wrapper {
+  display: flex;
+  width: 100%;
+}
+
+button.btns {
+  flex-grow: 1;
+  margin: 0;
+  border: none;
+  border-bottom: 1px solid $gray-border-color;
+  cursor: default;
+}
+
+.rotate-left-btn {
+  border-radius: 5px 0 0 0;
+}
+
+.rotate-right-btn {
+  border-radius: 0 5px 0 0;
+}
+
+.separating-line {
+  border-right: 1px solid $gray-border-color;
+}

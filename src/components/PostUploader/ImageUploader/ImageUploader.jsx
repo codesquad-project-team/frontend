@@ -5,7 +5,7 @@ import FirstInputButton from './FirstInputButton';
 import SecondInputButton from './SecondInputButton';
 import PreviewImages from './PreviewImages';
 import useModal from '../../../hooks/useModal';
-import ImageEditor from './ImageEditor';
+import ImageEditor from './ImageEditor/ImageEditor';
 
 const cx = classNames.bind(styles);
 
