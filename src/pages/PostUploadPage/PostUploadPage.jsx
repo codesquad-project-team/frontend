@@ -41,7 +41,7 @@ const getInitialPostData = isEditMode => {
     description,
     images,
     location
-  } = JSON.parse(localStorage.getItem('postData'));
+  } = isEditMode ? JSON.parse(localStorage.getItem('postData')) : {};
 
   const initialData = {
     location,
