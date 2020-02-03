@@ -10,7 +10,7 @@ const OverlayButtons = ({
   onMouseEnter,
   onMouseLeave,
   representativeImageHandler,
-  deleteImageHandler,
+  onDelete,
   openEditor
 }) => {
   return (
@@ -39,7 +39,7 @@ const OverlayButtons = ({
         className={cx('btns')}
         src={`${IMAGE_BUCKET_URL}/image-delete-icon-2.png`}
         data-idx={index}
-        onClick={deleteImageHandler}
+        onClick={onDelete}
       />
     </div>
   );

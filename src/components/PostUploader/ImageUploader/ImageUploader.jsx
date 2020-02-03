@@ -11,20 +11,13 @@ const cx = classNames.bind(styles);
 
 const MAXIMUM_IMAGES = 5;
 
-const showAlert = key => {
-  const messages = {
-    EXCEED_MAXIMUM_IMAGES: `업로드 할 수 있는 이미지의 최대 개수는 ${MAXIMUM_IMAGES}개 입니다!`
-  };
-  alert(messages[key]);
-};
-
 const ImageUploader = ({
   images,
   setImages,
   representativeIndex,
   setRepresentativeIndex
 }) => {
-  const { selectedImages, previewUrls } = images;
+  const { previewUrls } = images;
 
   const { Modal, toggleModal: toggleImageEditor, open } = useModal();
   const [imageIndex, setImageIndex] = useState(null);
@@ -36,47 +29,28 @@ const ImageUploader = ({
 
   const addImageHandler = files => {
     /* Map each file to a promise that resolves to an array of image URI's */
-    Promise.all(
-      files.map(file => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.addEventListener('load', ({ target }) => {
-            resolve(target.result);
-          });
-          reader.readAsDataURL(file); // file을 읽기 가능한 url로 변환하여 target의 result 속성에 넣는다.
-        });
-      })
-    ).then(
-      urls => {
+    Promise.all(files.map(file => readFileAsDataURL(file)))
+      .then(urls => {
         /* Once all promises are resolved, update state with image URI array */
-        setImages({
-          selectedImages: [...selectedImages, ...files],
-          previewUrls: [...previewUrls, ...urls]
-        });
-      },
-      error => {
-        console.log(error);
-      }
-    );
+        setImages(ADD_IMAGES(files, urls));
+      })
+      .catch(error => console.error(error));
   };
 
   const deleteImageHandler = e => {
-    const deleteTargetIndex = Number(e.target.dataset.idx);
+    const targetIndex = Number(e.target.dataset.idx);
 
-    if (deleteTargetIndex === representativeIndex) {
-      setRepresentativeIndex(!deleteTargetIndex ? 0 : representativeIndex - 1);
-    } else if (deleteTargetIndex < representativeIndex) {
-      setRepresentativeIndex(representativeIndex - 1);
+    if (targetIndex === representativeIndex && !targetIndex) {
+      setRepresentativeIndex(INIT_INDEX());
+    } else if (targetIndex === representativeIndex) {
+      setRepresentativeIndex(DECREASE_INDEX());
+    } else if (targetIndex < representativeIndex) {
+      setRepresentativeIndex(DECREASE_INDEX());
+    } else if (targetIndex > representativeIndex) {
+      /* do nothing */
     }
-
-    setImages({
-      selectedImages: removeItem(selectedImages, deleteTargetIndex),
-      previewUrls: removeItem(previewUrls, deleteTargetIndex)
-    });
+    setImages(DELETE_IMAGES(targetIndex));
   };
-
-  const removeItem = (arr, targetIndex) =>
-    arr.filter((el, idx) => idx !== targetIndex);
 
   const selectRepresentativeImage = ({ target }) => {
     setRepresentativeIndex(Number(target.dataset.idx));
@@ -96,17 +70,17 @@ const ImageUploader = ({
         <>
           <PreviewImages
             previewUrls={previewUrls}
-            deleteImageHandler={deleteImageHandler}
+            onDelete={deleteImageHandler}
             representativeIndex={representativeIndex}
             representativeImageHandler={selectRepresentativeImage}
             openEditor={openEditor}
           />
           {previewUrls.length < MAXIMUM_IMAGES && (
-            <SecondInputButton onChangeHandler={getImage} />
+            <SecondInputButton onChange={getImage} />
           )}
         </>
       ) : (
-        <FirstInputButton onChangeHandler={getImage} />
+        <FirstInputButton onChange={getImage} />
       )}
       {open && (
         <Modal onClick={toggleImageEditor}>
@@ -121,3 +95,36 @@ const ImageUploader = ({
 };
 
 export default ImageUploader;
+
+const showAlert = key => {
+  const messages = {
+    EXCEED_MAXIMUM_IMAGES: `업로드 할 수 있는 이미지의 최대 개수는 ${MAXIMUM_IMAGES}개 입니다!`
+  };
+  alert(messages[key]);
+};
+
+const readFileAsDataURL = file => {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.addEventListener('load', ({ target }) => {
+      resolve(target.result);
+    });
+    reader.readAsDataURL(file);
+  });
+};
+
+const ADD_IMAGES = (files, URLs) => ({ selectedImages, previewUrls }) => ({
+  selectedImages: [...selectedImages, ...files],
+  previewUrls: [...previewUrls, ...URLs]
+});
+
+const DELETE_IMAGES = targetIndex => ({ selectedImages, previewUrls }) => ({
+  selectedImages: removeItem(selectedImages, targetIndex),
+  previewUrls: removeItem(previewUrls, targetIndex)
+});
+
+const removeItem = (arr, targetIndex) =>
+  arr.filter((el, idx) => idx !== targetIndex);
+
+const INIT_INDEX = () => () => 0;
+const DECREASE_INDEX = () => index => index - 1;

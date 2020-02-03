@@ -4,7 +4,7 @@ import styles from './SecondInputButton.scss';
 
 const cx = classNames.bind(styles);
 
-const SecondInputButton = ({ onChangeHandler }) => {
+const SecondInputButton = ({ onChange }) => {
   return (
     <div className={cx('wrapper')}>
       <label className={cx('label')} htmlFor="second-input">
@@ -15,7 +15,7 @@ const SecondInputButton = ({ onChangeHandler }) => {
         id="second-input"
         type="file"
         accept="image/*"
-        onChange={onChangeHandler}
+        onChange={onChange}
         multiple
       />
     </div>

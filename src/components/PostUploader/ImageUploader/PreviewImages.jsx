@@ -8,7 +8,7 @@ const cx = classNames.bind(styles);
 const PreviewImages = ({
   previewUrls,
   representativeIndex,
-  deleteImageHandler,
+  onDelete,
   representativeImageHandler,
   openEditor
 }) => {
@@ -50,7 +50,7 @@ const PreviewImages = ({
             index={index}
             onMouseEnter={handleButtonMouseEnter}
             onMouseLeave={handleButtonMouseLeave}
-            deleteImageHandler={deleteImageHandler}
+            onDelete={onDelete}
             representativeImageHandler={representativeImageHandler}
             openEditor={openEditor}
           />
