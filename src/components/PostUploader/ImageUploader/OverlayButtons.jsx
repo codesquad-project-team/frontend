@@ -11,7 +11,7 @@ const OverlayButtons = ({
   onMouseLeave,
   representativeImageHandler,
   deleteImageHandler,
-  toggleImageEditor
+  openEditor
 }) => {
   return (
     <div
@@ -32,7 +32,7 @@ const OverlayButtons = ({
         className={cx('btns')}
         src={`${IMAGE_BUCKET_URL}/edit-icon1.png`}
         data-idx={index}
-        onClick={toggleImageEditor}
+        onClick={openEditor}
       />
       <input
         type="image"

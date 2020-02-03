@@ -10,7 +10,7 @@ const PreviewImages = ({
   representativeIndex,
   deleteImageHandler,
   representativeImageHandler,
-  toggleImageEditor
+  openEditor
 }) => {
   const [hoveredImageIdx, setHoveredImageIdx] = useState(null);
   const [hoveredButtonIdx, setHoveredButtonIdx] = useState(null);
@@ -52,7 +52,7 @@ const PreviewImages = ({
             onMouseLeave={handleButtonMouseLeave}
             deleteImageHandler={deleteImageHandler}
             representativeImageHandler={representativeImageHandler}
-            toggleImageEditor={toggleImageEditor}
+            openEditor={openEditor}
           />
         )}
       </div>

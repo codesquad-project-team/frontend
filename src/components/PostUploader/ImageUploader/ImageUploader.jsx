@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ImageUploader.scss';
 import FirstInputButton from './FirstInputButton';
@@ -27,6 +27,12 @@ const ImageUploader = ({
   const { selectedImages, previewUrls } = images;
 
   const { Modal, toggleModal: toggleImageEditor, open } = useModal();
+  const [imageIndex, setImageIndex] = useState(null);
+
+  const openEditor = ({ target }) => {
+    setImageIndex(Number(target.dataset.idx));
+    toggleImageEditor();
+  };
 
   const addImageHandler = files => {
     /* Map each file to a promise that resolves to an array of image URI's */
@@ -93,7 +99,7 @@ const ImageUploader = ({
             deleteImageHandler={deleteImageHandler}
             representativeIndex={representativeIndex}
             representativeImageHandler={selectRepresentativeImage}
-            toggleImageEditor={toggleImageEditor}
+            openEditor={openEditor}
           />
           {previewUrls.length < MAXIMUM_IMAGES && (
             <SecondInputButton onChangeHandler={getImage} />
@@ -104,7 +110,10 @@ const ImageUploader = ({
       )}
       {open && (
         <Modal onClick={toggleImageEditor}>
-          <ImageEditor onClick={toggleImageEditor} />
+          <ImageEditor
+            dataURL={previewUrls[imageIndex]}
+            onClick={toggleImageEditor}
+          />
         </Modal>
       )}
     </div>
