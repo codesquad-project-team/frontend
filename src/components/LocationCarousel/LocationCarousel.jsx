@@ -5,7 +5,11 @@ import Carousel from 'react-bootstrap/Carousel';
 
 const cx = classNames.bind(styles);
 
-const LocationCarousel = ({ data: { images = [] } }) => {
+const LocationCarousel = ({
+  data: {
+    post: { images = [] }
+  }
+}) => {
   const carouselItems = images.map(({ url }, index) => {
     return (
       <Carousel.Item key={index}>

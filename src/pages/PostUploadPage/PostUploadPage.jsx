@@ -23,41 +23,18 @@ const readyToUploadReducer = (prevState, newState) => {
   return { ...prevState, ...newState };
 };
 
-const getInitialPostData = isEditMode => {
-  const {
-    id, //postId
-    place,
-    companion,
-    activity,
-    description,
-    images,
-    location
-  } = isEditMode ? JSON.parse(localStorage.getItem('postData')) : {};
-
-  /* diff 비교를 위해 데이터 구조를 동일하게 맞춤
-  백엔드에서 넘겨주는 데이터구조를 아래처럼 수정하기로 했음
-  백엔드 수정되면 이쪽 코드도 간결하게 수정예정 */
-  const initialData = {
-    location,
-    post: {
-      place,
-      companion,
-      activity,
-      description,
-      images
-    },
-    id
-  };
-  return isEditMode ? initialData : {};
-};
+const getInitialPostData = isEditMode =>
+  isEditMode ? JSON.parse(localStorage.getItem('postData')) : {};
 
 const getInitialImages = images =>
-  images.map(({ url, isRepresentative }) => ({
-    original: null,
-    forUpload: null,
-    previewURL: url,
-    isRepresentative
-  }));
+  images
+    ? images.map(({ url, isRepresentative }) => ({
+        original: null, //TODO: url을 가지고 File객체 생성해야함.
+        forUpload: null,
+        previewURL: url,
+        isRepresentative
+      }))
+    : [];
 
 const PostUploadPage = () => {
   const history = useHistory();

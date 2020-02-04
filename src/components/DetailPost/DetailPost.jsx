@@ -8,10 +8,7 @@ const cx = classNames.bind(styles);
 
 const DetailPost = ({
   data: {
-    place,
-    companion,
-    activity,
-    description,
+    post: { place, companion, activity, description } = {},
     writer: { id, nickname, profileImage } = {}
   }
 }) => {
