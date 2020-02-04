@@ -9,7 +9,7 @@ const OverlayButtons = ({
   index,
   onMouseEnter,
   onMouseLeave,
-  representativeImageHandler,
+  onSelect,
   onDelete,
   openEditor
 }) => {
@@ -25,7 +25,7 @@ const OverlayButtons = ({
         className={cx('btns')}
         src={`${IMAGE_BUCKET_URL}/star-icon.png`}
         data-idx={index}
-        onClick={representativeImageHandler}
+        onClick={onSelect}
       />
       <input
         type="image"

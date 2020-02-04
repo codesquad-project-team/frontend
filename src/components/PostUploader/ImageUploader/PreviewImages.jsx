@@ -5,13 +5,7 @@ import OverlayButtons from './OverlayButtons';
 
 const cx = classNames.bind(styles);
 
-const PreviewImages = ({
-  previewUrls,
-  representativeIndex,
-  onDelete,
-  representativeImageHandler,
-  openEditor
-}) => {
+const PreviewImages = ({ images, onDelete, onSelect, openEditor }) => {
   const [hoveredImageIdx, setHoveredImageIdx] = useState(null);
   const [hoveredButtonIdx, setHoveredButtonIdx] = useState(null);
 
@@ -31,16 +25,14 @@ const PreviewImages = ({
     setHoveredButtonIdx(null);
   };
 
-  return previewUrls.map((image, index) => {
-    const representativeClassName =
-      index === representativeIndex ? 'representative' : 'non-representative';
+  return images.map(({ previewURL, isRepresentative }, index) => {
     const isImageHovered = hoveredImageIdx === index;
     const isButtonHovered = hoveredButtonIdx === index;
     return (
       <div className={cx('wrapper')} key={index}>
         <img
-          className={cx('img', representativeClassName)}
-          src={image}
+          className={cx('img', isRepresentative && 'representative')}
+          src={previewURL}
           data-idx={index}
           onMouseEnter={handleImageMouseEnter}
           onMouseLeave={handleImageMouseLeave}
@@ -51,7 +43,7 @@ const PreviewImages = ({
             onMouseEnter={handleButtonMouseEnter}
             onMouseLeave={handleButtonMouseLeave}
             onDelete={onDelete}
-            representativeImageHandler={representativeImageHandler}
+            onSelect={onSelect}
             openEditor={openEditor}
           />
         )}

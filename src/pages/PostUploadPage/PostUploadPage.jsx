@@ -23,18 +23,9 @@ const readyToUploadReducer = (prevState, newState) => {
   return { ...prevState, ...newState };
 };
 
-const getURLAndIndex = imageURLs => {
-  let representativeIndex;
-  const URLs = imageURLs.map(({ url, isRepresentative }, idx) => {
-    if (isRepresentative) representativeIndex = idx;
-    return url;
-  });
-  return [URLs, representativeIndex];
-};
-
 const getInitialPostData = isEditMode => {
   const {
-    id,
+    id, //postId
     place,
     companion,
     activity,
@@ -43,6 +34,9 @@ const getInitialPostData = isEditMode => {
     location
   } = isEditMode ? JSON.parse(localStorage.getItem('postData')) : {};
 
+  /* diff 비교를 위해 데이터 구조를 동일하게 맞춤
+  백엔드에서 넘겨주는 데이터구조를 아래처럼 수정하기로 했음
+  백엔드 수정되면 이쪽 코드도 간결하게 수정예정 */
   const initialData = {
     location,
     post: {
@@ -56,17 +50,23 @@ const getInitialPostData = isEditMode => {
   };
   return isEditMode ? initialData : {};
 };
-//TODO: 초기렌더링 이후 localStorage 초기화
+
+const getInitialImages = images =>
+  images.map(({ url, isRepresentative }) => ({
+    original: null,
+    forUpload: null,
+    previewURL: url,
+    isRepresentative
+  }));
+
 const PostUploadPage = () => {
   const history = useHistory();
   const { pathname } = useLocation();
   const isEditMode = pathname === '/post/edit';
 
   const initial = useMemo(() => getInitialPostData(isEditMode), []);
-  const [initialURLs, initialIdx] = useMemo(
-    () => (isEditMode ? getURLAndIndex(initial.post.images) : []),
-    []
-  );
+  const { images: initialImages, description: initialDesc, ...initialTitle } =
+    initial.post || {};
 
   const [readyToUpload, setReadyToUpload] = useReducer(
     readyToUploadReducer,
@@ -74,28 +74,15 @@ const PostUploadPage = () => {
   );
   const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
 
+  const [images, setImages] = useState(getInitialImages(initialImages));
+
   const [selectedLocation, setSelectedLocation] = useState(
     initial.location || {}
   );
-
   const { longitude, latitude, name } = selectedLocation;
 
-  const _initial = initial.post || {};
-  const initialTitle = {
-    place: _initial.place,
-    companion: _initial.companion,
-    activity: _initial.activity
-  };
   const [title, setTitle] = useState(initialTitle || '');
-  const [description, setDescription] = useState(_initial.description || '');
-
-  const [representativeIndex, setRepresentativeIndex] = useState(
-    initialIdx || 0
-  );
-  const [images, setImages] = useState({
-    selectedImages: [],
-    previewUrls: initialURLs || []
-  });
+  const [description, setDescription] = useState(initialDesc || '');
 
   const { nickname } = useLoginContext();
 
@@ -137,28 +124,27 @@ const PostUploadPage = () => {
     const S3uploadedURLs = S3imageUploadHandler(
       albumName,
       albumNamePrefix,
-      images.selectedImages,
+      images.map(({ forUpload }) => forUpload),
       setImageUploadError
     );
     return S3uploadedURLs;
   };
 
-  const mergePreviousImages = S3uploadedURLs => {
-    return images.previewUrls
-      .filter(URL => !URL.startsWith('data'))
+  const mergePreviousImages = (images, S3uploadedURLs) => {
+    return images
+      .filter(({ previewURL }) => previewURL.startsWith('http'))
       .concat(S3uploadedURLs);
   };
 
-  const formatURLs = S3uploadedURLs => {
+  const formatURLs = (images, S3uploadedURLs) => {
     const URLs = isEditMode
-      ? mergePreviousImages(S3uploadedURLs)
+      ? mergePreviousImages(images, S3uploadedURLs)
       : S3uploadedURLs;
 
-    return URLs.map((url, idx) =>
-      representativeIndex === idx
-        ? { url, isRepresentative: true }
-        : { url, isRepresentative: false }
-    );
+    return images.map(({ isRepresentative }, idx) => ({
+      url: URLs[idx],
+      isRepresentative
+    }));
   };
 
   const formatData = S3uploadedURLs => {
@@ -167,7 +153,7 @@ const PostUploadPage = () => {
       post: {
         ...title,
         description,
-        images: formatURLs(S3uploadedURLs)
+        images: formatURLs(images, S3uploadedURLs)
       }
     };
     return postData;
@@ -214,7 +200,7 @@ const PostUploadPage = () => {
     e.preventDefault();
 
     const needsMoreData =
-      !images.previewUrls.length ||
+      !images.length ||
       !hasSelectedLocation ||
       !hasAllTitles ||
       isOverDescLimit;
@@ -223,7 +209,9 @@ const PostUploadPage = () => {
       showUploadFailReason();
       return;
     }
-    const hasImagesToUpload = !!images.selectedImages.length;
+    const hasImagesToUpload = !!images.filter(({ previewURL }) =>
+      previewURL.startsWith('data')
+    ).length;
     const S3uploadedURLs = hasImagesToUpload ? await uploadImagesToS3() : [];
     const formattedData = formatData(S3uploadedURLs);
     const postData = isEditMode
@@ -243,12 +231,7 @@ const PostUploadPage = () => {
       <Header />
       <CommonPost.background className={cx('background')}>
         <CommonPost large className={cx('wrapper')}>
-          <ImageUploader
-            images={images}
-            setImages={setImages}
-            representativeIndex={representativeIndex}
-            setRepresentativeIndex={setRepresentativeIndex}
-          />
+          <ImageUploader images={images} setImages={setImages} />
           <LocationUploader
             lat={latitude}
             lng={longitude}
@@ -280,3 +263,5 @@ const PostUploadPage = () => {
 };
 
 export default PostUploadPage;
+
+/* helpers for PostUploadPage*/
