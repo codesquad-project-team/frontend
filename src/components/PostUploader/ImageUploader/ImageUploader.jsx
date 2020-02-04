@@ -13,10 +13,10 @@ const MAXIMUM_IMAGES = 5;
 
 const ImageUploader = ({ images, setImages }) => {
   const { Modal, toggleModal: toggleImageEditor, open } = useModal();
-  const [imageIndex, setImageIndex] = useState(null);
+  const [targetIndex, setTargetIndex] = useState(null);
 
   const openEditor = ({ target }) => {
-    setImageIndex(Number(target.dataset.idx));
+    setTargetIndex(Number(target.dataset.idx));
     toggleImageEditor();
   };
 
@@ -62,8 +62,8 @@ const ImageUploader = ({ images, setImages }) => {
       {open && (
         <Modal onClick={toggleImageEditor}>
           <ImageEditor
-            dataURL={images[imageIndex].previewURL}
-            onClick={toggleImageEditor}
+            dataURL={images[targetIndex].previewURL}
+            onClose={toggleImageEditor}
           />
         </Modal>
       )}
