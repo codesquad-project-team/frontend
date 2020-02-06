@@ -5,10 +5,10 @@ import CommonBtn from '../../../CommonBtn/CommonBtn';
 
 const cx = classNames.bind(styles);
 
-const EditorFooter = ({ onCancel }) => {
+const EditorFooter = ({ onSave, onCancel }) => {
   return (
     <div className={cx('wrapper')}>
-      <CommonBtn className={cx('btns', 'save-btn')} onClick={onCancel}>
+      <CommonBtn className={cx('btns', 'save-btn')} onClick={onSave}>
         저장
       </CommonBtn>
       <div className={cx('separating-line')} />

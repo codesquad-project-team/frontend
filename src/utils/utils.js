@@ -38,3 +38,9 @@ export const debounce = (callback, delay = 300) => {
     timer = setTimeout(() => callback(...param), delay);
   };
 };
+
+export const pipe = (...callbacks) => param =>
+  callbacks.reduce((acc, curr) => curr(acc), param);
+
+export const asyncPipe = (...callbacks) => param =>
+  callbacks.reduce((acc, cur) => acc.then(cur), Promise.resolve(param));

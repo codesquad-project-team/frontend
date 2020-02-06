@@ -6,6 +6,7 @@ import SecondInputButton from './SecondInputButton';
 import PreviewImages from './PreviewImages';
 import useModal from '../../../hooks/useModal';
 import ImageEditor from './ImageEditor/ImageEditor';
+import { pipe } from '../../../utils/utils';
 
 const cx = classNames.bind(styles);
 
@@ -62,7 +63,10 @@ const ImageUploader = ({ images, setImages }) => {
       {open && (
         <Modal onClick={toggleImageEditor}>
           <ImageEditor
-            dataURL={images[targetIndex].previewURL}
+            images={images}
+            setImages={setImages}
+            src={images[targetIndex].previewURL}
+            targetIndex={targetIndex}
             onClose={toggleImageEditor}
           />
         </Modal>
@@ -147,6 +151,3 @@ const getRepresentativeIndex = images =>
 
 const removeItem = (arr, targetIndex) =>
   arr.filter((el, idx) => idx !== targetIndex);
-
-const pipe = (...callbacks) => param =>
-  callbacks.reduce((acc, curr) => curr(acc), param);
