@@ -65,8 +65,9 @@ const ImageUploader = ({ images, setImages, actions }) => {
           <ImageEditor
             setImages={setImages}
             actions={actions}
-            src={images[targetIndex].previewURL}
+            src={images[targetIndex].originalURL}
             originalFile={images[targetIndex].original}
+            cropperData={images[targetIndex].cropperData}
             targetIndex={targetIndex}
             onClose={toggleImageEditor}
           />

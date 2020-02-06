@@ -1,4 +1,4 @@
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ImageEditor.scss';
 import CommonPost from '../../../CommonPost/CommonPost';
@@ -18,6 +18,7 @@ const ImageEditor = ({
   actions,
   src,
   originalFile,
+  cropperData,
   targetIndex,
   onClose
 }) => {
@@ -44,6 +45,7 @@ const ImageEditor = ({
   //   };
   //   setCrop(newCrop);
   // };
+
   return (
     <CommonPost large className={cx('wrapper')}>
       <EditorHeader onRotateLeft={rotateLeft} onRotateRight={rotateRight} />
@@ -52,6 +54,8 @@ const ImageEditor = ({
           ref={ref}
           src={src}
           style={{ height: '400px', width: '100%' }}
+          viewMode={1} //restrict the crop box to not exceed the size of the canvas.
+          data={cropperData}
         />
       </Suspense>
       <EditorFooter onSave={saveImage} onCancel={onClose} />

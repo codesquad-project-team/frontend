@@ -44,3 +44,15 @@ export const pipe = (...callbacks) => param =>
 
 export const asyncPipe = (...callbacks) => param =>
   callbacks.reduce((acc, cur) => acc.then(cur), Promise.resolve(param));
+
+/**
+ * @returns {Promise}
+ */
+export const readFileAsDataURL = file =>
+  new Promise(resolve => {
+    const reader = new FileReader();
+    reader.addEventListener('load', ({ target }) => {
+      resolve(target.result);
+    });
+    reader.readAsDataURL(file);
+  });

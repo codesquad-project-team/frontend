@@ -1,4 +1,4 @@
-import { pipe } from '../../../utils/utils';
+import { pipe, readFileAsDataURL } from '../../../utils/utils';
 
 export const ADD_IMAGES = async (setImages, imagesQuantity, files) => {
   const URLs = await getDataURLs(files);
@@ -15,18 +15,6 @@ const getDataURLs = files =>
     console.error(err)
   );
 
-/**
- * @returns {Promise}
- */
-const readFileAsDataURL = file =>
-  new Promise(resolve => {
-    const reader = new FileReader();
-    reader.addEventListener('load', ({ target }) => {
-      resolve(target.result);
-    });
-    reader.readAsDataURL(file);
-  });
-
 const addImagesOnFirstTime = ({ images, files, URLs }) =>
   pipe(addImages, initRepresentative)({ images, files, URLs });
 
@@ -34,6 +22,7 @@ const addImages = ({ images, files, URLs }) => [
   ...images,
   ...files.map((file, idx) => ({
     original: file,
+    originalURL: URLs[idx],
     forUpload: file,
     previewURL: URLs[idx],
     isRepresentative: false

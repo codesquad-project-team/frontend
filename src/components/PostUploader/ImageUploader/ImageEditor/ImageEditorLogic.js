@@ -1,4 +1,4 @@
-import { asyncPipe } from '../../../../utils/utils';
+import { asyncPipe, readFileAsDataURL } from '../../../../utils/utils';
 
 const CANVAS_OPTIONS = {
   maxWidth: 4096,
@@ -9,21 +9,23 @@ const CANVAS_OPTIONS = {
 };
 
 export const UPDATE_IMAGE = (setImages, cropper, index, originalFile) => {
+  const cropperData = cropper.getData();
+  const canvas = cropper.getCroppedCanvas(CANVAS_OPTIONS); //sync function
   asyncPipe(
-    () => cropper.getCroppedCanvas(CANVAS_OPTIONS), //sync function
-    canvas => convertCanvasToFile(canvas, originalFile), //async
-    file => getPreviewURL(file), //async
-    ({ forUpload, previewURL }) =>
+    canvas => convertCanvasToFile(canvas, originalFile),
+    async file => [file, await getPreviewURL(file)],
+    ([forUpload, previewURL]) =>
       setImages(images =>
-        updateArrayWithObject(images, index, { forUpload, previewURL })
+        updateArrayWithObject(images, index, {
+          forUpload,
+          previewURL,
+          cropperData
+        })
       )
-  )();
+  )(canvas);
 };
 
-const getPreviewURL = async file => {
-  const previewURL = await readFileAsDataURL(file);
-  return { forUpload: file, previewURL };
-};
+const getPreviewURL = async file => await readFileAsDataURL(file);
 
 const updateArrayWithObject = (array, index, item) =>
   array.map((el, idx) => (idx === index ? { ...el, ...item } : el));
@@ -35,15 +37,5 @@ const convertCanvasToFile = (canvasElement, originalFile) => {
       const file = new File([blob], name, { type });
       resolve(file);
     }, type);
-  });
-};
-
-const readFileAsDataURL = file => {
-  return new Promise(resolve => {
-    const reader = new FileReader();
-    reader.addEventListener('load', ({ target }) => {
-      resolve(target.result);
-    });
-    reader.readAsDataURL(file);
   });
 };
