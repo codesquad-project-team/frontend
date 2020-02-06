@@ -16,6 +16,7 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 import { deepDiff } from '../../utils/diff.js';
 import { WEB_SERVER_URL } from '../../configs';
+import * as actions from './actions';
 
 const cx = classNames.bind(styles);
 
@@ -208,7 +209,11 @@ const PostUploadPage = () => {
       <Header />
       <CommonPost.background className={cx('background')}>
         <CommonPost large className={cx('wrapper')}>
-          <ImageUploader images={images} setImages={setImages} />
+          <ImageUploader
+            images={images}
+            setImages={setImages}
+            actions={actions}
+          />
           <LocationUploader
             lat={latitude}
             lng={longitude}

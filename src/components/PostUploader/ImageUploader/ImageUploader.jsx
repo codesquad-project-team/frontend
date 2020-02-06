@@ -6,13 +6,19 @@ import SecondInputButton from './SecondInputButton';
 import PreviewImages from './PreviewImages';
 import useModal from '../../../hooks/useModal';
 import ImageEditor from './ImageEditor/ImageEditor';
-import { pipe } from '../../../utils/utils';
 
 const cx = classNames.bind(styles);
 
 const MAXIMUM_IMAGES = 5;
 
-const ImageUploader = ({ images, setImages }) => {
+const showAlert = key => {
+  const messages = {
+    EXCEED_MAXIMUM_IMAGES: `업로드 할 수 있는 이미지의 최대 개수는 ${MAXIMUM_IMAGES}개 입니다!`
+  };
+  alert(messages[key]);
+};
+
+const ImageUploader = ({ images, setImages, actions }) => {
   const { Modal, toggleModal: toggleImageEditor, open } = useModal();
   const [targetIndex, setTargetIndex] = useState(null);
 
@@ -26,21 +32,15 @@ const ImageUploader = ({ images, setImages }) => {
 
     files.length + images.length > MAXIMUM_IMAGES
       ? showAlert('EXCEED_MAXIMUM_IMAGES')
-      : addImageHandler(files);
-  };
-
-  const addImageHandler = files => {
-    getDataURLs(files)
-      .then(URLs => setImages(ADD_IMAGES(files, URLs)))
-      .catch(error => console.error(error));
+      : actions.ADD_IMAGES(setImages, images.length, files);
   };
 
   const deleteImage = ({ target }) => {
-    setImages(DELETE_IMAGES(Number(target.dataset.idx)));
+    setImages(actions.DELETE_IMAGE(Number(target.dataset.idx)));
   };
 
   const selectRepresentative = ({ target }) => {
-    setImages(UPDATE_REPRESENTATIVE(Number(target.dataset.idx)));
+    setImages(actions.UPDATE_REPRESENTATIVE(Number(target.dataset.idx)));
   };
 
   return (
@@ -63,9 +63,10 @@ const ImageUploader = ({ images, setImages }) => {
       {open && (
         <Modal onClick={toggleImageEditor}>
           <ImageEditor
-            images={images}
             setImages={setImages}
+            actions={actions}
             src={images[targetIndex].previewURL}
+            originalFile={images[targetIndex].original}
             targetIndex={targetIndex}
             onClose={toggleImageEditor}
           />
@@ -76,78 +77,3 @@ const ImageUploader = ({ images, setImages }) => {
 };
 
 export default ImageUploader;
-
-/* helper functions for ImageUploader */
-const showAlert = key => {
-  const messages = {
-    EXCEED_MAXIMUM_IMAGES: `업로드 할 수 있는 이미지의 최대 개수는 ${MAXIMUM_IMAGES}개 입니다!`
-  };
-  alert(messages[key]);
-};
-
-/**
- * @returns {Promise}
- */
-const getDataURLs = files =>
-  Promise.all(files.map(file => readFileAsDataURL(file))).catch(err =>
-    console.error(err)
-  );
-
-/* action functions */
-const ADD_IMAGES = (files, URLs) => images =>
-  images.length
-    ? addImages(images, files, URLs)
-    : pipe(
-        images => addImages(images, files, URLs),
-        images => initRepresentative(images)
-      )(images);
-
-const DELETE_IMAGES = targetIndex => images =>
-  targetIndex === getRepresentativeIndex(images)
-    ? pipe(
-        images => removeItem(images, targetIndex),
-        images => initRepresentative(images)
-      )(images)
-    : removeItem(images, targetIndex);
-
-const UPDATE_REPRESENTATIVE = targetIndex => images =>
-  images.map((obj, idx) =>
-    targetIndex === idx
-      ? { ...obj, isRepresentative: true }
-      : { ...obj, isRepresentative: false }
-  );
-
-/* action helpers  */
-/**
- * @returns {Promise}
- */
-const readFileAsDataURL = file => {
-  return new Promise(resolve => {
-    const reader = new FileReader();
-    reader.addEventListener('load', ({ target }) => {
-      resolve(target.result);
-    });
-    reader.readAsDataURL(file);
-  });
-};
-
-const addImages = (images, files, URLs) => [
-  ...images,
-  ...files.map((file, idx) => ({
-    original: file,
-    forUpload: file,
-    previewURL: URLs[idx],
-    isRepresentative: false
-  }))
-];
-
-const initRepresentative = images =>
-  images.map((obj, idx) =>
-    idx === 0 ? { ...obj, isRepresentative: true } : obj
-  );
-
-const getRepresentativeIndex = images =>
-  images.findIndex(item => item.isRepresentative);
-
-const removeItem = (arr, targetIndex) =>
-  arr.filter((el, idx) => idx !== targetIndex);
