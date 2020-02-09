@@ -13,7 +13,7 @@ export const UPDATE_IMAGE = (setImages, cropper, index, originalFile) => {
   const canvas = cropper.getCroppedCanvas(CANVAS_OPTIONS); //sync function
   asyncPipe(
     canvas => convertCanvasToFile(canvas, originalFile),
-    async file => [file, await getPreviewURL(file)],
+    async file => [file, await readFileAsDataURL(file)],
     ([forUpload, previewURL]) =>
       setImages(images =>
         updateArrayWithObject(images, index, {
@@ -24,8 +24,6 @@ export const UPDATE_IMAGE = (setImages, cropper, index, originalFile) => {
       )
   )(canvas);
 };
-
-const getPreviewURL = async file => await readFileAsDataURL(file);
 
 const updateArrayWithObject = (array, index, item) =>
   array.map((el, idx) => (idx === index ? { ...el, ...item } : el));

@@ -18,6 +18,11 @@ const showAlert = key => {
   alert(messages[key]);
 };
 
+const importCropper = () =>
+  import(/* webpackChunkName: "cropperjs" */ 'cropperjs').then(
+    ({ default: Cropper }) => Cropper
+  );
+
 const ImageUploader = ({ images, setImages, actions }) => {
   const { Modal, toggleModal: toggleImageEditor, open } = useModal();
   const [targetIndex, setTargetIndex] = useState(null);
@@ -27,12 +32,13 @@ const ImageUploader = ({ images, setImages, actions }) => {
     toggleImageEditor();
   };
 
-  const addImage = ({ target }) => {
+  const addImage = async ({ target }) => {
+    const Cropper = await importCropper();
     const files = Array.from(target.files);
 
     files.length + images.length > MAXIMUM_IMAGES
       ? showAlert('EXCEED_MAXIMUM_IMAGES')
-      : actions.ADD_IMAGES(setImages, images.length, files);
+      : actions.ADD_IMAGES(setImages, images.length, files, Cropper);
   };
 
   const deleteImage = ({ target }) => {

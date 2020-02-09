@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense, lazy } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ImageEditor.scss';
 import CommonPost from '../../../CommonPost/CommonPost';
@@ -10,7 +10,7 @@ import { asyncPipe } from '../../../../utils/utils';
 const cx = classNames.bind(styles);
 
 const Cropper = lazy(() =>
-  import(/* webpackChunkName: "cropper" */ 'react-cropper')
+  import(/* webpackChunkName: "react-cropper" */ 'react-cropper')
 );
 
 const ImageEditor = ({
@@ -34,18 +34,6 @@ const ImageEditor = ({
       onClose
     )();
 
-  //TODO: rotates crop selection, when rotate button is clicked.
-  //  const rotateCropSelection = () => {
-  //   const { x, y, width, height } = crop;
-  //   const newCrop = {
-  //     x: imageSize.height - (height + y),
-  //     y: x,
-  //     width: height,
-  //     height: width
-  //   };
-  //   setCrop(newCrop);
-  // };
-
   return (
     <CommonPost large className={cx('wrapper')}>
       <EditorHeader onRotateLeft={rotateLeft} onRotateRight={rotateRight} />
@@ -53,8 +41,10 @@ const ImageEditor = ({
         <Cropper
           ref={ref}
           src={src}
-          style={{ height: '400px', width: '100%' }}
-          viewMode={1} //restrict the crop box to not exceed the size of the canvas.
+          style={{ height: '500px', width: '100%' }}
+          checkOrientation={false}
+          aspectRatio={1 / 1}
+          autoCropArea={1}
           data={cropperData}
         />
       </Suspense>
