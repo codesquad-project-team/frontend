@@ -41,7 +41,7 @@ const ImageEditor = ({
         <Cropper
           ref={ref}
           src={src}
-          style={{ height: '500px', width: '100%' }}
+          style={{ width: '450px', height: '450px' }}
           checkOrientation={false}
           aspectRatio={1 / 1}
           autoCropArea={1}
