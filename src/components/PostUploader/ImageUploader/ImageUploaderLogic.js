@@ -8,6 +8,25 @@ const CANVAS_OPTIONS = {
   imageSmoothingQuality: 'high'
 };
 
+export const GET_IMAGES = images =>
+  images &&
+  images.map(({ url, isRepresentative }) =>
+    pipe(
+      () => getFileInfo(url),
+      ({ name, type }) =>
+        createImageItem({
+          original: { name, type },
+          originalURL: url,
+          isRepresentative
+        })
+    )()
+  );
+
+const getFileInfo = src => {
+  const name = src.split('/').pop();
+  return { name, type: 'image/' + name.split('.').pop() };
+};
+
 export const ADD_IMAGES = async (setImages, hasImages, files, Cropper) => {
   const URLs = await getDataURLs(files);
   const newImages = await getNewImages(URLs, files, Cropper);
@@ -32,7 +51,9 @@ const getNewImages = (URLs, files, Cropper) =>
     Promise.all(
       elements.map((imageElement, idx) =>
         isSquareImage(imageElement)
-          ? Promise.resolve(createImageItem(files[idx], URLs[idx]))
+          ? Promise.resolve(
+              createImageItem({ original: files[idx], originalURL: URLs[idx] })
+            )
           : createCroppedImageItem(imageElement, Cropper, files[idx], URLs[idx])
       )
     )
@@ -49,6 +70,7 @@ const addImages = ({ images, newImages }) => [...images, ...newImages];
 const createImageElement = src => {
   const div = document.createElement('div');
   const img = document.createElement('img');
+  img.crossOrigin = 'Anonymous';
   img.src = src;
   div.appendChild(img); //needs to be wrapped to use cropper.js
 
@@ -71,7 +93,12 @@ const createCroppedImageItem = async (
     originalFile
   );
   const previewURL = await readFileAsDataURL(croppedFile);
-  return createImageItem(originalFile, originalURL, croppedFile, previewURL);
+  return createImageItem({
+    original: originalFile,
+    originalURL,
+    forUpload: croppedFile,
+    previewURL
+  });
 };
 
 const createCroppedFile = (imageElement, Cropper, originalFile) =>
@@ -100,17 +127,18 @@ const convertCanvasToFile = (canvasElement, originalFile) => {
   });
 };
 
-const createImageItem = (
-  originalFile,
+const createImageItem = ({
+  original,
   originalURL,
-  fileForUpload,
-  previewURL
-) => ({
-  original: originalFile,
+  forUpload,
+  previewURL,
+  isRepresentative
+}) => ({
+  original,
   originalURL,
-  forUpload: fileForUpload || originalFile,
+  forUpload: forUpload || original,
   previewURL: previewURL || originalURL,
-  isRepresentative: false
+  isRepresentative: isRepresentative || false
 });
 
 const initRepresentative = images =>

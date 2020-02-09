@@ -27,16 +27,6 @@ const readyToUploadReducer = (prevState, newState) => {
 const getInitialPostData = isEditMode =>
   isEditMode ? JSON.parse(localStorage.getItem('postData')) : {};
 
-const getInitialImages = images =>
-  images
-    ? images.map(({ url, isRepresentative }) => ({
-        original: null, //TODO: url을 가지고 File객체 생성해야함.
-        forUpload: null,
-        previewURL: url,
-        isRepresentative
-      }))
-    : [];
-
 const PostUploadPage = () => {
   const history = useHistory();
   const { pathname } = useLocation();
@@ -52,7 +42,7 @@ const PostUploadPage = () => {
   );
   const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
 
-  const [images, setImages] = useState(getInitialImages(initialImages));
+  const [images, setImages] = useState(actions.GET_IMAGES(initialImages) || []);
 
   const [selectedLocation, setSelectedLocation] = useState(
     initial.location || {}

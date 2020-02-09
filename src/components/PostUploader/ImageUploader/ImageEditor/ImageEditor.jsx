@@ -18,7 +18,7 @@ const ImageEditor = ({
   setImages,
   actions,
   src,
-  originalFile,
+  originalFile: { name, type },
   cropperData,
   targetIndex,
   onClose
@@ -39,7 +39,8 @@ const ImageEditor = ({
 
   const saveImage = () =>
     asyncPipe(
-      () => actions.UPDATE_IMAGE(setImages, cropper, targetIndex, originalFile),
+      () =>
+        actions.UPDATE_IMAGE(setImages, cropper, targetIndex, { name, type }),
       onClose
     )();
 
