@@ -67,17 +67,16 @@ const ImageUploader = ({ images, setImages, actions }) => {
         <FirstInputButton onChange={addImage} />
       )}
       {open && (
-        <Modal onClick={toggleImageEditor}>
-          <ImageEditor
-            setImages={setImages}
-            actions={actions}
-            src={images[targetIndex].originalURL}
-            originalFile={images[targetIndex].original}
-            cropperData={images[targetIndex].cropperData}
-            targetIndex={targetIndex}
-            onClose={toggleImageEditor}
-          />
-        </Modal>
+        <ImageEditor
+          Modal={Modal}
+          setImages={setImages}
+          actions={actions}
+          src={images[targetIndex].originalURL}
+          originalFile={images[targetIndex].original}
+          cropperData={images[targetIndex].cropperData}
+          targetIndex={targetIndex}
+          onClose={toggleImageEditor}
+        />
       )}
     </div>
   );

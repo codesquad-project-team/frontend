@@ -14,6 +14,7 @@ const Cropper = lazy(() =>
 );
 
 const ImageEditor = ({
+  Modal,
   setImages,
   actions,
   src,
@@ -25,8 +26,16 @@ const ImageEditor = ({
   const [cropper, setCropper] = useState(null);
   const ref = cropper => setCropper(cropper);
 
-  const rotateLeft = () => cropper.rotate(-90);
-  const rotateRight = () => cropper.rotate(90);
+  const [isEdited, setIsEdited] = useState(false);
+
+  const rotateLeft = () => {
+    setIsEdited(true);
+    cropper.rotate(-90);
+  };
+  const rotateRight = () => {
+    setIsEdited(true);
+    cropper.rotate(90);
+  };
 
   const saveImage = () =>
     asyncPipe(
@@ -34,22 +43,31 @@ const ImageEditor = ({
       onClose
     )();
 
+  const closeEditor = () => {
+    isEdited
+      ? confirm('편집한 내용이 사라집니다. 창을 닫으시겠어요?') && onClose()
+      : onClose();
+  };
+
   return (
-    <CommonPost large className={cx('wrapper')}>
-      <EditorHeader onRotateLeft={rotateLeft} onRotateRight={rotateRight} />
-      <Suspense fallback={<div>loading...</div>}>
-        <Cropper
-          ref={ref}
-          src={src}
-          style={{ width: '450px', height: '450px' }}
-          checkOrientation={false}
-          aspectRatio={1 / 1}
-          autoCropArea={1}
-          data={cropperData}
-        />
-      </Suspense>
-      <EditorFooter onSave={saveImage} onCancel={onClose} />
-    </CommonPost>
+    <Modal onClick={closeEditor}>
+      <CommonPost large className={cx('wrapper')}>
+        <EditorHeader onRotateLeft={rotateLeft} onRotateRight={rotateRight} />
+        <Suspense fallback={<div>loading...</div>}>
+          <Cropper
+            ref={ref}
+            src={src}
+            style={{ width: '450px', height: '450px' }}
+            checkOrientation={false}
+            aspectRatio={1 / 1}
+            autoCropArea={1}
+            data={cropperData}
+            cropmove={() => setIsEdited(true)}
+          />
+        </Suspense>
+        <EditorFooter onSave={saveImage} onCancel={closeEditor} />
+      </CommonPost>
+    </Modal>
   );
 };
 
