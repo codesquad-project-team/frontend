@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ProfileInfo.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
@@ -7,38 +7,21 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import { WEB_SERVER_URL } from '../../configs';
 
 const cx = classNames.bind(styles);
+const reducer = (prevState, state) => ({ ...prevState, ...state });
 
 const ProfileInfo = ({ data, isMyProfile, userId }) => {
+  const [profileContent, setProfileContent] = useReducer(reducer, data);
+  const { loggedIn, handleSigninModal } = useLoginContext();
+  const [error, setError] = useState(null);
   const {
-    isFollowing: initialFollowStatus,
+    isFollowing,
     nickname,
     totalPosts,
     totalFollowers,
     totalFollowings,
     introduction,
     profileImage
-  } = data;
-
-  const [isFollowing, setIsFollowing] = useState(initialFollowStatus);
-  const { loggedIn, handleSigninModal, toggleSignupModal } = useLoginContext();
-  const [error, setError] = useState(null);
-
-  const handleResponse = res => {
-    switch (res.status) {
-      case 200:
-        setIsFollowing(!isFollowing);
-        break;
-      case 400:
-        setError('INVALID_USER_ID');
-        break;
-      case 401:
-        setError('INVALID_TOKEN');
-        break;
-      case 500:
-        setError('SERVER_ERROR');
-        break;
-    }
-  };
+  } = profileContent;
 
   const sendRequest = async () => {
     if (!loggedIn) {
@@ -52,6 +35,25 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
     handleResponse(res);
   };
 
+  const handleResponse = res => {
+    switch (res.status) {
+      case 200:
+        setProfileContent({
+          isFollowing: !isFollowing,
+          totalFollowers: totalFollowers + 1
+        });
+        break;
+      case 400:
+        setError('INVALID_USER_ID');
+        break;
+      case 401:
+        setError('INVALID_TOKEN');
+        break;
+      case 500:
+        setError('SERVER_ERROR');
+        break;
+    }
+  };
   return (
     <div className={cx('wrapper')}>
       <div className={cx('left-column')}>
