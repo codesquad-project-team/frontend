@@ -6,8 +6,8 @@ const cx = classNames.bind(styles);
 
 const SearchResultLists = ({
   className,
-  clickedMarkerIndex,
-  setClickedMarkerIndex,
+  clickedItemIndex,
+  setClickedItemIndex,
   searchResult,
   onClick: setClickedItemSelected,
   pagination
@@ -25,7 +25,7 @@ const SearchResultLists = ({
             data-index={index}
             className={cx(
               'item',
-              clickedMarkerIndex === index ? 'selected-item' : ''
+              clickedItemIndex === index ? 'selected-item' : ''
             )}
             onClick={setClickedItemSelected}
           >
@@ -39,12 +39,12 @@ const SearchResultLists = ({
 
   const gotoPrevPage = () => {
     pagination.prevPage();
-    setClickedMarkerIndex('UNCLICKED');
+    setClickedItemIndex('UNCLICKED');
   };
 
   const gotoNextPage = () => {
     pagination.nextPage();
-    setClickedMarkerIndex('UNCLICKED');
+    setClickedItemIndex('UNCLICKED');
   };
 
   return (
