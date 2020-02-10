@@ -12,6 +12,8 @@ const LoginContextProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState({});
   const { id, nickname, profileImage } = userInfo;
 
+  const [needsUserInfo, setNeedsUserInfo] = useState(false);
+
   const handleSigninModal = type => {
     switch (type) {
       case 'OPEN':
@@ -40,7 +42,7 @@ const LoginContextProvider = ({ children }) => {
         setUserInfo(await res.json());
       }
     })();
-  }, []);
+  }, [needsUserInfo]);
 
   return (
     <LoginContext.Provider
@@ -54,7 +56,8 @@ const LoginContextProvider = ({ children }) => {
         clickedSignin,
         handleSigninModal,
         toggleSignupModal,
-        setUserInfo
+        setUserInfo,
+        setNeedsUserInfo
       }}
     >
       {children}

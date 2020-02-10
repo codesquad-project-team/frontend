@@ -16,7 +16,7 @@ import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
 const cx = classNames.bind(styles);
 
 const SignupPage = ({ history }) => {
-  const { setLoggedIn } = useLoginContext();
+  const { setLoggedIn, setNeedsUserInfo } = useLoginContext();
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
 
@@ -92,6 +92,7 @@ const SignupPage = ({ history }) => {
     switch (res.status) {
       case 200:
         setLoggedIn(true);
+        setNeedsUserInfo(state => !state);
         history.push(referer);
         break;
       case 400:
