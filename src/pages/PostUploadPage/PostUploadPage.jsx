@@ -49,8 +49,8 @@ const PostUploadPage = () => {
   );
   const { longitude, latitude, name } = selectedLocation;
 
-  const [title, setTitle] = useState(initialTitle || '');
-  const [description, setDescription] = useState(initialDesc || '');
+  const [title, setTitle] = useState(initialTitle);
+  const [description, setDescription] = useState(initialDesc);
 
   const { nickname } = useLoginContext();
 
