@@ -14,10 +14,12 @@ import ProfileImageChangeBtn from './ProfileImageChangeBtn';
 import useScript from '../../hooks/useScript';
 import useS3 from '../../hooks/useS3';
 import { debounce } from '../../utils/utils';
+import { useLoginContext } from '../../contexts/LoginContext';
 
 const cx = classNames.bind(styles);
 
 const ProfileEditPage = () => {
+  const { setNeedsUserInfo } = useLoginContext();
   const { inputValue, setInputValue, handleChange } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
   const [image, setImage] = useState({ fileData: [], previewUrl: '' });
@@ -144,6 +146,7 @@ const ProfileEditPage = () => {
 
     switch (res.status) {
       case 200:
+        setNeedsUserInfo(state => !state);
         alert('회원 정보가 수정 되었습니다!');
         break;
 
