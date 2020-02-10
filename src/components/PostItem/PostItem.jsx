@@ -37,7 +37,7 @@ const PostItem = ({
         alt="representative post image"
       />
       <div className={cx('title')}>
-        {place}에서 {companion}랑 {activity}
+        {place}에서 {companion} {activity}
       </div>
       <div className={cx('desc')}>{description}</div>
     </div>
