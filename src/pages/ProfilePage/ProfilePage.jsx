@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Header from '../../components/Header/Header';
 import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
 import PostContainer from '../../components/PostContainer/PostContainer';
-import NewPostBtn from '../../components/NewPostBtn/NewPostBtn';
-import CommonLink from '../../components/CommonLink/CommonLink';
 import useFetch from '../../hooks/useFetch';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
@@ -26,9 +24,6 @@ const ProfilePage = () => {
   return (
     <div>
       <Header />
-      <CommonLink to="/post/upload">
-        <NewPostBtn />
-      </CommonLink>
       <FadeLoader
         css={override}
         sizeUnit={'px'}
