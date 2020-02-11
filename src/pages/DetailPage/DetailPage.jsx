@@ -36,7 +36,11 @@ const DetailPage = ({ postId }) => {
         />
         {!loading && (
           <>
-            <DetailPostHeader data={data} />
+            <DetailPostHeader
+              data={data}
+              writerId={data.writer.id}
+              postId={postId}
+            />
             <LocationCarousel data={data} />
             <DetailPost data={data} />
             <MapView data={data} />
