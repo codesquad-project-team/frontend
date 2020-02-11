@@ -117,7 +117,8 @@ const ProfileEditPage = () => {
 
   const checkPhoneNumberValidation = useCallback(
     debounce(phone => {
-      const isValid = /^[0-9]{3}[-]+[0-9]{4}[-]+[0-9]{4}$/.test(phone);
+      const isValid =
+        /^[0-9]{3}[-]+[0-9]{4}[-]+[0-9]{4}$/.test(phone) || !phone; //optional이므로 입력 안해도 허용
 
       isValid
         ? setPhoneValidity('NO_MESSAGE')
