@@ -92,12 +92,16 @@ const ProfileEditPage = () => {
   }, []);
 
   const checkNicknameValidation = useCallback(
-    debounce(nickname => {
+    debounce((nickname, currentNickname) => {
       const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
       const hasBlank = /\s/.test(nickname);
       const onlyOneCharacter = nickname.length === 1;
       const sameNickname = nickname === currentNickname;
+
       switch (true) {
+        case sameNickname:
+          setNicknameValidity('CURRENT_NICKNAME');
+          break;
         case isValid:
           checkNicknameFromServer(nickname);
           break;
@@ -127,10 +131,47 @@ const ProfileEditPage = () => {
     []
   );
 
-  const updateUserInfo = async (uploadedUrl = '') => {
-    if (phoneValidity === 'INVALID_PHONE_NUMBER')
-      return alert('휴대폰 정보를 형식에 맞게 입력해주세요!');
+  const requestUpdate = e => {
+    e.preventDefault();
+    if (nicknameValidity === 'CURRENT_NICKNAME') return;
+    if (nicknameValidity === 'AVAILABLE') {
+      handleSubmit();
+    } else {
+      setNicknameValidity('INFO_MESSAGE');
+    }
+  };
 
+  const handleSubmit = async () => {
+    if (phoneValidity === 'INVALID_PHONE_NUMBER') {
+      return alert('휴대폰 정보를 형식에 맞게 입력해주세요!');
+    }
+
+    const hasImageToUpload = image.previewUrl ? true : false;
+
+    const S3UploadedURL = hasImageToUpload ? await uploadImage() : '';
+
+    updateUserInfo(S3UploadedURL);
+  };
+
+  const uploadImage = async () => {
+    if (loadError) {
+      return alert(
+        `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
+      );
+    }
+
+    // await : promise의 resolve Value를 리턴
+    const [S3UploadedURL] = await S3imageUploadHandler({
+      albumName: nickname,
+      albumNamePrefix: 'profile-images/',
+      images: image.fileData,
+      setImageUploadError
+    });
+
+    return S3UploadedURL;
+  };
+
+  const updateUserInfo = async (uploadedUrl = '') => {
     const bodyObj = uploadedUrl
       ? { ...inputValue, profileImage: uploadedUrl }
       : inputValue;
@@ -147,59 +188,26 @@ const ProfileEditPage = () => {
 
     switch (res.status) {
       case 200:
+        setCurrentNickname(nickname);
+        setNicknameValidity('CURRENT_NICKNAME');
         setNeedsUserInfo(state => !state);
         alert('회원 정보가 수정 되었습니다!');
         break;
-
       case 400:
         alert('요청이 올바르지 않습니다.');
         break;
-
       case 401:
         alert('인증되지 않은 토큰입니다.');
         break;
-
       default:
+        //do nothing
         break;
     }
-  };
-
-  const uploadImage = async () => {
-    if (loadError) {
-      return alert(
-        `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
-      );
-    }
-
-    const albumName = nickname;
-    const albumNamePrefix = 'profile-images/';
-
-    // await : promise의 resolve Value를 리턴
-    const uploadedUrlArr = await S3imageUploadHandler(
-      albumName,
-      albumNamePrefix,
-      image.fileData,
-      setImageUploadError
-    );
-
-    return uploadedUrlArr[0];
-  };
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-
-    const hasImageToUpload = image.previewUrl ? true : false;
-
-    const S3UploadedUrl = hasImageToUpload ? await uploadImage() : '';
-
-    return updateUserInfo(S3UploadedUrl);
   };
 
   useEffect(() => {
     if (nickname) {
-      nickname === currentNickname
-        ? setNicknameValidity('CURRENT_NICKNAME')
-        : checkNicknameValidation(nickname);
+      checkNicknameValidation(nickname, currentNickname);
     } else {
       setNicknameValidity('');
     }
@@ -269,7 +277,7 @@ const ProfileEditPage = () => {
                 className={cx('submit-btn')}
                 type="submit"
                 styleType="emphasize"
-                onClick={handleSubmit}
+                onClick={requestUpdate}
               >
                 제출
               </CommonBtn>

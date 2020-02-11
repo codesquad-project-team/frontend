@@ -98,17 +98,14 @@ const PostUploadPage = () => {
       );
     }
 
-    const albumName = nickname.concat('_', YYYYMMDDHHMMSS(new Date())).trim();
-    const albumNamePrefix = 'post-images/';
-
-    const S3uploadedURLs = S3imageUploadHandler(
-      albumName,
-      albumNamePrefix,
-      images
+    const S3uploadedURLs = S3imageUploadHandler({
+      albumName: nickname.concat('_', YYYYMMDDHHMMSS(new Date())).trim(),
+      albumNamePrefix: 'post-images/',
+      images: images
         .filter(({ previewURL }) => previewURL.startsWith('data'))
         .map(({ forUpload }) => forUpload),
       setImageUploadError
-    );
+    });
     return S3uploadedURLs;
   };
 
