@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header/Header';
 import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
 import PostContainer from '../../components/PostContainer/PostContainer';
@@ -16,11 +16,19 @@ const ProfilePage = () => {
   const isMyProfile = id === userId;
 
   const [data, setData] = useState({});
-  const { error, loading } = useFetch(
+  const { error, loading, refetch } = useFetch(
     `${WEB_SERVER_URL}/user/profile-content?id=${userId}`,
     { credentials: 'include' },
     setData
   );
+
+  //로그아웃 시 refetch해서 profile 정보 갱신
+  useEffect(() => {
+    const isInitialRendering = !Object.keys(data).length;
+    if (isInitialRendering) return;
+    refetch();
+  }, [id]);
+
   return (
     <div>
       <Header />
