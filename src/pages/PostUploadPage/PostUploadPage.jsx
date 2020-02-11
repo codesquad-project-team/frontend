@@ -1,5 +1,5 @@
-import React, { useMemo, useState, useReducer } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import React, { useEffect, useMemo, useState, useReducer } from 'react';
+import { useHistory, useLocation, Prompt } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './PostUploadPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
@@ -58,7 +58,12 @@ const PostUploadPage = () => {
 
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDesc);
+  const [isEdited, setIsEdited] = useState(false);
 
+  const bindUpdater = updater => param => {
+    updater(param);
+    setIsEdited(true);
+  };
   const { nickname } = useLoginContext();
 
   const { loadError } = useScript(
@@ -195,38 +200,53 @@ const PostUploadPage = () => {
   const needsMoreData = () =>
     !images.length || !hasSelectedLocation || !hasAllTitles || isOverDescLimit;
 
-  const handleCancel = () => {
-    if (confirm('작성을 취소하고 이전 페이지로 돌아가시겠어요?')) {
-      history.goBack();
-    }
-  };
+  const handleCancel = () => history.goBack();
 
+  useEffect(() => {
+    isEditMode || refresh();
+  }, [isEditMode]);
+
+  const refresh = () => {
+    setReadyToUpload({
+      hasSelectedLocation: false,
+      hasAllTitles: false,
+      isOverDescLimit: false
+    });
+    setImages([]);
+    setSelectedLocation({});
+    setTitle('');
+    setDescription('');
+  };
   return (
     <>
+      <Prompt
+        when={isEdited}
+        message={'작성을 취소하고 페이지를 나가시겠어요?'}
+      />
       <Header />
       <CommonPost.background className={cx('background')}>
         <CommonPost large className={cx('wrapper')}>
           <ImageUploader
             images={images}
-            setImages={setImages}
+            setImages={bindUpdater(setImages)}
             actions={actions}
           />
           <LocationUploader
             lat={latitude}
             lng={longitude}
-            setSelectedLocation={setSelectedLocation}
+            setSelectedLocation={bindUpdater(setSelectedLocation)}
             setReadyToUpload={setReadyToUpload}
             hasSelectedLocation={hasSelectedLocation}
           />
           <TitleUploader
             placeName={name}
             title={title}
-            setTitle={setTitle}
+            setTitle={bindUpdater(setTitle)}
             setReadyToUpload={setReadyToUpload}
           />
           <DescriptionUploader
             description={description}
-            setDescription={setDescription}
+            setDescription={bindUpdater(setDescription)}
             setReadyToUpload={setReadyToUpload}
           />
           {/* TODO: 취향 매칭을 위한 질문 추가하기 */}

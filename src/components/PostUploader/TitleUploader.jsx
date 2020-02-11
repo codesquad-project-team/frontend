@@ -76,10 +76,12 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
   };
 
   useMemo(() => {
+    if (!placeName) return;
     setInputValue({ ...inputValue, place: placeName });
   }, [placeName]);
 
   useMemo(() => {
+    if (!select) return;
     if (isFreeInputValue(select)) {
       setState({ ...state, showsFreeInput: true });
     } else {
@@ -89,6 +91,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
   }, [select]);
 
   useMemo(() => {
+    if (!(place || companion || activity)) return;
     adjustLocationInputWidth(place);
     setTitle({
       place,
