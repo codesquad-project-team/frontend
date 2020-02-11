@@ -161,6 +161,7 @@ const PostUploadPage = () => {
 
     switch (res.status) {
       case 200:
+        setIsEdited(false);
         history.push(`/post/${postId}`);
         break;
       case 401:
