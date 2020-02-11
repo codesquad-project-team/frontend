@@ -20,7 +20,8 @@ const Header = () => {
     profileImage,
     clickedSignup,
     clickedSignin,
-    handleSigninModal,
+    openSigninModal,
+    closeSigninModal,
     toggleSignupModal
   } = useLoginContext();
 
@@ -73,7 +74,7 @@ const Header = () => {
             <>
               <CommonBtn
                 className={cx('signin-btn')}
-                onClick={handleSigninModal}
+                onClick={openSigninModal}
                 styleType="normal"
               >
                 로그인
@@ -90,11 +91,11 @@ const Header = () => {
         </div>
 
         {!loggedIn && clickedSignin && (
-          <CommonModal clickHandler={handleSigninModal} target={'signin'} />
+          <CommonModal onClose={closeSigninModal} target={'signin'} />
         )}
 
         {!loggedIn && clickedSignup && (
-          <CommonModal clickHandler={toggleSignupModal} target={'signup'} />
+          <CommonModal onClose={toggleSignupModal} target={'signup'} />
         )}
       </div>
     </div>

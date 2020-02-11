@@ -11,7 +11,7 @@ const reducer = (prevState, state) => ({ ...prevState, ...state });
 
 const ProfileInfo = ({ data, isMyProfile, userId }) => {
   const [profileContent, setProfileContent] = useReducer(reducer, data);
-  const { loggedIn, handleSigninModal } = useLoginContext();
+  const { loggedIn, openSigninModal } = useLoginContext();
   const [error, setError] = useState(null);
   const {
     isFollowing,
@@ -25,7 +25,7 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
 
   const sendRequest = async () => {
     if (!loggedIn) {
-      handleSigninModal('OPEN');
+      openSigninModal();
       return;
     }
     const res = await fetch(`${WEB_SERVER_URL}/user/follow/${userId}`, {

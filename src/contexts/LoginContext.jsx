@@ -1,4 +1,5 @@
 import React, { useState, useContext, createContext, useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import { WEB_SERVER_URL } from '../configs';
 
 const LoginContext = createContext();
@@ -6,7 +7,9 @@ const LoginContext = createContext();
 export const useLoginContext = () => useContext(LoginContext);
 
 const LoginContextProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const { pathname } = useLocation();
+  const history = useHistory();
+  const [loggedIn, setLoggedIn] = useState(true);
   const [clickedSignup, setClickedSignup] = useState(false);
   const [clickedSignin, setClickedSignin] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -14,18 +17,16 @@ const LoginContextProvider = ({ children }) => {
 
   const [needsUserInfo, setNeedsUserInfo] = useState(false);
 
-  const handleSigninModal = type => {
-    switch (type) {
-      case 'OPEN':
-        setClickedSignin(true);
-        break;
-      case 'CLOSE':
-        setClickedSignin(false);
-        break;
-      default:
-        setClickedSignin(!clickedSignin);
-        break;
+  const openSigninModal = () => setClickedSignin(true);
+  const closeSigninModal = () => {
+    if (
+      pathname === '/profile/edit' ||
+      pathname === '/post/edit' ||
+      pathname === '/post/upload'
+    ) {
+      history.push('/');
     }
+    setClickedSignin(false);
   };
 
   const toggleSignupModal = () => {
@@ -40,6 +41,8 @@ const LoginContextProvider = ({ children }) => {
       if (res.ok) {
         setLoggedIn(true);
         setUserInfo(await res.json());
+      } else {
+        setLoggedIn(false);
       }
     })();
   }, [needsUserInfo]);
@@ -54,7 +57,8 @@ const LoginContextProvider = ({ children }) => {
         profileImage,
         clickedSignup,
         clickedSignin,
-        handleSigninModal,
+        openSigninModal,
+        closeSigninModal,
         toggleSignupModal,
         setUserInfo,
         setNeedsUserInfo

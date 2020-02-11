@@ -19,7 +19,7 @@ import { useLoginContext } from '../../contexts/LoginContext';
 const cx = classNames.bind(styles);
 
 const ProfileEditPage = () => {
-  const { setNeedsUserInfo } = useLoginContext();
+  const { loggedIn, openSigninModal, setNeedsUserInfo } = useLoginContext();
   const { inputValue, setInputValue, handleChange } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
   const [image, setImage] = useState({ fileData: [], previewUrl: '' });
@@ -208,6 +208,10 @@ const ProfileEditPage = () => {
   useEffect(() => {
     checkPhoneNumberValidation(phone);
   }, [phone]);
+
+  useEffect(() => {
+    !loggedIn && openSigninModal();
+  }, [loggedIn]);
 
   const imageSrc = initialPageEnter ? profileImage : image.previewUrl;
 

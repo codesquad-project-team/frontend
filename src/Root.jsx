@@ -11,8 +11,8 @@ import LoginContextProvider from './contexts/LoginContext';
 
 const Root = () => {
   return (
-    <LoginContextProvider>
-      <Router>
+    <Router>
+      <LoginContextProvider>
         <Switch>
           <Route exact path="/" render={() => <MainPage />} />
           <Route path="/profile/edit" render={() => <ProfileEditPage />} />
@@ -28,8 +28,8 @@ const Root = () => {
             render={({ history }) => <SignupPage history={history} />}
           />
         </Switch>
-      </Router>
-    </LoginContextProvider>
+      </LoginContextProvider>
+    </Router>
   );
 };
 

@@ -64,7 +64,7 @@ const PostUploadPage = () => {
     updater(param);
     setIsEdited(true);
   };
-  const { nickname } = useLoginContext();
+  const { nickname, loggedIn, openSigninModal } = useLoginContext();
 
   const { loadError } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
@@ -203,6 +203,10 @@ const PostUploadPage = () => {
   const handleCancel = () => history.goBack();
 
   useEffect(() => {
+    !loggedIn && openSigninModal();
+  }, [loggedIn]);
+
+  useEffect(() => {
     isEditMode || refresh();
   }, [isEditMode]);
 
@@ -217,6 +221,7 @@ const PostUploadPage = () => {
     setTitle('');
     setDescription('');
   };
+
   return (
     <>
       <Prompt

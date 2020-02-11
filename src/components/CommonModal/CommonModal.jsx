@@ -7,7 +7,7 @@ import { IMAGE_BUCKET_URL, WEB_SERVER_URL } from '../../configs';
 
 const cx = classNames.bind(styles);
 
-const CommonModal = ({ clickHandler, target }) => {
+const CommonModal = ({ onClose, target }) => {
   const content =
     target === `signin`
       ? {
@@ -36,7 +36,7 @@ const CommonModal = ({ clickHandler, target }) => {
     <>
       <div className={cx('overlay')} />
       <div className={cx('wrapper')}>
-        <button className={cx('close-btn')} onClick={clickHandler}>
+        <button className={cx('close-btn')} onClick={onClose}>
           닫기
         </button>
         <div className={cx('content')}>
