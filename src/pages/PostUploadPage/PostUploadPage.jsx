@@ -32,9 +32,16 @@ const PostUploadPage = () => {
   const { pathname } = useLocation();
   const isEditMode = pathname === '/post/edit';
 
-  const initial = useMemo(() => getInitialPostData(isEditMode), []);
-  const { images: initialImages, description: initialDesc, ...initialTitle } =
-    initial.post || {};
+  const { writer, ...initial } = useMemo(
+    () => getInitialPostData(isEditMode),
+    []
+  );
+  const {
+    images: initialImages,
+    description: initialDesc,
+    id,
+    ...initialTitle
+  } = initial.post || {};
 
   const [readyToUpload, setReadyToUpload] = useReducer(
     readyToUploadReducer,
@@ -92,7 +99,9 @@ const PostUploadPage = () => {
     const S3uploadedURLs = S3imageUploadHandler(
       albumName,
       albumNamePrefix,
-      images.map(({ forUpload }) => forUpload),
+      images
+        .filter(({ previewURL }) => previewURL.startsWith('data'))
+        .map(({ forUpload }) => forUpload),
       setImageUploadError
     );
     return S3uploadedURLs;
@@ -101,6 +110,7 @@ const PostUploadPage = () => {
   const mergePreviousImages = (images, S3uploadedURLs) => {
     return images
       .filter(({ previewURL }) => previewURL.startsWith('http'))
+      .map(({ previewURL }) => previewURL)
       .concat(S3uploadedURLs);
   };
 
@@ -128,13 +138,12 @@ const PostUploadPage = () => {
   };
 
   const getUpdatedValues = (initialData, postData) => {
-    const { id, ...initial } = initialData;
-    return deepDiff(initial, postData);
+    return deepDiff(initialData, postData);
   };
 
   const requestPostUpload = async postData => {
     const res = await fetch(
-      `${WEB_SERVER_URL}/post${isEditMode ? `/${initial.id}` : ''}`,
+      `${WEB_SERVER_URL}/post${isEditMode ? `/${id}` : ''}`,
       {
         method: isEditMode ? 'PUT' : 'POST',
         mode: 'cors',
@@ -145,11 +154,12 @@ const PostUploadPage = () => {
         body: JSON.stringify(postData)
       }
     );
-    const { id } = isEditMode ? { id: initial.id } : await res.json();
+
+    const { id: postId } = isEditMode ? { id } : await res.json();
 
     switch (res.status) {
       case 200:
-        history.push(`/post/${id}`);
+        history.push(`/post/${postId}`);
         break;
       case 401:
         alert('토큰이 유효하지 않습니다. 다시 로그인 해주세요.');
@@ -167,13 +177,7 @@ const PostUploadPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const needsMoreData =
-      !images.length ||
-      !hasSelectedLocation ||
-      !hasAllTitles ||
-      isOverDescLimit;
-
-    if (needsMoreData) {
+    if (needsMoreData()) {
       showUploadFailReason();
       return;
     }
@@ -187,6 +191,9 @@ const PostUploadPage = () => {
       : formattedData;
     requestPostUpload(postData);
   };
+
+  const needsMoreData = () =>
+    !images.length || !hasSelectedLocation || !hasAllTitles || isOverDescLimit;
 
   const handleCancel = () => {
     if (confirm('작성을 취소하고 이전 페이지로 돌아가시겠어요?')) {
