@@ -16,6 +16,7 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 import { deepDiff } from '../../utils/diff.js';
 import { WEB_SERVER_URL } from '../../configs';
+import * as actions from './actions';
 
 const cx = classNames.bind(styles);
 
@@ -23,50 +24,17 @@ const readyToUploadReducer = (prevState, newState) => {
   return { ...prevState, ...newState };
 };
 
-const getURLAndIndex = imageURLs => {
-  let representativeIndex;
-  const URLs = imageURLs.map(({ url, isRepresentative }, idx) => {
-    if (isRepresentative) representativeIndex = idx;
-    return url;
-  });
-  return [URLs, representativeIndex];
-};
+const getInitialPostData = isEditMode =>
+  isEditMode ? JSON.parse(localStorage.getItem('postData')) : {};
 
-const getInitialPostData = isEditMode => {
-  const {
-    id,
-    place,
-    companion,
-    activity,
-    description,
-    images,
-    location
-  } = JSON.parse(localStorage.getItem('postData'));
-
-  const initialData = {
-    location,
-    post: {
-      place,
-      companion,
-      activity,
-      description,
-      images
-    },
-    id
-  };
-  return isEditMode ? initialData : {};
-};
-//TODO: 초기렌더링 이후 localStorage 초기화
 const PostUploadPage = () => {
   const history = useHistory();
   const { pathname } = useLocation();
   const isEditMode = pathname === '/post/edit';
 
   const initial = useMemo(() => getInitialPostData(isEditMode), []);
-  const [initialURLs, initialIdx] = useMemo(
-    () => (isEditMode ? getURLAndIndex(initial.post.images) : []),
-    []
-  );
+  const { images: initialImages, description: initialDesc, ...initialTitle } =
+    initial.post || {};
 
   const [readyToUpload, setReadyToUpload] = useReducer(
     readyToUploadReducer,
@@ -74,28 +42,15 @@ const PostUploadPage = () => {
   );
   const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
 
+  const [images, setImages] = useState(actions.GET_IMAGES(initialImages) || []);
+
   const [selectedLocation, setSelectedLocation] = useState(
     initial.location || {}
   );
-
   const { longitude, latitude, name } = selectedLocation;
 
-  const _initial = initial.post || {};
-  const initialTitle = {
-    place: _initial.place,
-    companion: _initial.companion,
-    activity: _initial.activity
-  };
   const [title, setTitle] = useState(initialTitle || '');
-  const [description, setDescription] = useState(_initial.description || '');
-
-  const [representativeIndex, setRepresentativeIndex] = useState(
-    initialIdx || 0
-  );
-  const [images, setImages] = useState({
-    selectedImages: [],
-    previewUrls: initialURLs || []
-  });
+  const [description, setDescription] = useState(initialDesc || '');
 
   const { nickname } = useLoginContext();
 
@@ -137,28 +92,27 @@ const PostUploadPage = () => {
     const S3uploadedURLs = S3imageUploadHandler(
       albumName,
       albumNamePrefix,
-      images.selectedImages,
+      images.map(({ forUpload }) => forUpload),
       setImageUploadError
     );
     return S3uploadedURLs;
   };
 
-  const mergePreviousImages = S3uploadedURLs => {
-    return images.previewUrls
-      .filter(URL => !URL.startsWith('data'))
+  const mergePreviousImages = (images, S3uploadedURLs) => {
+    return images
+      .filter(({ previewURL }) => previewURL.startsWith('http'))
       .concat(S3uploadedURLs);
   };
 
-  const formatURLs = S3uploadedURLs => {
+  const formatURLs = (images, S3uploadedURLs) => {
     const URLs = isEditMode
-      ? mergePreviousImages(S3uploadedURLs)
+      ? mergePreviousImages(images, S3uploadedURLs)
       : S3uploadedURLs;
 
-    return URLs.map((url, idx) =>
-      representativeIndex === idx
-        ? { url, isRepresentative: true }
-        : { url, isRepresentative: false }
-    );
+    return images.map(({ isRepresentative }, idx) => ({
+      url: URLs[idx],
+      isRepresentative
+    }));
   };
 
   const formatData = S3uploadedURLs => {
@@ -167,7 +121,7 @@ const PostUploadPage = () => {
       post: {
         ...title,
         description,
-        images: formatURLs(S3uploadedURLs)
+        images: formatURLs(images, S3uploadedURLs)
       }
     };
     return postData;
@@ -214,7 +168,7 @@ const PostUploadPage = () => {
     e.preventDefault();
 
     const needsMoreData =
-      !images.previewUrls.length ||
+      !images.length ||
       !hasSelectedLocation ||
       !hasAllTitles ||
       isOverDescLimit;
@@ -223,7 +177,9 @@ const PostUploadPage = () => {
       showUploadFailReason();
       return;
     }
-    const hasImagesToUpload = !!images.selectedImages.length;
+    const hasImagesToUpload = !!images.filter(({ previewURL }) =>
+      previewURL.startsWith('data')
+    ).length;
     const S3uploadedURLs = hasImagesToUpload ? await uploadImagesToS3() : [];
     const formattedData = formatData(S3uploadedURLs);
     const postData = isEditMode
@@ -246,8 +202,7 @@ const PostUploadPage = () => {
           <ImageUploader
             images={images}
             setImages={setImages}
-            representativeIndex={representativeIndex}
-            setRepresentativeIndex={setRepresentativeIndex}
+            actions={actions}
           />
           <LocationUploader
             lat={latitude}

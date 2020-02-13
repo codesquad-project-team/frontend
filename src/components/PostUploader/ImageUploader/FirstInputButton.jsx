@@ -5,9 +5,9 @@ import { IMAGE_BUCKET_URL } from '../../../configs';
 
 const cx = classNames.bind(styles);
 
-const FirstInputButton = ({ onChangeHandler, previewUrls }) => {
+const FirstInputButton = ({ onChange, ...props }) => {
   return (
-    <div className={cx('wrapper')}>
+    <div className={cx('wrapper')} {...props}>
       <img
         className={cx('icon')}
         src={`${IMAGE_BUCKET_URL}/image-upload-icon.png`}
@@ -20,7 +20,7 @@ const FirstInputButton = ({ onChangeHandler, previewUrls }) => {
         type="file"
         accept="image/*"
         className={cx('btn')}
-        onChange={onChangeHandler}
+        onChange={onChange}
         multiple
       />
     </div>

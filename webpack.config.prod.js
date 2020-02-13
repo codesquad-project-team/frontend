@@ -61,7 +61,8 @@ module.exports = {
   output: {
     publicPath: '/',
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[chunkhash].js'
+    filename: '[name].[chunkhash:16].js',
+    chunkFilename: '[name].[chunkhash:16].js' //dynamic import로 생성되는 chunk file의 이름을 설정.(optional)
   },
 
   optimization: {
@@ -78,7 +79,7 @@ module.exports = {
 
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css'
+      filename: '[name].[contenthash:16].css'
     }),
     new HtmlWebpackPlugin({
       template: 'src/index.html'
