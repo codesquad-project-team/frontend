@@ -16,17 +16,21 @@ export const UPDATE_IMAGE = (setImages, cropper, index, { name, type }) => {
     async file => [file, await readFileAsDataURL(file)],
     ([forUpload, previewURL]) =>
       setImages(images =>
-        updateArrayWithObject(images, index, {
-          forUpload,
-          previewURL,
-          cropperData
+        updateArrayWithObject({
+          targetArray: images,
+          index,
+          updateData: {
+            forUpload,
+            previewURL,
+            cropperData
+          }
         })
       )
   )(canvas);
 };
 
-const updateArrayWithObject = (array, index, item) =>
-  array.map((el, idx) => (idx === index ? { ...el, ...item } : el));
+const updateArrayWithObject = ({ targetArray, index, updateData }) =>
+  targetArray.map((el, idx) => (idx === index ? { ...el, ...updateData } : el));
 
 const convertCanvasToFile = (canvasElement, { name, type }) => {
   return new Promise(resolve => {

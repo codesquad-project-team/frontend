@@ -235,5 +235,3 @@ const PostUploadPage = () => {
 };
 
 export default PostUploadPage;
-
-/* helpers for PostUploadPage*/
