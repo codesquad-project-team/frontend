@@ -3,11 +3,13 @@ import classNames from 'classnames/bind';
 import styles from './CommonModal.scss';
 import OAuthBtn from '../OAuthBtn/OAuthBtn';
 import CommonBtn from '../CommonBtn/CommonBtn';
+import useModal from '../../hooks/useModal';
 import { IMAGE_BUCKET_URL, WEB_SERVER_URL } from '../../configs';
 
 const cx = classNames.bind(styles);
 
 const CommonModal = ({ onClose, target }) => {
+  const { Modal } = useModal();
   const content =
     target === `signin`
       ? {
@@ -27,53 +29,43 @@ const CommonModal = ({ onClose, target }) => {
           hyperlinkMsg: '로그인하기'
         };
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => (document.body.style.overflow = 'unset');
-  }, []);
-
   return (
-    <>
-      <div className={cx('overlay')} />
+    <Modal onClick={onClose}>
       <div className={cx('wrapper')}>
         <button className={cx('close-btn')} onClick={onClose}>
           닫기
         </button>
-        <div className={cx('content')}>
-          <div className={cx('header')}>
-            <img src={`${IMAGE_BUCKET_URL}/logo.png`} />
-            <h1>서비스 {content.title}</h1>
-          </div>
-          <p>{content.desc}</p>
-          <div className={cx('content-oauth')}>
-            <OAuthBtn
-              href={`${WEB_SERVER_URL}/auth/kakao`}
-              company="카카오"
-              msg={content.title}
-              imgUrl={`${IMAGE_BUCKET_URL}/kakao-logo.png`}
-            />
-            <OAuthBtn
-              company="페이스북"
-              msg={content.title}
-              imgUrl={`${IMAGE_BUCKET_URL}/facebook-logo.png`}
-            />
-            <OAuthBtn
-              company="인스타그램"
-              msg={content.title}
-              imgUrl={`${IMAGE_BUCKET_URL}/insta-logo.png`}
-            />
-          </div>
-          <p>
-            {content.reminderMsg}
-            <CommonBtn className={cx('reminder-btn')} styleType="underline">
-              <a href={`${WEB_SERVER_URL}/auth/kakao`}>
-                {content.hyperlinkMsg}
-              </a>
-            </CommonBtn>
-          </p>
+        <div className={cx('header')}>
+          <img src={`${IMAGE_BUCKET_URL}/logo.png`} />
+          <h1>서비스 {content.title}</h1>
         </div>
+        <p>{content.desc}</p>
+        <div className={cx('oauth')}>
+          <OAuthBtn
+            href={`${WEB_SERVER_URL}/auth/kakao`}
+            company="카카오"
+            msg={content.title}
+            imgUrl={`${IMAGE_BUCKET_URL}/kakao-logo.png`}
+          />
+          <OAuthBtn
+            company="페이스북"
+            msg={content.title}
+            imgUrl={`${IMAGE_BUCKET_URL}/facebook-logo.png`}
+          />
+          <OAuthBtn
+            company="인스타그램"
+            msg={content.title}
+            imgUrl={`${IMAGE_BUCKET_URL}/insta-logo.png`}
+          />
+        </div>
+        <p>
+          {content.reminderMsg}
+          <CommonBtn className={cx('reminder-btn')} styleType="underline">
+            <a href={`${WEB_SERVER_URL}/auth/kakao`}>{content.hyperlinkMsg}</a>
+          </CommonBtn>
+        </p>
       </div>
-    </>
+    </Modal>
   );
 };
 
