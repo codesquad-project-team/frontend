@@ -32,15 +32,15 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
       method: `${isFollowing ? 'DELETE' : 'POST'}`,
       credentials: 'include'
     });
-    handleResponse(res);
+    handleResponse(res, isFollowing ? totalFollowers - 1 : totalFollowers + 1);
   };
 
-  const handleResponse = res => {
+  const handleResponse = (res, followers) => {
     switch (res.status) {
       case 200:
         setProfileContent({
           isFollowing: !isFollowing,
-          totalFollowers: totalFollowers + 1
+          totalFollowers: followers
         });
         break;
       case 400:
