@@ -11,7 +11,7 @@ const cx = classNames.bind(styles);
 const DetailPostHeader = ({ data, writerId, postId }) => {
   const history = useHistory();
   const [isFirstMouseOver, setIsFirstMouseOver] = useState(true);
-  const { id } = useLoginContext();
+  const { id, nickname } = useLoginContext();
   const isMyPost = id === writerId;
 
   const savePostData = () => {
@@ -37,7 +37,7 @@ const DetailPostHeader = ({ data, writerId, postId }) => {
     switch (res.status) {
       case 200:
         alert('게시글이 삭제되었습니다.');
-        history.push('/profile');
+        history.push(`/profile/@${nickname}`);
         break;
       case 400:
         console.error('not exist postId');
