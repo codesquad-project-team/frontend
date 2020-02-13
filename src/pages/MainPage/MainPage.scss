@@ -3,28 +3,44 @@
 .wrapper {
   display: flex;
   flex-direction: column;
+}
+.banner {
+  position: relative;
+  width: 100%;
+  margin-bottom: 2.5rem;
+  background-image: $main-gradient;
+}
+.banner-text {
+  width: 100%;
+  padding: 3rem 5rem;
+  font-size: 3rem;
+  font-family: 'KCC-eunyoung';
+  color: #fff;
 
+  b {
+    color: $point-color;
+  }
+}
+
+@include tablet-and-desktop {
   .banner {
-    position: relative;
-    width: 100%;
-    height: 45rem;
     margin-bottom: 5rem;
-    background-image: $main-gradient;
-
-    &-text {
-      position: absolute;
-      top: 20rem;
-      right: 5rem;
-      width: 81rem;
-      padding: 0 5rem;
-      text-align: right;
-      font-size: 4rem;
-      font-family: 'KCC-eunyoung';
-      color: #fff;
-
-      b {
-        color: $point-color;
-      }
-    }
+    height: 45rem;
+  }
+  .banner-text {
+    position: absolute;
+    top: 20rem;
+    right: 5%;
+    text-align: right;
+  }
+}
+@include tablet {
+  .banner-text {
+    font-size: 3.5rem;
+  }
+}
+@include desktop {
+  .banner-text {
+    font-size: 4rem;
   }
 }

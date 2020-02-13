@@ -24,3 +24,24 @@ $gray-font-color: #bdbdbd;
 $dark-gray-font-color: #616161;
 
 $header-height: 8rem;
+
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1200px;
+
+@mixin tablet {
+  @media (min-width: #{$breakpoint-tablet}) and (max-width: #{$breakpoint-desktop - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$breakpoint-desktop}) {
+    @content;
+  }
+}
+
+@mixin tablet-and-desktop {
+  @media (min-width: #{$breakpoint-tablet}) {
+    @content;
+  }
+}

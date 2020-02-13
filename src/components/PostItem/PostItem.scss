@@ -1,11 +1,12 @@
 @import '../../stylesheets/util.scss';
 
 .wrapper {
-  width: 40rem;
-  border: 1px solid #d4d4d4;
-  border-radius: 5px;
   justify-self: center;
   align-self: center;
+  max-width: 40rem;
+  margin: 0.5rem;
+  border: 1px solid #d4d4d4;
+  border-radius: 5px;
   background-color: #fff;
   &:hover {
     cursor: pointer;
