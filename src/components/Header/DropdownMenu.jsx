@@ -38,7 +38,10 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
         </CommonLink>
         <CommonLink
           to={`/profile/@${nickname}`}
-          onClick={() => localStorage.setItem('targetUserId', id)}
+          onClick={() => {
+            localStorage.setItem('targetUserId', id);
+            setShowsMenu(false);
+          }}
         >
           <div className={cx('btns')}>내 프로필</div>
         </CommonLink>
