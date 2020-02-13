@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './PostContainer.scss';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 import PostItem from '../PostItem/PostItem';
-import CommonLink from '../CommonLink/CommonLink';
 import useFetch from '../../hooks/useFetch';
 import {
   WEB_SERVER_URL,
@@ -17,6 +17,7 @@ import { throttle } from '../../utils/utils';
 const cx = classNames.bind(styles);
 
 const PostContainer = ({ headerOn, writerId = '' }) => {
+  const history = useHistory();
   const [page, setPage] = useState(1);
   const [response, setResponse] = useState(null);
   const items = response ? response.posts : [];
@@ -68,10 +69,18 @@ const PostContainer = ({ headerOn, writerId = '' }) => {
   };
 
   const postItems = items.map(item => (
-    <CommonLink to={`/post/${item.id}`} key={item.id}>
-      <PostItem headerOn={headerOn} {...item} />
-    </CommonLink>
+    <PostItem
+      key={item.id}
+      headerOn={headerOn}
+      onClick={() => goTo(`/post/${item.id}`)}
+      {...item}
+    />
   ));
+
+  const goTo = pathname => {
+    history.push(pathname);
+    window.scroll(0, 0);
+  };
 
   return (
     <>
