@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import useFetch from './useFetch';
 import { WEB_SERVER_URL } from '../configs';
 
-const useTempTokenValidation = history => {
+const useTempTokenValidation = () => {
+  const history = useHistory();
   const [provider, setProvider] = useState(null);
   const postposition = provider === 'kakao' ? '로' : '으로';
 

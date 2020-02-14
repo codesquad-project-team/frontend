@@ -25,7 +25,9 @@ const readyToUploadReducer = (prevState, newState) => {
 };
 
 const getInitialPostData = isEditMode =>
-  isEditMode ? JSON.parse(localStorage.getItem('postData')) : {};
+  isEditMode
+    ? JSON.parse(localStorage.getItem('postData'))
+    : { post: {}, location: {} };
 
 const PostUploadPage = () => {
   const history = useHistory();
@@ -41,7 +43,7 @@ const PostUploadPage = () => {
     description: initialDesc,
     id,
     ...initialTitle
-  } = initial.post || {};
+  } = initial.post;
 
   const [readyToUpload, setReadyToUpload] = useReducer(
     readyToUploadReducer,
@@ -49,11 +51,11 @@ const PostUploadPage = () => {
   );
   const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
 
-  const [images, setImages] = useState(actions.GET_IMAGES(initialImages) || []);
-
-  const [selectedLocation, setSelectedLocation] = useState(
-    initial.location || {}
+  const [images, setImages] = useState(
+    isEditMode ? actions.GET_IMAGES(initialImages) : []
   );
+
+  const [selectedLocation, setSelectedLocation] = useState(initial.location);
   const { longitude, latitude, name } = selectedLocation;
 
   const [title, setTitle] = useState(initialTitle);
@@ -200,25 +202,12 @@ const PostUploadPage = () => {
 
   const handleCancel = () => history.goBack();
 
+  //업로드|수정 페이지에서 로그아웃 시, 또는 로그아웃 상태에서 직접 접근시 로그인 모달 띄우기
   useEffect(() => {
-    !loggedIn && openSigninModal();
+    if (loggedIn) return;
+    setIsEdited(false); //Prompt 컴포넌트 동작을 막기 위해서 상태 초기화.
+    openSigninModal();
   }, [loggedIn]);
-
-  useEffect(() => {
-    isEditMode || refresh();
-  }, [isEditMode]);
-
-  const refresh = () => {
-    setReadyToUpload({
-      hasSelectedLocation: false,
-      hasAllTitles: false,
-      isOverDescLimit: false
-    });
-    setImages([]);
-    setSelectedLocation({});
-    setTitle('');
-    setDescription('');
-  };
 
   return (
     <>

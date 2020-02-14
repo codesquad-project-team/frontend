@@ -12,6 +12,7 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
   const [showsMenu, setShowsMenu] = useState(false);
 
   const handleLogout = async () => {
+    if (!confirm('로그아웃 하시겠어요?')) return;
     const res = await fetch(`${WEB_SERVER_URL}/auth/logout`, {
       method: 'POST',
       credentials: 'include'
