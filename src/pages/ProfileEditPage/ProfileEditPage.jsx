@@ -133,6 +133,9 @@ const ProfileEditPage = () => {
 
   const requestUpdate = e => {
     e.preventDefault();
+    if (phoneValidity === 'INVALID_PHONE_NUMBER') {
+      return alert('휴대폰 정보를 형식에 맞게 입력해주세요!');
+    }
     if (nicknameValidity === 'CURRENT_NICKNAME') return;
     if (nicknameValidity === 'AVAILABLE') {
       handleSubmit();
@@ -142,10 +145,6 @@ const ProfileEditPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (phoneValidity === 'INVALID_PHONE_NUMBER') {
-      return alert('휴대폰 정보를 형식에 맞게 입력해주세요!');
-    }
-
     const hasImageToUpload = image.previewUrl ? true : false;
 
     const S3UploadedURL = hasImageToUpload ? await uploadImage() : '';
