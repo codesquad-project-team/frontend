@@ -25,22 +25,24 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
     }
   };
 
+  const startOpeningAnimation = () => setShowsMenu(true);
+
   useEffect(() => {
-    setShowsMenu(true);
+    startOpeningAnimation();
   }, []);
 
   return (
     <>
       <div className={cx('background')} onClick={toggleDropdownMenu} />
       <div className={cx('wrapper', showsMenu && 'animation')}>
-        <CommonLink to="/post/upload">
+        <CommonLink to="/post/upload" onClick={toggleDropdownMenu}>
           <div className={cx('btns')}>글 작성</div>
         </CommonLink>
         <CommonLink
           to={`/profile/@${nickname}`}
           onClick={() => {
             localStorage.setItem('targetUserId', id);
-            setShowsMenu(false);
+            toggleDropdownMenu();
           }}
         >
           <div className={cx('btns')}>내 프로필</div>
