@@ -1,14 +1,13 @@
-.post-container {
+.main {
   display: grid;
   justify-items: center;
   grid-template-columns: 50% 50%;
   row-gap: 8rem;
   width: 94rem;
   padding: 2rem 0;
-
-  &-wrapper {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
+}
+.wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }

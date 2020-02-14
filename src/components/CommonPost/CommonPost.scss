@@ -1,6 +1,6 @@
 @import '../../stylesheets/util.scss';
 
-.common-background {
+.background {
   display: flex;
   justify-content: center;
   width: 100vw;
@@ -9,22 +9,22 @@
   background-color: $gray-background-color;
 }
 
-.common-post {
+.post {
   background-color: #fff;
   border-radius: 5px;
+}
 
-  &-small {
-    width: 10rem;
-    min-height: 10rem;
-  }
+.small {
+  width: 10rem;
+  min-height: 10rem;
+}
 
-  &-medium {
-    width: 20rem;
-    min-height: 20rem;
-  }
+.medium {
+  width: 20rem;
+  min-height: 20rem;
+}
 
-  &-large {
-    width: 80rem;
-    min-height: 60rem;
-  }
+.large {
+  width: 80rem;
+  min-height: 60rem;
 }

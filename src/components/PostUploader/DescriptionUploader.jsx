@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import './DescriptionUploader.scss';
+import classNames from 'classnames/bind';
+import styles from './DescriptionUploader.scss';
+
+const cx = classNames.bind(styles);
 
 const MAX_DESCRIPTION_BYTES = 2000;
 
@@ -41,17 +44,15 @@ const DescriptionUploader = ({
   };
 
   return (
-    <div className="description-uploader-wrapper">
+    <div className={cx('wrapper')}>
       <textarea
         name="description"
-        className={`description-uploader ${
-          showsOverLimitMessage ? 'description-overlimit' : ''
-        }`}
+        className={cx('text-area', showsOverLimitMessage ? 'overlimit' : '')}
         placeholder="간단한 설명을 적어주세요(선택)."
         value={description}
         onChange={handleChange}
       />
-      <div className="description-overlimit-message">
+      <div className={cx('overlimit-message')}>
         {showsOverLimitMessage && (
           <span>{MAX_DESCRIPTION_BYTES / 2}자 이하로 작성해주세요.</span>
         )}

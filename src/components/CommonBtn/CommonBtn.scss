@@ -1,6 +1,6 @@
 @import '../../stylesheets/util.scss';
 
-.common-btn {
+.common {
   border-radius: 5px;
   padding: 0.6rem 1rem;
   margin: 1rem;
@@ -11,39 +11,38 @@
     font-size: 1.5rem;
     white-space: nowrap;
   }
+}
+.normal {
+  border: 1px solid $main-color;
+  background-color: #fff;
 
-  &-normal {
-    border: 1px solid $main-color;
-    background-color: #fff;
-
-    &:hover {
-      background-color: $main-color;
-      color: #fff;
-    }
-  }
-
-  &-emphasize {
-    border: 0;
+  &:hover {
     background-color: $main-color;
     color: #fff;
-
-    &:hover {
-      background-color: $main-color-light;
-    }
   }
+}
 
-  &-underline {
-    border: 0;
-    color: $main-color;
-    font-weight: bold;
+.emphasize {
+  border: 0;
+  background-color: $main-color;
+  color: #fff;
 
-    &:hover {
-      text-decoration: underline;
-    }
+  &:hover {
+    background-color: $main-color-light;
   }
+}
 
-  &-none {
-    border: 1px solid $main-color;
-    background-color: #fff;
+.underline {
+  border: 0;
+  color: $main-color;
+  font-weight: bold;
+
+  &:hover {
+    text-decoration: underline;
   }
+}
+
+.none {
+  border: 1px solid $main-color;
+  background-color: #fff;
 }

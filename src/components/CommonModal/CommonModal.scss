@@ -1,6 +1,15 @@
 @import '../../stylesheets/util.scss';
 
-.common-modal {
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.16);
+}
+
+.wrapper {
   position: fixed;
   left: 30%;
   top: 20%;
@@ -9,16 +18,7 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   z-index: 999;
 
-  &-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.16);
-  }
-
-  &-header {
+  .header {
     height: 14rem;
     margin-bottom: 2.5rem;
 
@@ -34,7 +34,7 @@
     }
   }
 
-  &-content {
+  .content {
     width: 50rem;
     margin: 0 auto;
     margin-top: 3rem;
@@ -52,7 +52,7 @@
     }
   }
 
-  &-close-btn {
+  .close-btn {
     position: absolute;
     right: 1rem;
     top: 1rem;
@@ -61,7 +61,7 @@
     font-weight: 200;
   }
 
-  &-reminder-btn {
+  .reminder-btn {
     margin: 0;
 
     span {

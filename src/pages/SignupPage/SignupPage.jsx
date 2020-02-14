@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import './SignupPage.scss';
+import classNames from 'classnames/bind';
+import styles from './SignupPage.scss';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import CommonLink from '../../components/CommonLink/CommonLink';
 import useInput from '../../hooks/useInput';
@@ -11,13 +12,17 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import useTempTokenValidation from '../../hooks/useTempTokenValidation';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
 import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
+import { useHistory } from 'react-router-dom';
 
-const SignupPage = ({ history }) => {
-  const { setLoggedIn } = useLoginContext();
+const cx = classNames.bind(styles);
+
+const SignupPage = () => {
+  const history = useHistory();
+  const { setLoggedIn, setNeedsUserInfo } = useLoginContext();
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
 
-  const { loading, provider } = useTempTokenValidation(history);
+  const { loading, provider } = useTempTokenValidation();
   const [nicknameValidity, setNicknameValidity] = useState({});
 
   const shakeTarget = useRef(null);
@@ -89,6 +94,7 @@ const SignupPage = ({ history }) => {
     switch (res.status) {
       case 200:
         setLoggedIn(true);
+        setNeedsUserInfo(state => !state);
         history.push(referer);
         break;
       case 400:
@@ -122,18 +128,18 @@ const SignupPage = ({ history }) => {
   }, [nickname]);
 
   return (
-    <div className="signup-page">
+    <div className={cx('wrapper')}>
       <header>
         <CommonLink to="/">
           <h1>Connect Flavor</h1>
         </CommonLink>
       </header>
       {!loading && (
-        <div className="signup-page-body">
+        <div className={cx('main')}>
           <h2>{provider} 회원가입</h2>
-          <div className="signup-page-auth-checker">인증완료</div>
+          <div className={cx('auth-checker')}>인증완료</div>
           <span>닉네임을 만들어주세요</span>
-          <div ref={shakeTarget} className={`signup-page-input-section`}>
+          <div ref={shakeTarget} className={cx('input-section')}>
             <input
               name="nickname"
               value={nickname}
@@ -145,7 +151,7 @@ const SignupPage = ({ history }) => {
           </div>
           <CommonBtn
             styleType="emphasize"
-            className="signup-page-signup-btn"
+            className={cx('signup-btn')}
             onClick={requestSignup}
           >
             회원가입

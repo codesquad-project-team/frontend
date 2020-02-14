@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import './CommonModal.scss';
+import classNames from 'classnames/bind';
+import styles from './CommonModal.scss';
 import OAuthBtn from '../OAuthBtn/OAuthBtn';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import { IMAGE_BUCKET_URL, WEB_SERVER_URL } from '../../configs';
 
-const CommonModal = ({ clickHandler, target }) => {
+const cx = classNames.bind(styles);
+
+const CommonModal = ({ onClose, target }) => {
   const content =
     target === `signin`
       ? {
@@ -31,18 +34,18 @@ const CommonModal = ({ clickHandler, target }) => {
 
   return (
     <>
-      <div className="common-modal-overlay" />
-      <div className="common-modal">
-        <button className="common-modal-close-btn" onClick={clickHandler}>
+      <div className={cx('overlay')} />
+      <div className={cx('wrapper')}>
+        <button className={cx('close-btn')} onClick={onClose}>
           닫기
         </button>
-        <div className="common-modal-content">
-          <div className="common-modal-header">
+        <div className={cx('content')}>
+          <div className={cx('header')}>
             <img src={`${IMAGE_BUCKET_URL}/logo.png`} />
             <h1>서비스 {content.title}</h1>
           </div>
           <p>{content.desc}</p>
-          <div className="common-modal-content-oauth">
+          <div className={cx('content-oauth')}>
             <OAuthBtn
               href={`${WEB_SERVER_URL}/auth/kakao`}
               company="카카오"
@@ -62,10 +65,7 @@ const CommonModal = ({ clickHandler, target }) => {
           </div>
           <p>
             {content.reminderMsg}
-            <CommonBtn
-              className="common-modal-reminder-btn"
-              styleType="underline"
-            >
+            <CommonBtn className={cx('reminder-btn')} styleType="underline">
               <a href={`${WEB_SERVER_URL}/auth/kakao`}>
                 {content.hyperlinkMsg}
               </a>

@@ -1,37 +1,52 @@
-import React from 'react';
-import './PreviewImages.scss';
-import { IMAGE_BUCKET_URL } from '../../../configs';
+import React, { useState } from 'react';
+import classNames from 'classnames/bind';
+import styles from './PreviewImages.scss';
+import OverlayButtons from './OverlayButtons';
 
-const PreviewImages = ({
-  previewUrls,
-  representativeIndex,
-  deleteImageHandler,
-  representativeImageHandler
-}) => {
-  return previewUrls.map((image, index) => {
-    const representativeClassName =
-      index === representativeIndex ? 'representative' : 'non-representative';
+const cx = classNames.bind(styles);
+
+const PreviewImages = ({ images, onDelete, onSelect, openEditor }) => {
+  const [hoveredImageIdx, setHoveredImageIdx] = useState(null);
+  const [hoveredButtonIdx, setHoveredButtonIdx] = useState(null);
+
+  const handleImageMouseEnter = ({ target }) => {
+    setHoveredImageIdx(Number(target.dataset.idx));
+  };
+
+  const handleImageMouseLeave = () => {
+    setHoveredImageIdx(null);
+  };
+
+  const handleButtonMouseEnter = ({ target }) => {
+    setHoveredButtonIdx(Number(target.dataset.idx));
+  };
+
+  const handleButtonMouseLeave = () => {
+    setHoveredButtonIdx(null);
+  };
+
+  return images.map(({ previewURL, isRepresentative }, index) => {
+    const isImageHovered = hoveredImageIdx === index;
+    const isButtonHovered = hoveredButtonIdx === index;
     return (
-      <div className="image-uploader-preview-wrapper" key={index}>
+      <div className={cx('wrapper')} key={index}>
         <img
-          className={`image-uploader-preview-img ${representativeClassName}`}
-          src={image}
+          className={cx('img', isRepresentative && 'representative')}
+          src={previewURL}
+          data-idx={index}
+          onMouseEnter={handleImageMouseEnter}
+          onMouseLeave={handleImageMouseLeave}
         />
-        <input
-          type="image"
-          className="image-uploader-preview-img-close-btn"
-          src={`${IMAGE_BUCKET_URL}/image-delete-icon-2.png`}
-          onClick={deleteImageHandler}
-          data-delete-target-index={index}
-        />
-
-        <input
-          type="image"
-          className="image-uploader-preview-img-select-btn"
-          src={`${IMAGE_BUCKET_URL}/star-icon.png`}
-          onClick={representativeImageHandler}
-          data-representative-index={index}
-        />
+        {(isImageHovered || isButtonHovered) && (
+          <OverlayButtons
+            index={index}
+            onMouseEnter={handleButtonMouseEnter}
+            onMouseLeave={handleButtonMouseLeave}
+            onDelete={onDelete}
+            onSelect={onSelect}
+            openEditor={openEditor}
+          />
+        )}
       </div>
     );
   });

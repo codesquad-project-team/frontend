@@ -1,8 +1,15 @@
 import React from 'react';
-import './LocationCarousel.scss';
+import classNames from 'classnames/bind';
+import styles from './LocationCarousel.scss';
 import Carousel from 'react-bootstrap/Carousel';
 
-const LocationCarousel = ({ data: { images = [] } }) => {
+const cx = classNames.bind(styles);
+
+const LocationCarousel = ({
+  data: {
+    post: { images = [] }
+  }
+}) => {
   const carouselItems = images.map(({ url }, index) => {
     return (
       <Carousel.Item key={index}>
@@ -12,7 +19,7 @@ const LocationCarousel = ({ data: { images = [] } }) => {
   });
 
   return (
-    <div className="location-carousel">
+    <div className={cx('wrapper')}>
       <Carousel>{carouselItems}</Carousel>
     </div>
   );

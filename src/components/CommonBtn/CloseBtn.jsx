@@ -1,10 +1,13 @@
 import React from 'react';
-import './CloseBtn.scss';
+import classNames from 'classnames/bind';
+import styles from './CloseBtn.scss';
+
+const cx = classNames.bind(styles);
 
 const CloseBtn = ({ className = '', onClick, children, ...restProps }) => {
   return (
     <button
-      className={`close-btn ${className}`}
+      className={cx('close-btn', className)}
       onClick={onClick}
       {...restProps}
     >

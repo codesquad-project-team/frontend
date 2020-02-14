@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 /**
  * @param {string} url fetch요청할 url
@@ -9,25 +9,26 @@ const useFetch = (url, options, callback) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(url, options);
+      if (res instanceof Promise) throw Error('REQUEST FAILED');
+      if (!res.ok) throw Error(res.status);
+      const json = await res.json();
+      callback(json);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [url]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch(url, options);
-        if (res instanceof Promise) throw Error('REQUEST FAILED');
-        if (!res.ok) throw Error(res.status);
-        const json = await res.json();
-        callback(json);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, [url]);
 
-  return { error, loading };
+  return { error, loading, refetch: fetchData };
 };
 
 export default useFetch;

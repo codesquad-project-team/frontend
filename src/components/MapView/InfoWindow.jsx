@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './InfoWindow.scss';
+import classNames from 'classnames/bind';
+import styles from './InfoWindow.scss';
 import CloseBtn from '../CommonBtn/CloseBtn';
 import { IMAGE_BUCKET_URL } from '../../configs';
 
+const cx = classNames.bind(styles);
+
 const InfoWindow = ({ info: { name, address, link, phone } = {} }) => {
   return (
-    <div className="info-window">
-      <h3 className="info-window-location-name">
+    <div className={cx('wrapper')}>
+      <h3 className={cx('location-name')}>
         <a href={link} target="_blank" rel="noopener noreferrer">
           {name}
         </a>
@@ -19,7 +22,7 @@ const InfoWindow = ({ info: { name, address, link, phone } = {} }) => {
           width="55"
           height="55"
           alt={titlePlace}
-          className="info-window-thumbnail"
+          className={cx("thumbnail")}
         />
         <br />  */}
       <div>{phone}</div>
@@ -29,7 +32,7 @@ const InfoWindow = ({ info: { name, address, link, phone } = {} }) => {
         </a>
       </span>
       <img
-        className="info-window-arrow-image"
+        className={cx('arrow-image')}
         src={`${IMAGE_BUCKET_URL}/info-window-arrow.png`}
         alt=""
       />

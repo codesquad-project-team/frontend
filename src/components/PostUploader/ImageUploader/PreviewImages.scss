@@ -1,37 +1,17 @@
-@import "../../../stylesheets/util.scss";
+@import '../../../stylesheets/util.scss';
 
-.image-uploader-preview {
-  &-wrapper {
-    position: relative;
-    margin: 0 1rem;
-  }
+.wrapper {
+  position: relative;
+  margin: 0 1rem;
+  margin-bottom: 3rem;
+}
 
-  &-img {
-    width: 15rem;
-    height: 15rem;
-    margin-bottom: 3rem;
-    border: 1px solid $main-color-light;
+.img {
+  width: 15rem;
+  height: 15rem;
+  border: 1px solid $main-color-light;
 
-    &.representative {
-      border: 3px solid $main-color-light;
-    }
-
-    &:hover {
-      cursor: pointer;
-    }
-
-    &-close-btn {
-      position: absolute;
-      right: 0.8rem;
-      top: 0.8rem;
-      width: 2.2rem;
-    }
-
-    &-select-btn {
-      position: absolute;
-      top: 0.8rem;
-      left: 0.8rem;
-      width: 2.2rem;
-    }
+  &.representative {
+    border: 3px solid $main-color-light;
   }
 }

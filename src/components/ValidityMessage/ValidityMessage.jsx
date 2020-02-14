@@ -1,5 +1,8 @@
 import React from 'react';
-import './ValidityMessage.scss';
+import classNames from 'classnames/bind';
+import styles from './ValidityMessage.scss';
+
+const cx = classNames.bind(styles);
 
 const messageMap = {
   AVAILABLE: '사용 가능한 닉네임이에요.',
@@ -22,12 +25,8 @@ const ValidityMessage = ({ messageKey, styleObj = {} }) => {
   const message = messageMap[messageKey];
 
   return (
-    <div className="validity-message" style={styleObj}>
-      <span
-        className={valid ? 'validity-message-ok' : 'validity-message-not-ok'}
-      >
-        {message}
-      </span>
+    <div className={cx('wrapper')} style={styleObj}>
+      <span className={cx(valid ? 'ok-msg' : 'not-ok-msg')}>{message}</span>
     </div>
   );
 };

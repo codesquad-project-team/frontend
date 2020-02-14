@@ -1,6 +1,7 @@
-import React, { useMemo, useState, useReducer } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import './PostUploadPage.scss';
+import React, { useEffect, useMemo, useState, useReducer } from 'react';
+import { useHistory, useLocation, Prompt } from 'react-router-dom';
+import classNames from 'classnames/bind';
+import styles from './PostUploadPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
 import Header from '../../components/Header/Header';
 import ImageUploader from '../../components/PostUploader/ImageUploader/ImageUploader';
@@ -15,55 +16,34 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 import { deepDiff } from '../../utils/diff.js';
 import { WEB_SERVER_URL } from '../../configs';
+import * as actions from './actions';
+
+const cx = classNames.bind(styles);
 
 const readyToUploadReducer = (prevState, newState) => {
   return { ...prevState, ...newState };
 };
 
-const getURLAndIndex = imageURLs => {
-  let representativeIndex;
-  const URLs = imageURLs.map(({ url, isRepresentative }, idx) => {
-    if (isRepresentative) representativeIndex = idx;
-    return url;
-  });
-  return [URLs, representativeIndex];
-};
+const getInitialPostData = isEditMode =>
+  isEditMode
+    ? JSON.parse(localStorage.getItem('postData'))
+    : { post: {}, location: {} };
 
-const getInitialPostData = isEditMode => {
-  const {
-    id,
-    place,
-    companion,
-    activity,
-    description,
-    images,
-    location
-  } = JSON.parse(localStorage.getItem('postData'));
-
-  const initialData = {
-    location,
-    post: {
-      place,
-      companion,
-      activity,
-      description,
-      images
-    },
-    id
-  };
-  return isEditMode ? initialData : {};
-};
-//TODO: 초기렌더링 이후 localStorage 초기화
 const PostUploadPage = () => {
   const history = useHistory();
   const { pathname } = useLocation();
   const isEditMode = pathname === '/post/edit';
 
-  const initial = useMemo(() => getInitialPostData(isEditMode), []);
-  const [initialURLs, initialIdx] = useMemo(
-    () => (isEditMode ? getURLAndIndex(initial.post.images) : []),
+  const { writer, ...initial } = useMemo(
+    () => getInitialPostData(isEditMode),
     []
   );
+  const {
+    images: initialImages,
+    description: initialDesc,
+    id,
+    ...initialTitle
+  } = initial.post;
 
   const [readyToUpload, setReadyToUpload] = useReducer(
     readyToUploadReducer,
@@ -71,30 +51,22 @@ const PostUploadPage = () => {
   );
   const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
 
-  const [selectedLocation, setSelectedLocation] = useState(
-    initial.location || {}
+  const [images, setImages] = useState(
+    isEditMode ? actions.GET_IMAGES(initialImages) : []
   );
 
+  const [selectedLocation, setSelectedLocation] = useState(initial.location);
   const { longitude, latitude, name } = selectedLocation;
 
-  const _initial = initial.post || {};
-  const initialTitle = {
-    place: _initial.place,
-    companion: _initial.companion,
-    activity: _initial.activity
+  const [title, setTitle] = useState(initialTitle);
+  const [description, setDescription] = useState(initialDesc);
+  const [isEdited, setIsEdited] = useState(false);
+
+  const bindUpdater = updater => param => {
+    updater(param);
+    setIsEdited(true);
   };
-  const [title, setTitle] = useState(initialTitle || '');
-  const [description, setDescription] = useState(_initial.description || '');
-
-  const [representativeIndex, setRepresentativeIndex] = useState(
-    initialIdx || 0
-  );
-  const [images, setImages] = useState({
-    selectedImages: [],
-    previewUrls: initialURLs || []
-  });
-
-  const { nickname } = useLoginContext();
+  const { nickname, loggedIn, openSigninModal } = useLoginContext();
 
   const { loadError } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
@@ -128,34 +100,33 @@ const PostUploadPage = () => {
       );
     }
 
-    const albumName = nickname.concat('_', YYYYMMDDHHMMSS(new Date())).trim();
-    const albumNamePrefix = 'post-images/';
-
-    const S3uploadedURLs = S3imageUploadHandler(
-      albumName,
-      albumNamePrefix,
-      images.selectedImages,
+    const S3uploadedURLs = S3imageUploadHandler({
+      albumName: nickname.concat('_', YYYYMMDDHHMMSS(new Date())).trim(),
+      albumNamePrefix: 'post-images/',
+      images: images
+        .filter(({ previewURL }) => previewURL.startsWith('data'))
+        .map(({ forUpload }) => forUpload),
       setImageUploadError
-    );
+    });
     return S3uploadedURLs;
   };
 
-  const mergePreviousImages = S3uploadedURLs => {
-    return images.previewUrls
-      .filter(URL => !URL.startsWith('data'))
+  const mergePreviousImages = (images, S3uploadedURLs) => {
+    return images
+      .filter(({ previewURL }) => previewURL.startsWith('http'))
+      .map(({ previewURL }) => previewURL)
       .concat(S3uploadedURLs);
   };
 
-  const formatURLs = S3uploadedURLs => {
+  const formatURLs = (images, S3uploadedURLs) => {
     const URLs = isEditMode
-      ? mergePreviousImages(S3uploadedURLs)
+      ? mergePreviousImages(images, S3uploadedURLs)
       : S3uploadedURLs;
 
-    return URLs.map((url, idx) =>
-      representativeIndex === idx
-        ? { url, isRepresentative: true }
-        : { url, isRepresentative: false }
-    );
+    return images.map(({ isRepresentative }, idx) => ({
+      url: URLs[idx],
+      isRepresentative
+    }));
   };
 
   const formatData = S3uploadedURLs => {
@@ -164,20 +135,19 @@ const PostUploadPage = () => {
       post: {
         ...title,
         description,
-        images: formatURLs(S3uploadedURLs)
+        images: formatURLs(images, S3uploadedURLs)
       }
     };
     return postData;
   };
 
   const getUpdatedValues = (initialData, postData) => {
-    const { id, ...initial } = initialData;
-    return deepDiff(initial, postData);
+    return deepDiff(initialData, postData);
   };
 
   const requestPostUpload = async postData => {
     const res = await fetch(
-      `${WEB_SERVER_URL}/post${isEditMode ? `/${initial.id}` : ''}`,
+      `${WEB_SERVER_URL}/post${isEditMode ? `/${id}` : ''}`,
       {
         method: isEditMode ? 'PUT' : 'POST',
         mode: 'cors',
@@ -188,11 +158,13 @@ const PostUploadPage = () => {
         body: JSON.stringify(postData)
       }
     );
-    const { id } = isEditMode ? { id: initial.id } : await res.json();
+
+    const { id: postId } = isEditMode ? { id } : await res.json();
 
     switch (res.status) {
       case 200:
-        history.push(`/post/${id}`);
+        setIsEdited(false);
+        history.push(`/post/${postId}`);
         break;
       case 401:
         alert('토큰이 유효하지 않습니다. 다시 로그인 해주세요.');
@@ -210,17 +182,13 @@ const PostUploadPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const needsMoreData =
-      !images.previewUrls.length ||
-      !hasSelectedLocation ||
-      !hasAllTitles ||
-      isOverDescLimit;
-
-    if (needsMoreData) {
+    if (needsMoreData()) {
       showUploadFailReason();
       return;
     }
-    const hasImagesToUpload = !!images.selectedImages.length;
+    const hasImagesToUpload = !!images.filter(({ previewURL }) =>
+      previewURL.startsWith('data')
+    ).length;
     const S3uploadedURLs = hasImagesToUpload ? await uploadImagesToS3() : [];
     const formattedData = formatData(S3uploadedURLs);
     const postData = isEditMode
@@ -229,44 +197,53 @@ const PostUploadPage = () => {
     requestPostUpload(postData);
   };
 
-  const handleCancel = () => {
-    if (confirm('작성을 취소하고 이전 페이지로 돌아가시겠어요?')) {
-      history.goBack();
-    }
-  };
+  const needsMoreData = () =>
+    !images.length || !hasSelectedLocation || !hasAllTitles || isOverDescLimit;
+
+  const handleCancel = () => history.goBack();
+
+  //업로드|수정 페이지에서 로그아웃 시, 또는 로그아웃 상태에서 직접 접근시 로그인 모달 띄우기
+  useEffect(() => {
+    if (loggedIn) return;
+    setIsEdited(false); //Prompt 컴포넌트 동작을 막기 위해서 상태 초기화.
+    openSigninModal();
+  }, [loggedIn]);
 
   return (
     <>
+      <Prompt
+        when={isEdited}
+        message={'작성을 취소하고 페이지를 나가시겠어요?'}
+      />
       <Header />
-      <CommonPost.background className="post-upload-page-background">
-        <CommonPost large className="post-upload-page">
+      <CommonPost.background className={cx('background')}>
+        <CommonPost large className={cx('wrapper')}>
           <ImageUploader
             images={images}
-            setImages={setImages}
-            representativeIndex={representativeIndex}
-            setRepresentativeIndex={setRepresentativeIndex}
+            setImages={bindUpdater(setImages)}
+            actions={actions}
           />
           <LocationUploader
             lat={latitude}
             lng={longitude}
-            setSelectedLocation={setSelectedLocation}
+            setSelectedLocation={bindUpdater(setSelectedLocation)}
             setReadyToUpload={setReadyToUpload}
             hasSelectedLocation={hasSelectedLocation}
           />
           <TitleUploader
             placeName={name}
             title={title}
-            setTitle={setTitle}
+            setTitle={bindUpdater(setTitle)}
             setReadyToUpload={setReadyToUpload}
           />
           <DescriptionUploader
             description={description}
-            setDescription={setDescription}
+            setDescription={bindUpdater(setDescription)}
             setReadyToUpload={setReadyToUpload}
           />
           {/* TODO: 취향 매칭을 위한 질문 추가하기 */}
           {/* <PostQuestions /> */}
-          <div className="post-upload-page-btns">
+          <div className={cx('btns')}>
             <CommonBtn onClick={handleSubmit}>작성</CommonBtn>
             <CommonBtn onClick={handleCancel}>취소</CommonBtn>
           </div>

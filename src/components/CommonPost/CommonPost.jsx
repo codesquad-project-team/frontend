@@ -1,6 +1,9 @@
 import React from 'react';
-import './CommonPost.scss';
+import classNames from 'classnames/bind';
+import styles from './CommonPost.scss';
 import { getClassName } from '../../utils/utils';
+
+const cx = classNames.bind(styles);
 
 const CommonPost = ({
   small,
@@ -10,12 +13,9 @@ const CommonPost = ({
   children,
   ...restProps
 }) => {
-  const sizeClassName = getClassName({
-    props: { small, medium, large },
-    prefix: 'common-post'
-  });
+  const sizeClassName = getClassName({ small, medium, large });
   return (
-    <div className={`common-post ${sizeClassName} ${className}`} {...restProps}>
+    <div className={cx('post', sizeClassName, className)} {...restProps}>
       {children}
     </div>
   );
@@ -27,7 +27,7 @@ export const CommonBackground = ({
   ...restProps
 }) => {
   return (
-    <div className={`common-background ${className}`} {...restProps}>
+    <div className={cx('background', className)} {...restProps}>
       {children}
     </div>
   );

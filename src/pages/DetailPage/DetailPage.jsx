@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import './DetailPage.scss';
+import { useParams } from 'react-router-dom';
+import classNames from 'classnames/bind';
+import styles from './DetailPage.scss';
 import Header from '../../components/Header/Header';
 import DetailPostHeader from '../../components/DetailPostHeader/DetailPostHeader';
 import LocationCarousel from '../../components/LocationCarousel/LocationCarousel';
@@ -11,7 +13,10 @@ import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 
-const DetailPage = ({ postId }) => {
+const cx = classNames.bind(styles);
+
+const DetailPage = () => {
+  const { postId } = useParams();
   const [data, setData] = useState({});
 
   const { error, loading } = useFetch(
@@ -21,9 +26,9 @@ const DetailPage = ({ postId }) => {
   );
 
   return (
-    <div className="detail-page">
+    <div className={cx('wrapper')}>
       <Header />
-      <div className="detail-page-contents">
+      <div className={cx('contents')}>
         <FadeLoader
           css={override}
           sizeUnit={'px'}
@@ -33,7 +38,11 @@ const DetailPage = ({ postId }) => {
         />
         {!loading && (
           <>
-            <DetailPostHeader data={data} />
+            <DetailPostHeader
+              data={data}
+              writerId={data.writer.id}
+              postId={postId}
+            />
             <LocationCarousel data={data} />
             <DetailPost data={data} />
             <MapView data={data} />
