@@ -11,25 +11,19 @@ import LoginContextProvider from './contexts/LoginContext';
 
 const Root = () => {
   return (
-    <LoginContextProvider>
-      <Router>
+    <Router>
+      <LoginContextProvider>
         <Switch>
-          <Route exact path="/" render={() => <MainPage />} />
-          <Route path="/profile/edit" render={() => <ProfileEditPage />} />
-          <Route path="/profile" render={() => <ProfilePage />} />
-          <Route path="/post/upload" render={() => <PostUploadPage />} />
-          <Route path="/post/edit" render={() => <PostUploadPage />} />
-          <Route
-            path="/post/:postId"
-            render={({ match }) => <DetailPage postId={match.params.postId} />}
-          />
-          <Route
-            path="/signup"
-            render={({ history }) => <SignupPage history={history} />}
-          />
+          <Route exact path="/" component={MainPage} />
+          <Route path="/profile/edit" component={ProfileEditPage} />
+          <Route path="/profile" component={ProfilePage} />
+          <Route path="/post/upload" component={() => <PostUploadPage />} />
+          <Route path="/post/edit" component={() => <PostUploadPage />} />
+          <Route path="/post/:postId" component={DetailPage} />
+          <Route path="/signup" component={SignupPage} />
         </Switch>
-      </Router>
-    </LoginContextProvider>
+      </LoginContextProvider>
+    </Router>
   );
 };
 

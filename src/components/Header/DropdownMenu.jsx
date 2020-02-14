@@ -12,6 +12,7 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
   const [showsMenu, setShowsMenu] = useState(false);
 
   const handleLogout = async () => {
+    if (!confirm('로그아웃 하시겠어요?')) return;
     const res = await fetch(`${WEB_SERVER_URL}/auth/logout`, {
       method: 'POST',
       credentials: 'include'
@@ -25,20 +26,25 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
     }
   };
 
+  const startOpeningAnimation = () => setShowsMenu(true);
+
   useEffect(() => {
-    setShowsMenu(true);
+    startOpeningAnimation();
   }, []);
 
   return (
     <>
       <div className={cx('background')} onClick={toggleDropdownMenu} />
       <div className={cx('wrapper', showsMenu && 'animation')}>
-        <CommonLink to="/post/upload">
+        <CommonLink to="/post/upload" onClick={toggleDropdownMenu}>
           <div className={cx('btns')}>글 작성</div>
         </CommonLink>
         <CommonLink
           to={`/profile/@${nickname}`}
-          onClick={() => localStorage.setItem('targetUserId', id)}
+          onClick={() => {
+            localStorage.setItem('targetUserId', id);
+            toggleDropdownMenu();
+          }}
         >
           <div className={cx('btns')}>내 프로필</div>
         </CommonLink>

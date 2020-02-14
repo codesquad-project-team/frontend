@@ -13,14 +13,15 @@ const PostItem = ({
   activity,
   description,
   writer: { id, profileImage, nickname } = {},
-  headerOn
+  headerOn,
+  ...props
 }) => {
   const handleClick = () => {
     localStorage.setItem('targetUserId', id);
   };
 
   return (
-    <div className={cx('wrapper')}>
+    <div className={cx('wrapper')} {...props}>
       {headerOn && (
         <div className={cx('header')}>
           <CommonLink to={`/profile/@${nickname}`} onClick={handleClick}>
@@ -37,7 +38,7 @@ const PostItem = ({
         alt="representative post image"
       />
       <div className={cx('title')}>
-        {place}에서 {companion}랑 {activity}
+        {place}에서 {companion} {activity}
       </div>
       <div className={cx('desc')}>{description}</div>
     </div>

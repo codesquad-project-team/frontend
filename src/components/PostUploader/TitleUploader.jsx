@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './TitleUploader.scss';
 import useInput from '../../hooks/useInput';
@@ -75,11 +75,13 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
       : setLocationInputStyle({});
   };
 
-  useMemo(() => {
+  useEffect(() => {
+    if (!placeName) return;
     setInputValue({ ...inputValue, place: placeName });
   }, [placeName]);
 
-  useMemo(() => {
+  useEffect(() => {
+    if (!select) return;
     if (isFreeInputValue(select)) {
       setState({ ...state, showsFreeInput: true });
     } else {
@@ -88,7 +90,8 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
     }
   }, [select]);
 
-  useMemo(() => {
+  useEffect(() => {
+    if (!(place || companion || activity)) return;
     adjustLocationInputWidth(place);
     setTitle({
       place,

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './DetailPage.scss';
 import Header from '../../components/Header/Header';
@@ -14,7 +15,8 @@ import FadeLoader from 'react-spinners/FadeLoader';
 
 const cx = classNames.bind(styles);
 
-const DetailPage = ({ postId }) => {
+const DetailPage = () => {
+  const { postId } = useParams();
   const [data, setData] = useState({});
 
   const { error, loading } = useFetch(
@@ -36,7 +38,11 @@ const DetailPage = ({ postId }) => {
         />
         {!loading && (
           <>
-            <DetailPostHeader data={data} />
+            <DetailPostHeader
+              data={data}
+              writerId={data.writer.id}
+              postId={postId}
+            />
             <LocationCarousel data={data} />
             <DetailPost data={data} />
             <MapView data={data} />

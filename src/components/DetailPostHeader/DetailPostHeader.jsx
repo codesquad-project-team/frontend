@@ -8,11 +8,11 @@ import { WEB_SERVER_URL } from '../../configs';
 
 const cx = classNames.bind(styles);
 
-const DetailPostHeader = ({ data }) => {
+const DetailPostHeader = ({ data, writerId, postId }) => {
   const history = useHistory();
   const [isFirstMouseOver, setIsFirstMouseOver] = useState(true);
-  const { id } = useLoginContext();
-  const isMyPost = id === data.writer.id;
+  const { id, nickname } = useLoginContext();
+  const isMyPost = id === writerId;
 
   const savePostData = () => {
     localStorage.setItem('postData', JSON.stringify(data));
@@ -30,14 +30,14 @@ const DetailPostHeader = ({ data }) => {
 
   const handleDelete = async () => {
     if (!confirm('정말 삭제하시겠어요?')) return;
-    const res = await fetch(`${WEB_SERVER_URL}/post/${data.id}`, {
+    const res = await fetch(`${WEB_SERVER_URL}/post/${postId}`, {
       method: 'DELETE',
       credentials: 'include'
     });
     switch (res.status) {
       case 200:
         alert('게시글이 삭제되었습니다.');
-        history.push('/profile');
+        history.push(`/profile/@${nickname}`);
         break;
       case 400:
         console.error('not exist postId');

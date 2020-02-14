@@ -12,15 +12,17 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import useTempTokenValidation from '../../hooks/useTempTokenValidation';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
 import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
+import { useHistory } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-const SignupPage = ({ history }) => {
-  const { setLoggedIn } = useLoginContext();
+const SignupPage = () => {
+  const history = useHistory();
+  const { setLoggedIn, setNeedsUserInfo } = useLoginContext();
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
 
-  const { loading, provider } = useTempTokenValidation(history);
+  const { loading, provider } = useTempTokenValidation();
   const [nicknameValidity, setNicknameValidity] = useState({});
 
   const shakeTarget = useRef(null);
@@ -92,6 +94,7 @@ const SignupPage = ({ history }) => {
     switch (res.status) {
       case 200:
         setLoggedIn(true);
+        setNeedsUserInfo(state => !state);
         history.push(referer);
         break;
       case 400:

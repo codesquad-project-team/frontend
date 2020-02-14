@@ -41,10 +41,11 @@ const RelatedPost = ({ postId }) => {
     return items.map(item => {
       return (
         <RelatedPostComment
+          key={item.id}
+          postId={item.id}
           companion={item.companion}
           activity={item.activity}
           profileImageURL={item.writer.profileImage || ''}
-          key={item.id}
         />
       );
     });

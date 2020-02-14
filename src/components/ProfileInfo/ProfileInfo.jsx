@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ProfileInfo.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
@@ -7,26 +7,41 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import { WEB_SERVER_URL } from '../../configs';
 
 const cx = classNames.bind(styles);
+const reducer = (prevState, state) => ({ ...prevState, ...state });
 
 const ProfileInfo = ({ data, isMyProfile, userId }) => {
+  const [profileContent, setProfileContent] = useReducer(reducer, data);
+  const { loggedIn, openSigninModal } = useLoginContext();
+  const [error, setError] = useState(null);
   const {
-    isFollowing: initialFollowStatus,
+    isFollowing,
     nickname,
     totalPosts,
     totalFollowers,
     totalFollowings,
     introduction,
     profileImage
-  } = data;
+  } = profileContent;
 
-  const [isFollowing, setIsFollowing] = useState(initialFollowStatus);
-  const { loggedIn, handleSigninModal, toggleSignupModal } = useLoginContext();
-  const [error, setError] = useState(null);
+  const sendRequest = async () => {
+    if (!loggedIn) {
+      openSigninModal();
+      return;
+    }
+    const res = await fetch(`${WEB_SERVER_URL}/user/follow/${userId}`, {
+      method: `${isFollowing ? 'DELETE' : 'POST'}`,
+      credentials: 'include'
+    });
+    handleResponse(res, isFollowing ? totalFollowers - 1 : totalFollowers + 1);
+  };
 
-  const handleResponse = res => {
+  const handleResponse = (res, followers) => {
     switch (res.status) {
       case 200:
-        setIsFollowing(!isFollowing);
+        setProfileContent({
+          isFollowing: !isFollowing,
+          totalFollowers: followers
+        });
         break;
       case 400:
         setError('INVALID_USER_ID');
@@ -39,19 +54,6 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
         break;
     }
   };
-
-  const sendRequest = async () => {
-    if (!loggedIn) {
-      handleSigninModal('OPEN');
-      return;
-    }
-    const res = await fetch(`${WEB_SERVER_URL}/user/follow/${userId}`, {
-      method: `${isFollowing ? 'DELETE' : 'POST'}`,
-      credentials: 'include'
-    });
-    handleResponse(res);
-  };
-
   return (
     <div className={cx('wrapper')}>
       <div className={cx('left-column')}>

@@ -10,7 +10,8 @@ const CommonLink = ({ className = '', onClick, children, ...restProps }) => {
     window.scrollTo(0, 0);
   };
 
-  const handleClick = () => {
+  const handleClick = e => {
+    e.stopPropagation();
     onClick ? onClick() : null;
     scrollToTop();
   };

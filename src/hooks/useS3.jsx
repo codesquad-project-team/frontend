@@ -126,12 +126,12 @@ const useS3 = () => {
     );
   };
 
-  const S3imageUploadHandler = async (
+  const S3imageUploadHandler = async ({
     albumName,
     albumNamePrefix,
     images,
     setImageUploadError
-  ) => {
+  }) => {
     try {
       const s3 = updateS3();
 
