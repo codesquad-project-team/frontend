@@ -1,32 +1,45 @@
+@import '../../stylesheets/util.scss';
+
 .wrapper {
-  max-width: 700px;
+  width: 100%;
   margin-bottom: 3rem;
+}
+.title {
+  font-size: $medium-title-font-size;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
 
+.content {
+  display: flex;
+  margin: 0 1rem;
+}
+
+.writer-img {
+  margin-right: 2rem;
+}
+
+.writer-name {
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+}
+
+.desc {
+  font-size: 1.6rem;
+}
+.profile-image {
+  margin-top: 1.5rem;
+}
+
+@include tablet-and-desktop {
+  .wrapper {
+    max-width: 700px;
+  }
   .title {
-    font-size: 3.6rem;
-    text-align: center;
-    margin-bottom: 1.5rem;
+    font-size: $large-title-font-size;
   }
-
   .content {
-    display: flex;
     margin: 0 3rem;
-  }
-
-  .writer-img {
-    margin-right: 2rem;
-  }
-
-  .writer-name {
-    font-weight: bold;
-    margin-bottom: 1rem;
-    font-size: 1.6rem;
-  }
-
-  .desc {
-    font-size: 1.6rem;
-  }
-  .profile-image {
-    margin-top: 1.5rem;
   }
 }
