@@ -3,8 +3,10 @@
 .wrapper {
   display: flex;
   position: absolute;
-  bottom: 0.1rem;
-  right: 2rem;
+  bottom: 0.5rem;
+  right: 1rem;
+  font-size: 1.2rem;
+  text-align: end;
   pointer-events: none;
 }
 .ok-msg {
@@ -12,10 +14,4 @@
 }
 .not-ok-msg {
   color: red;
-}
-
-@include desktop {
-  .wrapper {
-    right: 1rem;
-  }
 }

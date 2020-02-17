@@ -1,23 +1,25 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import classNames from 'classnames/bind';
+import FadeLoader from 'react-spinners/FadeLoader';
+import { css } from '@emotion/core';
 import styles from './SignupPage.scss';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import CommonLink from '../../components/CommonLink/CommonLink';
-import useInput from '../../hooks/useInput';
-import { css } from '@emotion/core';
-import FadeLoader from 'react-spinners/FadeLoader';
-import { debounce } from '../../utils/utils';
-import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
+import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
 import { useLoginContext } from '../../contexts/LoginContext';
 import useTempTokenValidation from '../../hooks/useTempTokenValidation';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
-import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
-import { useHistory } from 'react-router-dom';
+import useMediaQuerySet from '../../hooks/useMediaQuerySet';
+import useInput from '../../hooks/useInput';
+import { debounce } from '../../utils/utils';
+import { WEB_SERVER_URL, MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
 
 const cx = classNames.bind(styles);
 
 const SignupPage = () => {
   const history = useHistory();
+  const { isMobile } = useMediaQuerySet();
   const { setLoggedIn, setNeedsUserInfo } = useLoginContext();
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
@@ -89,6 +91,7 @@ const SignupPage = () => {
     });
     const json = await res.json();
     const domainRegExp = /^(((http(s?)):\/\/)?)([0-9a-zA-Z-]+(\.|:))([a-z]{2,3}|[0-9]{4})/;
+
     //사용자가 회원가입 하기 이전에 보고 있던 페이지 url
     const referer = json.referer.replace(domainRegExp, '');
     switch (res.status) {
@@ -137,7 +140,6 @@ const SignupPage = () => {
       {!loading && (
         <div className={cx('main')}>
           <h2>{provider} 회원가입</h2>
-          <div className={cx('auth-checker')}>인증완료</div>
           <span>닉네임을 만들어주세요</span>
           <div ref={shakeTarget} className={cx('input-section')}>
             <input
