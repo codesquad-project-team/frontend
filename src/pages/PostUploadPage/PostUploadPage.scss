@@ -7,13 +7,20 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-between;
-  padding: 4rem 0;
+  align-items: center;
+  padding: 1.5rem 0.5rem;
   border: 1px solid $gray-border-color;
+}
 
-  .btns {
-    display: flex;
-    justify-content: space-around;
+.btns {
+  display: flex;
+  justify-content: space-around;
+}
+
+@include tablet-and-desktop {
+  .wrapper {
+    padding: 4rem 0;
+    width: auto;
   }
 }

@@ -1,5 +1,8 @@
 @import '../../../stylesheets/util.scss';
 
+$mobile-preview-size: 10rem;
+$desktop-preview-size: 15rem;
+
 .wrapper {
   position: relative;
   margin: 0 1rem;
@@ -7,11 +10,18 @@
 }
 
 .img {
-  width: 15rem;
-  height: 15rem;
+  width: $mobile-preview-size;
+  height: $mobile-preview-size;
   border: 1px solid $main-color-light;
 
   &.representative {
     border: 3px solid $main-color-light;
+  }
+}
+
+@include tablet-and-desktop {
+  .img {
+    width: $desktop-preview-size;
+    height: $desktop-preview-size;
   }
 }

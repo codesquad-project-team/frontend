@@ -2,9 +2,11 @@ import React, { useMemo, useEffect } from 'react';
 import { KakaoMap } from 'react-kakao-maps';
 import Marker from './react-kakao-maps/Marker';
 import useMapContext from './react-kakao-maps/hooks/useMapContext';
+import useMediaQuerySet from '../../../hooks/useMediaQuerySet';
 
 const LocationPreview = ({ lat, lng, onClick: openLocationFinder }) => {
   const { MapContextForwarder, kakao, map } = useMapContext();
+  const { isMobile } = useMediaQuerySet();
 
   useMemo(() => {
     if (!map) return;
@@ -28,8 +30,8 @@ const LocationPreview = ({ lat, lng, onClick: openLocationFinder }) => {
     <KakaoMap
       // eslint-disable-next-line no-undef
       apiUrl={KAKAO_MAP_API_URL}
-      width="600px"
-      height="200px"
+      width={isMobile ? '100%' : '600px'}
+      height={isMobile ? '150px' : '200px'}
       level={3}
       lat={lat}
       lng={lng}

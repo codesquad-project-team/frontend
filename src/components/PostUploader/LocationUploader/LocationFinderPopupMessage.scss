@@ -12,26 +12,34 @@
   justify-content: center;
   align-items: center;
   padding: 1rem 3rem;
+  width: 99vw;
 
   background-color: #fff;
   border: 1px solid $main-color;
   border-radius: 5px;
   box-shadow: 0 0 15px #999999;
+}
+.message {
+  color: $main-color;
+  font-family: 'godoMaum';
+  font-size: $medium-title-font-size;
+  line-height: 4rem;
+}
 
-  .message {
-    color: $main-color;
-    font-family: 'godoMaum';
-    font-size: 3.2rem;
-    line-height: 4rem;
-    white-space: nowrap;
+.buttons {
+  display: flex;
+  width: 80%;
+
+  > button {
+    width: 40%;
   }
+}
 
-  .buttons {
-    display: flex;
-    width: 80%;
-
-    > button {
-      width: 40%;
-    }
+@include tablet-and-desktop {
+  .wrapper {
+    width: auto;
+  }
+  .message {
+    white-space: nowrap;
   }
 }
