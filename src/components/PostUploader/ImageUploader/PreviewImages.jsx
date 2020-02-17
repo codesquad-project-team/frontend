@@ -7,7 +7,7 @@ import useMediaQuerySet from '../../../hooks/useMediaQuerySet';
 const cx = classNames.bind(styles);
 
 const PreviewImages = ({ images, onDelete, onSelect, openEditor }) => {
-  const { isMobile } = useMediaQuerySet();
+  const { isDesktop } = useMediaQuerySet();
   const [hoveredImageIdx, setHoveredImageIdx] = useState(null);
   const [hoveredButtonIdx, setHoveredButtonIdx] = useState(null);
 
@@ -39,7 +39,7 @@ const PreviewImages = ({ images, onDelete, onSelect, openEditor }) => {
           onMouseEnter={handleImageMouseEnter}
           onMouseLeave={handleImageMouseLeave}
         />
-        {(isMobile || isImageHovered || isButtonHovered) && (
+        {(!isDesktop || isImageHovered || isButtonHovered) && (
           <OverlayButtons
             index={index}
             onMouseEnter={handleButtonMouseEnter}
