@@ -5,17 +5,6 @@ import useInput from '../../hooks/useInput';
 
 const cx = classNames.bind(styles);
 
-const companionValues = {
-  ALONE: '혼자서',
-  FRIENDS: '친구랑',
-  COUPLE: '연인이랑',
-  FAMILY: '가족이랑'
-};
-
-const isFreeInputValue = val => {
-  return val && !Object.values(companionValues).some(value => value === val);
-};
-
 const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
   const {
     inputValue,
@@ -27,7 +16,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
 
   const [select, setSelect] = useState(companion || '');
   const [state, setState] = useState({});
-  const { showsFreeInput, isCompanionInputFocused, isOverlayHovered } = state;
+  const { isCompanionInputFocused, isOverlayHovered } = state;
 
   const handleSelectBoxChange = ({ target }) => {
     setSelect(target.value);
@@ -82,12 +71,8 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
 
   useEffect(() => {
     if (!select) return;
-    if (isFreeInputValue(select)) {
-      setState({ ...state, showsFreeInput: true });
-    } else {
-      setInputValue({ ...inputValue, companion: select });
-      setState({});
-    }
+    setInputValue({ ...inputValue, companion: select });
+    setState({});
   }, [select]);
 
   useEffect(() => {
@@ -118,33 +103,16 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
         <span>에서</span>
       </div>
       <span className={cx('companion-section')}>
-        {showsFreeInput ? (
-          <input
-            type="text"
-            placeholder="누구랑"
-            name="companion"
-            value={companion}
-            onChange={handleInputChange}
-            onFocus={setInputStateFocused}
-            onBlur={setInputStateBlurred}
-          />
-        ) : (
-          <select
-            name="companion"
-            value={select}
-            onChange={handleSelectBoxChange}
-          >
-            <option value="" disabled>
-              누구랑
-            </option>
-            <option value="혼자서">혼자서</option>
-            <option value="친구랑">친구랑</option>
-            <option value="연인이랑">연인이랑</option>
-            <option value="가족이랑">가족이랑</option>
-            <option value="직접입력">직접입력</option>
-          </select>
-        )}
-        {isOverlayHovered || isCompanionInputFocused ? (
+        <input
+          type="text"
+          placeholder="누구랑"
+          name="companion"
+          value={companion}
+          onChange={handleInputChange}
+          onFocus={setInputStateFocused}
+          onBlur={setInputStateBlurred}
+        />
+        {(isOverlayHovered || isCompanionInputFocused) && (
           <select
             className={cx('overlay-select-box')}
             name="companion"
@@ -153,7 +121,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
             onMouseOver={setOverlayStateHovered}
             onMouseLeave={setOverlayStateUnhovered}
           >
-            <option value="직접입력" disabled>
+            <option value="_default" disabled>
               누구랑
             </option>
             <option value="혼자서">혼자서</option>
@@ -161,7 +129,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
             <option value="연인이랑">연인이랑</option>
             <option value="가족이랑">가족이랑</option>
           </select>
-        ) : null}
+        )}
       </span>
       <input
         type="text"

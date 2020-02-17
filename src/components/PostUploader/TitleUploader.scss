@@ -33,7 +33,10 @@
     position: relative;
 
     > select {
-      width: 20rem;
+      width: 90vw;
+      border: 1px solid;
+      border-radius: 5px;
+      background-color: #fff;
       font-size: $medium-title-font-size;
       text-align-last: center;
     }
