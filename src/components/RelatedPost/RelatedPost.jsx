@@ -29,7 +29,6 @@ const RelatedPost = ({ postId }) => {
   );
   const updateWindowWidth = useCallback(
     throttle(() => {
-      console.log('mobile');
       setWindowViewportWidth(window.innerWidth);
     }),
     []
