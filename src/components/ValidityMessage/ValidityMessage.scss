@@ -1,7 +1,10 @@
+@import '../../stylesheets/util.scss';
+
 .wrapper {
   display: flex;
   position: absolute;
-  right: 1rem;
+  bottom: 0.1rem;
+  right: 2rem;
   pointer-events: none;
 }
 .ok-msg {
@@ -9,4 +12,10 @@
 }
 .not-ok-msg {
   color: red;
+}
+
+@include desktop {
+  .wrapper {
+    right: 1rem;
+  }
 }
