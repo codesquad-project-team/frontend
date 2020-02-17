@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './TitleUploader.scss';
 import useInput from '../../hooks/useInput';
+import useMediaQuerySet from '../../hooks/useMediaQuerySet';
 
 const cx = classNames.bind(styles);
 
@@ -11,6 +12,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
     setInputValue,
     handleChange: handleInputChange
   } = useInput(title);
+  const { isDesktop } = useMediaQuerySet();
   const { place, companion, activity } = inputValue;
   const [locationInputStyle, setLocationInputStyle] = useState({});
 
@@ -77,7 +79,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
 
   useEffect(() => {
     if (!(place || companion || activity)) return;
-    adjustLocationInputWidth(place);
+    isDesktop && adjustLocationInputWidth(place);
     setTitle({
       place,
       companion,
@@ -97,6 +99,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
           placeholder="어디"
           name="place"
           value={place}
+          className={cx('text-boxes')}
           onChange={handleInputChange}
           style={locationInputStyle}
         />
@@ -107,6 +110,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
           type="text"
           placeholder="누구랑"
           name="companion"
+          className={cx('text-boxes')}
           value={companion}
           onChange={handleInputChange}
           onFocus={setInputStateFocused}
@@ -114,7 +118,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
         />
         {(isOverlayHovered || isCompanionInputFocused) && (
           <select
-            className={cx('overlay-select-box')}
+            className={cx('overlay-select-box', 'text-boxes')}
             name="companion"
             value={select}
             onChange={handleSelectBoxChange}
@@ -135,6 +139,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
         type="text"
         placeholder="뭐하기"
         name="activity"
+        className={cx('text-boxes')}
         value={activity}
         onChange={handleInputChange}
       />
