@@ -12,12 +12,7 @@ const ProfileContentItem = props => {
     <div className={cx('content-item')}>
       <label>{label}</label>
       <input type="text" name={name} value={value} onChange={changeHandler} />
-      {nicknameValidity && (
-        <ValidityMessage
-          messageKey={nicknameValidity}
-          styleObj={{ fontSize: '1.5rem' }}
-        />
-      )}
+      {nicknameValidity && <ValidityMessage messageKey={nicknameValidity} />}
     </div>
   );
 };

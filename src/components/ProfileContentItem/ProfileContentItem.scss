@@ -8,7 +8,6 @@
   margin-top: 2rem;
   width: 100%;
   font-size: 1.6rem;
-  line-height: 3rem;
 
   > label {
     padding-left: 0.5rem;
@@ -18,6 +17,7 @@
 
   > input {
     width: 100%;
+    height: 4rem;
     border: 1px solid $gray-border-color;
     border-radius: 5px;
     padding-left: 1rem;
@@ -35,6 +35,7 @@
 @include desktop {
   .content-item {
     flex-direction: row;
+    align-items: center;
 
     > label {
       padding-right: 2rem;
