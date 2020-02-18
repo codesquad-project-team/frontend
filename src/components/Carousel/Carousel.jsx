@@ -27,7 +27,11 @@ const Carousel = ({ data, src, key, className, style }) => {
         }}
       >
         {data.map((el, idx) => (
-          <img className={cx('items')} src={el[src]} key={key || idx} />
+          <img
+            className={cx('items')}
+            src={el[src] || el}
+            key={el[key] || idx}
+          />
         ))}
       </div>
       {!isRightEnd && (
