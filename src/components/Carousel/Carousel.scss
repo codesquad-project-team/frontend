@@ -7,6 +7,7 @@ $image-bucket-URL: 'https://team-project-s3-bucket.s3.ap-northeast-2.amazonaws.c
 
 .container {
   display: flex;
+  transition: 0.3s;
 }
 
 .items {
@@ -18,6 +19,7 @@ $image-bucket-URL: 'https://team-project-s3-bucket.s3.ap-northeast-2.amazonaws.c
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 1;
   margin: 5px;
   padding: 0;
   width: 24px;
@@ -40,11 +42,13 @@ $image-bucket-URL: 'https://team-project-s3-bucket.s3.ap-northeast-2.amazonaws.c
 .leftChevron {
   width: inherit;
   height: inherit;
+  z-index: inherit;
   background-image: url('#{$image-bucket-URL}/left-chevron.svg');
 }
 
 .rightChevron {
   width: inherit;
   height: inherit;
+  z-index: inherit;
   background-image: url('#{$image-bucket-URL}/right-chevron.svg');
 }
