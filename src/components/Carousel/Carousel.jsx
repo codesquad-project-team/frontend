@@ -14,31 +14,41 @@ const Carousel = ({ data, src, key, className, style }) => {
   const showNext = () => setTargetIndex(index => index + 1);
 
   return (
-    <div className={`${cx('viewport')} ${className}`} style={style}>
-      {!isLeftEnd && (
-        <button className={cx('leftButton')} onClick={showPrev}>
-          <div className={cx('leftChevron')} />
-        </button>
-      )}
-      <div
-        className={cx('container')}
-        style={{
-          transform: `translateX(${targetIndex * -100}%)`
-        }}
-      >
+    <div className={className} style={style}>
+      <div className={`${cx('viewport')}`}>
+        <div
+          className={cx('container')}
+          style={{
+            transform: `translateX(${targetIndex * -100}%)`
+          }}
+        >
+          {data.map((el, idx) => (
+            <img
+              className={cx('items')}
+              src={el[src] || el}
+              key={el[key] || idx}
+            />
+          ))}
+        </div>
+        {!isLeftEnd && (
+          <button className={cx('leftButton')} onClick={showPrev}>
+            <div className={cx('leftChevron')} />
+          </button>
+        )}
+        {!isRightEnd && (
+          <button className={cx('rightButton')} onClick={showNext}>
+            <div className={cx('rightChevron')} />
+          </button>
+        )}
+      </div>
+      <div className={cx('pagination-wrapper')}>
         {data.map((el, idx) => (
-          <img
-            className={cx('items')}
-            src={el[src] || el}
-            key={el[key] || idx}
+          <div
+            key={idx}
+            className={cx('pagination-dots', targetIndex === idx && 'active')}
           />
         ))}
       </div>
-      {!isRightEnd && (
-        <button className={cx('rightButton')} onClick={showNext}>
-          <div className={cx('rightChevron')} />
-        </button>
-      )}
     </div>
   );
 };
