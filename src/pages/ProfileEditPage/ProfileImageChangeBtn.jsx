@@ -18,7 +18,7 @@ const ProfileImageChangeBtn = ({ setImage, setInitialPageEnter }) => {
   };
 
   return (
-    <div className={cx('wrapper')}>
+    <div role="button" className={cx('wrapper')}>
       <img
         className={cx('icon')}
         src={`${IMAGE_BUCKET_URL}/profile-change-icon.png`}

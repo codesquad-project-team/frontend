@@ -75,7 +75,7 @@ const RelatedPost = ({ postId }) => {
 
   const makeCarouselJsx = () => {
     return !posts.length ? (
-      <div className={cx('carousel-wrap')}>
+      <div className={cx('carousel-wrap')} style={{ margin: '0 auto' }}>
         <h3>아직 이 장소를 방문한 다른 사람이 없네요. 🥺</h3>
       </div>
     ) : (

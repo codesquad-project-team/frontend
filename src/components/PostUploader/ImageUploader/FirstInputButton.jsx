@@ -7,7 +7,7 @@ const cx = classNames.bind(styles);
 
 const FirstInputButton = ({ onChange, ...props }) => {
   return (
-    <div className={cx('wrapper')} {...props}>
+    <div role="button" className={cx('wrapper')} {...props}>
       <img
         className={cx('icon')}
         src={`${IMAGE_BUCKET_URL}/image-upload-icon.png`}

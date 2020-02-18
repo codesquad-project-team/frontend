@@ -7,13 +7,13 @@ const cx = classNames.bind(styles);
 
 const LocationFindButton = ({ onClick: openLocationFinder, children }) => {
   return (
-    <button className={cx('wrapper')} onClick={openLocationFinder}>
+    <div role="button" className={cx('wrapper')} onClick={openLocationFinder}>
       <img
         className={cx('icon')}
         src={`${IMAGE_BUCKET_URL}/find-location-icon8.png`}
       />
       <span className={cx('label')}>{children}</span>
-    </button>
+    </div>
   );
 };
 

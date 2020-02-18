@@ -24,15 +24,25 @@ body {
   box-sizing: border-box !important;
   font-family: 'Nanum Gothic', sans-serif !important;
 }
+input,
+textarea,
+label,
+span,
+button {
+  font-family: inherit;
+}
+a {
+  text-decoration: none;
+}
 
 * {
   box-sizing: inherit;
 }
 
 hr {
-  margin: 2rem 0 !important;
-  border: 0 !important;
-  height: 0 !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+  margin: 2rem 0;
+  border: 0;
+  height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }

@@ -16,6 +16,9 @@
     align-items: center;
     flex-direction: column;
     justify-self: end;
+    > img {
+      margin: 1rem;
+    }
   }
 
   .right-column {
