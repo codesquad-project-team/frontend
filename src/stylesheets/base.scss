@@ -1,4 +1,5 @@
-// style 초기화 코드
+//기본적으로 Normalize.css를 사용(CDN으로 제공).
+//아래는 추가적인 초기화 코드.
 @font-face {
   font-family: 'godoMaum';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/godoMaum.woff')
@@ -15,34 +16,24 @@
 }
 
 html {
-  font-size: 10px !important;
+  font-size: 10px;
 }
 
 body {
-  margin: 0 !important;
-  padding: 0 !important;
-  box-sizing: border-box !important;
-  font-family: 'Nanum Gothic', sans-serif !important;
-}
-input,
-textarea,
-label,
-span,
-button {
-  font-family: inherit;
-}
-a {
-  text-decoration: none;
+  font-family: 'Nanum Gothic', sans-serif;
 }
 
-* {
-  box-sizing: inherit;
+div,
+input,
+form,
+img {
+  box-sizing: border-box;
+}
+
+span {
+  cursor: default;
 }
 
 hr {
   margin: 2rem 0;
-  border: 0;
-  height: 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
