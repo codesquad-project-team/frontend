@@ -9,49 +9,34 @@
   position: fixed;
   top: 0;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   align-items: center;
   width: 100%;
   height: inherit;
-  padding: 0 2rem;
+  padding: 0 0.5rem;
   background: #fff;
-  border: 1px solid #d4d4d4;
+  border: none;
+  border-bottom: 1px solid #d4d4d4;
   z-index: 100;
 
   .title {
+    position: absolute;
+    top: 0;
+    left: 1rem;
     display: flex;
-    flex: 1;
-    h1 {
-      color: $main-color;
-      font-size: 5rem;
-      font-weight: bold;
-      font-family: 'godoMaum';
-      white-space: nowrap;
-      &:hover {
-        color: $main-color-light;
-      }
+    justify-content: center;
+    align-items: center;
+    width: 5.6rem;
+    height: 100%;
+    img {
+      max-width: 100%;
     }
   }
 
-  form {
-    display: flex;
-    justify-content: center;
-    flex: 1;
-    width: 30rem;
-    height: 3rem;
-  }
-
-  .searchbar-icon-wrapper {
-    position: relative;
-  }
-
   .searchbar-icon {
-    position: absolute;
-    top: 50%;
-    left: 0.75rem;
-    transform: translateY(-50%);
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    padding: 1rem;
   }
 
   input {
@@ -63,19 +48,68 @@
     font-size: 1.75rem;
   }
 
-  .profile-img {
-    &:hover {
-      box-shadow: 0 0 5px $main-color;
-    }
-  }
-
   .over-dropdown-background {
     z-index: 1000;
   }
 
   .btns {
-    flex: 1;
     display: flex;
     justify-content: flex-end;
+  }
+  .user-icon {
+    width: 4rem;
+    height: 4rem;
+    padding: 0.5rem;
+  }
+  .profile-img {
+    width: 4.5rem;
+    height: 4.5rem;
+    &:hover {
+      box-shadow: 0 0 5px $main-color;
+    }
+  }
+}
+@include tablet-and-desktop {
+  .header {
+    padding: 0 2rem 0 0;
+    .title {
+      position: relative;
+      width: auto;
+      flex: 1;
+      h1 {
+        color: $main-color;
+        font-size: 5rem;
+        font-weight: bold;
+        font-family: 'godoMaum';
+        white-space: nowrap;
+        &:hover {
+          color: $main-color-light;
+        }
+      }
+    }
+
+    form {
+      display: flex;
+      justify-content: center;
+      flex: 1.5;
+      max-width: 90%;
+      height: 3.5rem;
+    }
+
+    .searchbar-icon-wrapper {
+      position: relative;
+    }
+    .searchbar-icon {
+      position: absolute;
+      top: 50%;
+      left: 0.75rem;
+      transform: translateY(-50%);
+      width: 1.5rem;
+      height: 1.5rem;
+      padding: 0;
+    }
+    .btns {
+      flex: 1;
+    }
   }
 }

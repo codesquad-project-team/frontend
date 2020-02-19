@@ -5,7 +5,7 @@
   justify-content: center;
   width: 100vw;
   min-height: calc(100vh - #{$header-height});
-  padding: 5rem;
+  padding: 5rem 0;
   background-color: $gray-background-color;
 }
 
@@ -25,6 +25,18 @@
 }
 
 .large {
-  width: 80rem;
+  width: 100%;
   min-height: 60rem;
+}
+
+@include tablet {
+  .large {
+    max-width: 70rem;
+  }
+}
+
+@include desktop {
+  .large {
+    max-width: 80rem;
+  }
 }

@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './DetailPost.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonLink from '../CommonLink/CommonLink';
+import useMediaQuerySet from '../../hooks/useMediaQuerySet';
 
 const cx = classNames.bind(styles);
 
@@ -12,10 +13,11 @@ const DetailPost = ({
     writer: { id, nickname, profileImage } = {}
   }
 }) => {
+  const { isMobile } = useMediaQuerySet();
   return (
     <div className={cx('wrapper')}>
       <h1 className={cx('title')}>
-        {place}에서 {companion} {activity}
+        {place}에서{isMobile && <br />} {companion} {activity}
       </h1>
       <div className={cx('content')}>
         <CommonLink

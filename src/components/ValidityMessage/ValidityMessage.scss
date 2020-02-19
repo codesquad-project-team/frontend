@@ -1,7 +1,12 @@
+@import '../../stylesheets/util.scss';
+
 .wrapper {
   display: flex;
   position: absolute;
+  bottom: 0.5rem;
   right: 1rem;
+  font-size: 1.2rem;
+  text-align: end;
   pointer-events: none;
 }
 .ok-msg {

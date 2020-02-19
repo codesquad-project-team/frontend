@@ -1,41 +1,65 @@
-.wrapper {
-  width: 700px;
-  position: relative;
+@import '../../stylesheets/util.scss';
 
-  .header {
-    text-align: center;
-    font-size: 2.8rem;
-    margin: 2rem 0;
+//아래 변수들 수정 시 RelatedPost.jsx의 변수 및 계산식도 수정해야 함.
+$btn-size: 2rem;
+$padding: 1rem;
+$carousel-width: calc(100vw - (#{$padding} + #{$btn-size}) * 2);
+
+.header {
+  margin: 2rem 0;
+  font-size: $medium-title-font-size;
+  letter-spacing: -1px;
+  text-align: center;
+}
+.carousel-area {
+  display: flex;
+  align-items: center;
+}
+.carousel {
+  display: flex;
+  margin: 0 auto;
+  width: $carousel-width;
+  overflow: hidden;
+}
+.carousel-wrap {
+  display: flex;
+  justify-content: space-evenly;
+}
+.prev-btn,
+.next-btn {
+  width: $btn-size;
+  height: $btn-size;
+  background-color: #fff;
+  border: 1px solid $gray-border-color;
+  border-radius: 50%;
+  cursor: auto !important;
+
+  &:active {
+    background-color: #aaa;
   }
+}
 
+@include tablet-and-desktop {
+  .header {
+    letter-spacing: normal;
+  }
+  .wrapper {
+    max-width: 700px;
+  }
   .carousel {
-    width: 500px;
-    overflow: hidden;
-    display: flex;
-    margin: 0 auto;
-
-    h3 {
-      text-align: center;
+    max-width: 500px;
+  }
+  .prev-btn,
+  .next-btn {
+    width: $btn-size * 2;
+    height: $btn-size * 2;
+  }
+}
+@include desktop {
+  .prev-btn,
+  .next-btn {
+    &:hover {
+      box-shadow: 0 0 5px $main-color;
     }
   }
-
-  .carousel-wrap {
-    display: flex;
-    justify-content: space-evenly;
-  }
-
-  .carousel-btns {
-    position: relative;
-    top: -10rem;
-  }
-}
-
-.prev-btn {
-  position: relative;
-  left: 2rem;
-}
-
-.next-btn {
-  position: absolute;
-  right: 3rem;
 }

@@ -1,20 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames/bind';
+import FadeLoader from 'react-spinners/FadeLoader';
+import { css } from '@emotion/core';
 import styles from './ProfileEditPage.scss';
+import CommonPost from '../../components/CommonPost/CommonPost';
+import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import Header from '../../components/Header/Header';
 import ProfileImage from '../../components/ProfileImage/ProfileImage';
 import ProfileContentItem from '../../components/ProfileContentItem/ProfileContentItem';
+import ProfileImageChangeBtn from './ProfileImageChangeBtn';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
-import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
-import { css } from '@emotion/core';
-import FadeLoader from 'react-spinners/FadeLoader';
-import CommonBtn from '../../components/CommonBtn/CommonBtn';
-import ProfileImageChangeBtn from './ProfileImageChangeBtn';
 import useScript from '../../hooks/useScript';
 import useS3 from '../../hooks/useS3';
 import { debounce } from '../../utils/utils';
 import { useLoginContext } from '../../contexts/LoginContext';
+import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 
 const cx = classNames.bind(styles);
 
@@ -225,8 +226,8 @@ const ProfileEditPage = () => {
   return (
     <>
       <Header />
-      <div className={cx('dimmed-background')}>
-        <div className={cx('wrapper')}>
+      <CommonPost.background className={cx('background')}>
+        <CommonPost className={cx('wrapper')}>
           <div className={cx('nav')}>
             <div className={cx('nav-item')}>프로필 편집</div>
           </div>
@@ -240,7 +241,11 @@ const ProfileEditPage = () => {
           {!loading && (
             <form className={cx('content-form')}>
               <div className={cx('profile-image-section')}>
-                <ProfileImage large src={imageSrc} />
+                <ProfileImage
+                  large
+                  src={imageSrc}
+                  className={cx('profile-image')}
+                />
                 <ProfileImageChangeBtn
                   setImage={setImage}
                   setInitialPageEnter={setInitialPageEnter}
@@ -282,8 +287,8 @@ const ProfileEditPage = () => {
               </CommonBtn>
             </form>
           )}
-        </div>
-      </div>
+        </CommonPost>
+      </CommonPost.background>
     </>
   );
 };

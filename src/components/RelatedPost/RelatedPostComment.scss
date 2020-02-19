@@ -1,9 +1,33 @@
+@import '../../stylesheets/util.scss';
+@import './RelatedPost.scss';
+
+$carousel-item-wrapper-size: calc(#{$carousel-width}/ 5);
+$carousel-item-padding: 0.5rem;
+$carousel-item-size: calc(
+  #{$carousel-item-wrapper-size} - (#{$carousel-item-padding} * 2)
+);
+
+.wrapper {
+  text-align: center;
+  width: $carousel-item-wrapper-size;
+}
+
+.profile-image {
+  width: $carousel-item-size;
+  height: $carousel-item-size;
+}
+
 .comment {
   margin-top: 1.5rem;
   font-size: 1.4rem;
 }
 
-.wrapper {
-  text-align: center;
-  width: 100px;
+@include tablet-and-desktop {
+  .wrapper {
+    max-width: 10rem;
+  }
+  .profile-image {
+    max-width: 8rem;
+    max-height: 8rem;
+  }
 }

@@ -1,22 +1,28 @@
 @import '../../../stylesheets/util.scss';
 
+$mobile-preview-size: 10rem;
+$desktop-preview-size: 15rem;
+
 .wrapper {
-  width: 15rem;
-  height: 15rem;
-  border: 2px dashed $main-color-light;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 1rem;
+  width: $mobile-preview-size;
+  height: $mobile-preview-size;
+  border: 2px dashed $main-color-light;
 }
 
 .label {
   display: inline-block;
-  padding: 1.5rem 2rem;
+  width: 6rem;
+  height: 6rem;
   border-radius: 50%;
   background-color: $main-color-light;
   color: white;
   font-size: 3rem;
-  line-height: normal;
+  text-align: center;
+  line-height: 6rem;
   cursor: pointer;
 }
 
@@ -24,4 +30,11 @@
   display: none;
   width: 0;
   height: 0;
+}
+
+@include tablet-and-desktop {
+  .wrapper {
+    width: $desktop-preview-size;
+    height: $desktop-preview-size;
+  }
 }

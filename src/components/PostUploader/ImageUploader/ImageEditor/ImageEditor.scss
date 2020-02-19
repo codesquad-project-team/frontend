@@ -1,7 +1,16 @@
+@import '../../../../stylesheets/util.scss';
+
 .wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 50rem;
+  width: 99vw;
+  min-height: auto;
+}
+
+@include tablet-and-desktop {
+  .wrapper {
+    max-width: 47rem;
+  }
 }
