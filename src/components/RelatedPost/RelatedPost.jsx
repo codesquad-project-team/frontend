@@ -15,7 +15,7 @@ const cx = classNames.bind(styles);
 
 const RelatedPost = ({ postId }) => {
   const { isMobile } = useMediaQuerySet();
-  const [windowWidth, setWindowViewportWidth] = useState(window.innerWidth);
+  const [windowWidth, cacheWindowWidth] = useState(window.innerWidth);
   //아래 계산식은 RelatedPost.scss 내에 작성된 계산식에 의존함.
   const carouselWidthOverMobile = 500; //px
   const btnSize = 20; //px
@@ -29,7 +29,7 @@ const RelatedPost = ({ postId }) => {
   );
   const updateWindowWidth = useCallback(
     throttle(() => {
-      setWindowViewportWidth(window.innerWidth);
+      cacheWindowWidth(window.innerWidth);
     }),
     []
   );
