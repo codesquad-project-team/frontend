@@ -55,9 +55,6 @@
     border: 1px solid $gray-border-color;
     border-radius: 5px;
 
-    &:hover {
-      border: 1px solid #333;
-    }
     &:focus {
       outline: none;
     }
@@ -96,6 +93,9 @@
   .input-section {
     > input {
       width: 45rem;
+      &:hover {
+        border: 1px solid #333;
+      }
     }
   }
   .signup-btn {

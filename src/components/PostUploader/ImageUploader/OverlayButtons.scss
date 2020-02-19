@@ -6,7 +6,7 @@
   position: absolute;
   top: 4px;
   left: 0;
-  width: 10rem;
+  width: $mobile-preview-size;
 }
 
 .btns {
@@ -16,6 +16,6 @@
 
 @include tablet-and-desktop {
   .btn-wrapper {
-    width: 15rem;
+    width: $desktop-preview-size;
   }
 }
