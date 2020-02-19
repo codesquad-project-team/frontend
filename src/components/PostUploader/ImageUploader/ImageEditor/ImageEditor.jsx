@@ -6,6 +6,7 @@ import EditorHeader from './EditorHeader';
 import EditorFooter from './EditorFooter';
 import 'cropperjs/dist/cropper.css';
 import { asyncPipe } from '../../../../utils/utils';
+import useMediaQuerySet from '../../../../hooks/useMediaQuerySet';
 
 const cx = classNames.bind(styles);
 
@@ -23,6 +24,7 @@ const ImageEditor = ({
   targetIndex,
   onClose
 }) => {
+  const { isMobile } = useMediaQuerySet();
   const [cropper, setCropper] = useState(null);
   const ref = cropper => setCropper(cropper);
 
@@ -58,7 +60,11 @@ const ImageEditor = ({
           <Cropper
             ref={ref}
             src={src}
-            style={{ width: '450px', height: '450px' }}
+            style={
+              isMobile
+                ? { width: '100%', height: '60vh' }
+                : { width: '450px', height: '450px' }
+            }
             checkOrientation={false}
             aspectRatio={1 / 1}
             autoCropArea={1}

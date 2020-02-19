@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './RelatedPost.scss';
 import useFetch from '../../hooks/useFetch';
+import useMediaQuerySet from '../../hooks/useMediaQuerySet';
 import RelatedPostComment from './RelatedPostComment';
+import { throttle } from '../../utils/utils';
 import {
   TRANSITION_DURATION_TIME,
   TRANSITION_DELAY_TIME,
@@ -12,6 +14,26 @@ import {
 const cx = classNames.bind(styles);
 
 const RelatedPost = ({ postId }) => {
+  const { isMobile } = useMediaQuerySet();
+  const [windowWidth, setWindowViewportWidth] = useState(window.innerWidth);
+  //아래 계산식은 RelatedPost.scss 내에 작성된 계산식에 의존함.
+  const carouselWidthOverMobile = 500; //px
+  const btnSize = 20; //px
+  const padding = 10; //px
+  const carouselViewportWidth = useMemo(
+    () =>
+      isMobile
+        ? windowWidth - (padding + btnSize) * 2
+        : carouselWidthOverMobile,
+    [windowWidth]
+  );
+  const updateWindowWidth = useCallback(
+    throttle(() => {
+      setWindowViewportWidth(window.innerWidth);
+    }),
+    []
+  );
+
   const [currentActiveIndex, setCurrentActiveIndex] = useState(1);
   const [positionX, setPositionX] = useState(0);
   const [page, setPage] = useState(1);
@@ -52,10 +74,9 @@ const RelatedPost = ({ postId }) => {
   };
 
   const makeCarouselJsx = () => {
-    const len = posts.length;
-    return !len ? (
+    return !posts.length ? (
       <div className={cx('carousel-wrap')}>
-        <h3>아직 이 장소를 방문한 다른 사람이 없네요. 🥺</h3>;
+        <h3>아직 이 장소를 방문한 다른 사람이 없네요. 🥺</h3>
       </div>
     ) : (
       <div
@@ -79,7 +100,7 @@ const RelatedPost = ({ postId }) => {
   const prevBtnHandler = () => {
     if (currentActiveIndex === 1) return;
     setCurrentActiveIndex(currentActiveIndex - 1);
-    setPositionX(positionX + 500);
+    setPositionX(positionX + carouselViewportWidth);
   };
 
   const nextBtnHandler = () => {
@@ -88,25 +109,33 @@ const RelatedPost = ({ postId }) => {
     if (response.hasNextPage && currentActiveIndex === maximumIndex - 1)
       setPage(page + 1);
     setCurrentActiveIndex(currentActiveIndex + 1);
-    setPositionX(positionX - 500);
+    setPositionX(positionX - carouselViewportWidth);
   };
+
+  useEffect(() => {
+    window.addEventListener('resize', updateWindowWidth);
+    return () => {
+      window.removeEventListener('resize', updateWindowWidth);
+    };
+  }, [isMobile]);
 
   return (
     <div className={cx('wrapper')}>
       <hr />
       <h2 className={cx('header')}>이 장소를 방문한 사람들</h2>
-
-      <div className={cx('carousel')}>{makeCarouselJsx()}</div>
-      {posts.length > 5 && (
-        <div className={cx('carousel-btns')}>
+      <div className={cx('carousel-area')}>
+        {posts.length > 5 && (
           <button className={cx('prev-btn')} onClick={prevBtnHandler}>
             &lt;
           </button>
+        )}
+        <div className={cx('carousel')}>{makeCarouselJsx()}</div>
+        {posts.length > 5 && (
           <button className={cx('next-btn')} onClick={nextBtnHandler}>
             &gt;
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

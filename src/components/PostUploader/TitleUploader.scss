@@ -5,38 +5,71 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 20rem;
   margin: 2rem 0;
+  width: 100%;
+  height: 20rem;
+}
 
-  input {
-    width: 20rem;
-    height: 5rem;
-    font-size: 3.2rem;
-    border: none;
-    border-bottom: 1px solid $gray-border-color;
-    text-align: center;
+.text-boxes {
+  width: 100%;
+  height: 5rem;
+  border: none;
+  border-bottom: 1px solid $gray-border-color;
+  font-size: $medium-title-font-size;
+  text-align: center;
+}
+
+.place-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  > .text-boxes {
+    flex: 1;
   }
+  > span {
+    font-size: $medium-title-font-size;
+  }
+}
 
+.companion-section {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.overlay-select-box {
+  position: absolute;
+  top: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0.5rem;
+
+  width: 100%;
+
+  border: 1px solid #999;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: $medium-title-font-size;
+  text-align-last: center;
+}
+
+@include tablet-and-desktop {
+  .wrapper {
+    max-width: 80%;
+  }
+}
+
+@include desktop {
   .place-section {
-    > span {
-      font-size: 3.2rem;
-    }
+    width: auto;
   }
-
-  .companion-section {
-    position: relative;
-
-    > select {
-      width: 20rem;
-      font-size: 3.2rem;
-      text-align-last: center;
-    }
+  .text-boxes {
+    width: auto;
   }
-
   .overlay-select-box {
-    position: absolute;
-    top: 4rem;
-    left: 0;
-    margin-top: 0.5rem;
+    width: 30rem;
   }
 }

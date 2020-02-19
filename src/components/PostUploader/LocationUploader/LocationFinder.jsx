@@ -11,6 +11,7 @@ import SearchResultLists from './SearchResultLists';
 import SearchResultMarkers from './SearchResultMarkers';
 import LocationFinderPopupMessage from './LocationFinderPopupMessage';
 import { IMAGE_BUCKET_URL } from '../../../configs';
+import useMediaQuerySet from '../../../hooks/useMediaQuerySet';
 
 const cx = classNames.bind(styles);
 
@@ -22,8 +23,10 @@ const LocationFinder = ({
   setSelectedLocation,
   setReadyToUpload
 }) => {
+  const { isMobile } = useMediaQuerySet();
   const { inputValue, handleChange } = useInput();
   const { locationKeyword } = inputValue;
+
   //kakao => 카카오 스크립트 태그를 통해 전역에 생성된 kakao객체의 인스턴스.
   //map => new kakao.maps.Map()을 통해 생성된 지도객체 인스턴스.
   //카카오 지도를 표시하고 조작하기 위한 메서드가 정의되어 있음.
@@ -156,8 +159,8 @@ const LocationFinder = ({
         <KakaoMap
           // eslint-disable-next-line no-undef
           apiUrl={KAKAO_MAP_API_URL}
-          width="570px"
-          height="400px"
+          width={isMobile ? '95vw' : '570px'}
+          height={isMobile ? '300px' : '400px'}
           level={3}
           lat={INITIAL_LAT}
           lng={INITIAL_LNG}

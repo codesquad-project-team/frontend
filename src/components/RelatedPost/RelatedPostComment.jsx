@@ -15,7 +15,11 @@ const RelatedPostComment = ({
   return (
     <div className={cx('wrapper')}>
       <CommonLink to={`/post/${postId}`}>
-        <ProfileImage medium src={profileImageURL} />
+        <ProfileImage
+          medium
+          src={profileImageURL}
+          className={cx('profile-image')}
+        />
       </CommonLink>
       <CommonLink to={`/post/${postId}`}>
         <h3 className={cx('comment')}>
