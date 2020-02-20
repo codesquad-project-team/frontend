@@ -20,7 +20,6 @@
   font-size: 3rem;
   text-align: center;
   line-height: 6rem;
-  cursor: pointer;
 }
 
 .btn {
@@ -33,5 +32,8 @@
   .wrapper {
     width: $desktop-preview-size;
     height: $desktop-preview-size;
+  }
+  .label:hover {
+    background-color: $main-color;
   }
 }

@@ -25,3 +25,9 @@ $border-width: 1px;
     white-space: nowrap;
   }
 }
+
+@include tablet-and-desktop {
+  .wrapper:hover {
+    background-color: $main-color;
+  }
+}
