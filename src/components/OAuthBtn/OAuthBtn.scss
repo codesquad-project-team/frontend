@@ -1,9 +1,7 @@
 @import '../../stylesheets/util.scss';
 
-//link에 크기를 지정하지 않으면 버튼 좌우로 약간 삐져나오는 현상이 있어 link에 크기를 지정함.
 .link {
   display: inline-block;
-  height: 4.2rem;
   margin: 1.5rem 0;
 }
 
@@ -14,13 +12,15 @@
   width: 82vw;
   max-width: 30rem;
 
-  span {
-    font-size: 1.5rem;
-  }
-
   img {
     width: 3rem;
     height: 3rem;
     margin-right: 1rem;
+  }
+}
+
+@include tablet-and-desktop {
+  .btn:hover {
+    text-decoration: underline;
   }
 }

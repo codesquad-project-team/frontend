@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     width: 100vw;
-    height: $header-height;
+    height: $mobile-header-height;
     padding: 0 3rem;
     border-bottom: 1px solid $gray-border-color;
 
@@ -84,7 +84,7 @@
     }
   }
   .main {
-    height: calc(100vh - #{$header-height});
+    height: calc(100vh - #{$tablet-and-desktop-header-height});
 
     > h2 {
       font-size: 5rem;

@@ -15,7 +15,7 @@
 @include tablet-and-desktop {
   .main {
     grid-template-columns: 50% 50%;
-    width: 94rem;
+    width: $desktop-page-max-width;
     row-gap: 8rem;
   }
 }

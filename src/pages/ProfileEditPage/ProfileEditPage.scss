@@ -1,7 +1,7 @@
 @import '../../stylesheets/util.scss';
 
 $edit-page-tablet-width: 50rem;
-$edit-page-desktop-width: 100rem;
+$edit-page-desktop-width: $desktop-page-max-width;
 
 .wrapper {
   display: flex;
@@ -62,7 +62,7 @@ $edit-page-desktop-width: 100rem;
 @include desktop {
   .wrapper {
     flex-direction: row;
-    padding: 10rem 10rem 8rem 10rem;
+    padding: 8rem 10rem;
     width: $edit-page-desktop-width;
     height: 65rem;
   }

@@ -12,57 +12,55 @@
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #fff;
-  box-shadow: 1px 1px 10px gray;
-  &:hover {
-    cursor: default;
-  }
+  box-shadow: 1px 1px 10px #333;
+  cursor: default;
 
-  a {
+  > a {
     text-decoration: none;
-    color: green;
+    color: #3d75cc;
     &:visited {
-      color: green;
+      color: #3d75cc;
     }
   }
 
-  hr {
+  > hr {
     margin: 0;
   }
+}
 
-  .location-name {
-    margin: 0;
-    font-size: $small-title-font-size;
-    display: inline-block;
+.location-name {
+  margin: 0;
+  font-size: $small-title-font-size;
+  display: inline-block;
 
-    > a {
-      color: black;
-      &:visited {
-        color: black;
-      }
+  > a {
+    text-decoration: none;
+    color: #000;
+    &:visited {
+      color: #000;
     }
   }
+}
 
-  .arrow-image {
-    position: absolute;
-    top: 12rem;
-    left: 12rem;
-    transform: translate(5px, -2px);
-    height: 5rem;
-    pointer-events: none;
-    &:hover {
-      cursor: default;
-    }
-  }
+.arrow-image {
+  position: absolute;
+  top: 12rem;
+  left: 12rem;
+  transform: translate(5px, -2px);
+  height: 5rem;
+  pointer-events: none;
+}
 
-  > button {
-    position: absolute;
-    top: 0rem;
-    right: 0.5rem;
-  }
+.close-btn {
+  top: 0rem;
+  right: 0.5rem;
 }
 
 @include tablet-and-desktop {
   .wrapper {
     width: 28rem;
+    a:hover {
+      text-decoration: underline;
+    }
   }
 }

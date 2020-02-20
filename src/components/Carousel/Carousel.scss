@@ -20,13 +20,17 @@ $image-bucket-URL: 'https://team-project-s3-bucket.s3.ap-northeast-2.amazonaws.c
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
-  margin: 5px;
+  margin: 0 5px;
   padding: 0;
   width: 24px;
   height: 24px;
   border: 0;
   border-radius: 50%;
-  box-shadow: 0 0 5px 2px #e0e0e0;
+  opacity: 0.8;
+  background-color: transparent;
+  &:hover {
+    box-shadow: 0 0 5px 1px #e0e0e0;
+  }
 }
 
 .leftButton {

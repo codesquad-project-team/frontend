@@ -23,6 +23,6 @@
 
 @include tablet-and-desktop {
   .contents {
-    max-width: 95rem;
+    max-width: $desktop-page-max-width;
   }
 }

@@ -1,8 +1,24 @@
 @import '../../stylesheets/util.scss';
 
+$mobile-header-margin: 1rem;
+$tablet-and-desktop-header-margin: 2rem;
+$header-profile-image-size: 4rem;
+
+.transparent-box {
+  height: $mobile-header-height;
+}
+
+//화면 크기가 커져도 헤더 내용은 가운데 정렬하고 border-bottom은 화면 전체에 그리기 위한 속성.
 .wrapper {
-  width: 100%;
-  height: $header-height;
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  height: $mobile-header-height;
+  border-bottom: 1px solid #d4d4d4;
+  background: #fff;
+  z-index: 2; //포스트 디테일 페이지에서 헤더가 지도에 가려지지 않기 위한 속성.
 }
 
 .header {
@@ -13,18 +29,12 @@
   align-items: center;
   width: 100%;
   height: inherit;
-  padding: 0 0.5rem;
-  background: #fff;
-  border: none;
-  border-bottom: 1px solid #d4d4d4;
-  z-index: 100;
 
   .title {
     position: absolute;
     top: 0;
-    left: 1rem;
+    left: $mobile-header-margin;
     display: flex;
-    justify-content: center;
     align-items: center;
     width: 5.6rem;
     height: 100%;
@@ -34,66 +44,67 @@
   }
 
   .searchbar-icon {
-    width: 4.5rem;
-    height: 4.5rem;
-    padding: 1rem;
+    width: $header-profile-image-size;
+    height: $header-profile-image-size;
+    padding: 0.5rem;
+    margin-right: 0.5rem;
   }
 
+  /*
+   form, input : 현재 모바일에는 필요 없지만 추후 기능 추가를 위해 여기에 작성.
+   지금은 모바일 이외 페이지에만 렌더링 중.
+  */
+  form {
+    display: flex;
+    height: 3.5rem;
+  }
   input {
-    width: inherit;
-    height: inherit;
     border: 1px solid #d4d4d4;
     border-radius: 5px;
     padding: 0.2rem 1rem 0.2rem 2.75rem;
     font-size: 1.75rem;
   }
 
-  .over-dropdown-background {
-    z-index: 1000;
-  }
-
   .btns {
-    display: flex;
-    justify-content: flex-end;
+    padding-right: $mobile-header-margin;
   }
   .user-icon {
-    width: 4rem;
-    height: 4rem;
+    width: $header-profile-image-size;
+    height: $header-profile-image-size;
     padding: 0.5rem;
   }
   .profile-img {
-    width: 4.5rem;
-    height: 4.5rem;
+    width: $header-profile-image-size;
+    height: $header-profile-image-size;
+    z-index: 1;
     &:hover {
       box-shadow: 0 0 5px $main-color;
     }
   }
 }
+
 @include tablet-and-desktop {
+  .transparent-box,
+  .wrapper {
+    height: $tablet-and-desktop-header-height;
+  }
+
   .header {
-    padding: 0 2rem 0 0;
+    justify-content: center;
+    max-width: $desktop-page-max-width;
+
     .title {
-      position: relative;
       width: auto;
-      flex: 1;
+      left: $tablet-and-desktop-header-margin;
       h1 {
+        margin: 0;
         color: $main-color;
         font-size: 5rem;
-        font-weight: bold;
         font-family: 'godoMaum';
-        white-space: nowrap;
         &:hover {
           color: $main-color-light;
         }
       }
-    }
-
-    form {
-      display: flex;
-      justify-content: center;
-      flex: 1.5;
-      max-width: 90%;
-      height: 3.5rem;
     }
 
     .searchbar-icon-wrapper {
@@ -108,8 +119,11 @@
       height: 1.5rem;
       padding: 0;
     }
+
     .btns {
-      flex: 1;
+      position: absolute;
+      right: $tablet-and-desktop-header-margin;
+      padding-right: initial;
     }
   }
 }
