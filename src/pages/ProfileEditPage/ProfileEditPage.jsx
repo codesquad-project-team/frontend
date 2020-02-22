@@ -5,17 +5,17 @@ import { css } from '@emotion/core';
 import styles from './ProfileEditPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
+import IconButton from '../../components/CommonBtn/IconButton';
 import Header from '../../components/Header/Header';
 import ProfileImage from '../../components/ProfileImage/ProfileImage';
 import ProfileContentItem from '../../components/ProfileContentItem/ProfileContentItem';
-import ProfileImageChangeBtn from './ProfileImageChangeBtn';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
 import useS3 from '../../hooks/useS3';
 import { debounce } from '../../utils/utils';
 import { useLoginContext } from '../../contexts/LoginContext';
-import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
+import { WEB_SERVER_URL, MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
 
 const cx = classNames.bind(styles);
 
@@ -204,6 +204,16 @@ const ProfileEditPage = () => {
         break;
     }
   };
+  const handleProfileImage = ({ target }) => {
+    const file = Array.from(target.files);
+
+    const reader = new FileReader();
+    reader.addEventListener('load', ({ target }) => {
+      setImage({ fileData: file, previewUrl: target.result });
+      setInitialPageEnter(false);
+    });
+    reader.readAsDataURL(file[0]);
+  };
 
   useEffect(() => {
     if (nickname) {
@@ -246,10 +256,13 @@ const ProfileEditPage = () => {
                   src={imageSrc}
                   className={cx('profile-image')}
                 />
-                <ProfileImageChangeBtn
-                  setImage={setImage}
-                  setInitialPageEnter={setInitialPageEnter}
-                />
+                <IconButton
+                  type="addImage"
+                  src={`${IMAGE_BUCKET_URL}/profile-change-icon.png`}
+                  onChange={handleProfileImage}
+                >
+                  프로필 사진 바꾸기
+                </IconButton>
               </div>
               <ProfileContentItem
                 label="닉네임"

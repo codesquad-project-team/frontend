@@ -1,0 +1,45 @@
+@import '../../stylesheets/util.scss';
+
+$button-height: 4rem;
+$border-width: 1px;
+
+.wrapper {
+  margin: 2rem 0;
+  border-radius: calc(#{$button-height} / 2);
+  height: $button-height;
+}
+
+.icon {
+  max-width: 80%;
+  max-height: 80%;
+}
+
+.label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0 1.5rem;
+  width: inherit;
+  height: inherit;
+
+  line-height: calc(#{$button-height} - #{$border-width} * 2);
+
+  border: $border-width solid $main-color;
+  border-radius: inherit;
+  background-color: $main-color-light;
+
+  font-weight: bold;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.hidden {
+  display: none;
+}
+
+@include tablet-and-desktop {
+  .label:hover {
+    background-color: $main-color;
+  }
+}
