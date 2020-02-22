@@ -125,9 +125,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
             onMouseOver={setOverlayStateHovered}
             onMouseLeave={setOverlayStateUnhovered}
           >
-            <option value="_default" disabled>
-              누구랑
-            </option>
+            <option value="누구랑">누구랑</option>
             <option value="혼자서">혼자서</option>
             <option value="친구랑">친구랑</option>
             <option value="연인이랑">연인이랑</option>
