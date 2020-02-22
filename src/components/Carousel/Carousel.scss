@@ -12,7 +12,7 @@ $image-bucket-URL: 'https://team-project-s3-bucket.s3.ap-northeast-2.amazonaws.c
 
 .items {
   width: 100%;
-  height: auto;
+  min-width: 100%;
 }
 
 @mixin buttons {
