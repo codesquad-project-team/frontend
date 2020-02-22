@@ -75,6 +75,7 @@ const RelatedPost = ({ postId }) => {
 
   const makeCarouselJsx = () => {
     return !posts.length ? (
+      //css class에 margin을 주면 캐러셀이 망가져서 style로 줌
       <div className={cx('carousel-wrap')} style={{ margin: '0 auto' }}>
         <h3>아직 이 장소를 방문한 다른 사람이 없네요. 🥺</h3>
       </div>
