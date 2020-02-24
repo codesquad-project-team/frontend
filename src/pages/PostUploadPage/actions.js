@@ -1,15 +1,8 @@
-import { UPDATE_IMAGE } from '../../components/PostUploader/ImageUploader/ImageEditor/ImageEditorLogic';
-import {
-  GET_IMAGES,
-  ADD_IMAGES,
-  DELETE_IMAGE,
-  UPDATE_REPRESENTATIVE
-} from '../../components/PostUploader/ImageUploader/ImageUploaderLogic';
+export { UPDATE_IMAGE } from '../../components/ImageEditor';
 
 export {
   GET_IMAGES,
   ADD_IMAGES,
   DELETE_IMAGE,
-  UPDATE_REPRESENTATIVE,
-  UPDATE_IMAGE
-};
+  UPDATE_REPRESENTATIVE
+} from '../../components/PostUploader/ImageUploader';

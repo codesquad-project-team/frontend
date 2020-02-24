@@ -1,4 +1,4 @@
-import { asyncPipe, readFileAsDataURL } from '../../../../utils/utils';
+import { asyncPipe, readFileAsDataURL } from '../../utils/utils';
 
 const CANVAS_OPTIONS = {
   maxWidth: 4096,

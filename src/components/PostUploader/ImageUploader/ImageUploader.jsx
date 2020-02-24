@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import classNames from 'classnames/bind';
-import styles from './ImageUploader.scss';
 import IconButton from '../../CommonBtn/IconButton';
 import SecondInputButton from './SecondInputButton';
+import ImageEditor from '../../ImageEditor';
 import PreviewImages from './PreviewImages';
 import useModal from '../../../hooks/useModal';
-import ImageEditor from './ImageEditor/ImageEditor';
+import styles from './ImageUploader.scss';
 import { IMAGE_BUCKET_URL } from '../../../configs';
 
 const cx = classNames.bind(styles);

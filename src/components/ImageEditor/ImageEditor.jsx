@@ -1,12 +1,12 @@
 import React, { useState, Suspense, lazy } from 'react';
 import classNames from 'classnames/bind';
-import styles from './ImageEditor.scss';
-import CommonPost from '../../../CommonPost/CommonPost';
+import CommonPost from '../CommonPost/CommonPost';
 import EditorHeader from './EditorHeader';
 import EditorFooter from './EditorFooter';
+import { asyncPipe } from '../../utils/utils';
+import useMediaQuerySet from '../../hooks/useMediaQuerySet';
 import 'cropperjs/dist/cropper.css';
-import { asyncPipe } from '../../../../utils/utils';
-import useMediaQuerySet from '../../../../hooks/useMediaQuerySet';
+import styles from './ImageEditor.scss';
 
 const cx = classNames.bind(styles);
 
