@@ -23,11 +23,17 @@ $gray-border-color: #e0e0e0;
 $gray-font-color: #bdbdbd;
 $dark-gray-font-color: #616161;
 
-$header-height: 8rem;
+$mobile-header-height: 6rem;
+$tablet-and-desktop-header-height: 8rem;
 
 $small-title-font-size: 2rem;
 $medium-title-font-size: 2.75rem;
 $large-title-font-size: 3.5rem;
+
+$desktop-page-max-width: 94rem;
+
+$mobile-preview-size: 10rem;
+$desktop-preview-size: 15rem;
 
 $breakpoint-tablet: 768px;
 $breakpoint-desktop: 1200px;

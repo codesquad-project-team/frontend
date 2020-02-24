@@ -1,6 +1,6 @@
 @import '../../stylesheets/util.scss';
 
-$drop-down-btn-height: 3rem;
+$dropdown-btn-height: 3rem;
 $btn-quantity: 4;
 
 .background {
@@ -9,12 +9,12 @@ $btn-quantity: 4;
   left: 0;
   width: 100vw;
   height: 100vh;
-  opacity: 0;
+  z-index: -1;
 }
 
 .wrapper {
   position: absolute;
-  top: calc(#{$header-height} - 0.5rem);
+  top: calc(#{$mobile-header-height} - 0.5rem);
   right: 0;
   width: 10rem;
   height: 0;
@@ -24,13 +24,12 @@ $btn-quantity: 4;
   background-color: #fff;
   overflow: hidden;
   transition: height 0.2s;
-  opacity: 0;
 
   .btns {
     width: 100%;
-    height: $drop-down-btn-height;
+    height: $dropdown-btn-height;
     font-size: 1.2rem;
-    line-height: $drop-down-btn-height;
+    line-height: $dropdown-btn-height;
     border-bottom: 1px solid $main-color;
     text-align: center;
     cursor: pointer;
@@ -42,6 +41,5 @@ $btn-quantity: 4;
 }
 
 .animation {
-  height: calc(#{$drop-down-btn-height} * #{$btn-quantity});
-  opacity: 1;
+  height: calc(#{$dropdown-btn-height} * #{$btn-quantity});
 }

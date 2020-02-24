@@ -16,9 +16,13 @@
   border-radius: 5px;
   width: 100%;
 }
+.carousel {
+  max-width: 600px;
+  margin-bottom: 3rem;
+}
 
 @include tablet-and-desktop {
   .contents {
-    max-width: 95rem;
+    max-width: $desktop-page-max-width;
   }
 }

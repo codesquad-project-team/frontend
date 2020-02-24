@@ -62,9 +62,10 @@ const ImageEditor = ({
             src={src}
             style={
               isMobile
-                ? { width: '100%', height: '60vh' }
-                : { width: '450px', height: '450px' }
+                ? { width: '90%', height: '60vh', margin: '0 10px' }
+                : { width: '450px', height: '500px', margin: '0 10px' }
             }
+            viewMode={1}
             checkOrientation={false}
             aspectRatio={1 / 1}
             autoCropArea={1}

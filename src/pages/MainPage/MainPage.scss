@@ -28,9 +28,10 @@
     height: 45rem;
   }
   .banner-text {
-    position: absolute;
+    position: relative;
     top: 20rem;
-    right: 5%;
+    margin: 0 auto;
+    max-width: $desktop-page-max-width;
     text-align: right;
   }
 }

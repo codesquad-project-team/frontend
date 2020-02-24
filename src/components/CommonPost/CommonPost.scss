@@ -4,7 +4,7 @@
   display: flex;
   justify-content: center;
   width: 100vw;
-  min-height: calc(100vh - #{$header-height});
+  min-height: calc(100vh - #{$mobile-header-height});
   padding: 5rem 0;
   background-color: $gray-background-color;
 }
@@ -26,17 +26,18 @@
 
 .large {
   width: 100%;
+  max-width: 100vw;
   min-height: 60rem;
 }
 
 @include tablet {
   .large {
-    max-width: 70rem;
+    max-width: 65rem;
   }
 }
 
 @include desktop {
   .large {
-    max-width: 80rem;
+    max-width: 70rem;
   }
 }
