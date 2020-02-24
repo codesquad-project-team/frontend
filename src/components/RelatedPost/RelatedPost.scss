@@ -24,6 +24,8 @@ $carousel-width: calc(100vw - (#{$padding} + #{$btn-size}) * 2);
 .carousel-wrap {
   display: flex;
   justify-content: space-evenly;
+  font-size: 1.2rem;
+  text-align: center;
 }
 .prev-btn,
 .next-btn {

@@ -51,7 +51,7 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        //react-bootstrap 사용을 위한 loader. node_modules를 제외하지 않음.
+        //cropper.js 사용을 위한 loader. node_modules를 제외하지 않음.
         test: /\.css$/,
         loader: 'style-loader!css-loader'
       }

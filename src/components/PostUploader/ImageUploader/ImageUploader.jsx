@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ImageUploader.scss';
-import FirstInputButton from './FirstInputButton';
+import IconButton from '../../CommonBtn/IconButton';
 import SecondInputButton from './SecondInputButton';
 import PreviewImages from './PreviewImages';
 import useModal from '../../../hooks/useModal';
 import ImageEditor from './ImageEditor/ImageEditor';
+import { IMAGE_BUCKET_URL } from '../../../configs';
 
 const cx = classNames.bind(styles);
 
@@ -64,7 +65,14 @@ const ImageUploader = ({ images, setImages, actions }) => {
           )}
         </>
       ) : (
-        <FirstInputButton onChange={addImage} />
+        <IconButton
+          type="addImage"
+          src={`${IMAGE_BUCKET_URL}/image-upload-icon.png`}
+          onChange={addImage}
+          multiple
+        >
+          이미지 선택
+        </IconButton>
       )}
       {open && (
         <ImageEditor

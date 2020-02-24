@@ -15,7 +15,7 @@ const cx = classNames.bind(styles);
 
 const RelatedPost = ({ postId }) => {
   const { isMobile } = useMediaQuerySet();
-  const [windowWidth, setWindowViewportWidth] = useState(window.innerWidth);
+  const [windowWidth, cacheWindowWidth] = useState(window.innerWidth);
   //아래 계산식은 RelatedPost.scss 내에 작성된 계산식에 의존함.
   const carouselWidthOverMobile = 500; //px
   const btnSize = 20; //px
@@ -29,7 +29,7 @@ const RelatedPost = ({ postId }) => {
   );
   const updateWindowWidth = useCallback(
     throttle(() => {
-      setWindowViewportWidth(window.innerWidth);
+      cacheWindowWidth(window.innerWidth);
     }),
     []
   );
@@ -75,7 +75,8 @@ const RelatedPost = ({ postId }) => {
 
   const makeCarouselJsx = () => {
     return !posts.length ? (
-      <div className={cx('carousel-wrap')}>
+      //css class에 margin을 주면 캐러셀이 망가져서 style로 줌
+      <div className={cx('carousel-wrap')} style={{ margin: '0 auto' }}>
         <h3>아직 이 장소를 방문한 다른 사람이 없네요. 🥺</h3>
       </div>
     ) : (

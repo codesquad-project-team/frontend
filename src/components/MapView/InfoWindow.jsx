@@ -26,17 +26,15 @@ const InfoWindow = ({ info: { name, address, link, phone } = {} }) => {
         />
         <br />  */}
       <div>{phone}</div>
-      <span>
-        <a href={link} target="_blank" rel="noopener noreferrer">
-          {link}
-        </a>
-      </span>
+      <a href={link} target="_blank" rel="noopener noreferrer">
+        {link}
+      </a>
       <img
         className={cx('arrow-image')}
         src={`${IMAGE_BUCKET_URL}/info-window-arrow.png`}
         alt=""
       />
-      <CloseBtn />
+      <CloseBtn className={cx('close-btn')} />
     </div>
   );
 };

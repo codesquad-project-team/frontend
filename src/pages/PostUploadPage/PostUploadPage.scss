@@ -21,6 +21,7 @@
 @include tablet-and-desktop {
   .wrapper {
     padding: 4rem 0;
-    width: auto;
+    height: 100%;
+    max-height: 100rem;
   }
 }

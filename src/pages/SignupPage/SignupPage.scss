@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     width: 100vw;
-    height: $header-height;
+    height: $mobile-header-height;
     padding: 0 3rem;
     border-bottom: 1px solid $gray-border-color;
 
@@ -55,9 +55,6 @@
     border: 1px solid $gray-border-color;
     border-radius: 5px;
 
-    &:hover {
-      border: 1px solid #333;
-    }
     &:focus {
       outline: none;
     }
@@ -87,7 +84,7 @@
     }
   }
   .main {
-    height: calc(100vh - #{$header-height});
+    height: calc(100vh - #{$tablet-and-desktop-header-height});
 
     > h2 {
       font-size: 5rem;
@@ -96,6 +93,9 @@
   .input-section {
     > input {
       width: 45rem;
+      &:hover {
+        border: 1px solid #333;
+      }
     }
   }
   .signup-btn {

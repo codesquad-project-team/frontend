@@ -1,0 +1,78 @@
+$image-bucket-URL: 'https://team-project-s3-bucket.s3.ap-northeast-2.amazonaws.com/resources';
+
+.viewport {
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  transition: 0.3s;
+}
+
+.items {
+  width: 100%;
+  min-width: 100%;
+}
+
+@mixin buttons {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  margin: 0 5px;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 50%;
+  opacity: 0.8;
+  background-color: transparent;
+  &:hover {
+    box-shadow: 0 0 5px 1px #e0e0e0;
+  }
+}
+
+.leftButton {
+  @include buttons;
+  left: 0;
+}
+
+.rightButton {
+  @include buttons;
+  right: 0;
+}
+
+.leftChevron {
+  width: inherit;
+  height: inherit;
+  z-index: inherit;
+  background-image: url('#{$image-bucket-URL}/left-chevron.svg');
+}
+
+.rightChevron {
+  width: inherit;
+  height: inherit;
+  z-index: inherit;
+  background-image: url('#{$image-bucket-URL}/right-chevron.svg');
+}
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+.pagination-dots {
+  margin-right: 4px;
+  width: 6px;
+  height: 6px;
+  border: 0;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+}
+.pagination-dots:last-child {
+  margin-right: 0;
+}
+.active {
+  background-color: #3897f0;
+}
