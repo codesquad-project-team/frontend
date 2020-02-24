@@ -11,10 +11,11 @@ script:
   - yarn build
 
 env:
-  - KAKAO_MAP_API_URL=$KAKAO_MAP_API_URL
-  - ALBUM_BUCKET_NAME=$ALBUM_BUCKET_NAME
-  - BUCKET_REGION=$BUCKET_REGION
-  - IDENTITY_POOL_ID=$IDENTITY_POOL_ID
+  global:
+    - KAKAO_MAP_API_URL=$KAKAO_MAP_API_URL
+    - ALBUM_BUCKET_NAME=$ALBUM_BUCKET_NAME
+    - BUCKET_REGION=$BUCKET_REGION
+    - IDENTITY_POOL_ID=$IDENTITY_POOL_ID
 
 before_deploy: # 배포하기전 하는 작업들
   - rm -rf node_modules # travis가 설치한 node_moduels를 삭제
