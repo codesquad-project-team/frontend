@@ -35,9 +35,15 @@ $edit-page-desktop-width: $desktop-page-max-width;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  height: 20rem;
+  height: 27rem;
 }
-
+.edit-btns {
+  display: flex;
+  flex-direction: column;
+  & > div {
+    margin: 1rem;
+  }
+}
 .submit-btn {
   width: 100%;
   margin: 3rem 0 2rem 0;
@@ -83,10 +89,12 @@ $edit-page-desktop-width: $desktop-page-max-width;
     flex-direction: row;
     justify-content: center;
     padding-left: 2rem;
+    height: 20rem;
   }
   .profile-image {
     margin-right: 2rem;
   }
+
   .submit-btn {
     align-self: flex-end;
     width: 15%;

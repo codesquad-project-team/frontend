@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames/bind';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { css } from '@emotion/core';
-import styles from './ProfileEditPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import IconButton from '../../components/CommonBtn/IconButton';
@@ -12,14 +11,17 @@ import ProfileContentItem from '../../components/ProfileContentItem/ProfileConte
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
+import useModal from '../../hooks/useModal';
 import useS3 from '../../hooks/useS3';
 import { debounce } from '../../utils/utils';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { WEB_SERVER_URL, MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
+import styles from './ProfileEditPage.scss';
 
 const cx = classNames.bind(styles);
 
 const ProfileEditPage = () => {
+  const { Modal, open, toggleModal } = useModal();
   const { loggedIn, openSigninModal, setNeedsUserInfo } = useLoginContext();
   const { inputValue, setInputValue, handleChange } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
@@ -256,13 +258,21 @@ const ProfileEditPage = () => {
                   src={imageSrc}
                   className={cx('profile-image')}
                 />
-                <IconButton
-                  type="addImage"
-                  src={`${IMAGE_BUCKET_URL}/profile-change-icon.png`}
-                  onChange={handleProfileImage}
-                >
-                  프로필 사진 바꾸기
-                </IconButton>
+                <div className={cx('edit-btns')}>
+                  <IconButton
+                    type="addImage"
+                    src={`${IMAGE_BUCKET_URL}/profile-change-icon.png`}
+                    onChange={handleProfileImage}
+                  >
+                    프로필 사진 바꾸기
+                  </IconButton>
+                  <IconButton
+                    src={`${IMAGE_BUCKET_URL}/edit-icon1.png`}
+                    onClick={toggleModal}
+                  >
+                    사진 편집
+                  </IconButton>
+                </div>
               </div>
               <ProfileContentItem
                 label="닉네임"
