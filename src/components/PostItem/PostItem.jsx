@@ -24,10 +24,22 @@ const PostItem = ({
     <div className={cx('wrapper')} {...props}>
       {headerOn && (
         <div className={cx('header')}>
-          <CommonLink to={`/profile/@${nickname}`} onClick={handleClick}>
+          <CommonLink
+            to={{
+              pathname: `/profile/@${nickname}`,
+              state: { userId: id }
+            }}
+            onClick={handleClick}
+          >
             <ProfileImage small src={profileImage} />
           </CommonLink>
-          <CommonLink to={`/profile/@${nickname}`} onClick={handleClick}>
+          <CommonLink
+            to={{
+              pathname: `/profile/@${nickname}`,
+              state: { userId: id }
+            }}
+            onClick={handleClick}
+          >
             <span>{nickname}</span>
           </CommonLink>
         </div>

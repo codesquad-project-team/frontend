@@ -10,12 +10,9 @@ import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { useLoginContext } from '../../contexts/LoginContext';
 
 const ProfilePage = () => {
-  //라우터URL을 nickname으로 표시하기 때문에 router의 prop으로는 userId를 받을 수 없음.
-  //따라서 localStorage를 활용하여 userId 값을 저장하여 사용함.
-  //추가로, 사용자 프로필을 보는 도중 로그인할 경우 userId값을 보존하기 위해서 localStorage사용.(로그인 시 새로고침 발생)
-  const { pathname } = useLocation();
+  //로그아웃 상태에서 myId값이 undefined이므로 isMyProfile이 true값이 나오지 않도록 userId 기본값을 null로 설정.
+  const { pathname, state: { userId } = { userId: null } } = useLocation();
   const nickname = pathname.replace('/profile/@', '');
-  const userId = JSON.parse(localStorage.getItem('targetUserId'));
 
   const { id: myId, nickname: myNickname } = useLoginContext();
   const isMyProfile = myId === userId || myNickname === nickname;
@@ -30,18 +27,12 @@ const ProfilePage = () => {
     setData
   );
 
-  const isInitialRendering = !Object.keys(data).length;
   //로그아웃 시 refetch해서 profile 정보 갱신
   useEffect(() => {
+    const isInitialRendering = !Object.keys(data).length;
     if (isInitialRendering) return;
     refetch();
   }, [myId]);
-
-  //주소창에 다른 닉네임 입력한 경우 fetch를 nickname으로 받기 위해 localStorage삭제
-  useEffect(() => {
-    if (isInitialRendering) return;
-    localStorage.removeItem('targetUserId');
-  }, [nickname]);
 
   return (
     <div>
@@ -54,7 +45,11 @@ const ProfilePage = () => {
         loading={loading}
       />
       {!loading && (
-        <ProfileInfo data={data} isMyProfile={isMyProfile} userId={userId} />
+        <ProfileInfo
+          data={data}
+          isMyProfile={isMyProfile}
+          userId={userId || data.id}
+        />
       )}
       {data.id && <PostContainer writerId={data.id} />}
     </div>

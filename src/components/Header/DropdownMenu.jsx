@@ -40,11 +40,11 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
           <div className={cx('btns')}>글 작성</div>
         </CommonLink>
         <CommonLink
-          to={`/profile/@${nickname}`}
-          onClick={() => {
-            localStorage.setItem('targetUserId', id);
-            toggleDropdownMenu();
+          to={{
+            pathname: `/profile/@${nickname}`,
+            state: { userId: id }
           }}
+          onClick={toggleDropdownMenu}
         >
           <div className={cx('btns')}>내 프로필</div>
         </CommonLink>
