@@ -57,6 +57,15 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
         break;
     }
   };
+  const [modalType, setModalType] = useState(null);
+  const openFollowingList = () => {
+    setModalType('following');
+    toggleModal();
+  };
+  const openFollowerList = () => {
+    setModalType('follower');
+    toggleModal();
+  };
   return (
     <div className={cx('wrapper')}>
       <div className={cx('left-column')}>
@@ -72,15 +81,28 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
           <span className={cx('username')}>{nickname}</span>
         </div>
         <div className={cx('overview')}>게시글 {totalPosts}개</div>
-        <div className={cx('overview', 'hover-effect')} onClick={toggleModal}>
+        <div
+          className={cx('overview', 'hover-effect')}
+          onClick={openFollowerList}
+        >
           팔로워 {totalFollowers}명
         </div>
-        <div className={cx('overview', 'hover-effect')} onClick={toggleModal}>
+        <div
+          className={cx('overview', 'hover-effect')}
+          onClick={openFollowingList}
+        >
           팔로잉 {totalFollowings}명
         </div>
         <div className={cx('introduction')}>{introduction}</div>
       </div>
-      {open && <FollowerList Modal={Modal} onClose={toggleModal} />}
+      {open && (
+        <FollowerList
+          Modal={Modal}
+          type={modalType}
+          onClose={toggleModal}
+          userId={userId}
+        />
+      )}
     </div>
   );
 };

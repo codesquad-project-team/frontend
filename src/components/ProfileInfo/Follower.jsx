@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import CommonLink from '../CommonLink/CommonLink';
 import ProfileImage from '../ProfileImage/ProfileImage';
-import styles from './Follwer.scss';
+import styles from './Follower.scss';
 
 const cx = classNames.bind(styles);
 
