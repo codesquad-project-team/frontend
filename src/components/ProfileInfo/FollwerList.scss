@@ -1,3 +1,33 @@
 .wrapper {
+  width: 99vw;
+  height: 60vh;
   background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+}
+
+.header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  & > span {
+    padding: 1rem;
+    font-size: 1.6rem;
+    text-align: center;
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+}
+
+.contents {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  overflow: hidden;
 }
