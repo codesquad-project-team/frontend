@@ -21,7 +21,7 @@ const FollowerList = ({ Modal, type, onClose, userId }) => {
   return (
     <Modal onClick={onClose} className={cx('wrapper')}>
       <div className={cx('header')}>
-        <span>팔로워</span>
+        <span>{type === 'follower' ? '팔로워' : '팔로잉'}</span>
         <CloseBtn className={cx('close-btn')} onClick={onClose} />
       </div>
       <div className={cx('contents')}>

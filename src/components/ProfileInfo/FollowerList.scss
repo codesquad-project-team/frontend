@@ -1,7 +1,10 @@
+$wrapper-height: 60vh;
+$header-height: 4rem;
+
 .wrapper {
   width: 99vw;
   max-width: 400px;
-  height: 60vh;
+  height: $wrapper-height;
   background-color: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 5px;
@@ -12,9 +15,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: $header-height;
   border-bottom: 1px solid #e0e0e0;
   & > span {
-    padding: 1rem;
     font-size: 1.6rem;
     text-align: center;
   }
@@ -27,8 +30,9 @@
 }
 
 .contents {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   padding: 1rem;
-  overflow: hidden;
+  max-height: calc(#{$wrapper-height} - #{$header-height});
+  overflow: auto;
 }

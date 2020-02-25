@@ -1,8 +1,13 @@
 .wrapper {
   display: flex;
+  margin: 0.5rem;
+}
+.link {
+  display: flex;
   align-items: center;
   & > span {
     font-size: 1.2rem;
+    cursor: pointer;
   }
 }
 .profile-image {

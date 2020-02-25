@@ -10,14 +10,20 @@ const Follower = ({ id, nickname, profileImage }) => {
   const handleClick = () => localStorage.setItem('targetUserId', id);
 
   return (
-    <CommonLink
-      to={`/profile/@${nickname}`}
-      onClick={handleClick}
-      className={cx('wrapper')}
-    >
-      <ProfileImage small src={profileImage} className={cx('profile-image')} />
-      <span>{nickname}</span>
-    </CommonLink>
+    <div className={cx('wrapper')}>
+      <CommonLink
+        to={`/profile/@${nickname}`}
+        onClick={handleClick}
+        className={cx('link')}
+      >
+        <ProfileImage
+          small
+          src={profileImage}
+          className={cx('profile-image')}
+        />
+        <span>{nickname}</span>
+      </CommonLink>
+    </div>
   );
 };
 
