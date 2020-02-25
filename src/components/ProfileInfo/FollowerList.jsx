@@ -9,14 +9,14 @@ import { WEB_SERVER_URL } from '../../configs';
 const cx = classNames.bind(styles);
 
 const FollowerList = ({ Modal, type, onClose, userId }) => {
-  const [lists, setLists] = useState([]);
-  const {
-    loading
-  } = useFetch(
-    `${WEB_SERVER_URL}/user/${userId}/relationship/${type}`,
-    {},
-    json => setLists(json)
-  );
+  const { data: lists, loading } = useFetch({
+    URL: `${WEB_SERVER_URL}/user/${userId}/relationship/${type}`,
+    errorMap: {
+      400: 'userId 또는 type 오류',
+      401: '유효하지 않은 토큰',
+      500: '서버 에러'
+    }
+  });
 
   return (
     <Modal onClick={onClose} className={cx('wrapper')}>

@@ -8,15 +8,12 @@ const useTempTokenValidation = () => {
   const [provider, setProvider] = useState(null);
   const postposition = provider === 'kakao' ? '로' : '으로';
 
-  const { loading, error } = useFetch(
-    `${WEB_SERVER_URL}/auth/tempToken`,
-    { method: 'POST', credentials: 'include' },
-    json => setProvider(json.provider)
-  );
-
-  useEffect(() => {
-    if (error && error.message === '401') history.push('/');
-  }, [error]);
+  const { loading } = useFetch({
+    URL: `${WEB_SERVER_URL}/auth/tempToken`,
+    options: { method: 'POST', credentials: 'include' },
+    callback: json => setProvider(json.provider),
+    errorMap: { 401: () => history.push('/') } //유효하지 않은 토큰
+  });
 
   return { loading, provider: provider + postposition };
 };

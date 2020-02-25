@@ -21,11 +21,11 @@ const ProfilePage = () => {
 
   //db의 primary key는 userId이지만 주소창에 닉네임을 직접 입력하는 경우에도 프로필 불러오기 위해 2가지 쿼리 사용.
   const query = userId ? `id=${userId}` : `nickname=${nickname}`;
-  const { error, loading, refetch } = useFetch(
-    `${WEB_SERVER_URL}/user/profile-content?${query}`,
-    { credentials: 'include' },
-    setData
-  );
+  const { loading, refetch } = useFetch({
+    URL: `${WEB_SERVER_URL}/user/profile-content?${query}`,
+    options: { credentials: 'include' },
+    callback: setData
+  });
 
   //로그아웃 시 refetch해서 profile 정보 갱신
   useEffect(() => {

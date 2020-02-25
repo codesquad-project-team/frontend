@@ -17,13 +17,10 @@ const cx = classNames.bind(styles);
 
 const DetailPage = () => {
   const { postId } = useParams();
-  const [data, setData] = useState({});
 
-  const { error, loading } = useFetch(
-    `${WEB_SERVER_URL}/post/${postId}`,
-    {},
-    json => setData(json)
-  );
+  const { data, loading } = useFetch({
+    URL: `${WEB_SERVER_URL}/post/${postId}`
+  });
 
   return (
     <div className={cx('wrapper')}>

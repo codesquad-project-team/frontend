@@ -40,14 +40,10 @@ const RelatedPost = ({ postId }) => {
   const [response, setResponse] = useState(null);
   const posts = response ? response.posts : [];
 
-  const {
-    error,
-    loading
-  } = useFetch(
-    `${WEB_SERVER_URL}/post/related-to?postid=${postId}&page=${page}`,
-    {},
-    json => mergeResponse(response, json)
-  );
+  const { loading } = useFetch({
+    URL: `${WEB_SERVER_URL}/post/related-to?postid=${postId}&page=${page}`,
+    callback: json => mergeResponse(response, json)
+  });
 
   const mergeResponse = (prevResponse, response) => {
     const isFirstFetch = prevResponse === null;
