@@ -4,12 +4,15 @@ import styles from './ProfileInfo.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import { useLoginContext } from '../../contexts/LoginContext';
+import useModal from '../../hooks/useModal';
 import { WEB_SERVER_URL } from '../../configs';
+import FollowerList from './FollowerList';
 
 const cx = classNames.bind(styles);
 const reducer = (prevState, state) => ({ ...prevState, ...state });
 
 const ProfileInfo = ({ data, isMyProfile, userId }) => {
+  const { Modal, open, toggleModal } = useModal();
   const [profileContent, setProfileContent] = useReducer(reducer, data);
   const { loggedIn, openSigninModal } = useLoginContext();
   const [error, setError] = useState(null);
@@ -69,10 +72,15 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
           <span className={cx('username')}>{nickname}</span>
         </div>
         <div className={cx('overview')}>게시글 {totalPosts}개</div>
-        <div className={cx('overview')}>팔로워 {totalFollowers}명</div>
-        <div className={cx('overview')}>팔로잉 {totalFollowings}명</div>
+        <div className={cx('overview', 'hover-effect')} onClick={toggleModal}>
+          팔로워 {totalFollowers}명
+        </div>
+        <div className={cx('overview', 'hover-effect')} onClick={toggleModal}>
+          팔로잉 {totalFollowings}명
+        </div>
         <div className={cx('introduction')}>{introduction}</div>
       </div>
+      {open && <FollowerList Modal={Modal} onClose={toggleModal} />}
     </div>
   );
 };
