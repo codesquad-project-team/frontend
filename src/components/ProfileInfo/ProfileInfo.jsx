@@ -81,17 +81,11 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
           <span className={cx('username')}>{nickname}</span>
         </div>
         <div className={cx('overview')}>게시글 {totalPosts}개</div>
-        <div
-          className={cx('overview', 'hover-effect')}
-          onClick={openFollowerList}
-        >
-          팔로워 {totalFollowers}명
+        <div className={cx('overview')} onClick={openFollowerList}>
+          <span className={cx('hover-effect')}>팔로워 {totalFollowers}명</span>
         </div>
-        <div
-          className={cx('overview', 'hover-effect')}
-          onClick={openFollowingList}
-        >
-          팔로잉 {totalFollowings}명
+        <div className={cx('overview')} onClick={openFollowingList}>
+          <span className={cx('hover-effect')}>팔로잉 {totalFollowings}명</span>
         </div>
         <div className={cx('introduction')}>{introduction}</div>
       </div>
