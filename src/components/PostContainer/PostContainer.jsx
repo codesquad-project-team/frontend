@@ -25,11 +25,12 @@ const PostContainer = ({ headerOn, writerId = '' }) => {
   //page - required
   //writerid - optional
   //writerid가 존재하는 경우 해당 사용자의 게시글만 받아오는 api
-  const { error, loading } = useFetch({
+  const { loading } = useFetch({
     URL: `${WEB_SERVER_URL}/post?page=${page}${
       writerId ? `&writerid=${writerId}` : ''
     }`,
-    callback: json => mergeResponse(response, json)
+    callback: json => mergeResponse(response, json),
+    errorMap: { 204: () => setResponse(null) }
   });
 
   const mergeResponse = (prevResponse, response) => {
