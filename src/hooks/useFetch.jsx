@@ -2,10 +2,23 @@ import { useState, useEffect, useCallback } from 'react';
 
 const handleFetchError = (error, errorMap) => {
   if (!error) return;
-  const value = errorMap[error.message];
-  if (!value) return alert('UNKNOWN_ERROR');
-  if (typeof value === 'string') return alert(value);
-  if (typeof value === 'function') return value();
+
+  const statusCode = Number(error.message);
+
+  if (!errorMap && statusCode === 204) {
+    console.warn('status code 204에 대한 처리가 필요합니다.');
+    return alert('NO_CONTENT');
+  }
+  if (!errorMap) return console.warn(error);
+
+  const handler = errorMap[statusCode];
+  if (typeof handler === 'string') return alert(handler);
+  if (typeof handler === 'function') return handler();
+
+  if (!handler) {
+    console.warn('errorMap에 정의하지 않은 에러입니다.');
+    return alert('UNKNOWN_ERROR');
+  }
 };
 
 /**
@@ -26,10 +39,11 @@ const useFetch = ({ URL, options = {}, callback, errorMap }) => {
       const res = await fetch(URL, options);
       if (res instanceof Promise) throw Error('REQUEST FAILED');
       if (!res.ok) throw Error(res.status);
+      if (res.status === 204) throw Error(res.status); //request success but no content
       const json = await res.json();
       callback ? callback(json) : setData(json);
     } catch (error) {
-      errorMap ? handleFetchError(error, errorMap) : console.warn(error);
+      handleFetchError(error, errorMap);
     } finally {
       setLoading(false);
     }
