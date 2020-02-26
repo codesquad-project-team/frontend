@@ -42,7 +42,8 @@ const RelatedPost = ({ postId }) => {
 
   const { loading } = useFetch({
     URL: `${WEB_SERVER_URL}/post/related-to?postid=${postId}&page=${page}`,
-    callback: json => mergeResponse(response, json)
+    callback: json => mergeResponse(response, json),
+    errorMap: { 204: () => setResponse(null) }
   });
 
   const mergeResponse = (prevResponse, response) => {
