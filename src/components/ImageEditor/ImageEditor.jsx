@@ -3,7 +3,6 @@ import classNames from 'classnames/bind';
 import CommonPost from '../CommonPost/CommonPost';
 import EditorHeader from './EditorHeader';
 import EditorFooter from './EditorFooter';
-import { asyncPipe } from '../../utils/utils';
 import useMediaQuerySet from '../../hooks/useMediaQuerySet';
 import 'cropperjs/dist/cropper.css';
 import styles from './ImageEditor.scss';
@@ -16,8 +15,7 @@ const Cropper = lazy(() =>
 
 const ImageEditor = ({
   Modal,
-  setImages,
-  actions,
+  asyncDispatch,
   src,
   originalFile: { name, type },
   cropperData,
@@ -39,12 +37,13 @@ const ImageEditor = ({
     cropper.rotate(90);
   };
 
-  const saveImage = () =>
-    asyncPipe(
-      () =>
-        actions.UPDATE_IMAGE(setImages, cropper, targetIndex, { name, type }),
-      onClose
-    )();
+  const saveImage = () => {
+    asyncDispatch({
+      type: 'cropImage',
+      payload: { cropper, name, type, targetIndex }
+    });
+    onClose();
+  };
 
   const closeEditor = () => {
     isEdited

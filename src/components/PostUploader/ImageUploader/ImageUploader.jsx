@@ -24,7 +24,7 @@ const importCropper = () =>
     ({ default: Cropper }) => Cropper
   );
 
-const ImageUploader = ({ images, setImages, actions }) => {
+const ImageUploader = ({ images, dispatch, asyncDispatch }) => {
   const { Modal, toggleModal: toggleImageEditor, isOpen } = useModal();
   const [targetIndex, setTargetIndex] = useState(null);
 
@@ -39,15 +39,18 @@ const ImageUploader = ({ images, setImages, actions }) => {
 
     files.length + images.length > MAXIMUM_IMAGES
       ? showAlert('EXCEED_MAXIMUM_IMAGES')
-      : actions.ADD_IMAGES(setImages, images.length, files, Cropper);
+      : asyncDispatch({ type: 'addImages', payload: { files, Cropper } });
   };
 
   const deleteImage = ({ target }) => {
-    setImages(actions.DELETE_IMAGE(Number(target.dataset.idx)));
+    dispatch({ type: 'deleteImage', payload: Number(target.dataset.idx) });
   };
 
   const selectRepresentative = ({ target }) => {
-    setImages(actions.UPDATE_REPRESENTATIVE(Number(target.dataset.idx)));
+    dispatch({
+      type: 'updateRepresentative',
+      payload: Number(target.dataset.idx)
+    });
   };
 
   return (
@@ -77,8 +80,7 @@ const ImageUploader = ({ images, setImages, actions }) => {
       {isOpen && (
         <ImageEditor
           Modal={Modal}
-          setImages={setImages}
-          actions={actions}
+          asyncDispatch={asyncDispatch}
           src={images[targetIndex].originalURL}
           originalFile={images[targetIndex].original}
           cropperData={images[targetIndex].cropperData}

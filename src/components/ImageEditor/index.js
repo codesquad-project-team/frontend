@@ -1,2 +1,4 @@
 export { default } from './ImageEditor';
-export { UPDATE_IMAGE } from './ImageEditorLogic';
+import * as action from './action';
+import * as reducer from './reducer';
+export { action, reducer };

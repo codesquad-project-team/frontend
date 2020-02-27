@@ -13,10 +13,15 @@ import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import useS3 from '../../hooks/useS3';
 import useScript from '../../hooks/useScript';
 import { useLoginContext } from '../../contexts/LoginContext';
-import { YYYYMMDDHHMMSS } from '../../utils/utils';
+import {
+  YYYYMMDDHHMMSS,
+  bindDispatch,
+  bindAsyncDispatch
+} from '../../utils/utils';
 import { deepDiff } from '../../utils/diff.js';
 import { WEB_SERVER_URL } from '../../configs';
-import * as actions from './actions';
+import action from './action';
+import reducer from './reducer';
 
 const cx = classNames.bind(styles);
 
@@ -50,22 +55,24 @@ const PostUploadPage = () => {
     isEditMode ? { hasSelectedLocation: true } : {}
   );
   const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
-
-  const [images, setImages] = useState(
-    isEditMode ? actions.GET_IMAGES(initialImages) : []
-  );
-
-  const [selectedLocation, setSelectedLocation] = useState(initial.location);
-  const { longitude, latitude, name } = selectedLocation;
-
-  const [title, setTitle] = useState(initialTitle);
-  const [description, setDescription] = useState(initialDesc);
   const [isEdited, setIsEdited] = useState(false);
 
   const bindUpdater = updater => param => {
     updater(param);
     setIsEdited(true);
   };
+  const [images, setImages] = useState(
+    isEditMode ? action.getImages(initialImages) : []
+  );
+  const dispatch = bindDispatch(bindUpdater(setImages), reducer);
+  const asyncDispatch = bindAsyncDispatch(setImages, reducer, action);
+
+  const [selectedLocation, setSelectedLocation] = useState(initial.location);
+  const { longitude, latitude, name } = selectedLocation;
+
+  const [title, setTitle] = useState(initialTitle);
+  const [description, setDescription] = useState(initialDesc);
+
   const { nickname, loggedIn, openSigninModal } = useLoginContext();
 
   const { loadError } = useScript(
@@ -220,8 +227,8 @@ const PostUploadPage = () => {
         <CommonPost large className={cx('wrapper')}>
           <ImageUploader
             images={images}
-            setImages={bindUpdater(setImages)}
-            actions={actions}
+            dispatch={dispatch}
+            asyncDispatch={asyncDispatch}
           />
           <LocationUploader
             lat={latitude}

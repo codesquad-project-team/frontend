@@ -8,7 +8,7 @@ const CANVAS_OPTIONS = {
   imageSmoothingQuality: 'high'
 };
 
-export const GET_IMAGES = images =>
+export const getImages = images =>
   images &&
   images.map(({ url, isRepresentative }) =>
     pipe(
@@ -27,12 +27,10 @@ const getFileInfo = src => {
   return { name, type: 'image/' + name.split('.').pop() };
 };
 
-export const ADD_IMAGES = async (setImages, hasImages, files, Cropper) => {
+export const addImages = ({ files, Cropper }) => async () => {
   const URLs = await getDataURLs(files);
   const newImages = await getNewImages(URLs, files, Cropper);
-  hasImages
-    ? setImages(images => addImages({ images, newImages }))
-    : setImages(images => addImagesOnFirstTime({ images, newImages }));
+  return { type: 'addImages', payload: newImages };
 };
 
 /**
@@ -58,11 +56,6 @@ const getNewImages = (URLs, files, Cropper) =>
       )
     )
   );
-
-const addImagesOnFirstTime = ({ images, newImages }) =>
-  pipe(addImages, initRepresentative)({ images, newImages });
-
-const addImages = ({ images, newImages }) => [...images, ...newImages];
 
 /**
  * @returns {Promise} once resolved, returns an HTMLImageElement.
@@ -141,28 +134,12 @@ const createImageItem = ({
   isRepresentative: isRepresentative || false
 });
 
-const initRepresentative = images =>
-  images.map((obj, idx) =>
-    idx === 0 ? { ...obj, isRepresentative: true } : obj
-  );
+export const deleteImage = targetIndex => ({
+  type: 'deleteImage',
+  payload: targetIndex
+});
 
-export const DELETE_IMAGE = targetIndex => images =>
-  targetIndex === getRepresentativeIndex(images)
-    ? pipe(
-        images => removeItem(images, targetIndex),
-        images => initRepresentative(images)
-      )(images)
-    : removeItem(images, targetIndex);
-
-const getRepresentativeIndex = images =>
-  images.findIndex(item => item.isRepresentative);
-
-const removeItem = (arr, targetIndex) =>
-  arr.filter((el, idx) => idx !== targetIndex);
-
-export const UPDATE_REPRESENTATIVE = targetIndex => images =>
-  images.map((obj, idx) =>
-    targetIndex === idx
-      ? { ...obj, isRepresentative: true }
-      : { ...obj, isRepresentative: false }
-  );
+export const updateRepresentative = targetIndex => ({
+  type: 'updateRepresentative',
+  payload: targetIndex
+});
