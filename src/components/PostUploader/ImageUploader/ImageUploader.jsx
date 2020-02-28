@@ -25,7 +25,7 @@ const importCropper = () =>
   );
 
 const ImageUploader = ({ images, setImages, actions }) => {
-  const { Modal, toggleModal: toggleImageEditor, open } = useModal();
+  const { Modal, toggleModal: toggleImageEditor, isOpen } = useModal();
   const [targetIndex, setTargetIndex] = useState(null);
 
   const openEditor = ({ target }) => {
@@ -74,7 +74,7 @@ const ImageUploader = ({ images, setImages, actions }) => {
           이미지 선택
         </IconButton>
       )}
-      {open && (
+      {isOpen && (
         <ImageEditor
           Modal={Modal}
           setImages={setImages}

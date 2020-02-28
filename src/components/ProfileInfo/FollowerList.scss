@@ -1,0 +1,38 @@
+$wrapper-height: 60vh;
+$header-height: 4rem;
+
+.wrapper {
+  width: 99vw;
+  max-width: 400px;
+  height: $wrapper-height;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+}
+
+.header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: $header-height;
+  border-bottom: 1px solid #e0e0e0;
+  & > span {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+}
+
+.contents {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 1rem;
+  max-height: calc(#{$wrapper-height} - #{$header-height});
+  overflow: auto;
+}

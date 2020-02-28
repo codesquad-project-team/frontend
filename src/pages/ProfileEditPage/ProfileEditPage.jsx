@@ -38,11 +38,11 @@ const ProfileEditPage = () => {
 
   const { S3imageUploadHandler } = useS3();
 
-  const { loading, error } = useFetch(
-    `${WEB_SERVER_URL}/user/myinfo`,
-    { credentials: 'include' },
-    json => initUserInfo(json)
-  );
+  const { loading } = useFetch({
+    URL: `${WEB_SERVER_URL}/user/myinfo`,
+    options: { credentials: 'include' },
+    callback: json => initUserInfo(json)
+  });
 
   const initUserInfo = userInfo => {
     const {

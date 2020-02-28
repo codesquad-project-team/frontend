@@ -20,18 +20,18 @@ const PostContainer = ({ headerOn, writerId = '' }) => {
   const history = useHistory();
   const [page, setPage] = useState(1);
   const [response, setResponse] = useState(null);
-  const items = response ? response.posts : [];
+  const items = response ? response.posts : null;
 
   //page - required
   //writerid - optional
   //writerid가 존재하는 경우 해당 사용자의 게시글만 받아오는 api
-  const { error, loading } = useFetch(
-    `${WEB_SERVER_URL}/post?page=${page}${
+  const { loading } = useFetch({
+    URL: `${WEB_SERVER_URL}/post?page=${page}${
       writerId ? `&writerid=${writerId}` : ''
     }`,
-    {},
-    json => mergeResponse(response, json)
-  );
+    callback: json => mergeResponse(response, json),
+    errorMap: { 204: () => setResponse(null) }
+  });
 
   const mergeResponse = (prevResponse, response) => {
     if (page === 1) {
@@ -68,15 +68,6 @@ const PostContainer = ({ headerOn, writerId = '' }) => {
     return !loading && scrollBottom + TRIGGER_POINT >= documentHeight;
   };
 
-  const postItems = items.map(item => (
-    <PostItem
-      key={item.id}
-      headerOn={headerOn}
-      onClick={() => goTo(`/post/${item.id}`)}
-      {...item}
-    />
-  ));
-
   const goTo = pathname => {
     history.push(pathname);
     window.scroll(0, 0);
@@ -85,7 +76,20 @@ const PostContainer = ({ headerOn, writerId = '' }) => {
   return (
     <>
       <div className={cx('wrapper')}>
-        <div className={cx('main')}>{postItems}</div>
+        {items ? (
+          <div className={cx('main')}>
+            {items.map(item => (
+              <PostItem
+                key={item.id}
+                headerOn={headerOn}
+                onClick={() => goTo(`/post/${item.id}`)}
+                {...item}
+              />
+            ))}
+          </div>
+        ) : (
+          <span className={cx('no-content')}>아직 작성한 게시글이 없어요.</span>
+        )}
       </div>
       <FadeLoader
         css={override}
