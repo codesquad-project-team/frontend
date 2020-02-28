@@ -42,7 +42,7 @@ const ProfileEditPage = () => {
   const [currentNickname, setCurrentNickname] = useState('');
   const [nicknameValidity, setNicknameValidity] = useState({});
   const [phoneValidity, setPhoneValidity] = useState('');
-  const [initialPageEnter, setInitialPageEnter] = useState(true);
+  const [isNewImageAdded, setIsNewImageAdded] = useState(false);
 
   const { loadError } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
@@ -223,7 +223,7 @@ const ProfileEditPage = () => {
     if (!file) return;
 
     asyncDispatch({ type: 'addNewImage', payload: { file } });
-    setInitialPageEnter(false);
+    setIsNewImageAdded(true);
   };
 
   useEffect(() => {
@@ -262,7 +262,7 @@ const ProfileEditPage = () => {
               <div className={cx('profile-image-section')}>
                 <ProfileImage
                   large
-                  src={initialPageEnter ? profileImage : image.previewURL}
+                  src={isNewImageAdded ? image.previewURL : profileImage}
                   className={cx('profile-image')}
                 />
                 <div className={cx('edit-btns')}>
@@ -273,12 +273,14 @@ const ProfileEditPage = () => {
                   >
                     프로필 사진 바꾸기
                   </IconButton>
-                  <IconButton
-                    src={`${IMAGE_BUCKET_URL}/edit-icon1.png`}
-                    onClick={toggleModal}
-                  >
-                    사진 편집
-                  </IconButton>
+                  {isNewImageAdded && (
+                    <IconButton
+                      src={`${IMAGE_BUCKET_URL}/edit-icon1.png`}
+                      onClick={toggleModal}
+                    >
+                      사진 편집
+                    </IconButton>
+                  )}
                 </div>
               </div>
               <ProfileContentItem
