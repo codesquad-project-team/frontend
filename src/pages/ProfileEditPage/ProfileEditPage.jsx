@@ -146,20 +146,20 @@ const ProfileEditPage = () => {
     []
   );
 
-  const requestUpdate = e => {
+  const handleSubmit = e => {
     e.preventDefault();
     if (phoneValidity === 'INVALID_PHONE_NUMBER') {
       return alert('휴대폰 정보를 형식에 맞게 입력해주세요!');
     }
     if (nicknameValidity === 'CURRENT_NICKNAME') return;
     if (nicknameValidity === 'AVAILABLE') {
-      handleSubmit();
+      requestUpdate();
     } else {
       setNicknameValidity('INFO_MESSAGE');
     }
   };
 
-  const handleSubmit = async () => {
+  const requestUpdate = async () => {
     const hasImageToUpload = image.previewURL ? true : false;
 
     const S3UploadedURL = hasImageToUpload ? await uploadImage() : '';
@@ -313,7 +313,7 @@ const ProfileEditPage = () => {
                 className={cx('submit-btn')}
                 type="submit"
                 styleType="emphasize"
-                onClick={requestUpdate}
+                onClick={handleSubmit}
               >
                 제출
               </CommonBtn>
