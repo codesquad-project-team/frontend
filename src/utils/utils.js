@@ -56,3 +56,8 @@ export const readFileAsDataURL = file =>
     });
     reader.readAsDataURL(file);
   });
+
+export const profilePage = (nickname, id) => ({
+  pathname: `/profile/@${nickname}`,
+  state: { targetId: id }
+});

@@ -10,17 +10,17 @@ import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
 import { useLoginContext } from '../../contexts/LoginContext';
 
 const ProfilePage = () => {
-  //로그아웃 상태에서 myId값이 undefined이므로 isMyProfile이 true값이 나오지 않도록 userId 기본값을 null로 설정.
-  const { pathname, state: { userId } = { userId: null } } = useLocation();
+  //로그아웃 상태에서 myId값이 undefined이므로 isMyProfile이 true값이 나오지 않도록 targetId 기본값을 null로 설정.
+  const { pathname, state: { targetId } = { targetId: null } } = useLocation();
   const nickname = pathname.replace('/profile/@', '');
 
   const { id: myId, nickname: myNickname } = useLoginContext();
-  const isMyProfile = myId === userId || myNickname === nickname;
+  const isMyProfile = myId === targetId || myNickname === nickname;
 
   const [data, setData] = useState({});
 
   //db의 primary key는 userId이지만 주소창에 닉네임을 직접 입력하는 경우에도 프로필 불러오기 위해 2가지 쿼리 사용.
-  const query = userId ? `id=${userId}` : `nickname=${nickname}`;
+  const query = targetId ? `id=${targetId}` : `nickname=${nickname}`;
   const { loading, refetch } = useFetch({
     URL: `${WEB_SERVER_URL}/user/profile-content?${query}`,
     options: { credentials: 'include' },
@@ -48,7 +48,7 @@ const ProfilePage = () => {
         <ProfileInfo
           data={data}
           isMyProfile={isMyProfile}
-          userId={userId || data.id}
+          userId={targetId || data.id}
         />
       )}
       {data.id && <PostContainer writerId={data.id} />}

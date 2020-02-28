@@ -1,8 +1,9 @@
 import React from 'react';
 import classNames from 'classnames/bind';
-import styles from './PostItem.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonLink from '../CommonLink/CommonLink';
+import { profilePage } from '../../utils/utils';
+import styles from './PostItem.scss';
 
 const cx = classNames.bind(styles);
 
@@ -16,30 +17,14 @@ const PostItem = ({
   headerOn,
   ...props
 }) => {
-  const handleClick = () => {
-    localStorage.setItem('targetUserId', id);
-  };
-
   return (
     <div className={cx('wrapper')} {...props}>
       {headerOn && (
         <div className={cx('header')}>
-          <CommonLink
-            to={{
-              pathname: `/profile/@${nickname}`,
-              state: { userId: id }
-            }}
-            onClick={handleClick}
-          >
+          <CommonLink to={profilePage(nickname, id)}>
             <ProfileImage small src={profileImage} />
           </CommonLink>
-          <CommonLink
-            to={{
-              pathname: `/profile/@${nickname}`,
-              state: { userId: id }
-            }}
-            onClick={handleClick}
-          >
+          <CommonLink to={profilePage(nickname, id)}>
             <span>{nickname}</span>
           </CommonLink>
         </div>

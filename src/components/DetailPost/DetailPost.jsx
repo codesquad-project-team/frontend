@@ -1,9 +1,10 @@
 import React from 'react';
 import classNames from 'classnames/bind';
-import styles from './DetailPost.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonLink from '../CommonLink/CommonLink';
 import useMediaQuerySet from '../../hooks/useMediaQuerySet';
+import { profilePage } from '../../utils/utils';
+import styles from './DetailPost.scss';
 
 const cx = classNames.bind(styles);
 
@@ -20,11 +21,7 @@ const DetailPost = ({
         {place}에서{isMobile && <br />} {companion} {activity}
       </h1>
       <div className={cx('content')}>
-        <CommonLink
-          to={`/profile/@${nickname}`}
-          onClick={() => localStorage.setItem('targetUserId', id)}
-          className={cx('writer-img')}
-        >
+        <CommonLink to={profilePage(nickname, id)} className={cx('writer-img')}>
           <ProfileImage
             small
             className={cx('profile-image')}
@@ -33,8 +30,7 @@ const DetailPost = ({
         </CommonLink>
         <div>
           <CommonLink
-            to={`/profile/@${nickname}`}
-            onClick={() => localStorage.setItem('targetUserId', id)}
+            to={profilePage(nickname, id)}
             className={cx('writer-name')}
           >
             {nickname}
