@@ -50,6 +50,12 @@
     font-size: 1.6rem;
   }
 
+  .hover-effect {
+    cursor: default;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   .introduction {
     font-size: 1.6rem;
     padding: 1rem 0;

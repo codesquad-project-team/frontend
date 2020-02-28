@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
-import styles from './DropdownMenu.scss';
 import CommonLink from '../CommonLink/CommonLink';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { WEB_SERVER_URL } from '../../configs';
+import { profilePage } from '../../utils/utils';
+import styles from './DropdownMenu.scss';
 
 const cx = classNames.bind(styles);
 
@@ -39,13 +40,7 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
         <CommonLink to="/post/upload" onClick={toggleDropdownMenu}>
           <div className={cx('btns')}>글 작성</div>
         </CommonLink>
-        <CommonLink
-          to={`/profile/@${nickname}`}
-          onClick={() => {
-            localStorage.setItem('targetUserId', id);
-            toggleDropdownMenu();
-          }}
-        >
+        <CommonLink to={profilePage(nickname, id)} onClick={toggleDropdownMenu}>
           <div className={cx('btns')}>내 프로필</div>
         </CommonLink>
         <CommonLink to="/profile/edit">

@@ -12,7 +12,7 @@ const LocationUploader = ({
   setReadyToUpload,
   hasSelectedLocation
 }) => {
-  const { Modal, toggleModal, open } = useModal();
+  const { Modal, toggleModal, isOpen } = useModal();
 
   return (
     <>
@@ -26,7 +26,7 @@ const LocationUploader = ({
           장소검색
         </IconButton>
       )}
-      {open && (
+      {isOpen && (
         <Modal onClick={toggleModal}>
           <LocationFinder
             toggleModal={toggleModal}
