@@ -55,7 +55,7 @@ export const readFileAsDataURL = file =>
       resolve(target.result);
     });
     reader.readAsDataURL(file);
-  });
+  }).catch(err => console.warn(err));
 
 export const profilePage = (nickname, id) => ({
   pathname: `/profile/@${nickname}`,
