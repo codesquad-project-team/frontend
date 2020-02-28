@@ -6,6 +6,7 @@ import CommonPost from '../../components/CommonPost/CommonPost';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import IconButton from '../../components/CommonBtn/IconButton';
 import Header from '../../components/Header/Header';
+import ImageEditor from '../../components/ImageEditor';
 import ProfileImage from '../../components/ProfileImage/ProfileImage';
 import ProfileContentItem from '../../components/ProfileContentItem/ProfileContentItem';
 import useInput from '../../hooks/useInput';
@@ -13,19 +14,30 @@ import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
 import useModal from '../../hooks/useModal';
 import useS3 from '../../hooks/useS3';
-import { debounce } from '../../utils/utils';
+import { debounce, bindAsyncDispatch } from '../../utils/utils';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { WEB_SERVER_URL, MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
+import action from './action';
+import reducer from './reducer';
 import styles from './ProfileEditPage.scss';
 
 const cx = classNames.bind(styles);
 
 const ProfileEditPage = () => {
-  const { Modal, open, toggleModal } = useModal();
+  const { Modal, isOpen, toggleModal } = useModal();
   const { loggedIn, openSigninModal, setNeedsUserInfo } = useLoginContext();
   const { inputValue, setInputValue, handleChange } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
-  const [image, setImage] = useState({ fileData: [], previewUrl: '' });
+
+  const [image, setImage] = useState({
+    original: null,
+    originalURL: '',
+    forUpload: [],
+    previewURL: '',
+    cropperData: {}
+  });
+
+  const asyncDispatch = bindAsyncDispatch(setImage, reducer, action);
 
   const [currentNickname, setCurrentNickname] = useState('');
   const [nicknameValidity, setNicknameValidity] = useState({});
@@ -148,7 +160,7 @@ const ProfileEditPage = () => {
   };
 
   const handleSubmit = async () => {
-    const hasImageToUpload = image.previewUrl ? true : false;
+    const hasImageToUpload = image.previewURL ? true : false;
 
     const S3UploadedURL = hasImageToUpload ? await uploadImage() : '';
 
@@ -166,7 +178,7 @@ const ProfileEditPage = () => {
     const [S3UploadedURL] = await S3imageUploadHandler({
       albumName: nickname,
       albumNamePrefix: 'profile-images/',
-      images: image.fileData,
+      images: image.forUpload,
       setImageUploadError
     });
 
@@ -207,14 +219,11 @@ const ProfileEditPage = () => {
     }
   };
   const handleProfileImage = ({ target }) => {
-    const file = Array.from(target.files);
+    const file = Array.from(target.files)[0];
+    if (!file) return;
 
-    const reader = new FileReader();
-    reader.addEventListener('load', ({ target }) => {
-      setImage({ fileData: file, previewUrl: target.result });
-      setInitialPageEnter(false);
-    });
-    reader.readAsDataURL(file[0]);
+    asyncDispatch({ type: 'addNewImage', payload: { file } });
+    setInitialPageEnter(false);
   };
 
   useEffect(() => {
@@ -232,8 +241,6 @@ const ProfileEditPage = () => {
   useEffect(() => {
     !loggedIn && openSigninModal();
   }, [loggedIn]);
-
-  const imageSrc = initialPageEnter ? profileImage : image.previewUrl;
 
   return (
     <>
@@ -255,7 +262,7 @@ const ProfileEditPage = () => {
               <div className={cx('profile-image-section')}>
                 <ProfileImage
                   large
-                  src={imageSrc}
+                  src={initialPageEnter ? profileImage : image.previewURL}
                   className={cx('profile-image')}
                 />
                 <div className={cx('edit-btns')}>
@@ -309,6 +316,16 @@ const ProfileEditPage = () => {
                 제출
               </CommonBtn>
             </form>
+          )}
+          {isOpen && (
+            <ImageEditor
+              Modal={Modal}
+              asyncDispatch={asyncDispatch}
+              src={image.previewURL}
+              originalFile={image.original}
+              cropperData={image.cropperData}
+              onClose={toggleModal}
+            />
           )}
         </CommonPost>
       </CommonPost.background>
