@@ -13,8 +13,8 @@ const FollowerList = ({ Modal, type, onClose, userId }) => {
     URL: `${WEB_SERVER_URL}/user/${userId}/relationship/${type}`,
     errorMap: {
       400: 'userId 또는 type 오류',
-      401: '유효하지 않은 토큰',
-      500: '서버 에러'
+      401: '유효하지 않은 토큰입니다. 다시 로그인 해주세요.',
+      500: '서버에 문제가 생겼어요. 잠시 후에 다시 시도해주세요.'
     }
   });
 
