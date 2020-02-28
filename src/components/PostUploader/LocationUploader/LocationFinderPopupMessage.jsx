@@ -19,7 +19,7 @@ const LocationFinderPopupMessage = ({
   setPopupActionType,
   closeLocationFinder
 }) => {
-  const { open, toggleModal: togglePopup } = useModal();
+  const { isOpen, toggleModal: togglePopup } = useModal();
 
   const needsPopup = popupActionType !== 'CLOSE';
 
@@ -53,7 +53,7 @@ const LocationFinderPopupMessage = ({
   }, [popupActionType]);
 
   return (
-    open && (
+    isOpen && (
       <div className={cx('wrapper')}>
         {message}
         {popupActionType === 'SAVE_REQUIRED' && (

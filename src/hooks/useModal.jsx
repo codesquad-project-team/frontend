@@ -19,22 +19,22 @@ const Modal = ({ className = '', onClick, children }) => {
 };
 
 const useModal = () => {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const toggleModal = order => {
     switch (order) {
       case 'open':
-        setOpen(true);
+        setIsOpen(true);
         break;
       case 'close':
-        setOpen(false);
+        setIsOpen(false);
         break;
       default:
-        setOpen(!open);
+        setIsOpen(!isOpen);
         break;
     }
   };
 
-  return { Modal, toggleModal, open };
+  return { Modal, toggleModal, isOpen };
 };
 
 export default useModal;

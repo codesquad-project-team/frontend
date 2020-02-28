@@ -12,7 +12,7 @@ const cx = classNames.bind(styles);
 const reducer = (prevState, state) => ({ ...prevState, ...state });
 
 const ProfileInfo = ({ data, isMyProfile, userId }) => {
-  const { Modal, open, toggleModal } = useModal();
+  const { Modal, isOpen, toggleModal } = useModal();
   const [profileContent, setProfileContent] = useReducer(reducer, data);
   const { loggedIn, openSigninModal } = useLoginContext();
   const [error, setError] = useState(null);
@@ -93,7 +93,7 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
         </div>
         <div className={cx('introduction')}>{introduction}</div>
       </div>
-      {open && (
+      {isOpen && (
         <FollowerList
           Modal={Modal}
           type={modalType}
