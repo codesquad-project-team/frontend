@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useReducer } from 'react';
 import classNames from 'classnames/bind';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { css } from '@emotion/core';
@@ -39,10 +39,7 @@ const ProfileEditPage = () => {
 
   const asyncDispatch = bindAsyncDispatch(setImage, reducer, action);
 
-  const [currentNickname, setCurrentNickname] = useState('');
-  const [nicknameValidity, setNicknameValidity] = useState({});
-  const [phoneValidity, setPhoneValidity] = useState('');
-  const [isNewImageAdded, setIsNewImageAdded] = useState(false);
+  const [initialUserInfo, saveInitialUserInfo] = useState();
 
   const { loadError } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
@@ -68,17 +65,16 @@ const ProfileEditPage = () => {
     } = userInfo;
 
     // 리액트에서 input 태그의 비어있는 값을 null로 표현하기 보다는 undefined 으로 사용하는 것을 권고함
-
     const initialValue = {
       profileImage: profileImage === null ? undefined : profileImage,
       nickname,
-      email: email === null ? undefined : email,
-      phone: phone === null ? undefined : phone,
-      introduction: intro === null ? undefined : intro
+      email: email === null ? '' : email,
+      phone: phone === null ? '' : phone,
+      introduction: intro === null ? '' : intro //input을 다 지우면 빈문자열('')임. 따라서 수정 여부 비교를 위해서는 초기값이 빈문자열이어야함.
     };
 
-    setCurrentNickname(initialValue.nickname);
-    setInputValue(initialValue);
+    saveInitialUserInfo(initialValue);
+    setInputValue(initialValue); //TODO: setInitialValues 같은 이름으로 수정하는건 어떨까?
   };
 
   const checkNicknameFromServer = useCallback(async nickname => {
@@ -90,18 +86,27 @@ const ProfileEditPage = () => {
     });
     switch (res.status) {
       case 200:
-        setNicknameValidity('AVAILABLE');
+        setValidities({
+          nickname: { isValid: true, message: 'AVAILABLE' }
+        });
         break;
       case 400:
-        setNicknameValidity('HAS_BLANKS');
+        setValidities({
+          nickname: { isValid: false, message: 'HAS_BLANKS' }
+        });
         break;
       case 409:
-        setNicknameValidity('ALREADY_IN_USE');
+        setValidities({
+          nickname: { isValid: false, message: 'ALREADY_IN_USE' }
+        });
         break;
       case 500:
-        setNicknameValidity('SERVER_ERROR');
+        setValidities({
+          nickname: { isValid: false, message: 'SERVER_ERROR' }
+        });
         break;
       default:
+        //TODO: unknown error
         break;
     }
   }, []);
@@ -110,24 +115,26 @@ const ProfileEditPage = () => {
     debounce((nickname, currentNickname) => {
       const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
       const hasBlank = /\s/.test(nickname);
-      const onlyOneCharacter = nickname.length === 1;
       const sameNickname = nickname === currentNickname;
 
       switch (true) {
         case sameNickname:
-          setNicknameValidity('CURRENT_NICKNAME');
+          setValidities({
+            nickname: { isValid: true, message: 'CURRENT_NICKNAME' }
+          });
           break;
         case isValid:
           checkNicknameFromServer(nickname);
           break;
         case hasBlank:
-          setNicknameValidity('HAS_BLANKS');
-          break;
-        case onlyOneCharacter:
-          setNicknameValidity('NO_MESSAGE');
+          setValidities({
+            nickname: { isValid: false, message: 'HAS_BLANKS' }
+          });
           break;
         default:
-          setNicknameValidity('INFO_MESSAGE');
+          setValidities({
+            nickname: { isValid: false, message: 'INFO_MESSAGE' }
+          });
           break;
       }
     }),
@@ -140,23 +147,63 @@ const ProfileEditPage = () => {
         /^[0-9]{3}[-]+[0-9]{4}[-]+[0-9]{4}$/.test(phone) || !phone; //optional이므로 입력 안해도 허용
 
       isValid
-        ? setPhoneValidity('NO_MESSAGE')
-        : setPhoneValidity('INVALID_PHONE_NUMBER');
+        ? setValidities({ phone: { isValid: true, message: 'NO_MESSAGE' } })
+        : setValidities({
+            phone: { isValid: false, message: 'INVALID_PHONE_NUMBER' }
+          });
     }),
     []
   );
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (phoneValidity === 'INVALID_PHONE_NUMBER') {
-      return alert('휴대폰 정보를 형식에 맞게 입력해주세요!');
-    }
-    if (nicknameValidity === 'CURRENT_NICKNAME') return;
-    if (nicknameValidity === 'AVAILABLE') {
-      requestUpdate();
-    } else {
-      setNicknameValidity('INFO_MESSAGE');
-    }
+    isProfileEdited(editStatus) && isAllValid(validities)
+      ? requestUpdate()
+      : showErrorMessage();
+  };
+
+  const mergeState = (prevState, newState) => ({
+    ...prevState,
+    ...newState
+  });
+
+  const [validities, setValidities] = useReducer(mergeState, {
+    nickname: { isValid: true, message: '' },
+    email: { isValid: true, message: '' },
+    phone: { isValid: true, message: '' }
+  });
+
+  const [editStatus, setEditStatus] = useReducer(mergeState, {
+    image: { isEdited: false },
+    nickname: { isEdited: false },
+    introduction: { isEdited: false },
+    email: { isEdited: false },
+    phone: { isEdited: false }
+  });
+
+  const bindHandleChange = property => e => {
+    changeEditStatus(property, e);
+    handleChange(e);
+  };
+
+  const changeEditStatus = (property, e) => {
+    initialUserInfo[property] === e.target.value
+      ? setEditStatus({ [property]: { isEdited: false } })
+      : setEditStatus({ [property]: { isEdited: true } });
+  };
+  const isAllValid = ({ email, phone, nickname }) =>
+    email.isValid && phone.isValid && nickname.isValid;
+
+  const isProfileEdited = ({ image, nickname, introduction, email, phone }) =>
+    image.isEdited ||
+    nickname.isEdited ||
+    introduction.isEdited ||
+    email.isEdited ||
+    phone.isEdited;
+
+  const showErrorMessage = () => {
+    console.warn('error임미당');
+    //TODO: shake();
   };
 
   const requestUpdate = async () => {
@@ -202,8 +249,10 @@ const ProfileEditPage = () => {
 
     switch (res.status) {
       case 200:
-        setCurrentNickname(nickname);
-        setNicknameValidity('CURRENT_NICKNAME');
+        saveInitialUserInfo(prevState => ({ ...prevState, nickname }));
+        setValidities({
+          nickname: { isValid: true, message: 'CURRENT_NICKNAME' }
+        });
         setNeedsUserInfo(state => !state);
         alert('회원 정보가 수정 되었습니다!');
         break;
@@ -223,15 +272,12 @@ const ProfileEditPage = () => {
     if (!file) return;
 
     asyncDispatch({ type: 'addNewImage', payload: { file } });
-    setIsNewImageAdded(true);
+    setEditStatus({ image: { isEdited: true } });
   };
 
   useEffect(() => {
-    if (nickname) {
-      checkNicknameValidation(nickname, currentNickname);
-    } else {
-      setNicknameValidity('');
-    }
+    if (!initialUserInfo) return;
+    checkNicknameValidation(nickname, initialUserInfo.nickname);
   }, [nickname]);
 
   useEffect(() => {
@@ -262,7 +308,9 @@ const ProfileEditPage = () => {
               <div className={cx('profile-image-section')}>
                 <ProfileImage
                   large
-                  src={isNewImageAdded ? image.previewURL : profileImage}
+                  src={
+                    editStatus.image.isEdited ? image.previewURL : profileImage
+                  }
                   className={cx('profile-image')}
                 />
                 <div className={cx('edit-btns')}>
@@ -273,7 +321,7 @@ const ProfileEditPage = () => {
                   >
                     프로필 사진 바꾸기
                   </IconButton>
-                  {isNewImageAdded && (
+                  {editStatus.image.isEdited && (
                     <IconButton
                       src={`${IMAGE_BUCKET_URL}/edit-icon1.png`}
                       onClick={toggleModal}
@@ -287,27 +335,27 @@ const ProfileEditPage = () => {
                 label="닉네임"
                 value={nickname}
                 name="nickname"
-                changeHandler={handleChange}
-                nicknameValidity={nicknameValidity}
+                changeHandler={bindHandleChange('nickname')}
+                messageKey={validities.nickname.message}
               />
               <ProfileContentItem
                 label="소개"
                 value={introduction}
                 name="introduction"
-                changeHandler={handleChange}
+                changeHandler={bindHandleChange('introduction')}
               />
               <ProfileContentItem
                 label="이메일"
                 value={email}
                 name="email"
-                changeHandler={handleChange}
+                changeHandler={bindHandleChange('email')}
               />
               <ProfileContentItem
                 label="휴대폰 번호"
                 value={phone}
                 name="phone"
-                changeHandler={handleChange}
-                nicknameValidity={phoneValidity}
+                changeHandler={bindHandleChange('phone')}
+                messageKey={validities.phone.message}
               />
               <CommonBtn
                 className={cx('submit-btn')}
