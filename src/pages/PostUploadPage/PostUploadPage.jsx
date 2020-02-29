@@ -50,11 +50,13 @@ const PostUploadPage = () => {
     ...initialTitle
   } = initial.post;
 
-  const [readyToUpload, setReadyToUpload] = useReducer(
+  const [
+    { hasSelectedLocation, hasAllTitles, isOverDescLimit },
+    setReadyToUpload
+  ] = useReducer(
     readyToUploadReducer,
     isEditMode ? { hasSelectedLocation: true } : {}
   );
-  const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
   const [isEdited, setIsEdited] = useState(false);
 
   const bindUpdater = updater => param => {
@@ -65,7 +67,11 @@ const PostUploadPage = () => {
     isEditMode ? action.getImages(initialImages) : []
   );
   const dispatch = bindDispatch(bindUpdater(setImages), reducer);
-  const asyncDispatch = bindAsyncDispatch(setImages, reducer, action);
+  const asyncDispatch = bindAsyncDispatch(
+    bindUpdater(setImages),
+    reducer,
+    action
+  );
 
   const [selectedLocation, setSelectedLocation] = useState(initial.location);
   const { longitude, latitude, name } = selectedLocation;
@@ -85,7 +91,7 @@ const PostUploadPage = () => {
 
   const showUploadFailReason = () => {
     switch (true) {
-      case !images.previewUrls.length:
+      case !images.length:
         alert('사진을 1개 이상 선택해주세요.');
         break;
       case !hasSelectedLocation:
@@ -189,7 +195,7 @@ const PostUploadPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (needsMoreData()) {
+    if (isSubmitReady()) {
       showUploadFailReason();
       return;
     }
@@ -204,8 +210,8 @@ const PostUploadPage = () => {
     requestPostUpload(postData);
   };
 
-  const needsMoreData = () =>
-    !images.length || !hasSelectedLocation || !hasAllTitles || isOverDescLimit;
+  const isSubmitReady = () =>
+    images.length && hasSelectedLocation && hasAllTitles && isOverDescLimit;
 
   const handleCancel = () => history.goBack();
 
