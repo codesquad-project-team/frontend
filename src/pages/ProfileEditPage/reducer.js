@@ -12,7 +12,7 @@ const cropImage = (image, { croppedFile, previewURL, cropperData }) => ({
 const addNewImage = (image, { file, previewURL }) => ({
   original: file,
   originalURL: previewURL,
-  forUpload: file,
+  forUpload: [file],
   previewURL
 });
 
