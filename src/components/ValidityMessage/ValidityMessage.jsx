@@ -9,7 +9,7 @@ const messageMap = {
   AVAILABLE: '사용 가능한 닉네임이에요.',
   HAS_BLANKS: '닉네임에 공백이 있어요.',
   ALREADY_IN_USE: '이미 사용중인 닉네임이에요.',
-  CURRENT_NICKNAME: '현재 닉네임이에요.',
+  IS_PREVIOUS_NICKNAME: '현재 닉네임이에요.',
   SERVER_ERROR: '서버에서 에러가 발생했어요. 잠시후에 다시 시도해주세요.',
   NO_MESSAGE: '',
   INFO_MESSAGE:
@@ -29,7 +29,8 @@ const makeMessageLineByLine = (messageKey, isMobile) =>
 
 const ValidityMessage = ({ messageKey, styleObj = {} }) => {
   const { isMobile } = useMediaQuerySet();
-  const valid = messageKey === 'AVAILABLE' || messageKey === 'CURRENT_NICKNAME';
+  const valid =
+    messageKey === 'AVAILABLE' || messageKey === 'IS_PREVIOUS_NICKNAME';
 
   const message = makeMessageLineByLine(messageKey, isMobile);
 

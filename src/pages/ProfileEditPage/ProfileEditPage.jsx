@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useReducer } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames/bind';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { css } from '@emotion/core';
@@ -9,6 +9,8 @@ import Header from '../../components/Header/Header';
 import ImageEditor from '../../components/ImageEditor';
 import ProfileImage from '../../components/ProfileImage/ProfileImage';
 import ProfileContentItem from '../../components/ProfileContentItem/ProfileContentItem';
+import useProfileValidation from '../../hooks/useProfileValidation';
+import useEditStatus from '../../hooks/useEditStatus';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
@@ -76,130 +78,78 @@ const ProfileEditPage = () => {
     saveInitialUserInfo(initialValue);
     setInputValue(initialValue); //TODO: setInitialValues 같은 이름으로 수정하는건 어떨까?
   };
+  const {
+    validities,
+    isAllValid,
+    setValid,
+    setInvalid,
+    setNicknameAlreadyInUse,
+    setNicknameAvailable,
+    setNicknameHasBlanks,
+    setValidationServerError,
+    setIsPreviousNickname,
+    showNicknameInfoMessage
+  } = useProfileValidation();
 
-  const checkNicknameFromServer = useCallback(async nickname => {
-    const res = await fetch(`${WEB_SERVER_URL}/user/checkNicknameDuplication`, {
+  const { requestFetch: checkNicknameFromServer } = useFetch({
+    URL: `${WEB_SERVER_URL}/user/checkNicknameDuplication`,
+    options: {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nickname })
-    });
-    switch (res.status) {
-      case 200:
-        setValidities({
-          nickname: { isValid: true, message: 'AVAILABLE' }
-        });
+    },
+    callback: setNicknameAvailable,
+    errorMap: {
+      400: setNicknameHasBlanks,
+      409: setNicknameAlreadyInUse,
+      500: setValidationServerError
+    },
+    needsJson: false
+  });
+
+  const checkNicknameValidation = debounce((nickname, currentNickname) => {
+    const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
+    const hasBlank = /\s/.test(nickname);
+    const sameNickname = nickname === currentNickname;
+
+    switch (true) {
+      case sameNickname:
+        setIsPreviousNickname();
         break;
-      case 400:
-        setValidities({
-          nickname: { isValid: false, message: 'HAS_BLANKS' }
-        });
+      case isValid:
+        checkNicknameFromServer();
         break;
-      case 409:
-        setValidities({
-          nickname: { isValid: false, message: 'ALREADY_IN_USE' }
-        });
-        break;
-      case 500:
-        setValidities({
-          nickname: { isValid: false, message: 'SERVER_ERROR' }
-        });
+      case hasBlank:
+        setNicknameHasBlanks();
         break;
       default:
-        //TODO: unknown error
+        showNicknameInfoMessage();
         break;
     }
-  }, []);
-
-  const checkNicknameValidation = useCallback(
-    debounce((nickname, currentNickname) => {
-      const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
-      const hasBlank = /\s/.test(nickname);
-      const sameNickname = nickname === currentNickname;
-
-      switch (true) {
-        case sameNickname:
-          setValidities({
-            nickname: { isValid: true, message: 'CURRENT_NICKNAME' }
-          });
-          break;
-        case isValid:
-          checkNicknameFromServer(nickname);
-          break;
-        case hasBlank:
-          setValidities({
-            nickname: { isValid: false, message: 'HAS_BLANKS' }
-          });
-          break;
-        default:
-          setValidities({
-            nickname: { isValid: false, message: 'INFO_MESSAGE' }
-          });
-          break;
-      }
-    }),
-    []
-  );
+  });
 
   const checkPhoneNumberValidation = useCallback(
     debounce(phone => {
       const isValid =
         /^[0-9]{3}[-]+[0-9]{4}[-]+[0-9]{4}$/.test(phone) || !phone; //optional이므로 입력 안해도 허용
 
-      isValid
-        ? setValidities({ phone: { isValid: true, message: 'NO_MESSAGE' } })
-        : setValidities({
-            phone: { isValid: false, message: 'INVALID_PHONE_NUMBER' }
-          });
+      isValid ? setValid('phone') : setInvalid('phone');
     }),
     []
   );
-
+  const { setEditStatus, changeEditStatus, isEdited } = useEditStatus(
+    initialUserInfo
+  );
   const handleSubmit = e => {
     e.preventDefault();
-    isProfileEdited(editStatus) && isAllValid(validities)
-      ? requestUpdate()
-      : showErrorMessage();
+    isEdited() && isAllValid(validities) ? requestUpdate() : showErrorMessage();
   };
-
-  const mergeState = (prevState, newState) => ({
-    ...prevState,
-    ...newState
-  });
-
-  const [validities, setValidities] = useReducer(mergeState, {
-    nickname: { isValid: true, message: '' },
-    email: { isValid: true, message: '' },
-    phone: { isValid: true, message: '' }
-  });
-
-  const [editStatus, setEditStatus] = useReducer(mergeState, {
-    image: { isEdited: false },
-    nickname: { isEdited: false },
-    introduction: { isEdited: false },
-    email: { isEdited: false },
-    phone: { isEdited: false }
-  });
 
   const bindHandleChange = property => e => {
-    changeEditStatus(property, e);
+    changeEditStatus(initialUserInfo, property, e);
     handleChange(e);
   };
-
-  const changeEditStatus = (property, e) => {
-    initialUserInfo[property] === e.target.value
-      ? setEditStatus({ [property]: { isEdited: false } })
-      : setEditStatus({ [property]: { isEdited: true } });
-  };
-  const isAllValid = ({ email, phone, nickname }) =>
-    email.isValid && phone.isValid && nickname.isValid;
-
-  const isProfileEdited = ({ image, nickname, introduction, email, phone }) =>
-    image.isEdited ||
-    nickname.isEdited ||
-    introduction.isEdited ||
-    email.isEdited ||
-    phone.isEdited;
 
   const showErrorMessage = () => {
     console.warn('error임미당');
@@ -250,9 +200,7 @@ const ProfileEditPage = () => {
     switch (res.status) {
       case 200:
         saveInitialUserInfo(prevState => ({ ...prevState, nickname }));
-        setValidities({
-          nickname: { isValid: true, message: 'CURRENT_NICKNAME' }
-        });
+        setIsPreviousNickname();
         setNeedsUserInfo(state => !state);
         alert('회원 정보가 수정 되었습니다!');
         break;
@@ -272,7 +220,7 @@ const ProfileEditPage = () => {
     if (!file) return;
 
     asyncDispatch({ type: 'addNewImage', payload: { file } });
-    setEditStatus({ image: { isEdited: true } });
+    setEditStatus({ profileImage: { isEdited: true } });
   };
 
   useEffect(() => {
@@ -308,9 +256,7 @@ const ProfileEditPage = () => {
               <div className={cx('profile-image-section')}>
                 <ProfileImage
                   large
-                  src={
-                    editStatus.image.isEdited ? image.previewURL : profileImage
-                  }
+                  src={image.previewURL || profileImage}
                   className={cx('profile-image')}
                 />
                 <div className={cx('edit-btns')}>
@@ -321,7 +267,7 @@ const ProfileEditPage = () => {
                   >
                     프로필 사진 바꾸기
                   </IconButton>
-                  {editStatus.image.isEdited && (
+                  {image.previewURL && (
                     <IconButton
                       src={`${IMAGE_BUCKET_URL}/edit-icon1.png`}
                       onClick={toggleModal}
