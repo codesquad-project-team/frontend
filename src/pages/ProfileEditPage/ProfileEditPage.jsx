@@ -54,7 +54,7 @@ const ProfileEditPage = () => {
   const { loading } = useFetch({
     URL: `${WEB_SERVER_URL}/user/myinfo`,
     options: { credentials: 'include' },
-    callback: json => initUserInfo(json)
+    onSuccess: json => initUserInfo(json)
   });
 
   const initUserInfo = userInfo => {
@@ -78,6 +78,11 @@ const ProfileEditPage = () => {
     saveInitialUserInfo(initialValue);
     setInputValue(initialValue); //TODO: setInitialValues 같은 이름으로 수정하는건 어떨까?
   };
+
+  const { setEditStatus, changeEditStatus, isEdited } = useEditStatus(
+    initialUserInfo
+  );
+
   const {
     validities,
     isAllValid,
@@ -91,23 +96,6 @@ const ProfileEditPage = () => {
     showNicknameInfoMessage
   } = useProfileValidation();
 
-  const { requestFetch: checkNicknameFromServer } = useFetch({
-    URL: `${WEB_SERVER_URL}/user/checkNicknameDuplication`,
-    options: {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nickname })
-    },
-    callback: setNicknameAvailable,
-    errorMap: {
-      400: setNicknameHasBlanks,
-      409: setNicknameAlreadyInUse,
-      500: setValidationServerError
-    },
-    needsJson: false
-  });
-
   const checkNicknameValidation = debounce((nickname, currentNickname) => {
     const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
     const hasBlank = /\s/.test(nickname);
@@ -118,7 +106,7 @@ const ProfileEditPage = () => {
         setIsPreviousNickname();
         break;
       case isValid:
-        checkNicknameFromServer();
+        requestValidationToServer(nickname);
         break;
       case hasBlank:
         setNicknameHasBlanks();
@@ -129,6 +117,25 @@ const ProfileEditPage = () => {
     }
   });
 
+  const { requestFetch: requestValidationToServer } = useFetch({
+    onFetch: nickname => checkNicknameOnServer(nickname),
+    onSuccess: setNicknameAvailable,
+    onError: {
+      400: setNicknameHasBlanks,
+      409: setNicknameAlreadyInUse,
+      500: setValidationServerError
+    }
+  });
+
+  const checkNicknameOnServer = async nickname => {
+    return await fetch(`${WEB_SERVER_URL}/user/checkNicknameDuplication`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nickname })
+    });
+  };
+
   const checkPhoneNumberValidation = useCallback(
     debounce(phone => {
       const isValid =
@@ -138,22 +145,10 @@ const ProfileEditPage = () => {
     }),
     []
   );
-  const { setEditStatus, changeEditStatus, isEdited } = useEditStatus(
-    initialUserInfo
-  );
+
   const handleSubmit = e => {
     e.preventDefault();
     isEdited() && isAllValid(validities) ? requestUpdate() : showErrorMessage();
-  };
-
-  const bindHandleChange = property => e => {
-    changeEditStatus(initialUserInfo, property, e);
-    handleChange(e);
-  };
-
-  const showErrorMessage = () => {
-    console.warn('error임미당');
-    //TODO: shake();
   };
 
   const requestUpdate = async () => {
@@ -161,7 +156,7 @@ const ProfileEditPage = () => {
 
     const S3UploadedURL = hasImageToUpload ? await uploadImage() : '';
 
-    updateUserInfo(S3UploadedURL);
+    requestUpdateUserInfo(S3UploadedURL);
   };
 
   const uploadImage = async () => {
@@ -170,7 +165,6 @@ const ProfileEditPage = () => {
         `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
       );
     }
-
     // await : promise의 resolve Value를 리턴
     const [S3UploadedURL] = await S3imageUploadHandler({
       albumName: nickname,
@@ -182,45 +176,52 @@ const ProfileEditPage = () => {
     return S3UploadedURL;
   };
 
-  const updateUserInfo = async (uploadedUrl = '') => {
-    const bodyObj = uploadedUrl
-      ? { ...inputValue, profileImage: uploadedUrl }
+  const { requestFetch: requestUpdateUserInfo } = useFetch({
+    onFetch: uploadedURL => sendUpdatedUserInfo(uploadedURL),
+    onSuccess: () => handleUpdateSuccess(),
+    onError: {
+      400: '요청이 올바르지 않습니다.',
+      401: '인증되지 않은 토큰입니다.'
+    }
+  });
+
+  const sendUpdatedUserInfo = async (uploadedURL = '') => {
+    const bodyObj = uploadedURL
+      ? { ...inputValue, profileImage: uploadedURL }
       : inputValue;
 
-    const res = await fetch(`${WEB_SERVER_URL}/user/profile`, {
+    return await fetch(`${WEB_SERVER_URL}/user/profile`, {
       method: 'PUT',
       mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify(bodyObj)
     });
-
-    switch (res.status) {
-      case 200:
-        saveInitialUserInfo(prevState => ({ ...prevState, nickname }));
-        setIsPreviousNickname();
-        setNeedsUserInfo(state => !state);
-        alert('회원 정보가 수정 되었습니다!');
-        break;
-      case 400:
-        alert('요청이 올바르지 않습니다.');
-        break;
-      case 401:
-        alert('인증되지 않은 토큰입니다.');
-        break;
-      default:
-        //do nothing
-        break;
-    }
   };
+
+  const handleUpdateSuccess = () => {
+    saveInitialUserInfo(prevState => ({ ...prevState, nickname })); //TODO: 닉네임 이외 다른 정보도 업데이트 필요.
+    setIsPreviousNickname();
+    setNeedsUserInfo(state => !state);
+    alert('회원 정보가 수정 되었습니다!');
+  };
+
+  const showErrorMessage = () => {
+    console.warn('error임미당');
+    //TODO: shake();
+  };
+
   const handleProfileImage = ({ target }) => {
     const file = Array.from(target.files)[0];
     if (!file) return;
 
     asyncDispatch({ type: 'addNewImage', payload: { file } });
     setEditStatus({ profileImage: { isEdited: true } });
+  };
+
+  const bindHandleChange = property => e => {
+    changeEditStatus(initialUserInfo, property, e);
+    handleChange(e);
   };
 
   useEffect(() => {

@@ -29,8 +29,8 @@ const PostContainer = ({ headerOn, writerId = '' }) => {
     URL: `${WEB_SERVER_URL}/post?page=${page}${
       writerId ? `&writerid=${writerId}` : ''
     }`,
-    callback: json => mergeResponse(response, json),
-    errorMap: { 204: () => setResponse(null) }
+    onSuccess: json => mergeResponse(response, json),
+    onError: { 204: () => setResponse(null) }
   });
 
   const mergeResponse = (prevResponse, response) => {
