@@ -149,6 +149,12 @@ const ProfileEditPage = () => {
     []
   );
 
+  const checkEmailValidation = debounce(email => {
+    const regExp = /^[A-Za-z0-9_.-]+@[A-Za-z0-9-]+\.[A-Za-z0-9-]+/;
+
+    regExp.test(email) || !email ? setValid('email') : setInvalid('email');
+  });
+
   const handleSubmit = e => {
     e.preventDefault();
     isEdited() && isAllValid(validities) ? requestUpdate() : showErrorMessage();
@@ -254,6 +260,10 @@ const ProfileEditPage = () => {
   }, [phone]);
 
   useEffect(() => {
+    checkEmailValidation(email);
+  }, [email]);
+
+  useEffect(() => {
     !loggedIn && openSigninModal();
   }, [loggedIn]);
 
@@ -316,6 +326,7 @@ const ProfileEditPage = () => {
                 value={email}
                 name="email"
                 changeHandler={bindHandleChange('email')}
+                messageKey={validities.email.message}
               />
               <ProfileContentItem
                 label="휴대폰 번호"
