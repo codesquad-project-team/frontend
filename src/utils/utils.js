@@ -114,3 +114,7 @@ export const bindDispatch = (updater, reducer) => actionCreator => {
     console.warn('action type을 확인해주세요.');
   }
 };
+
+export const handleResponse = (key, callbackMap) => {
+  callbackMap[key]();
+};
