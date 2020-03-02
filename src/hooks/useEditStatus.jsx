@@ -47,11 +47,20 @@ const useEditStatus = param => {
   const isEdited = () =>
     Object.keys(editStatus).some(property => editStatus[property].isEdited);
 
+  const getEditedProperties = () =>
+    Object.keys(editStatus).filter(property => editStatus[property].isEdited);
+
   useEffect(() => {
     setEditStatus(initialStatus);
   }, [initialStatus]);
 
-  return { editStatus, setEditStatus, changeEditStatus, isEdited };
+  return {
+    editStatus,
+    setEditStatus,
+    changeEditStatus,
+    isEdited,
+    getEditedProperties
+  };
 };
 
 export default useEditStatus;

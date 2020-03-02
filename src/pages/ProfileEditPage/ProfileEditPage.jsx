@@ -79,9 +79,12 @@ const ProfileEditPage = () => {
     setInputValue(initialValue); //TODO: setInitialValues 같은 이름으로 수정하는건 어떨까?
   };
 
-  const { setEditStatus, changeEditStatus, isEdited } = useEditStatus(
-    initialUserInfo
-  );
+  const {
+    setEditStatus,
+    changeEditStatus,
+    isEdited,
+    getEditedProperties
+  } = useEditStatus(initialUserInfo);
 
   const {
     validities,
@@ -152,11 +155,24 @@ const ProfileEditPage = () => {
   };
 
   const requestUpdate = async () => {
+    const editedProperties = getEditedProperties();
+    const updatedValues = filterUpdatedValue(editedProperties, inputValue);
+
     const hasImageToUpload = image.previewURL ? true : false;
+    const S3UploadedURL = hasImageToUpload && (await uploadImage());
 
-    const S3UploadedURL = hasImageToUpload ? await uploadImage() : '';
+    const userInfo = S3UploadedURL
+      ? { ...updatedValues, profileImage: S3UploadedURL }
+      : updatedValues;
 
-    requestUpdateUserInfo(S3UploadedURL);
+    requestUpdateUserInfo(userInfo);
+  };
+
+  const filterUpdatedValue = (editedProperties, inputValue) => {
+    return editedProperties.reduce(
+      (acc, property) => ({ ...acc, [property]: inputValue[property] }),
+      {}
+    );
   };
 
   const uploadImage = async () => {
@@ -177,7 +193,7 @@ const ProfileEditPage = () => {
   };
 
   const { requestFetch: requestUpdateUserInfo } = useFetch({
-    onFetch: uploadedURL => sendUpdatedUserInfo(uploadedURL),
+    onFetch: userInfo => sendUpdatedUserInfo(userInfo),
     onSuccess: () => handleUpdateSuccess(),
     onError: {
       400: '요청이 올바르지 않습니다.',
@@ -185,22 +201,21 @@ const ProfileEditPage = () => {
     }
   });
 
-  const sendUpdatedUserInfo = async (uploadedURL = '') => {
-    const bodyObj = uploadedURL
-      ? { ...inputValue, profileImage: uploadedURL }
-      : inputValue;
-
+  const sendUpdatedUserInfo = async userInfo => {
     return await fetch(`${WEB_SERVER_URL}/user/profile`, {
       method: 'PUT',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify(bodyObj)
+      body: JSON.stringify(userInfo)
     });
   };
 
   const handleUpdateSuccess = () => {
-    saveInitialUserInfo(prevState => ({ ...prevState, nickname })); //TODO: 닉네임 이외 다른 정보도 업데이트 필요.
+    saveInitialUserInfo({
+      ...inputValue,
+      profileImage: image.previewURL || profileImage
+    });
     setIsPreviousNickname();
     setNeedsUserInfo(state => !state);
     alert('회원 정보가 수정 되었습니다!');
@@ -216,6 +231,11 @@ const ProfileEditPage = () => {
     if (!file) return;
 
     asyncDispatch({ type: 'addNewImage', payload: { file } });
+    setEditStatus({ profileImage: { isEdited: true } });
+  };
+
+  const handleImageEdit = dispatch => action => {
+    dispatch(action);
     setEditStatus({ profileImage: { isEdited: true } });
   };
 
@@ -317,7 +337,7 @@ const ProfileEditPage = () => {
           {isOpen && (
             <ImageEditor
               Modal={Modal}
-              asyncDispatch={asyncDispatch}
+              asyncDispatch={handleImageEdit(asyncDispatch)}
               src={image.previewURL}
               originalFile={image.original}
               cropperData={image.cropperData}
