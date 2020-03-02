@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import classNames from 'classnames/bind';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { css } from '@emotion/core';
@@ -11,6 +11,7 @@ import ProfileImage from '../../components/ProfileImage/ProfileImage';
 import ProfileContentItem from '../../components/ProfileContentItem/ProfileContentItem';
 import useProfileValidation from '../../hooks/useProfileValidation';
 import useEditStatus from '../../hooks/useEditStatus';
+import useShakeAnimation from '../../hooks/useShakeAnimation';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
@@ -28,6 +29,14 @@ const cx = classNames.bind(styles);
 const ProfileEditPage = () => {
   const { Modal, isOpen, toggleModal } = useModal();
   const { loggedIn, openSigninModal, setNeedsUserInfo } = useLoginContext();
+
+  const nicknameForm = useRef();
+  const [shakeNickname] = useShakeAnimation(nicknameForm);
+  const emailForm = useRef();
+  const [shakeEmail] = useShakeAnimation(emailForm);
+  const phoneForm = useRef();
+  const [shakePhone] = useShakeAnimation(phoneForm);
+
   const { inputValue, setInputValue, handleChange } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
 
@@ -89,6 +98,7 @@ const ProfileEditPage = () => {
   const {
     validities,
     isAllValid,
+    getInvalidProperties,
     setValid,
     setInvalid,
     setNicknameAlreadyInUse,
@@ -157,7 +167,7 @@ const ProfileEditPage = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    isEdited() && isAllValid(validities) ? requestUpdate() : showErrorMessage();
+    isEdited() && isAllValid(validities) ? requestUpdate() : showErrorEffect();
   };
 
   const requestUpdate = async () => {
@@ -227,9 +237,14 @@ const ProfileEditPage = () => {
     alert('회원 정보가 수정 되었습니다!');
   };
 
-  const showErrorMessage = () => {
-    console.warn('error임미당');
-    //TODO: shake();
+  const showErrorEffect = () => {
+    const shakeMap = {
+      nickname: shakeNickname,
+      email: shakeEmail,
+      phone: shakePhone
+    };
+    const invalidProperties = getInvalidProperties();
+    invalidProperties.forEach(property => shakeMap[property]());
   };
 
   const handleProfileImage = ({ target }) => {
@@ -309,6 +324,7 @@ const ProfileEditPage = () => {
                 </div>
               </div>
               <ProfileContentItem
+                forwardedRef={nicknameForm}
                 label="닉네임"
                 value={nickname}
                 name="nickname"
@@ -322,6 +338,7 @@ const ProfileEditPage = () => {
                 changeHandler={bindHandleChange('introduction')}
               />
               <ProfileContentItem
+                forwardedRef={emailForm}
                 label="이메일"
                 value={email}
                 name="email"
@@ -329,6 +346,7 @@ const ProfileEditPage = () => {
                 messageKey={validities.email.message}
               />
               <ProfileContentItem
+                forwardedRef={phoneForm}
                 label="휴대폰 번호"
                 value={phone}
                 name="phone"

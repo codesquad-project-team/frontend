@@ -17,6 +17,9 @@ const useProfileValidation = () => {
     isAllValid: () =>
       Object.keys(validities).every(property => validities[property].isValid),
 
+    getInvalidProperties: () =>
+      Object.keys(validities).filter(property => !validities[property].isValid),
+
     setInvalid: property =>
       setValidities({
         [property]: {
