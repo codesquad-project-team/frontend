@@ -4,7 +4,7 @@ const reducer = ({ type, payload }) => image => {
 
 const cropImage = (image, { croppedFile, previewURL, cropperData }) => ({
   ...image,
-  forUpload: croppedFile,
+  forUpload: [croppedFile],
   previewURL,
   cropperData
 });
