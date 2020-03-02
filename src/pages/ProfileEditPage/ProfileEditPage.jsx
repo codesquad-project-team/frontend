@@ -17,7 +17,7 @@ import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
 import useModal from '../../hooks/useModal';
 import useS3 from '../../hooks/useS3';
-import { debounce, bindAsyncDispatch } from '../../utils/utils';
+import { debounce, bindAsyncDispatch, handleResponse } from '../../utils/utils';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { WEB_SERVER_URL, MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
 import action from './action';
@@ -119,7 +119,7 @@ const ProfileEditPage = () => {
         setIsPreviousNickname();
         break;
       case isValid:
-        requestValidationToServer(nickname);
+        checkNicknameOnServer(nickname);
         break;
       case hasBlank:
         setNicknameHasBlanks();
@@ -130,22 +130,19 @@ const ProfileEditPage = () => {
     }
   });
 
-  const { requestFetch: requestValidationToServer } = useFetch({
-    onFetch: nickname => checkNicknameOnServer(nickname),
-    onSuccess: setNicknameAvailable,
-    onError: {
-      400: setNicknameHasBlanks,
-      409: setNicknameAlreadyInUse,
-      500: setValidationServerError
-    }
-  });
-
   const checkNicknameOnServer = async nickname => {
-    return await fetch(`${WEB_SERVER_URL}/user/checkNicknameDuplication`, {
+    const res = await fetch(`${WEB_SERVER_URL}/user/checkNicknameDuplication`, {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nickname })
+    });
+
+    handleResponse(res.status, {
+      200: setNicknameAvailable,
+      400: setNicknameHasBlanks,
+      409: setNicknameAlreadyInUse,
+      500: setValidationServerError
     });
   };
 
