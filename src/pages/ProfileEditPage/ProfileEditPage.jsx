@@ -364,7 +364,7 @@ const ProfileEditPage = () => {
             <ImageEditor
               Modal={Modal}
               asyncDispatch={handleImageEdit(asyncDispatch)}
-              src={image.previewURL}
+              src={image.originalURL}
               originalFile={image.original}
               cropperData={image.cropperData}
               onClose={toggleModal}
