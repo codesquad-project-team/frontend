@@ -12,6 +12,7 @@ import ProfileContentItem from '../../components/ProfileContentItem/ProfileConte
 import useProfileValidation from '../../hooks/useProfileValidation';
 import useEditStatus from '../../hooks/useEditStatus';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
+import useAsyncDispatch from '../../hooks/useAsyncDispatch';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
@@ -31,24 +32,27 @@ const ProfileEditPage = () => {
   const { loggedIn, openSigninModal, setNeedsUserInfo } = useLoginContext();
 
   const nicknameForm = useRef();
-  const [shakeNickname] = useShakeAnimation(nicknameForm);
   const emailForm = useRef();
-  const [shakeEmail] = useShakeAnimation(emailForm);
   const phoneForm = useRef();
+  const [shakeNickname] = useShakeAnimation(nicknameForm);
+  const [shakeEmail] = useShakeAnimation(emailForm);
   const [shakePhone] = useShakeAnimation(phoneForm);
 
   const { inputValue, setInputValue, handleChange } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
 
-  const [image, setImage] = useState({
+  const initialImage = {
     original: null,
     originalURL: '',
     forUpload: [],
     previewURL: '',
     cropperData: {}
-  });
-
-  const asyncDispatch = bindAsyncDispatch(setImage, reducer, action);
+  };
+  const [image, dispatch, asyncDispatch] = useAsyncDispatch(
+    reducer,
+    action,
+    initialImage
+  );
 
   const [initialUserInfo, saveInitialUserInfo] = useState();
 
@@ -248,7 +252,7 @@ const ProfileEditPage = () => {
     const file = Array.from(target.files)[0];
     if (!file) return;
 
-    asyncDispatch({ type: 'addNewImage', payload: { file } });
+    asyncDispatch({ type: 'addNewImage', payload: file });
     setEditStatus({ profileImage: { isEdited: true } });
   };
 

@@ -1,7 +1,7 @@
 import { action as ImageEditorAction } from '../../components/ImageEditor';
 import { readFileAsDataURL } from '../../utils/utils';
 
-const addNewImage = async ({ file }) => ({
+const addNewImage = async file => ({
   type: 'addNewImage',
   payload: { file, previewURL: await readFileAsDataURL(file) }
 });
