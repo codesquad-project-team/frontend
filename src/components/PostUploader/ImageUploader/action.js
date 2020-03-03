@@ -8,7 +8,7 @@ const CANVAS_OPTIONS = {
   imageSmoothingQuality: 'high'
 };
 
-export const addImages = ({ files, Cropper }) => async () => {
+export const addImages = async ({ files, Cropper }) => {
   const URLs = await getDataURLs(files);
   const newImages = await getNewImages(URLs, files, Cropper);
   return { type: 'addImages', payload: newImages };

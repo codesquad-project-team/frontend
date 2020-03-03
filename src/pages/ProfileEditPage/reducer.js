@@ -1,4 +1,4 @@
-const reducer = ({ type, payload }) => image => {
+const reducer = (image, { type, payload }) => {
   return { cropImage, addNewImage }[type](image, payload);
 };
 

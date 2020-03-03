@@ -8,7 +8,7 @@ const CANVAS_OPTIONS = {
   imageSmoothingQuality: 'high'
 };
 
-export const cropImage = ({ cropper, name, type, targetIndex }) => async () => {
+export const cropImage = async ({ cropper, name, type, targetIndex }) => {
   const cropperData = cropper.getData();
   const canvas = cropper.getCroppedCanvas(CANVAS_OPTIONS); //sync function
   const croppedFile = await convertCanvasToFile(canvas, { name, type });
