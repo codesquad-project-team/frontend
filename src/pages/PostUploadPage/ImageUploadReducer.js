@@ -34,7 +34,7 @@ const createImageItem = ({
   previewURL,
   isRepresentative
 }) => ({
-  original: originalFile,
+  originalFile,
   originalURL,
   forUpload: croppedFile || originalFile,
   previewURL: previewURL || originalURL,

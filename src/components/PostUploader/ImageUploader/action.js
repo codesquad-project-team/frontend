@@ -32,7 +32,10 @@ const getNewImages = (URLs, files, Cropper) =>
       Promise.all(
         elements.map((imageElement, idx) =>
           isSquareImage(imageElement)
-            ? Promise.resolve({ original: files[idx], originalURL: URLs[idx] })
+            ? Promise.resolve({
+                originalFile: files[idx],
+                originalURL: URLs[idx]
+              })
             : createCroppedImageItem(
                 imageElement,
                 Cropper,

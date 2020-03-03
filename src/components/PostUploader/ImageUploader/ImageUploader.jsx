@@ -82,7 +82,7 @@ const ImageUploader = ({ images, dispatch, asyncDispatch }) => {
           Modal={Modal}
           asyncDispatch={asyncDispatch}
           src={images[targetIndex].originalURL}
-          originalFile={images[targetIndex].original}
+          originalFile={images[targetIndex].originalFile}
           cropperData={images[targetIndex].cropperData}
           targetIndex={targetIndex}
           onClose={toggleImageEditor}
