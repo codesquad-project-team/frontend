@@ -62,8 +62,8 @@ const PostUploadPage = () => {
   };
   const [images, dispatch, asyncDispatch] = useAsyncDispatch(
     reducer,
-    action,
-    isEditMode ? getLocalStorageImages(initialImages) : []
+    isEditMode ? getLocalStorageImages(initialImages) : [],
+    action
   );
 
   const [selectedLocation, setSelectedLocation] = useState(initial.location);

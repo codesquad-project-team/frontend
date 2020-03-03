@@ -18,7 +18,7 @@ import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
 import useModal from '../../hooks/useModal';
 import useS3 from '../../hooks/useS3';
-import { debounce, bindAsyncDispatch, handleResponse } from '../../utils/utils';
+import { debounce, handleResponse } from '../../utils/utils';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { WEB_SERVER_URL, MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
 import action from './action';
@@ -50,8 +50,8 @@ const ProfileEditPage = () => {
   };
   const [image, dispatch, asyncDispatch] = useAsyncDispatch(
     reducer,
-    action,
-    initialImage
+    initialImage,
+    action
   );
 
   const [initialUserInfo, saveInitialUserInfo] = useState();
