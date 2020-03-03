@@ -1,11 +1,8 @@
-import { reducer as ImageUploaderReducer } from '../../components/PostUploader/ImageUploader';
-import { reducer as ImageEditorReducer } from '../../components/ImageEditor';
+import * as ImageUploadReducer from './ImageUploadReducer';
+import * as ImageEditReducer from './ImageEditReducer';
 
 const reducer = ({ type, payload }) => images => {
-  return { ...ImageEditorReducer, ...ImageUploaderReducer }[type](
-    images,
-    payload
-  );
+  return { ...ImageEditReducer, ...ImageUploadReducer }[type](images, payload);
 };
-
+export const { getLocalStorageImages } = ImageUploadReducer;
 export default reducer;

@@ -1,4 +1,4 @@
-import { pipe, readFileAsDataURL, asyncPipe } from '../../../utils/utils';
+import { readFileAsDataURL, asyncPipe } from '../../../utils/utils';
 
 const CANVAS_OPTIONS = {
   maxWidth: 4096,
@@ -6,25 +6,6 @@ const CANVAS_OPTIONS = {
   fillColor: '#fff',
   imageSmoothingEnabled: false,
   imageSmoothingQuality: 'high'
-};
-
-export const getImages = images =>
-  images &&
-  images.map(({ url, isRepresentative }) =>
-    pipe(
-      () => getFileInfo(url),
-      ({ name, type }) =>
-        createImageItem({
-          original: { name, type },
-          originalURL: url,
-          isRepresentative
-        })
-    )()
-  );
-
-const getFileInfo = src => {
-  const name = src.split('/').pop();
-  return { name, type: 'image/' + name.split('.').pop() };
 };
 
 export const addImages = ({ files, Cropper }) => async () => {
@@ -45,17 +26,23 @@ const getDataURLs = files =>
  * @returns {Promise} once resolved, returns an array of objects, which represents added images.
  */
 const getNewImages = (URLs, files, Cropper) =>
-  Promise.all(URLs.map(src => createImageElement(src))).then(elements =>
-    Promise.all(
-      elements.map((imageElement, idx) =>
-        isSquareImage(imageElement)
-          ? Promise.resolve(
-              createImageItem({ original: files[idx], originalURL: URLs[idx] })
-            )
-          : createCroppedImageItem(imageElement, Cropper, files[idx], URLs[idx])
+  //TODO: 이미지 하나하나 추가되도록 수정
+  Promise.all(URLs.map(src => createImageElement(src)))
+    .then(elements =>
+      Promise.all(
+        elements.map((imageElement, idx) =>
+          isSquareImage(imageElement)
+            ? Promise.resolve({ original: files[idx], originalURL: URLs[idx] })
+            : createCroppedImageItem(
+                imageElement,
+                Cropper,
+                files[idx],
+                URLs[idx]
+              )
+        )
       )
     )
-  );
+    .catch(err => console.error(err));
 
 /**
  * @returns {Promise} once resolved, returns an HTMLImageElement.
@@ -86,12 +73,7 @@ const createCroppedImageItem = async (
     originalFile
   );
   const previewURL = await readFileAsDataURL(croppedFile);
-  return createImageItem({
-    original: originalFile,
-    originalURL,
-    forUpload: croppedFile,
-    previewURL
-  });
+  return { originalFile, originalURL, croppedFile, previewURL };
 };
 
 const createCroppedFile = (imageElement, Cropper, originalFile) =>
@@ -119,20 +101,6 @@ const convertCanvasToFile = (canvasElement, originalFile) => {
     }, type);
   });
 };
-
-const createImageItem = ({
-  original,
-  originalURL,
-  forUpload,
-  previewURL,
-  isRepresentative
-}) => ({
-  original,
-  originalURL,
-  forUpload: forUpload || original,
-  previewURL: previewURL || originalURL,
-  isRepresentative: isRepresentative || false
-});
 
 export const deleteImage = targetIndex => ({
   type: 'deleteImage',

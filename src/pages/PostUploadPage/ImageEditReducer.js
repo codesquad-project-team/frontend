@@ -2,15 +2,15 @@ export const cropImage = (
   images,
   { targetIndex, croppedFile, previewURL, cropperData }
 ) =>
-  updateArrayWithObject({
+  updateArrayWithData({
     targetArray: images,
     index: targetIndex,
-    updateData: {
+    data: {
       forUpload: croppedFile,
       previewURL,
       cropperData
     }
   });
 
-const updateArrayWithObject = ({ targetArray, index, updateData }) =>
-  targetArray.map((el, idx) => (idx === index ? { ...el, ...updateData } : el));
+const updateArrayWithData = ({ targetArray, index, data }) =>
+  targetArray.map((el, idx) => (idx === index ? { ...el, ...data } : el));

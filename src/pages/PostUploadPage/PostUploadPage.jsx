@@ -21,7 +21,7 @@ import {
 import { deepDiff } from '../../utils/diff.js';
 import { WEB_SERVER_URL } from '../../configs';
 import action from './action';
-import reducer from './reducer';
+import reducer, { getLocalStorageImages } from './reducer';
 
 const cx = classNames.bind(styles);
 
@@ -64,7 +64,7 @@ const PostUploadPage = () => {
     setIsEdited(true);
   };
   const [images, setImages] = useState(
-    isEditMode ? action.getImages(initialImages) : []
+    isEditMode ? getLocalStorageImages(initialImages) : []
   );
   const dispatch = bindDispatch(bindUpdater(setImages), reducer);
   const asyncDispatch = bindAsyncDispatch(
