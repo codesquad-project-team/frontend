@@ -12,11 +12,13 @@ import PostQuestions from '../../components/PostUploader/PostQuestions';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import useS3 from '../../hooks/useS3';
 import useScript from '../../hooks/useScript';
+import useAsyncDispatch from '../../hooks/useAsyncDispatch';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 import { deepDiff } from '../../utils/diff.js';
 import { WEB_SERVER_URL } from '../../configs';
-import * as actions from './actions';
+import action from './action';
+import reducer, { getLocalStorageImages } from './reducer';
 
 const cx = classNames.bind(styles);
 
@@ -45,14 +47,23 @@ const PostUploadPage = () => {
     ...initialTitle
   } = initial.post;
 
-  const [readyToUpload, setReadyToUpload] = useReducer(
+  const [
+    { hasSelectedLocation, hasAllTitles, isOverDescLimit },
+    setReadyToUpload
+  ] = useReducer(
     readyToUploadReducer,
     isEditMode ? { hasSelectedLocation: true } : {}
   );
-  const { hasSelectedLocation, hasAllTitles, isOverDescLimit } = readyToUpload;
+  const [isEdited, setIsEdited] = useState(false);
 
-  const [images, setImages] = useState(
-    isEditMode ? actions.GET_IMAGES(initialImages) : []
+  const bindUpdater = updater => param => {
+    updater(param);
+    setIsEdited(true);
+  };
+  const [images, dispatch, asyncDispatch] = useAsyncDispatch(
+    reducer,
+    isEditMode ? getLocalStorageImages(initialImages) : [],
+    action
   );
 
   const [selectedLocation, setSelectedLocation] = useState(initial.location);
@@ -60,12 +71,7 @@ const PostUploadPage = () => {
 
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDesc);
-  const [isEdited, setIsEdited] = useState(false);
 
-  const bindUpdater = updater => param => {
-    updater(param);
-    setIsEdited(true);
-  };
   const { nickname, loggedIn, openSigninModal } = useLoginContext();
 
   const { loadError } = useScript(
@@ -75,23 +81,6 @@ const PostUploadPage = () => {
   // TODO : loadError, imageUploadError 등 PostUploadPage 에서 나올 수 있는 error 를 어떻게 관리해야 할지 고민 중
 
   const { S3imageUploadHandler } = useS3();
-
-  const showUploadFailReason = () => {
-    switch (true) {
-      case !images.previewUrls.length:
-        alert('사진을 1개 이상 선택해주세요.');
-        break;
-      case !hasSelectedLocation:
-        alert('장소검색 버튼을 눌러 장소를 선택해주세요.');
-        break;
-      case !hasAllTitles:
-        alert('어디에서 누구랑 무엇을 했는지 알려주지 않을래요?');
-        break;
-      case isOverDescLimit:
-        alert('설명을 1000자 이하로 입력해주세요.');
-        break;
-    }
-  };
 
   const uploadImagesToS3 = () => {
     if (loadError) {
@@ -182,7 +171,7 @@ const PostUploadPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (needsMoreData()) {
+    if (!isSubmitReady()) {
       showUploadFailReason();
       return;
     }
@@ -197,8 +186,25 @@ const PostUploadPage = () => {
     requestPostUpload(postData);
   };
 
-  const needsMoreData = () =>
-    !images.length || !hasSelectedLocation || !hasAllTitles || isOverDescLimit;
+  const isSubmitReady = () =>
+    images.length && hasSelectedLocation && hasAllTitles && !isOverDescLimit;
+
+  const showUploadFailReason = () => {
+    switch (true) {
+      case !images.length:
+        alert('사진을 1개 이상 선택해주세요.');
+        break;
+      case !hasSelectedLocation:
+        alert('장소검색 버튼을 눌러 장소를 선택해주세요.');
+        break;
+      case !hasAllTitles:
+        alert('어디에서 누구랑 무엇을 했는지 알려주지 않을래요?');
+        break;
+      case isOverDescLimit:
+        alert('설명을 1000자 이하로 입력해주세요.');
+        break;
+    }
+  };
 
   const handleCancel = () => history.goBack();
 
@@ -220,8 +226,8 @@ const PostUploadPage = () => {
         <CommonPost large className={cx('wrapper')}>
           <ImageUploader
             images={images}
-            setImages={bindUpdater(setImages)}
-            actions={actions}
+            dispatch={bindUpdater(dispatch)}
+            asyncDispatch={bindUpdater(asyncDispatch)}
           />
           <LocationUploader
             lat={latitude}

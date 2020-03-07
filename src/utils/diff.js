@@ -26,8 +26,7 @@ const diffArray = (origin, changed) => {
 //TODO: val이 object가 아닌경우 diff처리
 const deepDiffArray = (origin, changed) => {
   return origin.length === changed.length
-    ? changed.filter((val, idx) => !isEmpty(diffObject(origin[idx], val)))
-        .length
+    ? changed.some((val, idx) => !isEmpty(diffObject(origin[idx], val)))
       ? changed
       : []
     : changed;

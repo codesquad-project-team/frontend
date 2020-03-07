@@ -10,7 +10,6 @@ import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
 import { useLoginContext } from '../../contexts/LoginContext';
 import useTempTokenValidation from '../../hooks/useTempTokenValidation';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
-import useMediaQuerySet from '../../hooks/useMediaQuerySet';
 import useInput from '../../hooks/useInput';
 import { debounce } from '../../utils/utils';
 import { WEB_SERVER_URL, MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
@@ -19,7 +18,6 @@ const cx = classNames.bind(styles);
 
 const SignupPage = () => {
   const history = useHistory();
-  const { isMobile } = useMediaQuerySet();
   const { setLoggedIn, setNeedsUserInfo } = useLoginContext();
   const { inputValue, handleChange } = useInput();
   const { nickname } = inputValue;
@@ -28,7 +26,7 @@ const SignupPage = () => {
   const [nicknameValidity, setNicknameValidity] = useState({});
 
   const shakeTarget = useRef(null);
-  const { setSignupFailed } = useShakeAnimation(shakeTarget);
+  const [shakeInput] = useShakeAnimation(shakeTarget);
 
   const checkNicknameFromServer = useCallback(async nickname => {
     const res = await fetch(`${WEB_SERVER_URL}/user/checkNicknameDuplication`, {
@@ -101,11 +99,11 @@ const SignupPage = () => {
         history.push(referer);
         break;
       case 400:
-        setSignupFailed(true);
+        shakeInput();
         setNicknameValidity('INFO_MESSAGE');
         break;
       case 401:
-        setSignupFailed(true);
+        shakeInput();
         setNicknameValidity('INVALID_TOKEN');
         break;
       default:
@@ -117,7 +115,7 @@ const SignupPage = () => {
     if (nicknameValidity === 'AVAILABLE') {
       signUp(nickname);
     } else {
-      setSignupFailed(true);
+      shakeInput();
       setNicknameValidity('INFO_MESSAGE');
     }
   };

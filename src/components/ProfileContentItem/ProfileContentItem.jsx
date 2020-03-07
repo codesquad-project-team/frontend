@@ -6,13 +6,26 @@ import ValidityMessage from '../ValidityMessage/ValidityMessage';
 const cx = classNames.bind(styles);
 
 const ProfileContentItem = props => {
-  const { label, name, value, changeHandler, nicknameValidity = '' } = props;
+  const {
+    forwardedRef,
+    label,
+    name,
+    value,
+    changeHandler,
+    messageKey = ''
+  } = props;
 
   return (
     <div className={cx('content-item')}>
       <label>{label}</label>
-      <input type="text" name={name} value={value} onChange={changeHandler} />
-      {nicknameValidity && <ValidityMessage messageKey={nicknameValidity} />}
+      <input
+        ref={forwardedRef}
+        type="text"
+        name={name}
+        value={value}
+        onChange={changeHandler}
+      />
+      {messageKey && <ValidityMessage messageKey={messageKey} />}
     </div>
   );
 };
