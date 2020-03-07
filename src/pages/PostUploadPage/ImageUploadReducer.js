@@ -47,12 +47,15 @@ const initRepresentative = images =>
   );
 
 export const deleteImage = (images, targetIndex) =>
-  targetIndex === getRepresentativeIndex(images)
+  isRepresentative(targetIndex, images)
     ? pipe(
         images => removeItem(images, targetIndex),
         images => initRepresentative(images)
       )(images)
     : removeItem(images, targetIndex);
+
+const isRepresentative = (targetIndex, images) =>
+  targetIndex === getRepresentativeIndex(images);
 
 const getRepresentativeIndex = images =>
   images.findIndex(item => item.isRepresentative);

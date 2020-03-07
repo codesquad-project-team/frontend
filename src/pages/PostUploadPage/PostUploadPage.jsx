@@ -82,23 +82,6 @@ const PostUploadPage = () => {
 
   const { S3imageUploadHandler } = useS3();
 
-  const showUploadFailReason = () => {
-    switch (true) {
-      case !images.length:
-        alert('사진을 1개 이상 선택해주세요.');
-        break;
-      case !hasSelectedLocation:
-        alert('장소검색 버튼을 눌러 장소를 선택해주세요.');
-        break;
-      case !hasAllTitles:
-        alert('어디에서 누구랑 무엇을 했는지 알려주지 않을래요?');
-        break;
-      case isOverDescLimit:
-        alert('설명을 1000자 이하로 입력해주세요.');
-        break;
-    }
-  };
-
   const uploadImagesToS3 = () => {
     if (loadError) {
       return alert(
@@ -188,7 +171,7 @@ const PostUploadPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (isSubmitReady()) {
+    if (!isSubmitReady()) {
       showUploadFailReason();
       return;
     }
@@ -204,7 +187,24 @@ const PostUploadPage = () => {
   };
 
   const isSubmitReady = () =>
-    images.length && hasSelectedLocation && hasAllTitles && isOverDescLimit;
+    images.length && hasSelectedLocation && hasAllTitles && !isOverDescLimit;
+
+  const showUploadFailReason = () => {
+    switch (true) {
+      case !images.length:
+        alert('사진을 1개 이상 선택해주세요.');
+        break;
+      case !hasSelectedLocation:
+        alert('장소검색 버튼을 눌러 장소를 선택해주세요.');
+        break;
+      case !hasAllTitles:
+        alert('어디에서 누구랑 무엇을 했는지 알려주지 않을래요?');
+        break;
+      case isOverDescLimit:
+        alert('설명을 1000자 이하로 입력해주세요.');
+        break;
+    }
+  };
 
   const handleCancel = () => history.goBack();
 
@@ -226,8 +226,8 @@ const PostUploadPage = () => {
         <CommonPost large className={cx('wrapper')}>
           <ImageUploader
             images={images}
-            dispatch={dispatch}
-            asyncDispatch={asyncDispatch}
+            dispatch={bindUpdater(dispatch)}
+            asyncDispatch={bindUpdater(asyncDispatch)}
           />
           <LocationUploader
             lat={latitude}
