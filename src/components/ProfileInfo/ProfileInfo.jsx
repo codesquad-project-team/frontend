@@ -1,12 +1,13 @@
 import React, { useReducer, useState } from 'react';
 import classNames from 'classnames/bind';
-import styles from './ProfileInfo.scss';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import { useLoginContext } from '../../contexts/LoginContext';
 import useModal from '../../hooks/useModal';
 import { WEB_SERVER_URL } from '../../configs';
+import { handleResponse } from '../../utils/utils';
 import FollowerList from './FollowerList';
+import styles from './ProfileInfo.scss';
 
 const cx = classNames.bind(styles);
 const reducer = (prevState, state) => ({ ...prevState, ...state });
@@ -15,7 +16,7 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
   const { Modal, isOpen, toggleModal } = useModal();
   const [profileContent, setProfileContent] = useReducer(reducer, data);
   const { loggedIn, openSigninModal } = useLoginContext();
-  const [error, setError] = useState(null);
+
   const {
     isFollowing,
     nickname,
@@ -35,28 +36,19 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
       method: `${isFollowing ? 'DELETE' : 'POST'}`,
       credentials: 'include'
     });
-    handleResponse(res, isFollowing ? totalFollowers - 1 : totalFollowers + 1);
-  };
 
-  const handleResponse = (res, followers) => {
-    switch (res.status) {
-      case 200:
+    handleResponse(res.status, {
+      200: () =>
         setProfileContent({
           isFollowing: !isFollowing,
-          totalFollowers: followers
-        });
-        break;
-      case 400:
-        setError('INVALID_USER_ID');
-        break;
-      case 401:
-        setError('INVALID_TOKEN');
-        break;
-      case 500:
-        setError('SERVER_ERROR');
-        break;
-    }
+          totalFollowers: isFollowing ? totalFollowers - 1 : totalFollowers + 1
+        }),
+      400: () => alert('존재하지 않는 userId입니다.'),
+      401: () => alert('토큰이 만료되었습니다. 다시 로그인해주세요.'),
+      500: () => alert('서버에 문제가 발생했어요. 잠시 후에 다시 시도해주세요.')
+    });
   };
+
   const [modalType, setModalType] = useState(null);
   const openFollowingList = () => {
     setModalType('following');

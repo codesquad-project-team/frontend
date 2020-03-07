@@ -126,6 +126,14 @@ const useS3 = () => {
     );
   };
 
+  /**
+   * 이미지를 S3에 업로드하고 URL이 담긴 배열을 프로미스 형태로 리턴합니다.
+   * @param {string} albumName
+   * @param {string} albumNamePrefix
+   * @param {Array} images file객체를 담고 있는 배열.
+   * @param {Function} setImageUploadError
+   * @returns {Promise} "S3에 업로드된 URL을 담고있는 배열"을 resolved value로 갖는 Promise.
+   */
   const S3imageUploadHandler = async ({
     albumName,
     albumNamePrefix,

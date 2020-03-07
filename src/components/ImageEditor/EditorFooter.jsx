@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './EditorFooter.scss';
-import CommonBtn from '../../../CommonBtn/CommonBtn';
+import CommonBtn from '../CommonBtn/CommonBtn';
 
 const cx = classNames.bind(styles);
 

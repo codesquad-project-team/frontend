@@ -24,4 +24,5 @@ $ANIMATION_DELAY: 0.3s;
 }
 .shake {
   animation: shake $ANIMATION_DELAY;
+  outline: 2px solid#FF0000;
 }

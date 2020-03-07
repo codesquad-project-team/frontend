@@ -11,8 +11,8 @@ const useTempTokenValidation = () => {
   const { loading } = useFetch({
     URL: `${WEB_SERVER_URL}/auth/tempToken`,
     options: { method: 'POST', credentials: 'include' },
-    callback: json => setProvider(json.provider),
-    errorMap: { 401: () => history.push('/') } //유효하지 않은 토큰
+    onSuccess: json => setProvider(json.provider),
+    onError: { 401: () => history.push('/') } //유효하지 않은 토큰
   });
 
   return { loading, provider: provider + postposition };

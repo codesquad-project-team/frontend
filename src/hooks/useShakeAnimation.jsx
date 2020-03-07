@@ -7,20 +7,21 @@ const cx = classNames.bind(styles);
 const ANIMATION_DELAY = 300;
 
 const useShakeAnimation = shakeTarget => {
-  const [signupFailed, setSignupFailed] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
+  const shake = () => setIsFailed(state => !state);
 
   useEffect(() => {
-    if (signupFailed) {
+    if (isFailed) {
       shakeTarget.current.classList.add(cx('shake'));
 
       setTimeout(() => {
         shakeTarget.current.classList.remove(cx('shake'));
-        setSignupFailed(false);
+        setIsFailed(false);
       }, ANIMATION_DELAY);
     }
-  }, [signupFailed]);
+  }, [isFailed]);
 
-  return { setSignupFailed };
+  return [shake];
 };
 
 export default useShakeAnimation;

@@ -1,34 +1,60 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import classNames from 'classnames/bind';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { css } from '@emotion/core';
-import styles from './ProfileEditPage.scss';
 import CommonPost from '../../components/CommonPost/CommonPost';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import IconButton from '../../components/CommonBtn/IconButton';
 import Header from '../../components/Header/Header';
+import ImageEditor from '../../components/ImageEditor';
 import ProfileImage from '../../components/ProfileImage/ProfileImage';
 import ProfileContentItem from '../../components/ProfileContentItem/ProfileContentItem';
+import useProfileValidation from '../../hooks/useProfileValidation';
+import useEditStatus from '../../hooks/useEditStatus';
+import useShakeAnimation from '../../hooks/useShakeAnimation';
+import useAsyncDispatch from '../../hooks/useAsyncDispatch';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
+import useModal from '../../hooks/useModal';
 import useS3 from '../../hooks/useS3';
-import { debounce } from '../../utils/utils';
+import { debounce, handleResponse } from '../../utils/utils';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { WEB_SERVER_URL, MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
+import action from './action';
+import reducer from './reducer';
+import styles from './ProfileEditPage.scss';
 
 const cx = classNames.bind(styles);
 
 const ProfileEditPage = () => {
+  const { Modal, isOpen, toggleModal } = useModal();
   const { loggedIn, openSigninModal, setNeedsUserInfo } = useLoginContext();
+
+  const nicknameForm = useRef();
+  const emailForm = useRef();
+  const phoneForm = useRef();
+  const [shakeNickname] = useShakeAnimation(nicknameForm);
+  const [shakeEmail] = useShakeAnimation(emailForm);
+  const [shakePhone] = useShakeAnimation(phoneForm);
+
   const { inputValue, setInputValue, handleChange } = useInput();
   const { profileImage, nickname, email, phone, introduction } = inputValue;
-  const [image, setImage] = useState({ fileData: [], previewUrl: '' });
 
-  const [currentNickname, setCurrentNickname] = useState('');
-  const [nicknameValidity, setNicknameValidity] = useState({});
-  const [phoneValidity, setPhoneValidity] = useState('');
-  const [initialPageEnter, setInitialPageEnter] = useState(true);
+  const initialImage = {
+    original: null,
+    originalURL: '',
+    forUpload: [],
+    previewURL: '',
+    cropperData: {}
+  };
+  const [image, dispatch, asyncDispatch] = useAsyncDispatch(
+    reducer,
+    initialImage,
+    action
+  );
+
+  const [initialUserInfo, saveInitialUserInfo] = useState();
 
   const { loadError } = useScript(
     'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'
@@ -41,7 +67,7 @@ const ProfileEditPage = () => {
   const { loading } = useFetch({
     URL: `${WEB_SERVER_URL}/user/myinfo`,
     options: { credentials: 'include' },
-    callback: json => initUserInfo(json)
+    onSuccess: json => initUserInfo(json)
   });
 
   const initUserInfo = userInfo => {
@@ -54,103 +80,116 @@ const ProfileEditPage = () => {
     } = userInfo;
 
     // 리액트에서 input 태그의 비어있는 값을 null로 표현하기 보다는 undefined 으로 사용하는 것을 권고함
-
     const initialValue = {
       profileImage: profileImage === null ? undefined : profileImage,
       nickname,
-      email: email === null ? undefined : email,
-      phone: phone === null ? undefined : phone,
-      introduction: intro === null ? undefined : intro
+      email: email === null ? '' : email,
+      phone: phone === null ? '' : phone,
+      introduction: intro === null ? '' : intro //input을 다 지우면 빈문자열('')임. 따라서 수정 여부 비교를 위해서는 초기값이 빈문자열이어야함.
     };
 
-    setCurrentNickname(initialValue.nickname);
-    setInputValue(initialValue);
+    saveInitialUserInfo(initialValue);
+    setInputValue(initialValue); //TODO: setInitialValues 같은 이름으로 수정하는건 어떨까?
   };
 
-  const checkNicknameFromServer = useCallback(async nickname => {
+  const {
+    setEditStatus,
+    changeEditStatus,
+    isEdited,
+    getEditedProperties
+  } = useEditStatus(initialUserInfo);
+
+  const {
+    validities,
+    isAllValid,
+    getInvalidProperties,
+    setValid,
+    setInvalid,
+    setNicknameAlreadyInUse,
+    setNicknameAvailable,
+    setNicknameHasBlanks,
+    setValidationServerError,
+    setIsPreviousNickname,
+    showNicknameInfoMessage
+  } = useProfileValidation();
+
+  const checkNicknameValidation = debounce((nickname, currentNickname) => {
+    const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
+    const hasBlank = /\s/.test(nickname);
+    const sameNickname = nickname === currentNickname;
+
+    switch (true) {
+      case sameNickname:
+        setIsPreviousNickname();
+        break;
+      case isValid:
+        checkNicknameOnServer(nickname);
+        break;
+      case hasBlank:
+        setNicknameHasBlanks();
+        break;
+      default:
+        showNicknameInfoMessage();
+        break;
+    }
+  });
+
+  const checkNicknameOnServer = async nickname => {
     const res = await fetch(`${WEB_SERVER_URL}/user/checkNicknameDuplication`, {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nickname })
     });
-    switch (res.status) {
-      case 200:
-        setNicknameValidity('AVAILABLE');
-        break;
-      case 400:
-        setNicknameValidity('HAS_BLANKS');
-        break;
-      case 409:
-        setNicknameValidity('ALREADY_IN_USE');
-        break;
-      case 500:
-        setNicknameValidity('SERVER_ERROR');
-        break;
-      default:
-        break;
-    }
-  }, []);
 
-  const checkNicknameValidation = useCallback(
-    debounce((nickname, currentNickname) => {
-      const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
-      const hasBlank = /\s/.test(nickname);
-      const onlyOneCharacter = nickname.length === 1;
-      const sameNickname = nickname === currentNickname;
-
-      switch (true) {
-        case sameNickname:
-          setNicknameValidity('CURRENT_NICKNAME');
-          break;
-        case isValid:
-          checkNicknameFromServer(nickname);
-          break;
-        case hasBlank:
-          setNicknameValidity('HAS_BLANKS');
-          break;
-        case onlyOneCharacter:
-          setNicknameValidity('NO_MESSAGE');
-          break;
-        default:
-          setNicknameValidity('INFO_MESSAGE');
-          break;
-      }
-    }),
-    []
-  );
+    handleResponse(res.status, {
+      200: setNicknameAvailable,
+      400: setNicknameHasBlanks,
+      409: setNicknameAlreadyInUse,
+      500: setValidationServerError
+    });
+  };
 
   const checkPhoneNumberValidation = useCallback(
     debounce(phone => {
       const isValid =
         /^[0-9]{3}[-]+[0-9]{4}[-]+[0-9]{4}$/.test(phone) || !phone; //optional이므로 입력 안해도 허용
 
-      isValid
-        ? setPhoneValidity('NO_MESSAGE')
-        : setPhoneValidity('INVALID_PHONE_NUMBER');
+      isValid ? setValid('phone') : setInvalid('phone');
     }),
     []
   );
 
-  const requestUpdate = e => {
+  const checkEmailValidation = debounce(email => {
+    const regExp = /^[A-Za-z0-9_.-]+@[A-Za-z0-9-]+\.[A-Za-z0-9-]+/;
+
+    regExp.test(email) || !email ? setValid('email') : setInvalid('email');
+  });
+
+  const handleSubmit = e => {
     e.preventDefault();
-    if (phoneValidity === 'INVALID_PHONE_NUMBER') {
-      return alert('휴대폰 정보를 형식에 맞게 입력해주세요!');
-    }
-    if (nicknameValidity === 'CURRENT_NICKNAME') return;
-    if (nicknameValidity === 'AVAILABLE') {
-      handleSubmit();
-    } else {
-      setNicknameValidity('INFO_MESSAGE');
-    }
+    isEdited() && isAllValid(validities) ? requestUpdate() : showErrorEffect();
   };
 
-  const handleSubmit = async () => {
-    const hasImageToUpload = image.previewUrl ? true : false;
+  const requestUpdate = async () => {
+    const editedProperties = getEditedProperties();
+    const updatedValues = filterUpdatedValue(editedProperties, inputValue);
 
-    const S3UploadedURL = hasImageToUpload ? await uploadImage() : '';
+    const hasImageToUpload = image.previewURL ? true : false;
+    const S3UploadedURL = hasImageToUpload && (await uploadImage());
 
-    updateUserInfo(S3UploadedURL);
+    const userInfo = S3UploadedURL
+      ? { ...updatedValues, profileImage: S3UploadedURL }
+      : updatedValues;
+
+    requestUpdateUserInfo(userInfo);
+  };
+
+  const filterUpdatedValue = (editedProperties, inputValue) => {
+    return editedProperties.reduce(
+      (acc, property) => ({ ...acc, [property]: inputValue[property] }),
+      {}
+    );
   };
 
   const uploadImage = async () => {
@@ -159,68 +198,77 @@ const ProfileEditPage = () => {
         `필요한 스크립트를 로드하지 못했습니다. 다음에 다시 시도해주세요.`
       );
     }
-
     // await : promise의 resolve Value를 리턴
     const [S3UploadedURL] = await S3imageUploadHandler({
       albumName: nickname,
       albumNamePrefix: 'profile-images/',
-      images: image.fileData,
+      images: image.forUpload,
       setImageUploadError
     });
 
     return S3UploadedURL;
   };
 
-  const updateUserInfo = async (uploadedUrl = '') => {
-    const bodyObj = uploadedUrl
-      ? { ...inputValue, profileImage: uploadedUrl }
-      : inputValue;
+  const { requestFetch: requestUpdateUserInfo } = useFetch({
+    onFetch: userInfo => sendUpdatedUserInfo(userInfo),
+    onSuccess: () => handleUpdateSuccess(),
+    onError: {
+      400: '요청이 올바르지 않습니다.',
+      401: '인증되지 않은 토큰입니다.'
+    }
+  });
 
-    const res = await fetch(`${WEB_SERVER_URL}/user/profile`, {
+  const sendUpdatedUserInfo = async userInfo => {
+    return await fetch(`${WEB_SERVER_URL}/user/profile`, {
       method: 'PUT',
       mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify(bodyObj)
+      body: JSON.stringify(userInfo)
     });
-
-    switch (res.status) {
-      case 200:
-        setCurrentNickname(nickname);
-        setNicknameValidity('CURRENT_NICKNAME');
-        setNeedsUserInfo(state => !state);
-        alert('회원 정보가 수정 되었습니다!');
-        break;
-      case 400:
-        alert('요청이 올바르지 않습니다.');
-        break;
-      case 401:
-        alert('인증되지 않은 토큰입니다.');
-        break;
-      default:
-        //do nothing
-        break;
-    }
   };
-  const handleProfileImage = ({ target }) => {
-    const file = Array.from(target.files);
 
-    const reader = new FileReader();
-    reader.addEventListener('load', ({ target }) => {
-      setImage({ fileData: file, previewUrl: target.result });
-      setInitialPageEnter(false);
+  const handleUpdateSuccess = () => {
+    saveInitialUserInfo({
+      ...inputValue,
+      profileImage: image.previewURL || profileImage
     });
-    reader.readAsDataURL(file[0]);
+    setIsPreviousNickname();
+    setNeedsUserInfo(state => !state);
+    alert('회원 정보가 수정 되었습니다!');
+  };
+
+  const showErrorEffect = () => {
+    const shakeMap = {
+      nickname: shakeNickname,
+      email: shakeEmail,
+      phone: shakePhone
+    };
+    const invalidProperties = getInvalidProperties();
+    invalidProperties.forEach(property => shakeMap[property]());
+  };
+
+  const handleProfileImage = ({ target }) => {
+    const file = Array.from(target.files)[0];
+    if (!file) return;
+
+    asyncDispatch({ type: 'addNewImage', payload: file });
+    setEditStatus({ profileImage: { isEdited: true } });
+  };
+
+  const handleImageEdit = dispatch => action => {
+    dispatch(action);
+    setEditStatus({ profileImage: { isEdited: true } });
+  };
+
+  const bindHandleChange = property => e => {
+    changeEditStatus(initialUserInfo, property, e);
+    handleChange(e);
   };
 
   useEffect(() => {
-    if (nickname) {
-      checkNicknameValidation(nickname, currentNickname);
-    } else {
-      setNicknameValidity('');
-    }
+    if (!initialUserInfo) return;
+    checkNicknameValidation(nickname, initialUserInfo.nickname);
   }, [nickname]);
 
   useEffect(() => {
@@ -228,10 +276,12 @@ const ProfileEditPage = () => {
   }, [phone]);
 
   useEffect(() => {
+    checkEmailValidation(email);
+  }, [email]);
+
+  useEffect(() => {
     !loggedIn && openSigninModal();
   }, [loggedIn]);
-
-  const imageSrc = initialPageEnter ? profileImage : image.previewUrl;
 
   return (
     <>
@@ -253,52 +303,76 @@ const ProfileEditPage = () => {
               <div className={cx('profile-image-section')}>
                 <ProfileImage
                   large
-                  src={imageSrc}
+                  src={image.previewURL || profileImage}
                   className={cx('profile-image')}
                 />
-                <IconButton
-                  type="addImage"
-                  src={`${IMAGE_BUCKET_URL}/profile-change-icon.png`}
-                  onChange={handleProfileImage}
-                >
-                  프로필 사진 바꾸기
-                </IconButton>
+                <div className={cx('edit-btns')}>
+                  <IconButton
+                    type="addImage"
+                    src={`${IMAGE_BUCKET_URL}/profile-change-icon.png`}
+                    onChange={handleProfileImage}
+                  >
+                    프로필 사진 바꾸기
+                  </IconButton>
+                  {image.previewURL && (
+                    <IconButton
+                      src={`${IMAGE_BUCKET_URL}/edit-icon1.png`}
+                      onClick={toggleModal}
+                    >
+                      사진 편집
+                    </IconButton>
+                  )}
+                </div>
               </div>
               <ProfileContentItem
+                forwardedRef={nicknameForm}
                 label="닉네임"
                 value={nickname}
                 name="nickname"
-                changeHandler={handleChange}
-                nicknameValidity={nicknameValidity}
+                changeHandler={bindHandleChange('nickname')}
+                messageKey={validities.nickname.message}
               />
               <ProfileContentItem
                 label="소개"
                 value={introduction}
                 name="introduction"
-                changeHandler={handleChange}
+                changeHandler={bindHandleChange('introduction')}
               />
               <ProfileContentItem
+                forwardedRef={emailForm}
                 label="이메일"
                 value={email}
                 name="email"
-                changeHandler={handleChange}
+                changeHandler={bindHandleChange('email')}
+                messageKey={validities.email.message}
               />
               <ProfileContentItem
+                forwardedRef={phoneForm}
                 label="휴대폰 번호"
                 value={phone}
                 name="phone"
-                changeHandler={handleChange}
-                nicknameValidity={phoneValidity}
+                changeHandler={bindHandleChange('phone')}
+                messageKey={validities.phone.message}
               />
               <CommonBtn
                 className={cx('submit-btn')}
                 type="submit"
                 styleType="emphasize"
-                onClick={requestUpdate}
+                onClick={handleSubmit}
               >
                 제출
               </CommonBtn>
             </form>
+          )}
+          {isOpen && (
+            <ImageEditor
+              Modal={Modal}
+              asyncDispatch={handleImageEdit(asyncDispatch)}
+              src={image.originalURL}
+              originalFile={image.original}
+              cropperData={image.cropperData}
+              onClose={toggleModal}
+            />
           )}
         </CommonPost>
       </CommonPost.background>
