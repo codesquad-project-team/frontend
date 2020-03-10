@@ -34,12 +34,14 @@ const ImageUploader = ({ images, dispatch, asyncDispatch }) => {
   };
 
   const addImage = async ({ target }) => {
-    const Cropper = await importCropper();
     const files = Array.from(target.files);
 
     files.length + images.length > MAXIMUM_IMAGES
       ? showAlert('EXCEED_MAXIMUM_IMAGES')
-      : asyncDispatch({ type: 'addImages', payload: { files, Cropper } });
+      : asyncDispatch({
+          type: 'addImages',
+          payload: { files, Cropper: await importCropper() }
+        });
   };
 
   const deleteImage = ({ target }) => {
