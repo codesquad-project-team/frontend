@@ -115,6 +115,13 @@ export const bindDispatch = (updater, reducer) => actionCreator => {
   }
 };
 
+/**
+ * 액션함수로 작성하지 않은 동기액션을 에러없이 reducer로 전달하기 위한 함수
+ * @param {Object} actionCreators 액션 객체를 리턴하는 함수가 담긴 객체
+ */
+export const createActionCreator = actionCreators => ({ type, payload }) =>
+  actionCreators[type] ? actionCreators[type](payload) : { type, payload };
+
 export const handleResponse = (key, callbackMap) => {
   callbackMap[key]();
 };

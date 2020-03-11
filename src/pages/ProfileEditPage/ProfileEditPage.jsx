@@ -12,7 +12,7 @@ import ProfileContentItem from '../../components/ProfileContentItem/ProfileConte
 import useProfileValidation from '../../hooks/useProfileValidation';
 import useEditStatus from '../../hooks/useEditStatus';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
-import useAsyncDispatch from '../../hooks/useAsyncDispatch';
+import useAsyncAction from '../../hooks/useAsyncAction';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
@@ -49,11 +49,7 @@ const ProfileEditPage = () => {
     previewURL: '',
     cropperData: {}
   };
-  const [image, dispatch, asyncDispatch] = useAsyncDispatch(
-    reducer,
-    initialImage,
-    action
-  );
+  const [image, dispatch] = useAsyncAction(reducer, initialImage, action);
 
   const [initialUserInfo, saveInitialUserInfo] = useState();
 
@@ -241,7 +237,7 @@ const ProfileEditPage = () => {
     const file = Array.from(target.files)[0];
     if (!file) return;
 
-    asyncDispatch({ type: 'addNewImage', payload: file });
+    dispatch({ type: 'addNewImage', payload: file });
     setEditStatus({ profileImage: { isEdited: true } });
   };
 
@@ -356,7 +352,7 @@ const ProfileEditPage = () => {
           {isOpen && (
             <ImageEditor
               Modal={Modal}
-              asyncDispatch={handleImageEdit(asyncDispatch)}
+              dispatch={handleImageEdit(dispatch)}
               src={image.originalURL}
               originalFile={image.original}
               cropperData={image.cropperData}

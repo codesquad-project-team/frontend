@@ -15,7 +15,7 @@ const Cropper = lazy(() =>
 
 const ImageEditor = ({
   Modal,
-  asyncDispatch,
+  dispatch,
   src,
   originalFile: { name, type },
   cropperData,
@@ -38,7 +38,7 @@ const ImageEditor = ({
   };
 
   const saveImage = () => {
-    asyncDispatch({
+    dispatch({
       type: 'cropImage',
       payload: { cropper, name, type, targetIndex }
     });

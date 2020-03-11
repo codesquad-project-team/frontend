@@ -12,7 +12,7 @@ import PostQuestions from '../../components/PostUploader/PostQuestions';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import useS3 from '../../hooks/useS3';
 import useScript from '../../hooks/useScript';
-import useAsyncDispatch from '../../hooks/useAsyncDispatch';
+import useAsyncAction from '../../hooks/useAsyncAction';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 import { deepDiff } from '../../utils/diff.js';
@@ -61,7 +61,7 @@ const PostUploadPage = () => {
     updater(param);
     setIsEdited(true);
   };
-  const [images, dispatch, asyncDispatch] = useAsyncDispatch(
+  const [images, dispatch] = useAsyncAction(
     reducer,
     isEditMode ? getLocalStorageImages(initialImages) : [],
     action
@@ -209,11 +209,7 @@ const PostUploadPage = () => {
       <Header />
       <CommonPost.background className={cx('background')}>
         <CommonPost large className={cx('wrapper')}>
-          <ImageUploader
-            images={images}
-            dispatch={bindUpdater(dispatch)}
-            asyncDispatch={bindUpdater(asyncDispatch)}
-          />
+          <ImageUploader images={images} dispatch={bindUpdater(dispatch)} />
           <LocationUploader
             lat={latitude}
             lng={longitude}

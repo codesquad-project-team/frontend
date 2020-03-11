@@ -104,13 +104,3 @@ const convertCanvasToFile = (canvasElement, originalFile) => {
     }, type);
   });
 };
-
-export const deleteImage = targetIndex => ({
-  type: 'deleteImage',
-  payload: targetIndex
-});
-
-export const updateRepresentative = targetIndex => ({
-  type: 'updateRepresentative',
-  payload: targetIndex
-});
