@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames/bind';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { css } from '@emotion/core';
@@ -13,12 +13,12 @@ import useProfileValidation from '../../hooks/useProfileValidation';
 import useEditStatus from '../../hooks/useEditStatus';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
 import useAsyncAction from '../../hooks/useAsyncAction';
+import useDebounce from '../../hooks/useDebounce';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
 import useModal from '../../hooks/useModal';
 import useS3 from '../../hooks/useS3';
-import { debounce } from '../../utils/utils';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
 import action from './action';
@@ -115,29 +115,26 @@ const ProfileEditPage = () => {
     phone: { isValid: true, message: '' }
   });
 
-  const checkNicknameValidation = useCallback(
-    debounce((nickname, currentNickname) => {
-      const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
-      const hasBlank = /\s/.test(nickname);
-      const sameNickname = nickname === currentNickname;
+  const checkNicknameValidation = useDebounce((nickname, currentNickname) => {
+    const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
+    const hasBlank = /\s/.test(nickname);
+    const sameNickname = nickname === currentNickname;
 
-      switch (true) {
-        case sameNickname:
-          setIsPreviousNickname();
-          break;
-        case isValid:
-          checkNicknameOnServer(nickname);
-          break;
-        case hasBlank:
-          setNicknameHasBlanks();
-          break;
-        default:
-          showNicknameInfoMessage();
-          break;
-      }
-    }),
-    []
-  );
+    switch (true) {
+      case sameNickname:
+        setIsPreviousNickname();
+        break;
+      case isValid:
+        checkNicknameOnServer(nickname);
+        break;
+      case hasBlank:
+        setNicknameHasBlanks();
+        break;
+      default:
+        showNicknameInfoMessage();
+        break;
+    }
+  });
   const { request: checkNicknameOnServer } = useFetch({
     onRequest: api.checkNickname,
     onSuccess: setNicknameAvailable,
@@ -148,24 +145,17 @@ const ProfileEditPage = () => {
     }
   });
 
-  const checkPhoneNumberValidation = useCallback(
-    debounce(phone => {
-      const isValid =
-        /^[0-9]{3}[-]+[0-9]{4}[-]+[0-9]{4}$/.test(phone) || !phone; // 입력 안해도 허용
+  const checkPhoneNumberValidation = useDebounce(phone => {
+    const isValid = /^[0-9]{3}[-]+[0-9]{4}[-]+[0-9]{4}$/.test(phone) || !phone; // 입력 안해도 허용
 
-      isValid ? setValid('phone') : setInvalid('phone');
-    }),
-    []
-  );
+    isValid ? setValid('phone') : setInvalid('phone');
+  });
 
-  const checkEmailValidation = useCallback(
-    debounce(email => {
-      const regExp = /^[A-Za-z0-9_.-]+@[A-Za-z0-9-]+\.[A-Za-z0-9-]+/;
+  const checkEmailValidation = useDebounce(email => {
+    const regExp = /^[A-Za-z0-9_.-]+@[A-Za-z0-9-]+\.[A-Za-z0-9-]+/;
 
-      regExp.test(email) || !email ? setValid('email') : setInvalid('email');
-    }),
-    []
-  );
+    regExp.test(email) || !email ? setValid('email') : setInvalid('email');
+  });
 
   const handleSubmit = e => {
     e.preventDefault();

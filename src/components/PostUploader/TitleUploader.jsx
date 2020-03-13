@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './TitleUploader.scss';
 import useInput from '../../hooks/useInput';
+import useDebounce from '../../hooks/useDebounce';
 import useMediaQuerySet from '../../hooks/useMediaQuerySet';
 
 const cx = classNames.bind(styles);
@@ -78,18 +79,25 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
   }, [select]);
 
   useEffect(() => {
+    updateTitles(place, companion, activity);
+  }, [place, companion, activity]);
+
+  const updateTitles = useDebounce((place, companion, activity) => {
     if (!(place || companion || activity)) return;
-    isDesktop && adjustLocationInputWidth(place);
     setTitle({
       place,
       companion,
       activity
     });
-    const hasAllTitles = place && companion && activity ? true : false;
+    const hasAllTitles = place && companion && activity;
     hasAllTitles
       ? setReadyToUpload({ hasAllTitles: true })
       : setReadyToUpload({ hasAllTitles: false });
-  }, [place, companion, activity]);
+  });
+
+  useEffect(() => {
+    isDesktop && adjustLocationInputWidth(place);
+  }, [place]);
 
   return (
     <div className={cx('wrapper')}>
