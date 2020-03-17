@@ -2,10 +2,12 @@ import { useState, useCallback } from 'react';
 
 /**
  * 동기/비동기 모두 같은 방식으로 dispatch하기 위한 커스텀 훅입니다.
+ * 1. useAsyncAction의 3번째 인자를 전달하고, dispatch에 객체리터럴을 전달하거나,
+ * 2. 3번째 인자를 전달하지 않고, dispatch에서 액션 함수를 호출하는 방식으로 사용할 수 있습니다.
  * @param {Function} reducer state를 업데이트하는 동기로직을 담고있는 리듀서 함수
  * @param {any} initialState 초기 state
- * @param {Function} [actionCreator] [optional] 액션 객체를 리턴하는 동기/비동기 액션함수.
- * 동기로직은 액션함수를 정의하지 않고 dispach에 액션객체를 바로 전달할 수 있습니다.
+ * @param {Object} [actionCreator] [optional] 액션 객체를 리턴하는 동기/비동기 액션함수가 매핑된 객체.
+ * 동기로직은 액션함수를 정의하지 않고 dispatch에 액션객체를 바로 전달할 수 있습니다.
  * @returns {Array} [ state, dispatch ]
  *
  * @example
@@ -17,11 +19,16 @@ import { useState, useCallback } from 'react';
 const useAsyncAction = (reducer, initialState, actionCreator) => {
   const [state, setState] = useState(initialState);
 
+  const isReadyToReduce = param =>
+    !actionCreator || _(param).isPromise || !_(param).has(actionCreator);
+
   const dispatch = useCallback(
     param =>
-      then(
-        action => setState(state => reducer(state, action)),
-        !actionCreator || _(param).isPromise ? param : actionCreator(param)
+      promiseGo(
+        isReadyToReduce(param)
+          ? param
+          : actionCreator[param.type](param.payload),
+        action => setState(state => reducer(state, action))
       ),
     []
   );
@@ -32,16 +39,20 @@ const useAsyncAction = (reducer, initialState, actionCreator) => {
 export default useAsyncAction;
 
 /**
- * 인자의 프로미스 여부를 확인하기 위한 함수.
- * @param {any} a
+ * 인자의 프로미스 여부를 확인하거나 정의된 액션함수가 존재하는지 확인하기 위한 함수.
+ * @param {any} param
  * @example
  * _(param).isPromise //returns Boolean(true or false)
+ * _(param).has(actionCreator) //returns Boolean
  */
-const _ = a => ({ isPromise: (() => a instanceof Promise)() });
+const _ = param => ({
+  has: actionCreator => !!actionCreator[param.type],
+  isPromise: (() => param instanceof Promise)()
+});
 
 /**
- * 두번째 인자가 Promise이면 비동기로 동작하고, 아닌경우는 동기로 동작하는 유틸함수.
- * @param {Function} f
+ * 첫번째 인자가 Promise이면 비동기로 동작하고, 아닌경우는 동기로 동작하는 유틸함수.
  * @param {any} a
+ * @param {Function} f
  */
-const then = (f, a) => (a instanceof Promise ? a.then(f) : f(a));
+const promiseGo = (a, f) => (a instanceof Promise ? a.then(f) : f(a));
