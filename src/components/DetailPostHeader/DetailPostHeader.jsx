@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import CommonBtn from '../CommonBtn/CommonBtn';
 import { useLoginContext } from '../../contexts/LoginContext';
 import useFetch from '../../hooks/useFetch';
+import useMediaQuerySet from '../../hooks/useMediaQuerySet';
 import api from '../../api';
 import styles from './DetailPostHeader.scss';
 
@@ -11,6 +12,7 @@ const cx = classNames.bind(styles);
 
 const DetailPostHeader = ({ data, writerId, postId }) => {
   const history = useHistory();
+  const { isMobile, isTablet } = useMediaQuerySet();
   const [isFirstMouseOver, setIsFirstMouseOver] = useState(true);
   const { id, nickname } = useLoginContext();
   const isMyPost = id === writerId;
@@ -19,7 +21,6 @@ const DetailPostHeader = ({ data, writerId, postId }) => {
     localStorage.setItem('postData', JSON.stringify(data));
   };
 
-  //TODO: 모바일에서는 클릭시 save 하도록 수정
   const handleMouseOver = () => {
     if (!isFirstMouseOver) return;
     savePostData();
@@ -27,6 +28,7 @@ const DetailPostHeader = ({ data, writerId, postId }) => {
   };
 
   const handleEdit = () => {
+    (isMobile || isTablet) && savePostData();
     history.push('/post/edit');
   };
 
