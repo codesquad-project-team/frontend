@@ -3,16 +3,18 @@ import { useHistory } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { css } from '@emotion/core';
-import styles from './SignupPage.scss';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import CommonLink from '../../components/CommonLink/CommonLink';
 import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
 import { useLoginContext } from '../../contexts/LoginContext';
 import useTempTokenValidation from '../../hooks/useTempTokenValidation';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
+import useFetch from '../../hooks/useFetch';
 import useInput from '../../hooks/useInput';
 import { debounce } from '../../utils/utils';
-import { WEB_SERVER_URL, MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
+import { MAIN_COLOR } from '../../configs';
+import api from '../../api';
+import styles from './SignupPage.scss';
 
 const cx = classNames.bind(styles);
 
@@ -28,30 +30,16 @@ const SignupPage = () => {
   const shakeTarget = useRef(null);
   const [shakeInput] = useShakeAnimation(shakeTarget);
 
-  const checkNicknameFromServer = useCallback(async nickname => {
-    const res = await fetch(`${WEB_SERVER_URL}/user/checkNicknameDuplication`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nickname })
-    });
-    switch (res.status) {
-      case 200:
-        setNicknameValidity('AVAILABLE');
-        break;
-      case 400:
-        setNicknameValidity('HAS_BLANKS');
-        break;
-      case 409:
-        setNicknameValidity('ALREADY_IN_USE');
-        break;
-      case 500:
-        setNicknameValidity('SERVER_ERROR');
-        break;
-      default:
-        break;
+  const { request: checkNicknameFromServer } = useFetch({
+    onRequest: api.checkNickname,
+    //TODO: useProfileValidation 으로 리팩토링
+    onSuccess: () => setNicknameValidity('AVAILABLE'),
+    onError: {
+      400: () => setNicknameValidity('HAS_BLANKS'),
+      409: () => setNicknameValidity('ALREADY_IN_USE'),
+      500: () => setNicknameValidity('SERVER_ERROR')
     }
-  }, []);
+  });
 
   const checkNicknameValidation = useCallback(
     debounce(nickname => {
@@ -75,45 +63,32 @@ const SignupPage = () => {
     }),
     []
   );
+  const DOMAIN_REGEXP = /^(((http(s?)):\/\/)?)([0-9a-zA-Z-]+(\.|:))([a-z]{2,3}|[0-9]{4})/;
 
-  const signUp = useCallback(async nickname => {
-    const res = await fetch(`${WEB_SERVER_URL}/auth/signup`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      //tempToken의 id를 보내기 위해 credentials 옵션 설정
-      credentials: 'include',
-      body: JSON.stringify({ nickname })
-    });
-    const json = await res.json();
-    const domainRegExp = /^(((http(s?)):\/\/)?)([0-9a-zA-Z-]+(\.|:))([a-z]{2,3}|[0-9]{4})/;
-
-    //사용자가 회원가입 하기 이전에 보고 있던 페이지 url
-    const referer = json.referer.replace(domainRegExp, '');
-    switch (res.status) {
-      case 200:
-        setLoggedIn(true);
-        setNeedsUserInfo(state => !state);
-        history.push(referer);
-        break;
-      case 400:
+  const { request: signup } = useFetch({
+    onRequest: api.signup,
+    // onResponse: ,
+    onSuccess: ({ referer }) => goTo(referer.replace(DOMAIN_REGEXP, '')),
+    onError: {
+      400: () => {
         shakeInput();
         setNicknameValidity('INFO_MESSAGE');
-        break;
-      case 401:
+      },
+      401: () => {
         shakeInput();
         setNicknameValidity('INVALID_TOKEN');
-        break;
-      default:
-        break;
+      }
     }
-  }, []);
+  });
+  const goTo = prevPath => {
+    setLoggedIn(true);
+    setNeedsUserInfo(state => !state);
+    history.push(prevPath);
+  };
 
   const requestSignup = () => {
     if (nicknameValidity === 'AVAILABLE') {
-      signUp(nickname);
+      signup(nickname);
     } else {
       shakeInput();
       setNicknameValidity('INFO_MESSAGE');

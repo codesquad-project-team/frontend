@@ -6,13 +6,9 @@ import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 import PostItem from '../PostItem/PostItem';
 import useFetch from '../../hooks/useFetch';
-import {
-  WEB_SERVER_URL,
-  VIEWPORT_HEIGHT,
-  TRIGGER_POINT,
-  MAIN_COLOR
-} from '../../configs';
+import { VIEWPORT_HEIGHT, TRIGGER_POINT, MAIN_COLOR } from '../../configs';
 import { throttle } from '../../utils/utils';
+import api from '../../api';
 
 const cx = classNames.bind(styles);
 
@@ -22,15 +18,12 @@ const PostContainer = ({ headerOn, writerId = '' }) => {
   const [response, setResponse] = useState(null);
   const items = response ? response.posts : null;
 
-  //page - required
-  //writerid - optional
-  //writerid가 존재하는 경우 해당 사용자의 게시글만 받아오는 api
   const { loading } = useFetch({
-    URL: `${WEB_SERVER_URL}/post?page=${page}${
-      writerId ? `&writerid=${writerId}` : ''
-    }`,
+    onRequest: () => api.getPosts(page, writerId),
     onSuccess: json => mergeResponse(response, json),
-    onError: { 204: () => setResponse(null) }
+    onError: { 204: () => setResponse(null) },
+    watch: [page, writerId],
+    loadStatus: true
   });
 
   const mergeResponse = (prevResponse, response) => {

@@ -16,9 +16,10 @@ import useAsyncDispatch from '../../hooks/useAsyncDispatch';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 import { deepDiff } from '../../utils/diff.js';
-import { WEB_SERVER_URL } from '../../configs';
 import action from './action';
 import reducer, { getLocalStorageImages } from './reducer';
+import useFetch from '../../hooks/useFetch';
+import api from '../../api';
 
 const cx = classNames.bind(styles);
 
@@ -134,38 +135,22 @@ const PostUploadPage = () => {
     return deepDiff(initialData, postData);
   };
 
-  const requestPostUpload = async postData => {
-    const res = await fetch(
-      `${WEB_SERVER_URL}/post${isEditMode ? `/${id}` : ''}`,
-      {
-        method: isEditMode ? 'PUT' : 'POST',
-        mode: 'cors',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(postData)
-      }
-    );
-
-    const { id: postId } = isEditMode ? { id } : await res.json();
-
-    switch (res.status) {
-      case 200:
-        setIsEdited(false);
-        history.push(`/post/${postId}`);
-        break;
-      case 401:
-        alert('토큰이 유효하지 않습니다. 다시 로그인 해주세요.');
-        //TODO: 로그인 모달창 띄우고 지금까지 입력한 데이터는 따로 보관하기
-        //로그인 과정에서 새로고침이 발생할 것으로 보임.
-        //local storage 활용해야할 것으로 예상.
-        break;
-      case 500:
-        alert('서버에서 에러가 발생했어요. 잠시 후에 다시 시도해주세요.');
-        //TODO: 임시저장 기능?
-        break;
+  const { request } = useFetch({
+    onRequest: postData => api.uploadPost(isEditMode, id, postData),
+    onSuccess: ({ id: postId }) => goPostDetailPage(postId || id), //PUT의 경우엔 res.body가 없으므로 id를 직접 전달
+    onError: {
+      //TODO: 401 - 로그인 모달창 띄우고 지금까지 입력한 데이터는 따로 보관하기
+      401: '토큰이 유효하지 않습니다. 다시 로그인 해주세요.',
+      //TODO: 500 - 임시저장 기능
+      500: '서버에서 에러가 발생했어요. 잠시 후에 다시 시도해주세요.'
     }
+  });
+  const goPostDetailPage = postId => {
+    setIsEdited(false);
+    history.push(`/post/${postId}`);
+  };
+  const requestPostUpload = postData => {
+    request(postData);
   };
 
   const handleSubmit = async e => {

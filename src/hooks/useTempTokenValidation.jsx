@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useFetch from './useFetch';
-import { WEB_SERVER_URL } from '../configs';
+import api from '../api';
 
 const useTempTokenValidation = () => {
   const history = useHistory();
@@ -9,10 +9,10 @@ const useTempTokenValidation = () => {
   const postposition = provider === 'kakao' ? '로' : '으로';
 
   const { loading } = useFetch({
-    URL: `${WEB_SERVER_URL}/auth/tempToken`,
-    options: { method: 'POST', credentials: 'include' },
+    onRequest: api.validateTempToken,
     onSuccess: json => setProvider(json.provider),
-    onError: { 401: () => history.push('/') } //유효하지 않은 토큰
+    onError: { 401: () => history.push('/') }, //유효하지 않은 토큰
+    loadStatus: true
   });
 
   return { loading, provider: provider + postposition };
