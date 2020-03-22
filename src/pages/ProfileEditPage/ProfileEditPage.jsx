@@ -113,7 +113,11 @@ const ProfileEditPage = () => {
     setValidationServerError,
     setIsPreviousNickname,
     showNicknameInfoMessage
-  } = useProfileValidation();
+  } = useProfileValidation({
+    nickname: { isValid: true, message: '' },
+    email: { isValid: true, message: '' },
+    phone: { isValid: true, message: '' }
+  });
 
   const checkNicknameValidation = debounce((nickname, currentNickname) => {
     const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);

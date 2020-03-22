@@ -8,6 +8,7 @@ import CommonLink from '../../components/CommonLink/CommonLink';
 import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
 import { useLoginContext } from '../../contexts/LoginContext';
 import useTempTokenValidation from '../../hooks/useTempTokenValidation';
+import useProfileValidation from '../../hooks/useProfileValidation';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
 import useFetch from '../../hooks/useFetch';
 import useInput from '../../hooks/useInput';
@@ -25,40 +26,51 @@ const SignupPage = () => {
   const { nickname } = inputValue;
 
   const { loading, provider } = useTempTokenValidation();
-  const [nicknameValidity, setNicknameValidity] = useState({});
 
   const shakeTarget = useRef(null);
   const [shakeInput] = useShakeAnimation(shakeTarget);
 
+  const {
+    validities,
+    isAllValid,
+    resetValidation,
+    setInvalidToken,
+    setNicknameAvailable,
+    setNicknameAlreadyInUse,
+    setNicknameHasBlanks,
+    setValidationServerError,
+    showNicknameInfoMessage
+  } = useProfileValidation({
+    nickname: { isValid: false, message: '' }
+  });
+
   const { request: checkNicknameFromServer } = useFetch({
     onRequest: api.checkNickname,
-    //TODO: useProfileValidation 으로 리팩토링
-    onSuccess: () => setNicknameValidity('AVAILABLE'),
+    onSuccess: setNicknameAvailable,
     onError: {
-      400: () => setNicknameValidity('HAS_BLANKS'),
-      409: () => setNicknameValidity('ALREADY_IN_USE'),
-      500: () => setNicknameValidity('SERVER_ERROR')
+      400: setNicknameHasBlanks,
+      409: setNicknameAlreadyInUse,
+      500: setValidationServerError
     }
   });
 
   const checkNicknameValidation = useCallback(
     debounce(nickname => {
+      if (!nickname) return resetValidation();
+
       const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
       const hasBlank = /\s/.test(nickname);
-      const onlyOneCharacter = nickname.length === 1;
+
       switch (true) {
         case isValid:
           checkNicknameFromServer(nickname);
           break;
         case hasBlank:
-          setNicknameValidity('HAS_BLANKS');
-          break;
-        case onlyOneCharacter:
-          setNicknameValidity('NO_MESSAGE');
+          setNicknameHasBlanks();
           break;
         default:
-          setNicknameValidity('INFO_MESSAGE');
-          break;
+          showNicknameInfoMessage();
+          return;
       }
     }),
     []
@@ -67,16 +79,15 @@ const SignupPage = () => {
 
   const { request: signup } = useFetch({
     onRequest: api.signup,
-    // onResponse: ,
     onSuccess: ({ referer }) => goTo(referer.replace(DOMAIN_REGEXP, '')),
     onError: {
       400: () => {
         shakeInput();
-        setNicknameValidity('INFO_MESSAGE');
+        showNicknameInfoMessage();
       },
       401: () => {
         shakeInput();
-        setNicknameValidity('INVALID_TOKEN');
+        setInvalidToken();
       }
     }
   });
@@ -87,20 +98,16 @@ const SignupPage = () => {
   };
 
   const requestSignup = () => {
-    if (nicknameValidity === 'AVAILABLE') {
+    if (isAllValid()) {
       signup(nickname);
     } else {
       shakeInput();
-      setNicknameValidity('INFO_MESSAGE');
+      showNicknameInfoMessage();
     }
   };
 
   useEffect(() => {
-    if (nickname) {
-      checkNicknameValidation(nickname);
-    } else {
-      setNicknameValidity('');
-    }
+    checkNicknameValidation(nickname);
   }, [nickname]);
 
   return (
@@ -122,7 +129,7 @@ const SignupPage = () => {
               type="text"
               placeholder="4~15자로 입력해주세요."
             />
-            <ValidityMessage messageKey={nicknameValidity} />
+            <ValidityMessage messageKey={validities.nickname.message} />
           </div>
           <CommonBtn
             styleType="emphasize"

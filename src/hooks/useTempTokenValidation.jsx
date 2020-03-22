@@ -12,6 +12,7 @@ const useTempTokenValidation = () => {
     onRequest: api.validateTempToken,
     onSuccess: json => setProvider(json.provider),
     onError: { 401: () => history.push('/') }, //유효하지 않은 토큰
+    autoFetch: true,
     loadStatus: true
   });
 
