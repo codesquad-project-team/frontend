@@ -1,3 +1,3 @@
 export { default } from './ImageUploader';
-import * as action from './action';
-export { action };
+import * as middleware from './middleware';
+export { middleware };

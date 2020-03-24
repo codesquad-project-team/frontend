@@ -12,7 +12,7 @@ import ProfileContentItem from '../../components/ProfileContentItem/ProfileConte
 import useProfileValidation from '../../hooks/useProfileValidation';
 import useEditStatus from '../../hooks/useEditStatus';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
-import useAsyncAction from '../../hooks/useAsyncAction';
+import useReducerMiddleware from '../../hooks/useReducerMiddleware';
 import useDebounce from '../../hooks/useDebounce';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
@@ -21,7 +21,7 @@ import useModal from '../../hooks/useModal';
 import useS3 from '../../hooks/useS3';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
-import action from './action';
+import middleware from './middleware';
 import reducer from './reducer';
 import api from '../../api';
 import styles from './ProfileEditPage.scss';
@@ -49,7 +49,11 @@ const ProfileEditPage = () => {
     previewURL: '',
     cropperData: {}
   };
-  const [image, dispatch] = useAsyncAction(reducer, initialImage, action);
+  const [image, dispatch] = useReducerMiddleware(
+    reducer,
+    initialImage,
+    middleware
+  );
 
   const [initialUserInfo, saveInitialUserInfo] = useState();
 

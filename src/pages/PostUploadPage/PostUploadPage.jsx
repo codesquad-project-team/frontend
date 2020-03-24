@@ -12,11 +12,11 @@ import PostQuestions from '../../components/PostUploader/PostQuestions';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import useS3 from '../../hooks/useS3';
 import useScript from '../../hooks/useScript';
-import useAsyncAction from '../../hooks/useAsyncAction';
+import useReducerMiddleware from '../../hooks/useReducerMiddleware';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 import { deepDiff } from '../../utils/diff.js';
-import action from './action';
+import middleware from './middleware';
 import reducer, { getLocalStorageImages } from './reducer';
 import useFetch from '../../hooks/useFetch';
 import api from '../../api';
@@ -61,10 +61,10 @@ const PostUploadPage = () => {
     updater(param);
     setIsEdited(true);
   };
-  const [images, dispatch] = useAsyncAction(
+  const [images, dispatch] = useReducerMiddleware(
     reducer,
     isEditMode ? getLocalStorageImages(initialImages) : [],
-    action
+    middleware
   );
 
   const [selectedLocation, setSelectedLocation] = useState(initial.location);
