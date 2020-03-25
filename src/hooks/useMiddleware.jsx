@@ -15,6 +15,7 @@ const NO_MIDDLE_WARE_DETECTED =
  * @returns {Array} [ state, dispatch ]
  *
  * @example
+ * https://codesandbox.io/s/usemiddleware-gjv7v
  */
 const useMiddleware = (reducer, initialState, middleware) => {
   if (!middleware) throw Error(NO_MIDDLE_WARE_DETECTED);
