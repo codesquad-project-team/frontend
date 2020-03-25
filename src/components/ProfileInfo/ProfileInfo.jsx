@@ -28,7 +28,7 @@ const ProfileInfo = ({ data, isMyProfile, userId }) => {
   } = profileContent;
 
   const { request } = useFetch({
-    onRequest: () => api.getFollowStatus(userId, isFollowing),
+    onRequest: () => api.updateFollowStatus(userId, isFollowing),
     onSuccess: () =>
       setProfileContent({
         isFollowing: !isFollowing,

@@ -64,7 +64,7 @@ const userAPI = {
   getFollowList: (userId, type) => {
     return request(GET, `/user/${userId}/relationship/${type}`);
   },
-  getFollowStatus: (userId, isFollowing) => {
+  updateFollowStatus: (userId, isFollowing) => {
     return request(
       isFollowing ? DELETE : POST,
       `/user/follow/${userId}`,
