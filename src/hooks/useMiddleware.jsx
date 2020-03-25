@@ -29,24 +29,15 @@ const useMiddleware = (reducer, initialState, middleware) => {
 
   const _updateState = action => setState(state => reducer(state, action));
 
-  const dispatch = useCallback(param => {
-    goAnyway(param, ..._middleware, _updateState);
-  }, []);
+  const dispatch = useCallback(
+    param => goAnyway(param, ..._middleware, _updateState),
+    []
+  );
 
   return [state, dispatch];
 };
 
 export default useMiddleware;
-
-/**
- * 인자의 타입에 맞는 미들웨어가 존재하는지 확인하기 위한 함수.
- * @param {any} param
- * @example
- * _(param).has(middleware) //returns Boolean(true or false)
- */
-const _ = param => ({
-  has: middleware => !!middleware[param.type]
-});
 
 /**
  * 프로미스이든지 아니든지 어쨌든 go 합니다.
@@ -83,7 +74,13 @@ const bindActionCreator = middleware => param => {
  * 리턴된 함수는 미들웨어의 실행결과를 받아서 액션을 생성합니다.
  * @param {string} type
  */
-const bindType = type => payload => ({ type, payload });
+const bindType = type => middlewareResult =>
+  isActionObject(middlewareResult)
+    ? middlewareResult
+    : {
+        type,
+        payload: middlewareResult
+      };
 
 /**
  * 미들웨어를 실행합니다.
@@ -95,6 +92,10 @@ const processMiddleware = ({ middleware, type, payload }) =>
 
 const { isArray } = Array;
 const isFunction = func => typeof func === 'function';
+const isObject = obj =>
+  obj !== undefined && obj !== null && obj.constructor === Object;
+const hasTypeProps = obj => !!obj.type;
+const isActionObject = obj => isObject(obj) && hasTypeProps(obj);
 
 export const createMiddleware = obj => (type, payload) =>
   obj[type] ? obj[type](payload) : payload;
