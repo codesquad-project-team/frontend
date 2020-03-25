@@ -17,6 +17,7 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 import { deepDiff } from '../../utils/diff.js';
 import middleware from './middleware';
+import logger from '../../utils/loggerMiddleware';
 import reducer, { getLocalStorageImages } from './reducer';
 import useFetch from '../../hooks/useFetch';
 import api from '../../api';
@@ -64,7 +65,7 @@ const PostUploadPage = () => {
   const [images, dispatch] = useReducerMiddleware(
     reducer,
     isEditMode ? getLocalStorageImages(initialImages) : [],
-    middleware
+    [middleware, logger]
   );
 
   const [selectedLocation, setSelectedLocation] = useState(initial.location);

@@ -22,6 +22,7 @@ import useS3 from '../../hooks/useS3';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
 import middleware from './middleware';
+import logger from '../../utils/loggerMiddleware';
 import reducer from './reducer';
 import api from '../../api';
 import styles from './ProfileEditPage.scss';
@@ -49,11 +50,10 @@ const ProfileEditPage = () => {
     previewURL: '',
     cropperData: {}
   };
-  const [image, dispatch] = useReducerMiddleware(
-    reducer,
-    initialImage,
-    middleware
-  );
+  const [image, dispatch] = useReducerMiddleware(reducer, initialImage, [
+    middleware,
+    logger
+  ]);
 
   const [initialUserInfo, saveInitialUserInfo] = useState();
 
