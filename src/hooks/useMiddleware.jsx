@@ -16,7 +16,7 @@ const NO_MIDDLE_WARE_DETECTED =
  *
  * @example
  */
-const useReducerMiddleware = (reducer, initialState, middleware) => {
+const useMiddleware = (reducer, initialState, middleware) => {
   if (!middleware) throw Error(NO_MIDDLE_WARE_DETECTED);
 
   const [state, setState] = useState(initialState);
@@ -36,7 +36,7 @@ const useReducerMiddleware = (reducer, initialState, middleware) => {
   return [state, dispatch];
 };
 
-export default useReducerMiddleware;
+export default useMiddleware;
 
 /**
  * 인자의 타입에 맞는 미들웨어가 존재하는지 확인하기 위한 함수.

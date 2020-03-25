@@ -1,6 +1,6 @@
 import { middleware as ImageEditorMiddleware } from '../../components/ImageEditor';
 import { middleware as ImageUploaderMiddleware } from '../../components/PostUploader/ImageUploader';
-import { createMiddleware } from '../../hooks/useReducerMiddleware';
+import { createMiddleware } from '../../hooks/useMiddleware';
 
 const middleware = createMiddleware({
   ...ImageEditorMiddleware,

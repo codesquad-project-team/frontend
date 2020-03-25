@@ -12,7 +12,7 @@ import PostQuestions from '../../components/PostUploader/PostQuestions';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import useS3 from '../../hooks/useS3';
 import useScript from '../../hooks/useScript';
-import useReducerMiddleware from '../../hooks/useReducerMiddleware';
+import useMiddleware from '../../hooks/useMiddleware';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { YYYYMMDDHHMMSS } from '../../utils/utils';
 import { deepDiff } from '../../utils/diff.js';
@@ -62,7 +62,7 @@ const PostUploadPage = () => {
     updater(param);
     setIsEdited(true);
   };
-  const [images, dispatch] = useReducerMiddleware(
+  const [images, dispatch] = useMiddleware(
     reducer,
     isEditMode ? getLocalStorageImages(initialImages) : [],
     [middleware, logger]

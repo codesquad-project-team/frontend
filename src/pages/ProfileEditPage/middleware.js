@@ -1,6 +1,6 @@
 import { middleware as ImageEditorMiddleware } from '../../components/ImageEditor';
 import { readFileAsDataURL } from '../../utils/utils';
-import { createMiddleware } from '../../hooks/useReducerMiddleware';
+import { createMiddleware } from '../../hooks/useMiddleware';
 
 const addNewImage = async file => ({
   file,

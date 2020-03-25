@@ -12,7 +12,7 @@ import ProfileContentItem from '../../components/ProfileContentItem/ProfileConte
 import useProfileValidation from '../../hooks/useProfileValidation';
 import useEditStatus from '../../hooks/useEditStatus';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
-import useReducerMiddleware from '../../hooks/useReducerMiddleware';
+import useMiddleware from '../../hooks/useMiddleware';
 import useDebounce from '../../hooks/useDebounce';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
@@ -50,7 +50,7 @@ const ProfileEditPage = () => {
     previewURL: '',
     cropperData: {}
   };
-  const [image, dispatch] = useReducerMiddleware(reducer, initialImage, [
+  const [image, dispatch] = useMiddleware(reducer, initialImage, [
     middleware,
     logger
   ]);
