@@ -19,14 +19,14 @@ const DropdownMenu = ({ onClick: toggleDropdownMenu }) => {
     alert('로그아웃되었습니다.');
   };
 
-  const showServerErrorMessage = () =>
+  const serverErrorMessage =
     '서버에 문제가 있나봐요. 잠시 후에 다시 시도해주세요.';
 
   const { request } = useFetch({
     onRequest: api.requestLogout,
     onSuccess: resetLocalUserInfo,
     onError: {
-      500: showServerErrorMessage
+      500: serverErrorMessage
     }
   });
 
