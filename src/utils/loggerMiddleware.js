@@ -1,4 +1,4 @@
-const logger = (type, payload) => {
+const logger = ({ type, payload }) => {
   console.groupCollapsed(`action type: %c${type}`, 'color: blue;');
   console.log('payload: ', payload);
   console.groupEnd();
