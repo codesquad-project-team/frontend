@@ -1,6 +1,7 @@
 import React, { useState, useContext, createContext, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import { WEB_SERVER_URL } from '../configs';
+import useFetch from '../hooks/useFetch';
+import api from '../api';
 
 const LoginContext = createContext();
 
@@ -33,18 +34,19 @@ const LoginContextProvider = ({ children }) => {
     setClickedSignup(!clickedSignup);
   };
 
+  const handleLoginSuccess = userInfo => {
+    setLoggedIn(true);
+    setUserInfo(userInfo);
+  };
+
+  const { request } = useFetch({
+    onRequest: api.hasLoggedIn,
+    onSuccess: handleLoginSuccess,
+    onError: () => setLoggedIn(false)
+  });
+
   useEffect(() => {
-    (async () => {
-      const res = await fetch(`${WEB_SERVER_URL}/auth/has-logged-in`, {
-        credentials: 'include'
-      });
-      if (res.ok) {
-        setLoggedIn(true);
-        setUserInfo(await res.json());
-      } else {
-        setLoggedIn(false);
-      }
-    })();
+    request();
   }, [needsUserInfo]);
 
   return (

@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames/bind';
 import CloseBtn from '../CommonBtn/CloseBtn';
 import Follower from './Follower';
 import useFetch from '../../hooks/useFetch';
 import styles from './FollowerList.scss';
-import { WEB_SERVER_URL } from '../../configs';
+import api from '../../api';
 
 const cx = classNames.bind(styles);
 
 const FollowerList = ({ Modal, type, onClose, userId }) => {
   const { data: lists, loading } = useFetch({
-    URL: `${WEB_SERVER_URL}/user/${userId}/relationship/${type}`,
+    onRequest: () => api.getFollowList(userId, type),
     onError: {
       400: 'userId 또는 type 오류',
       401: '유효하지 않은 토큰입니다. 다시 로그인 해주세요.',
       500: '서버에 문제가 생겼어요. 잠시 후에 다시 시도해주세요.'
-    }
+    },
+    watch: userId,
+    loadStatus: true
   });
 
   return (

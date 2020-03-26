@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { css } from '@emotion/core';
+import FadeLoader from 'react-spinners/FadeLoader';
 import Header from '../../components/Header/Header';
 import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
 import PostContainer from '../../components/PostContainer/PostContainer';
 import useFetch from '../../hooks/useFetch';
-import { css } from '@emotion/core';
-import FadeLoader from 'react-spinners/FadeLoader';
-import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
+import { MAIN_COLOR } from '../../configs';
 import { useLoginContext } from '../../contexts/LoginContext';
+import api from '../../api';
 
 const ProfilePage = () => {
   //로그아웃 상태에서 myId값이 undefined이므로 isMyProfile이 true값이 나오지 않도록 targetId 기본값을 null로 설정.
@@ -19,12 +20,11 @@ const ProfilePage = () => {
 
   const [data, setData] = useState({});
 
-  //db의 primary key는 userId이지만 주소창에 닉네임을 직접 입력하는 경우에도 프로필 불러오기 위해 2가지 쿼리 사용.
-  const query = targetId ? `id=${targetId}` : `nickname=${nickname}`;
-  const { loading, requestFetch: refetch } = useFetch({
-    URL: `${WEB_SERVER_URL}/user/profile-content?${query}`,
-    options: { credentials: 'include' },
-    onSuccess: setData
+  const { loading, request: refetch } = useFetch({
+    onRequest: () => api.getProfile(targetId, nickname),
+    onSuccess: setData,
+    watch: [targetId, nickname],
+    loadStatus: true
   });
 
   //로그아웃 시 refetch해서 profile 정보 갱신

@@ -3,16 +3,19 @@ import { useHistory } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { css } from '@emotion/core';
-import styles from './SignupPage.scss';
 import CommonBtn from '../../components/CommonBtn/CommonBtn';
 import CommonLink from '../../components/CommonLink/CommonLink';
 import ValidityMessage from '../../components/ValidityMessage/ValidityMessage';
 import { useLoginContext } from '../../contexts/LoginContext';
 import useTempTokenValidation from '../../hooks/useTempTokenValidation';
+import useProfileValidation from '../../hooks/useProfileValidation';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
+import useFetch from '../../hooks/useFetch';
 import useInput from '../../hooks/useInput';
 import { debounce } from '../../utils/utils';
-import { WEB_SERVER_URL, MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
+import { MAIN_COLOR } from '../../configs';
+import api from '../../api';
+import styles from './SignupPage.scss';
 
 const cx = classNames.bind(styles);
 
@@ -23,109 +26,88 @@ const SignupPage = () => {
   const { nickname } = inputValue;
 
   const { loading, provider } = useTempTokenValidation();
-  const [nicknameValidity, setNicknameValidity] = useState({});
 
   const shakeTarget = useRef(null);
   const [shakeInput] = useShakeAnimation(shakeTarget);
 
-  const checkNicknameFromServer = useCallback(async nickname => {
-    const res = await fetch(`${WEB_SERVER_URL}/user/checkNicknameDuplication`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nickname })
-    });
-    switch (res.status) {
-      case 200:
-        setNicknameValidity('AVAILABLE');
-        break;
-      case 400:
-        setNicknameValidity('HAS_BLANKS');
-        break;
-      case 409:
-        setNicknameValidity('ALREADY_IN_USE');
-        break;
-      case 500:
-        setNicknameValidity('SERVER_ERROR');
-        break;
-      default:
-        break;
+  const {
+    validities,
+    isAllValid,
+    resetValidation,
+    setInvalidToken,
+    setNicknameAvailable,
+    setNicknameAlreadyInUse,
+    setNicknameHasBlanks,
+    setValidationServerError,
+    showNicknameInfoMessage
+  } = useProfileValidation({
+    nickname: { isValid: false, message: '' }
+  });
+
+  const { request: checkNicknameFromServer } = useFetch({
+    onRequest: api.checkNickname,
+    onSuccess: setNicknameAvailable,
+    onError: {
+      400: setNicknameHasBlanks,
+      409: setNicknameAlreadyInUse,
+      500: setValidationServerError
     }
-  }, []);
+  });
 
   const checkNicknameValidation = useCallback(
     debounce(nickname => {
+      if (!nickname) return resetValidation();
+
       const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
       const hasBlank = /\s/.test(nickname);
-      const onlyOneCharacter = nickname.length === 1;
+
       switch (true) {
         case isValid:
           checkNicknameFromServer(nickname);
           break;
         case hasBlank:
-          setNicknameValidity('HAS_BLANKS');
-          break;
-        case onlyOneCharacter:
-          setNicknameValidity('NO_MESSAGE');
+          setNicknameHasBlanks();
           break;
         default:
-          setNicknameValidity('INFO_MESSAGE');
-          break;
+          showNicknameInfoMessage();
+          return;
       }
     }),
     []
   );
+  const DOMAIN_REGEXP = /^(((http(s?)):\/\/)?)([0-9a-zA-Z-]+(\.|:))([a-z]{2,3}|[0-9]{4})/;
 
-  const signUp = useCallback(async nickname => {
-    const res = await fetch(`${WEB_SERVER_URL}/auth/signup`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
+  const { request: signup } = useFetch({
+    onRequest: api.signup,
+    onSuccess: ({ referer }) => goTo(referer.replace(DOMAIN_REGEXP, '')),
+    onError: {
+      400: () => {
+        shakeInput();
+        showNicknameInfoMessage();
       },
-      //tempToken의 id를 보내기 위해 credentials 옵션 설정
-      credentials: 'include',
-      body: JSON.stringify({ nickname })
-    });
-    const json = await res.json();
-    const domainRegExp = /^(((http(s?)):\/\/)?)([0-9a-zA-Z-]+(\.|:))([a-z]{2,3}|[0-9]{4})/;
-
-    //사용자가 회원가입 하기 이전에 보고 있던 페이지 url
-    const referer = json.referer.replace(domainRegExp, '');
-    switch (res.status) {
-      case 200:
-        setLoggedIn(true);
-        setNeedsUserInfo(state => !state);
-        history.push(referer);
-        break;
-      case 400:
+      401: () => {
         shakeInput();
-        setNicknameValidity('INFO_MESSAGE');
-        break;
-      case 401:
-        shakeInput();
-        setNicknameValidity('INVALID_TOKEN');
-        break;
-      default:
-        break;
+        setInvalidToken();
+      }
     }
-  }, []);
+  });
+  const goTo = prevPath => {
+    setLoggedIn(true);
+    setNeedsUserInfo(state => !state);
+    history.push(prevPath);
+  };
 
   const requestSignup = () => {
-    if (nicknameValidity === 'AVAILABLE') {
-      signUp(nickname);
+    if (isAllValid()) {
+      signup(nickname);
     } else {
       shakeInput();
-      setNicknameValidity('INFO_MESSAGE');
+      showNicknameInfoMessage();
     }
   };
 
   useEffect(() => {
-    if (nickname) {
-      checkNicknameValidation(nickname);
-    } else {
-      setNicknameValidity('');
-    }
+    checkNicknameValidation(nickname);
   }, [nickname]);
 
   return (
@@ -147,7 +129,7 @@ const SignupPage = () => {
               type="text"
               placeholder="4~15자로 입력해주세요."
             />
-            <ValidityMessage messageKey={nicknameValidity} />
+            <ValidityMessage messageKey={validities.nickname.message} />
           </div>
           <CommonBtn
             styleType="emphasize"

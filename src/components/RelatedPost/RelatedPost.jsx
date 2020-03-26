@@ -1,15 +1,12 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import classNames from 'classnames/bind';
-import styles from './RelatedPost.scss';
 import useFetch from '../../hooks/useFetch';
 import useMediaQuerySet from '../../hooks/useMediaQuerySet';
 import RelatedPostComment from './RelatedPostComment';
 import { throttle } from '../../utils/utils';
-import {
-  TRANSITION_DURATION_TIME,
-  TRANSITION_DELAY_TIME,
-  WEB_SERVER_URL
-} from '../../configs';
+import { TRANSITION_DURATION_TIME, TRANSITION_DELAY_TIME } from '../../configs';
+import api from '../../api';
+import styles from './RelatedPost.scss';
 
 const cx = classNames.bind(styles);
 
@@ -41,9 +38,10 @@ const RelatedPost = ({ postId }) => {
   const posts = response ? response.posts : [];
 
   const { loading } = useFetch({
-    URL: `${WEB_SERVER_URL}/post/related-to?postid=${postId}&page=${page}`,
+    onRequest: () => api.getRelatedPosts(postId, page),
     onSuccess: json => mergeResponse(response, json),
-    onError: { 204: () => setResponse(null) }
+    onError: { 204: () => setResponse(null) },
+    watch: page
   });
 
   const mergeResponse = (prevResponse, response) => {

@@ -18,11 +18,12 @@ import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
 import useModal from '../../hooks/useModal';
 import useS3 from '../../hooks/useS3';
-import { debounce, handleResponse } from '../../utils/utils';
+import { debounce } from '../../utils/utils';
 import { useLoginContext } from '../../contexts/LoginContext';
-import { WEB_SERVER_URL, MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
+import { MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
 import action from './action';
 import reducer from './reducer';
+import api from '../../api';
 import styles from './ProfileEditPage.scss';
 
 const cx = classNames.bind(styles);
@@ -65,9 +66,10 @@ const ProfileEditPage = () => {
   const { S3imageUploadHandler } = useS3();
 
   const { loading } = useFetch({
-    URL: `${WEB_SERVER_URL}/user/myinfo`,
-    options: { credentials: 'include' },
-    onSuccess: json => initUserInfo(json)
+    onRequest: api.getMyProfile,
+    onSuccess: json => initUserInfo(json),
+    autoFetch: true,
+    loadStatus: true
   });
 
   const initUserInfo = userInfo => {
@@ -111,7 +113,11 @@ const ProfileEditPage = () => {
     setValidationServerError,
     setIsPreviousNickname,
     showNicknameInfoMessage
-  } = useProfileValidation();
+  } = useProfileValidation({
+    nickname: { isValid: true, message: '' },
+    email: { isValid: true, message: '' },
+    phone: { isValid: true, message: '' }
+  });
 
   const checkNicknameValidation = debounce((nickname, currentNickname) => {
     const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
@@ -133,22 +139,15 @@ const ProfileEditPage = () => {
         break;
     }
   });
-
-  const checkNicknameOnServer = async nickname => {
-    const res = await fetch(`${WEB_SERVER_URL}/user/checkNicknameDuplication`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nickname })
-    });
-
-    handleResponse(res.status, {
-      200: setNicknameAvailable,
+  const { request: checkNicknameOnServer } = useFetch({
+    onRequest: api.checkNickname,
+    onSuccess: setNicknameAvailable,
+    onError: {
       400: setNicknameHasBlanks,
       409: setNicknameAlreadyInUse,
       500: setValidationServerError
-    });
-  };
+    }
+  });
 
   const checkPhoneNumberValidation = useCallback(
     debounce(phone => {
@@ -209,24 +208,14 @@ const ProfileEditPage = () => {
     return S3UploadedURL;
   };
 
-  const { requestFetch: requestUpdateUserInfo } = useFetch({
-    onFetch: userInfo => sendUpdatedUserInfo(userInfo),
+  const { request: requestUpdateUserInfo } = useFetch({
+    onRequest: userInfo => api.updateProfile(userInfo),
     onSuccess: () => handleUpdateSuccess(),
     onError: {
       400: '요청이 올바르지 않습니다.',
       401: '인증되지 않은 토큰입니다.'
     }
   });
-
-  const sendUpdatedUserInfo = async userInfo => {
-    return await fetch(`${WEB_SERVER_URL}/user/profile`, {
-      method: 'PUT',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(userInfo)
-    });
-  };
 
   const handleUpdateSuccess = () => {
     saveInitialUserInfo({

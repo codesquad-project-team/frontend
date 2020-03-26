@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
 import classNames from 'classnames/bind';
-import styles from './DetailPage.scss';
 import Header from '../../components/Header/Header';
 import DetailPostHeader from '../../components/DetailPostHeader/DetailPostHeader';
 import Carousel from '../../components/Carousel/Carousel';
@@ -11,7 +10,9 @@ import DetailPost from '../../components/DetailPost/DetailPost';
 import MapView from '../../components/MapView/MapView';
 import RelatedPost from '../../components/RelatedPost/RelatedPost';
 import useFetch from '../../hooks/useFetch';
-import { WEB_SERVER_URL, MAIN_COLOR } from '../../configs';
+import { MAIN_COLOR } from '../../configs';
+import api from '../../api';
+import styles from './DetailPage.scss';
 
 const cx = classNames.bind(styles);
 
@@ -19,7 +20,9 @@ const DetailPage = () => {
   const { postId } = useParams();
 
   const { data, loading } = useFetch({
-    URL: `${WEB_SERVER_URL}/post/${postId}`
+    onRequest: () => api.getPostDetail(postId),
+    watch: postId,
+    loadStatus: true
   });
 
   return (
