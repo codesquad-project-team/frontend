@@ -25,9 +25,9 @@ const useMiddleware = (reducer, initialState, middleware) => {
 
   const _middleware = isArray(middleware)
     ? middleware.map((middlewares /*: Object|Function */) =>
-        new Middleware().create(middlewares)
+        createMiddleware(middlewares)
       )
-    : [new Middleware().create(middleware)];
+    : [createMiddleware(middleware)];
 
   const _updateState = action => setState(state => reducer(state, action));
 
@@ -69,36 +69,23 @@ const isObject = obj =>
 const hasTypeProps = obj => !!obj.type;
 const isActionObject = obj => isObject(obj) && hasTypeProps(obj);
 
-class Middleware {
-  constructor() {
-    this.type = '';
-    this.middlewares = {};
-    this.run = this.run.bind(this);
-    this.middleware = this.middleware.bind(this);
-    this.createAction = this.createAction.bind(this);
-  }
-  hasMiddleware(type) {
-    return !!this.middlewares[type];
-  }
-  run({ type, payload }) {
-    return this.hasMiddleware(type) ? this.middlewares[type](payload) : payload;
-  }
-  createAction(middlewareResult) {
-    return isActionObject(middlewareResult)
-      ? middlewareResult
-      : {
-          type: this.type,
-          payload: middlewareResult
-        };
-  }
-  middleware(action) {
-    this.type = action.type;
-    return isFunction(this.middlewares)
-      ? goAnyway(action, this.middlewares, this.createAction)
-      : goAnyway(action, this.run, this.createAction);
-  }
-  create(middlewares) {
-    this.middlewares = middlewares;
-    return this.middleware;
-  }
-}
+const createMiddleware = middlewares => {
+  const hasMiddleware = type => !!middlewares[type];
+  const run = ({ type, payload }) =>
+    hasMiddleware(type) ? middlewares[type](payload) : payload;
+
+  return function middleware(action) {
+    const type = action.type;
+    const createAction = middlewareResult =>
+      isActionObject(middlewareResult)
+        ? middlewareResult
+        : {
+            type,
+            payload: middlewareResult
+          };
+
+    return isFunction(middlewares)
+      ? goAnyway(action, middlewares, createAction)
+      : goAnyway(action, run, createAction);
+  };
+};
