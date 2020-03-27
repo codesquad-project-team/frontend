@@ -1,10 +1,9 @@
 import { middleware as ImageEditorMiddleware } from '../../components/ImageEditor';
 import { middleware as ImageUploaderMiddleware } from '../../components/PostUploader/ImageUploader';
-import { createMiddleware } from '../../hooks/useMiddleware';
 
-const middleware = createMiddleware({
+const middleware = {
   ...ImageEditorMiddleware,
   ...ImageUploaderMiddleware
-});
+};
 
 export default middleware;
