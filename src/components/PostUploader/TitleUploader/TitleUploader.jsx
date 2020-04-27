@@ -8,7 +8,14 @@ import useWidthAdjust from '../../../hooks/useWidthAdjust';
 
 const cx = classNames.bind(styles);
 
-const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
+const TitleUploader = ({
+  state: {
+    location: { name: placeName },
+    post: { description, images, ...title },
+  },
+  dispatch,
+  setUploadStatus,
+}) => {
   const {
     inputValue,
     setInputValue,
@@ -30,16 +37,12 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
     const isAllEmpty = !(place || companion || activity);
     if (isAllEmpty) return;
 
-    setTitle({
-      place,
-      companion,
-      activity,
-    });
+    dispatch({ type: 'updateTitle', payload: { place, companion, activity } });
 
     const hasAllTitles = place && companion && activity;
     hasAllTitles
-      ? setReadyToUpload({ hasAllTitles: true })
-      : setReadyToUpload({ hasAllTitles: false });
+      ? setUploadStatus({ hasAllTitles: true })
+      : setUploadStatus({ hasAllTitles: false });
   });
 
   return (

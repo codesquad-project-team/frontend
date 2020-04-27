@@ -8,7 +8,7 @@ const errorMsgMap = (key, msg = '') => {
     ALBUM_NAME_ALREADY_EXIST: `동일한 폴더명을 이미 사용 중입니다. `,
     ALBUM_NAME_UNKNOWN_ERROR: `폴더를 생성 하는 중 해당 에러가 발생했습니다. ${msg}`,
     NO_SELECTED_IMAGE: '업로드 할 이미지를 최소 1개 이상 선택해주세요.',
-    IMAGE_UPLOAD_UNKNOWN_ERROR: `이미지를 업로드 하는 도중 해당 에러가 발생했습니다. ${msg}`
+    IMAGE_UPLOAD_UNKNOWN_ERROR: `이미지를 업로드 하는 도중 해당 에러가 발생했습니다. ${msg}`,
   };
 
   return obj[key];
@@ -23,15 +23,15 @@ const useS3 = () => {
       // eslint-disable-next-line no-undef
       credentials: new AWS.CognitoIdentityCredentials({
         // eslint-disable-next-line no-undef
-        IdentityPoolId: `${IDENTITY_POOL_ID}`
-      })
+        IdentityPoolId: `${IDENTITY_POOL_ID}`,
+      }),
     });
 
     // eslint-disable-next-line no-undef
     return new AWS.S3({
       apiVersion: '2006-03-01',
       // eslint-disable-next-line no-undef
-      params: { Bucket: `${ALBUM_BUCKET_NAME}` }
+      params: { Bucket: `${ALBUM_BUCKET_NAME}` },
     });
   };
 
@@ -41,8 +41,8 @@ const useS3 = () => {
       region: null,
       // eslint-disable-next-line no-undef
       credentials: new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: null
-      })
+        IdentityPoolId: null,
+      }),
     });
   };
 
@@ -50,21 +50,21 @@ const useS3 = () => {
     if (!albumName) {
       return {
         error: true,
-        msg: errorMsgMap('ALBUM_NAME_PREREQUISITE_CHAR')
+        msg: errorMsgMap('ALBUM_NAME_PREREQUISITE_CHAR'),
       };
     }
 
     if (albumName.indexOf('/') !== -1) {
       return {
         error: true,
-        msg: errorMsgMap('ALBUM_NAME_CANNOT_CONTAIN_SLASH')
+        msg: errorMsgMap('ALBUM_NAME_CANNOT_CONTAIN_SLASH'),
       };
     }
 
     if (!files.length) {
       return {
         error: true,
-        msg: errorMsgMap('NO_SELECTED_IMAGE')
+        msg: errorMsgMap('NO_SELECTED_IMAGE'),
       };
     }
 
@@ -78,7 +78,7 @@ const useS3 = () => {
           if (err)
             return {
               error: true,
-              msg: errorMsgMap('ALBUM_NAME_UNKNOWN_ERROR', err.message)
+              msg: errorMsgMap('ALBUM_NAME_UNKNOWN_ERROR', err.message),
             };
         });
       }
@@ -89,7 +89,7 @@ const useS3 = () => {
 
   const addImage = (files, albumKey) => {
     return Promise.all(
-      files.map(file => {
+      files.map((file) => {
         const fileName = file.name;
 
         const photoKey = albumKey + fileName;
@@ -100,27 +100,27 @@ const useS3 = () => {
             Bucket: `${ALBUM_BUCKET_NAME}`,
             Key: photoKey,
             Body: file,
-            ACL: 'public-read'
-          }
+            ACL: 'public-read',
+          },
         });
 
         return upload.promise();
       })
     ).then(
-      response => {
+      (response) => {
         const uploadedUrl = response.reduce((acc, cur) => {
           return acc.concat(cur.Location);
         }, []);
 
         return {
           error: false,
-          msg: uploadedUrl
+          msg: uploadedUrl,
         };
       },
-      err => {
+      (err) => {
         return {
           error: true,
-          msg: errorMsgMap('IMAGE_UPLOAD_UNKNOWN_ERROR', err.message)
+          msg: errorMsgMap('IMAGE_UPLOAD_UNKNOWN_ERROR', err.message),
         };
       }
     );
@@ -131,14 +131,12 @@ const useS3 = () => {
    * @param {string} albumName
    * @param {string} albumNamePrefix
    * @param {Array} images file객체를 담고 있는 배열.
-   * @param {Function} setImageUploadError
    * @returns {Promise} "S3에 업로드된 URL을 담고있는 배열"을 resolved value로 갖는 Promise.
    */
   const S3imageUploadHandler = async ({
     albumName,
     albumNamePrefix,
     images,
-    setImageUploadError
   }) => {
     try {
       const s3 = updateS3();
@@ -165,7 +163,6 @@ const useS3 = () => {
       else {
         console.log(err);
         alert('서버 에러가 발생했습니다. 다음에 다시 시도해주세요. ');
-        setImageUploadError(true);
       }
     } finally {
       initS3();
