@@ -1,11 +1,12 @@
 import * as ImageUploadReducer from './ImageUploadReducer';
 import * as ImageEditReducer from './ImageEditReducer';
+import * as LocationUploadReducer from './LocationUploadReducer';
 
 const reducer = (state, { type, payload }) => {
   return {
     ...ImageEditReducer,
     ...ImageUploadReducer,
-    updateLocation,
+    ...LocationUploadReducer,
     updateTitle,
     updateDescription,
     resetEditStatus,
@@ -16,10 +17,6 @@ export default reducer;
 
 const resetEditStatus = (state) => {
   return { ...state, isEdited: false };
-};
-
-const updateLocation = (state, location) => {
-  return { ...state, location, isEdited: true };
 };
 
 const updateTitle = (state, title) => {

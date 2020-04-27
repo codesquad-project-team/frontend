@@ -15,7 +15,7 @@ import useMiddleware from '../../hooks/useMiddleware';
 import { useLoginContext } from '../../contexts/LoginContext';
 import middleware from './middleware';
 import logger from '../../utils/loggerMiddleware';
-import reducer, { getLocalStorageImages } from './reducer';
+import reducer, { getLocalStorageImages } from '../../reducers/PostUploadPage';
 import useFetch from '../../hooks/useFetch';
 import api from '../../api';
 import useUploadStatus from '../../hooks/useUploadStatus';

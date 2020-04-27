@@ -79,33 +79,15 @@ const LocationFinder = ({
     map.setCenter(new kakao.maps.LatLng(y, x));
   };
 
-  const makeFormattedLocation = (location) => {
-    const {
-      x: lng,
-      y: lat,
-      place_name: name,
-      road_address_name: address,
-      place_url: link,
-      phone,
-    } = location;
-
-    return {
-      latitude: Number(lat),
-      longitude: Number(lng),
-      name,
-      address,
-      link,
-      phone,
-    };
-  };
-
   const selectLocation = () => {
     if (clickedItemIndex === 'UNCLICKED') {
       setPopupActionType('SELECTION_REQUIRED');
       return;
     }
-    const location = makeFormattedLocation(searchResult[clickedItemIndex]);
-    dispatch({ type: 'updateLocation', payload: location });
+    dispatch({
+      type: 'updateLocation',
+      payload: searchResult[clickedItemIndex],
+    });
     setUploadStatus({ hasSelectedLocation: true });
     closeModal();
   };
