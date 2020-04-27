@@ -1,13 +1,5 @@
 @import '../../../stylesheets/util.scss';
 
-.text-boxes {
-  width: 100%;
-  height: 5rem;
-  border: none;
-  border-bottom: 1px solid $gray-border-color;
-  font-size: $medium-title-font-size;
-  text-align: center;
-}
 .overlay-select-box {
   position: absolute;
   top: 4rem;
@@ -25,9 +17,6 @@
 }
 
 @include desktop {
-  .text-boxes {
-    width: auto;
-  }
   .overlay-select-box {
     width: 30rem;
   }

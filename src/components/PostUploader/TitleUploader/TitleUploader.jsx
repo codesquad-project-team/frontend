@@ -57,7 +57,11 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
         <span>에서</span>
       </div>
       <span className={cx('companion-section')}>
-        <CompanionInput value={companion} onChange={handleInputChange} />
+        <CompanionInput
+          className={cx('text-boxes')}
+          value={companion}
+          onChange={handleInputChange}
+        />
       </span>
       <input
         type="text"

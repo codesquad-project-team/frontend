@@ -32,7 +32,7 @@ const useWidthAdjust = (inputValue) => {
   };
 
   useEffect(() => {
-    isDesktop && adjustInputWidth(inputValue); //TODO: custom hook 분리
+    isDesktop && adjustInputWidth(inputValue);
   }, [inputValue]);
 
   return [inputStyle];

@@ -4,7 +4,7 @@ import styles from './CompanionInput.scss';
 
 const cx = classNames.bind(styles);
 
-const CompanionInput = ({ value, onChange }) => {
+const CompanionInput = ({ className = '', value, onChange }) => {
   const [selectValue, setSelectValue] = useState(value || '');
   const [status, setStatus] = useState({});
   const { isInputFocused, isSelectBoxHovered } = status;
@@ -40,7 +40,7 @@ const CompanionInput = ({ value, onChange }) => {
         type="text"
         placeholder="누구랑"
         name="companion"
-        className={cx('text-boxes')}
+        className={className}
         value={value}
         onChange={onChange}
         onFocus={setInputFocused}
@@ -48,7 +48,7 @@ const CompanionInput = ({ value, onChange }) => {
       />
       {(isSelectBoxHovered || isInputFocused) && (
         <select
-          className={cx('overlay-select-box', 'text-boxes')}
+          className={`${cx('overlay-select-box')} ${className}`}
           name="companion"
           value={selectValue}
           onChange={handleSelectBoxChange}
