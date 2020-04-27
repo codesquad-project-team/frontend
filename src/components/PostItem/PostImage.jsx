@@ -34,6 +34,11 @@ const PostImage = ({ headerOn, src }) => {
             className={cx('img', 'thumb')}
             style={{ opacity: isLoaded ? 0 : 1 }}
           />
+          {!isLoaded && (
+            <div className={cx('bar')}>
+              <div className={cx('indicator')} />
+            </div>
+          )}
         </>
       )}
     </div>

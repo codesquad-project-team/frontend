@@ -20,11 +20,49 @@
 }
 
 .full {
-  transition: opacity 0s ease 0.5s;
+  transition: opacity 0.5s ease 0s;
 }
 .thumb {
   filter: blur(20px);
   transform: scale(1.1);
-  transition: opacity 1s ease 0s;
-  background-color: #aaaaaa; //TODO: 썸네일 기능 구현 시 삭제.
+}
+
+.bar {
+  width: 100%;
+  position: absolute;
+  animation: skeleton 1s ease-in infinite;
+}
+
+.indicator {
+  width: 0;
+  box-shadow: 0 0 75px 75px white;
+}
+
+.bar,
+.indicator {
+  height: 100%;
+}
+
+@keyframes skeleton {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
