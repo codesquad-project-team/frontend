@@ -4,6 +4,7 @@ import ProfileImage from '../ProfileImage/ProfileImage';
 import CommonLink from '../CommonLink/CommonLink';
 import { profilePage } from '../../utils/utils';
 import styles from './PostItem.scss';
+import PostImage from './PostImage';
 
 const cx = classNames.bind(styles);
 
@@ -29,11 +30,7 @@ const PostItem = ({
           </CommonLink>
         </div>
       )}
-      <img
-        className={cx(headerOn ? 'img' : 'img-without-header')}
-        src={image}
-        alt="representative post image"
-      />
+      <PostImage src={image} headerOn={headerOn} />
       <div className={cx('title')}>
         {place}에서 {companion} {activity}
       </div>

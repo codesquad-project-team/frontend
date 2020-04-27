@@ -1,0 +1,30 @@
+.wrapper {
+  position: relative;
+  padding-bottom: 100%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #eeeeee;
+}
+
+.img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.without-header {
+  border-radius: 5px 5px 0 0;
+}
+
+.full {
+  transition: opacity 0s ease 0.5s;
+}
+.thumb {
+  filter: blur(20px);
+  transform: scale(1.1);
+  transition: opacity 1s ease 0s;
+  background-color: #aaaaaa; //TODO: 썸네일 기능 구현 시 삭제.
+}
