@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './TitleUploader.scss';
-import useInput from '../../hooks/useInput';
-import useDebounce from '../../hooks/useDebounce';
-import useMediaQuerySet from '../../hooks/useMediaQuerySet';
+import useInput from '../../../hooks/useInput';
+import useDebounce from '../../../hooks/useDebounce';
+import useMediaQuerySet from '../../../hooks/useMediaQuerySet';
+import CompanionInput from './CompanionInput';
 
 const cx = classNames.bind(styles);
 
@@ -11,35 +12,11 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
   const {
     inputValue,
     setInputValue,
-    handleChange: handleInputChange
+    handleChange: handleInputChange,
   } = useInput(title);
   const { isDesktop } = useMediaQuerySet();
   const { place, companion, activity } = inputValue;
   const [locationInputStyle, setLocationInputStyle] = useState({});
-
-  const [select, setSelect] = useState(companion || '');
-  const [state, setState] = useState({});
-  const { isCompanionInputFocused, isOverlayHovered } = state;
-
-  const handleSelectBoxChange = ({ target }) => {
-    setSelect(target.value);
-  };
-
-  const setInputStateFocused = () => {
-    setState({ ...state, isCompanionInputFocused: true });
-  };
-
-  const setInputStateBlurred = () => {
-    setState({ ...state, isCompanionInputFocused: false });
-  };
-
-  const setOverlayStateHovered = () => {
-    setState({ ...state, isOverlayHovered: true });
-  };
-
-  const setOverlayStateUnhovered = () => {
-    setState({ ...state, isOverlayHovered: false });
-  };
 
   const adjustLocationInputWidth = (place = '') => {
     //width 20rem, font-size 4rem 기준 한글 7글자에서 overflow 발생. max는 19자
@@ -62,7 +39,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
     // }
     inputOverflows
       ? setLocationInputStyle({
-          width: `${newWidth}rem`
+          width: `${newWidth}rem`,
         })
       : setLocationInputStyle({});
   };
@@ -73,22 +50,19 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
   }, [placeName]);
 
   useEffect(() => {
-    if (!select) return;
-    setInputValue({ ...inputValue, companion: select });
-    setState({});
-  }, [select]);
-
-  useEffect(() => {
     updateTitles(place, companion, activity);
   }, [place, companion, activity]);
 
   const updateTitles = useDebounce((place, companion, activity) => {
-    if (!(place || companion || activity)) return;
+    const isAllEmpty = !(place || companion || activity);
+    if (isAllEmpty) return;
+
     setTitle({
       place,
       companion,
-      activity
+      activity,
     });
+
     const hasAllTitles = place && companion && activity;
     hasAllTitles
       ? setReadyToUpload({ hasAllTitles: true })
@@ -96,7 +70,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
   });
 
   useEffect(() => {
-    isDesktop && adjustLocationInputWidth(place);
+    isDesktop && adjustLocationInputWidth(place); //TODO: custom hook 분리
   }, [place]);
 
   return (
@@ -114,32 +88,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
         <span>에서</span>
       </div>
       <span className={cx('companion-section')}>
-        <input
-          type="text"
-          placeholder="누구랑"
-          name="companion"
-          className={cx('text-boxes')}
-          value={companion}
-          onChange={handleInputChange}
-          onFocus={setInputStateFocused}
-          onBlur={setInputStateBlurred}
-        />
-        {(isOverlayHovered || isCompanionInputFocused) && (
-          <select
-            className={cx('overlay-select-box', 'text-boxes')}
-            name="companion"
-            value={select}
-            onChange={handleSelectBoxChange}
-            onMouseOver={setOverlayStateHovered}
-            onMouseLeave={setOverlayStateUnhovered}
-          >
-            <option value="누구랑">누구랑</option>
-            <option value="혼자서">혼자서</option>
-            <option value="친구랑">친구랑</option>
-            <option value="연인이랑">연인이랑</option>
-            <option value="가족이랑">가족이랑</option>
-          </select>
-        )}
+        <CompanionInput value={companion} onChange={handleInputChange} />
       </span>
       <input
         type="text"
