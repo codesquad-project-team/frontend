@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './TitleUploader.scss';
 import useInput from '../../../hooks/useInput';
 import useDebounce from '../../../hooks/useDebounce';
-import useMediaQuerySet from '../../../hooks/useMediaQuerySet';
 import CompanionInput from './CompanionInput';
+import useWidthAdjust from '../../../hooks/useWidthAdjust';
 
 const cx = classNames.bind(styles);
 
@@ -14,35 +14,8 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
     setInputValue,
     handleChange: handleInputChange,
   } = useInput(title);
-  const { isDesktop } = useMediaQuerySet();
   const { place, companion, activity } = inputValue;
-  const [locationInputStyle, setLocationInputStyle] = useState({});
-
-  const adjustLocationInputWidth = (place = '') => {
-    //width 20rem, font-size 4rem 기준 한글 7글자에서 overflow 발생. max는 19자
-    const len = place.length;
-    const OVERFLOW_CRITERION = 7;
-    const MAX_WIDTH = 19;
-    const MAX_WIDTH_REM = 59;
-    const ADJUST_REM = 3.25;
-    const DEFAULT_WIDTH_REM = 20;
-    const inputOverflows = len >= OVERFLOW_CRITERION;
-    const overflowQuantity = len - OVERFLOW_CRITERION;
-    const overMaxWidth = len > MAX_WIDTH;
-    const adjustedWidth = DEFAULT_WIDTH_REM + ADJUST_REM * overflowQuantity;
-    const newWidth =
-      adjustedWidth > MAX_WIDTH_REM ? MAX_WIDTH_REM : adjustedWidth;
-
-    //TODO: 최대길이 넘어갈 경우 font-size 줄이기
-    // if(overMaxWidth) {
-    //   setLocationInputStyle({width: `${DEFAULT_WIDTH + ADJUST_REM * overflowQuantity}rem`})
-    // }
-    inputOverflows
-      ? setLocationInputStyle({
-          width: `${newWidth}rem`,
-        })
-      : setLocationInputStyle({});
-  };
+  const [placeInputStyle] = useWidthAdjust(place);
 
   useEffect(() => {
     if (!placeName) return;
@@ -69,10 +42,6 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
       : setReadyToUpload({ hasAllTitles: false });
   });
 
-  useEffect(() => {
-    isDesktop && adjustLocationInputWidth(place); //TODO: custom hook 분리
-  }, [place]);
-
   return (
     <div className={cx('wrapper')}>
       <div className={cx('place-section')}>
@@ -83,7 +52,7 @@ const TitleUploader = ({ placeName, title, setTitle, setReadyToUpload }) => {
           value={place}
           className={cx('text-boxes')}
           onChange={handleInputChange}
-          style={locationInputStyle}
+          style={placeInputStyle}
         />
         <span>에서</span>
       </div>
