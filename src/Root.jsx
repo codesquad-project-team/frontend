@@ -3,6 +3,7 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage';
 import LoginContextProvider from './contexts/LoginContext';
+import Loader from './components/Loader';
 
 const ProfileEditPage = lazy(() =>
   import(/* webpackChunkName: "profile-edit-page" */ './pages/ProfileEditPage')
@@ -24,7 +25,7 @@ const Root = () => {
   return (
     <Router>
       <LoginContextProvider>
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense fallback={<Loader size={50} unit={'px'} />}>
           <Switch>
             <Route exact path="/" component={MainPage} />
             <Route path="/profile/edit" component={ProfileEditPage} />
