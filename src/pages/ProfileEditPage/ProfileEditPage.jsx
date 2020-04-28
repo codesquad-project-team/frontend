@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames/bind';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { css } from '@emotion/core';
@@ -12,16 +12,17 @@ import ProfileContentItem from '../../components/ProfileContentItem/ProfileConte
 import useProfileValidation from '../../hooks/useProfileValidation';
 import useEditStatus from '../../hooks/useEditStatus';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
-import useAsyncDispatch from '../../hooks/useAsyncDispatch';
+import useMiddleware from '../../hooks/useMiddleware';
+import useDebounce from '../../hooks/useDebounce';
 import useInput from '../../hooks/useInput';
 import useFetch from '../../hooks/useFetch';
 import useScript from '../../hooks/useScript';
 import useModal from '../../hooks/useModal';
 import useS3 from '../../hooks/useS3';
-import { debounce } from '../../utils/utils';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { MAIN_COLOR, IMAGE_BUCKET_URL } from '../../configs';
-import action from './action';
+import middleware from './middleware';
+import logger from '../../utils/loggerMiddleware';
 import reducer from './reducer';
 import api from '../../api';
 import styles from './ProfileEditPage.scss';
@@ -49,11 +50,10 @@ const ProfileEditPage = () => {
     previewURL: '',
     cropperData: {}
   };
-  const [image, dispatch, asyncDispatch] = useAsyncDispatch(
-    reducer,
-    initialImage,
-    action
-  );
+  const [image, dispatch] = useMiddleware(reducer, initialImage, [
+    middleware,
+    logger
+  ]);
 
   const [initialUserInfo, saveInitialUserInfo] = useState();
 
@@ -119,7 +119,7 @@ const ProfileEditPage = () => {
     phone: { isValid: true, message: '' }
   });
 
-  const checkNicknameValidation = debounce((nickname, currentNickname) => {
+  const checkNicknameValidation = useDebounce((nickname, currentNickname) => {
     const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
     const hasBlank = /\s/.test(nickname);
     const sameNickname = nickname === currentNickname;
@@ -149,17 +149,13 @@ const ProfileEditPage = () => {
     }
   });
 
-  const checkPhoneNumberValidation = useCallback(
-    debounce(phone => {
-      const isValid =
-        /^[0-9]{3}[-]+[0-9]{4}[-]+[0-9]{4}$/.test(phone) || !phone; //optional이므로 입력 안해도 허용
+  const checkPhoneNumberValidation = useDebounce(phone => {
+    const isValid = /^[0-9]{3}[-]+[0-9]{4}[-]+[0-9]{4}$/.test(phone) || !phone; // 입력 안해도 허용
 
-      isValid ? setValid('phone') : setInvalid('phone');
-    }),
-    []
-  );
+    isValid ? setValid('phone') : setInvalid('phone');
+  });
 
-  const checkEmailValidation = debounce(email => {
+  const checkEmailValidation = useDebounce(email => {
     const regExp = /^[A-Za-z0-9_.-]+@[A-Za-z0-9-]+\.[A-Za-z0-9-]+/;
 
     regExp.test(email) || !email ? setValid('email') : setInvalid('email');
@@ -241,7 +237,7 @@ const ProfileEditPage = () => {
     const file = Array.from(target.files)[0];
     if (!file) return;
 
-    asyncDispatch({ type: 'addNewImage', payload: file });
+    dispatch({ type: 'addNewImage', payload: file });
     setEditStatus({ profileImage: { isEdited: true } });
   };
 
@@ -356,7 +352,7 @@ const ProfileEditPage = () => {
           {isOpen && (
             <ImageEditor
               Modal={Modal}
-              asyncDispatch={handleImageEdit(asyncDispatch)}
+              dispatch={handleImageEdit(dispatch)}
               src={image.originalURL}
               originalFile={image.original}
               cropperData={image.cropperData}

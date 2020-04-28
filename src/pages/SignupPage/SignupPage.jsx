@@ -10,9 +10,9 @@ import { useLoginContext } from '../../contexts/LoginContext';
 import useTempTokenValidation from '../../hooks/useTempTokenValidation';
 import useProfileValidation from '../../hooks/useProfileValidation';
 import useShakeAnimation from '../../hooks/useShakeAnimation';
+import useDebounce from '../../hooks/useDebounce';
 import useFetch from '../../hooks/useFetch';
 import useInput from '../../hooks/useInput';
-import { debounce } from '../../utils/utils';
 import { MAIN_COLOR } from '../../configs';
 import api from '../../api';
 import styles from './SignupPage.scss';
@@ -54,27 +54,25 @@ const SignupPage = () => {
     }
   });
 
-  const checkNicknameValidation = useCallback(
-    debounce(nickname => {
-      if (!nickname) return resetValidation();
+  const checkNicknameValidation = useDebounce(nickname => {
+    if (!nickname) return resetValidation();
 
-      const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
-      const hasBlank = /\s/.test(nickname);
+    const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
+    const hasBlank = /\s/.test(nickname);
 
-      switch (true) {
-        case isValid:
-          checkNicknameFromServer(nickname);
-          break;
-        case hasBlank:
-          setNicknameHasBlanks();
-          break;
-        default:
-          showNicknameInfoMessage();
-          return;
-      }
-    }),
-    []
-  );
+    switch (true) {
+      case isValid:
+        checkNicknameFromServer(nickname);
+        break;
+      case hasBlank:
+        setNicknameHasBlanks();
+        break;
+      default:
+        showNicknameInfoMessage();
+        return;
+    }
+  });
+
   const DOMAIN_REGEXP = /^(((http(s?)):\/\/)?)([0-9a-zA-Z-]+(\.|:))([a-z]{2,3}|[0-9]{4})/;
 
   const { request: signup } = useFetch({

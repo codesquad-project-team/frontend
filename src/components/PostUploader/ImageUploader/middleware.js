@@ -11,7 +11,7 @@ const CANVAS_OPTIONS = {
 export const addImages = async ({ files, Cropper }) => {
   const URLs = await getDataURLs(files);
   const newImages = await getNewImages(URLs, files, Cropper);
-  return { type: 'addImages', payload: newImages };
+  return newImages;
 };
 
 /**
@@ -104,13 +104,3 @@ const convertCanvasToFile = (canvasElement, originalFile) => {
     }, type);
   });
 };
-
-export const deleteImage = targetIndex => ({
-  type: 'deleteImage',
-  payload: targetIndex
-});
-
-export const updateRepresentative = targetIndex => ({
-  type: 'updateRepresentative',
-  payload: targetIndex
-});

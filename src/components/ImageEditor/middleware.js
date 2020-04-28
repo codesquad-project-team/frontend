@@ -14,13 +14,10 @@ export const cropImage = async ({ cropper, name, type, targetIndex }) => {
   const croppedFile = await convertCanvasToFile(canvas, { name, type });
   const previewURL = await readFileAsDataURL(croppedFile);
   return {
-    type: 'cropImage',
-    payload: {
-      croppedFile,
-      previewURL,
-      cropperData,
-      targetIndex
-    }
+    croppedFile,
+    previewURL,
+    cropperData,
+    targetIndex
   };
 };
 

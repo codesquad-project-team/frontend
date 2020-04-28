@@ -41,14 +41,14 @@ const useFetch = ({
   onError,
   watch,
   autoFetch,
-  loadStatus
+  loadStatus,
 }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const watchingValue = useMemo(() => getWatchingValue(watch), [watch]);
 
-  const request = async param => {
+  const request = async (param) => {
     try {
       if (loadStatus) setLoading(true);
       const res = await onRequest(param);
@@ -84,13 +84,10 @@ const useFetch = ({
 
 export default useFetch;
 
-const isFunction = func => typeof func === 'function';
+const isFunction = (func) => typeof func === 'function';
 
-const isObject = obj =>
-  obj !== undefined && obj !== null && obj.constructor === Object;
-
-const getWatchingValue = watch => {
-  if (Array.isArray(watch) || isObject(watch)) {
+const getWatchingValue = (watch) => {
+  if (Array.isArray(watch)) {
     return watch;
   }
   return [watch];

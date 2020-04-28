@@ -1,0 +1,23 @@
+@import '../../../stylesheets/util.scss';
+
+.overlay-select-box {
+  position: absolute;
+  top: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0.5rem;
+
+  width: 100%;
+
+  border: 1px solid #999;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: $medium-title-font-size;
+  text-align-last: center;
+}
+
+@include desktop {
+  .overlay-select-box {
+    width: 30rem;
+  }
+}
