@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useReducer } from 'react';
+import React, { useEffect, useMemo, useReducer } from 'react';
 import { useHistory, useLocation, Prompt } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './PostUploadPage.scss';

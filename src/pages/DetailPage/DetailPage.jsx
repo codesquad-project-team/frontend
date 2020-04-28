@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { css } from '@emotion/core';
 import FadeLoader from 'react-spinners/FadeLoader';
@@ -22,7 +22,7 @@ const DetailPage = () => {
   const { data, loading } = useFetch({
     onRequest: () => api.getPostDetail(postId),
     watch: postId,
-    loadStatus: true
+    loadStatus: true,
   });
 
   return (
