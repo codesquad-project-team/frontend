@@ -6,18 +6,11 @@ import styles from './PostImage.scss';
 const cx = classNames.bind(styles);
 
 const PostImage = ({ headerOn, src }) => {
-  const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const target = useRef(null);
 
-  useIntersectionObserver({
+  const [isVisible] = useIntersectionObserver({
     target,
-    onIntersect: ([{ isIntersecting }], observer) => {
-      if (isIntersecting) {
-        setIsVisible(true);
-        observer.unobserve(target.current);
-      }
-    },
   });
   return (
     <div className={cx('wrapper')} ref={target}>
