@@ -1,0 +1,68 @@
+.wrapper {
+  position: relative;
+  padding-bottom: 100%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #eeeeee;
+}
+
+.img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.without-header {
+  border-radius: 5px 5px 0 0;
+}
+
+.full {
+  transition: opacity 0.5s ease 0s;
+}
+.thumb {
+  filter: blur(20px);
+  transform: scale(1.1);
+}
+
+.bar {
+  width: 100%;
+  position: absolute;
+  animation: skeleton 1s ease-in infinite;
+}
+
+.indicator {
+  width: 0;
+  box-shadow: 0 0 75px 75px white;
+}
+
+.bar,
+.indicator {
+  height: 100%;
+}
+
+@keyframes skeleton {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
