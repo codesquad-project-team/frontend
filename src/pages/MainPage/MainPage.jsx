@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import classNames from 'classnames/bind';
 import styles from './MainPage.scss';
 import Header from '../../components/Header/Header';
-import PostContainer from '../../components/PostContainer/PostContainer';
 
 const cx = classNames.bind(styles);
+
+const PostContainer = lazy(() =>
+  import(
+    /* webpackChunkName: "post-container" */ '../../components/PostContainer/PostContainer'
+  )
+);
 
 const MainPage = () => {
   return (
@@ -17,7 +22,9 @@ const MainPage = () => {
           <br /> 그리고 개인의 취향에 따라 할 일을 추천합니다.
         </div>
       </div>
-      <PostContainer headerOn />
+      <Suspense fallback={<div>loading...</div>}>
+        <PostContainer headerOn />
+      </Suspense>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import FadeLoader from 'react-spinners/FadeLoader';
@@ -39,9 +39,9 @@ const SignupPage = () => {
     setNicknameAlreadyInUse,
     setNicknameHasBlanks,
     setValidationServerError,
-    showNicknameInfoMessage
+    showNicknameInfoMessage,
   } = useProfileValidation({
-    nickname: { isValid: false, message: '' }
+    nickname: { isValid: false, message: '' },
   });
 
   const { request: checkNicknameFromServer } = useFetch({
@@ -50,11 +50,11 @@ const SignupPage = () => {
     onError: {
       400: setNicknameHasBlanks,
       409: setNicknameAlreadyInUse,
-      500: setValidationServerError
-    }
+      500: setValidationServerError,
+    },
   });
 
-  const checkNicknameValidation = useDebounce(nickname => {
+  const checkNicknameValidation = useDebounce((nickname) => {
     if (!nickname) return resetValidation();
 
     const isValid = /^[A-Za-z][A-Za-z0-9_-]{3,14}$/.test(nickname);
@@ -86,12 +86,12 @@ const SignupPage = () => {
       401: () => {
         shakeInput();
         setInvalidToken();
-      }
-    }
+      },
+    },
   });
-  const goTo = prevPath => {
+  const goTo = (prevPath) => {
     setLoggedIn(true);
-    setNeedsUserInfo(state => !state);
+    setNeedsUserInfo((state) => !state);
     history.push(prevPath);
   };
 
