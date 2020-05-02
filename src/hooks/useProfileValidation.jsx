@@ -1,19 +1,17 @@
-import React, { useReducer } from 'react';
+import { useReducer } from 'react';
 
 const mergeState = (prevState, newState) => ({
   ...prevState,
   ...newState
 });
 
-const useProfileValidation = () => {
-  const [validities, setValidities] = useReducer(mergeState, {
-    nickname: { isValid: true, message: '' },
-    email: { isValid: true, message: '' },
-    phone: { isValid: true, message: '' }
-  });
+const useProfileValidation = initialState => {
+  const [validities, setValidities] = useReducer(mergeState, initialState);
 
   return {
     validities,
+    resetValidation: () => setValidities(initialState),
+
     isAllValid: () =>
       Object.keys(validities).every(property => validities[property].isValid),
 
@@ -31,6 +29,9 @@ const useProfileValidation = () => {
 
     setValid: property =>
       setValidities({ [property]: { isValid: true, message: 'NO_MESSAGE' } }),
+
+    setInvalidToken: () =>
+      setValidities({ nickname: { isValid: false, message: 'INVALID_TOKEN' } }),
 
     setIsPreviousNickname: () =>
       setValidities({

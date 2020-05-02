@@ -7,13 +7,15 @@ const cx = classNames.bind(styles);
 const MAX_DESCRIPTION_BYTES = 2000;
 
 const DescriptionUploader = ({
-  description,
-  setDescription,
-  setReadyToUpload
+  state: {
+    post: { description },
+  },
+  dispatch,
+  setUploadStatus,
 }) => {
   const [showsOverLimitMessage, setShowsOverLimitMessage] = useState(false);
 
-  const countBytes = texts => {
+  const countBytes = (texts) => {
     const len = texts.length;
     let totalBytes = 0;
 
@@ -24,22 +26,21 @@ const DescriptionUploader = ({
     return totalBytes;
   };
 
-  const isOverLimit = value => {
+  const isOverLimit = (value) => {
     const totalBytes = countBytes(value);
 
-    return totalBytes > MAX_DESCRIPTION_BYTES ? true : false;
+    return totalBytes > MAX_DESCRIPTION_BYTES;
   };
 
-  const handleChange = ({ target }) => {
-    const { value } = target;
-    setDescription(value);
+  const handleChange = ({ target: { value } }) => {
+    dispatch({ type: 'updateDescription', payload: value });
 
     if (isOverLimit(value)) {
       setShowsOverLimitMessage(true);
-      setReadyToUpload({ isOverDescLimit: true });
+      setUploadStatus({ isOverDescLimit: true });
     } else {
       setShowsOverLimitMessage(false);
-      setReadyToUpload({ isOverDescLimit: false });
+      setUploadStatus({ isOverDescLimit: false });
     }
   };
 

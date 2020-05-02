@@ -1,0 +1,25 @@
+@import '../../stylesheets/util.scss';
+
+.wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+.loader {
+  border: 3px solid $main-color-light;
+  border-radius: 50%;
+  border-top-color: $main-color;
+  animation: spin 1s ease-in-out infinite;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -6,12 +6,13 @@ import IconButton from '../../CommonBtn/IconButton';
 import { IMAGE_BUCKET_URL } from '../../../configs';
 
 const LocationUploader = ({
-  lat,
-  lng,
-  setSelectedLocation,
-  setReadyToUpload,
-  hasSelectedLocation
+  state: {
+    location: { latitude: lat, longitude: lng },
+  },
+  dispatch,
+  setUploadStatus,
 }) => {
+  const hasSelectedLocation = !!lat;
   const { Modal, toggleModal, isOpen } = useModal();
 
   return (
@@ -30,8 +31,8 @@ const LocationUploader = ({
         <Modal onClick={toggleModal}>
           <LocationFinder
             toggleModal={toggleModal}
-            setSelectedLocation={setSelectedLocation}
-            setReadyToUpload={setReadyToUpload}
+            dispatch={dispatch}
+            setUploadStatus={setUploadStatus}
           />
         </Modal>
       )}

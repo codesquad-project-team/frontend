@@ -20,8 +20,8 @@ const INITIAL_LNG = 126.9975588;
 
 const LocationFinder = ({
   toggleModal: closeModal,
-  setSelectedLocation,
-  setReadyToUpload
+  dispatch,
+  setUploadStatus,
 }) => {
   const { isMobile } = useMediaQuerySet();
   const { inputValue, handleChange } = useInput();
@@ -63,10 +63,10 @@ const LocationFinder = ({
   //placeService => 카카오가 장소검색을 위해 제공하는 객체인스턴스.
   //장소검색에 필요한 메서드가 미리 정의되어 있음.
   //http://apis.map.kakao.com/web/documentation/#services_Places
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     placeService.keywordSearch(locationKeyword, handleSearchResponse, {
-      location: map.getCenter()
+      location: map.getCenter(),
     });
     setClickedItemIndex('UNCLICKED');
   };
@@ -79,34 +79,16 @@ const LocationFinder = ({
     map.setCenter(new kakao.maps.LatLng(y, x));
   };
 
-  const makeFormattedLocation = location => {
-    const {
-      x: lng,
-      y: lat,
-      place_name: name,
-      road_address_name: address,
-      place_url: link,
-      phone
-    } = location;
-
-    return {
-      latitude: Number(lat),
-      longitude: Number(lng),
-      name,
-      address,
-      link,
-      phone
-    };
-  };
-
   const selectLocation = () => {
     if (clickedItemIndex === 'UNCLICKED') {
       setPopupActionType('SELECTION_REQUIRED');
       return;
     }
-    const location = makeFormattedLocation(searchResult[clickedItemIndex]);
-    setSelectedLocation(location);
-    setReadyToUpload({ hasSelectedLocation: true });
+    dispatch({
+      type: 'updateLocation',
+      payload: searchResult[clickedItemIndex],
+    });
+    setUploadStatus({ hasSelectedLocation: true });
     closeModal();
   };
 

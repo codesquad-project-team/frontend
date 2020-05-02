@@ -1,27 +1,41 @@
 import { hot } from 'react-hot-loader/root';
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage';
-import DetailPage from './pages/DetailPage/DetailPage';
-import ProfileEditPage from './pages/ProfileEditPage/ProfileEditPage';
-import ProfilePage from './pages/ProfilePage/ProfilePage';
-import PostUploadPage from './pages/PostUploadPage/PostUploadPage';
-import SignupPage from './pages/SignupPage/SignupPage';
 import LoginContextProvider from './contexts/LoginContext';
+import Loader from './components/Loader';
+
+const ProfileEditPage = lazy(() =>
+  import(/* webpackChunkName: "profile-edit-page" */ './pages/ProfileEditPage')
+);
+const ProfilePage = lazy(() =>
+  import(/* webpackChunkName: "profile-page" */ './pages/ProfilePage')
+);
+const PostUploadPage = lazy(() =>
+  import(/* webpackChunkName: "post-upload-page" */ './pages/PostUploadPage')
+);
+const DetailPage = lazy(() =>
+  import(/* webpackChunkName: "detail-page" */ './pages/DetailPage')
+);
+const SignupPage = lazy(() =>
+  import(/* webpackChunkName: "signup-page" */ './pages/SignupPage')
+);
 
 const Root = () => {
   return (
     <Router>
       <LoginContextProvider>
-        <Switch>
-          <Route exact path="/" component={MainPage} />
-          <Route path="/profile/edit" component={ProfileEditPage} />
-          <Route path="/profile" component={ProfilePage} />
-          <Route path="/post/upload" component={() => <PostUploadPage />} />
-          <Route path="/post/edit" component={() => <PostUploadPage />} />
-          <Route path="/post/:postId" component={DetailPage} />
-          <Route path="/signup" component={SignupPage} />
-        </Switch>
+        <Suspense fallback={<Loader size={50} unit={'px'} />}>
+          <Switch>
+            <Route exact path="/" component={MainPage} />
+            <Route path="/profile/edit" component={ProfileEditPage} />
+            <Route path="/profile" component={ProfilePage} />
+            <Route path="/post/upload" component={() => <PostUploadPage />} />
+            <Route path="/post/edit" component={() => <PostUploadPage />} />
+            <Route path="/post/:postId" component={DetailPage} />
+            <Route path="/signup" component={SignupPage} />
+          </Switch>
+        </Suspense>
       </LoginContextProvider>
     </Router>
   );
