@@ -14,6 +14,8 @@
 
 </p>
 
+- [서비스 화면 구성 및 기능 링크](https://github.com/codesquad-project-team/frontend/wiki/%ED%99%94%EB%A9%B4-%EA%B5%AC%EC%84%B1-%EB%B0%8F-%EA%B8%B0%EB%8A%A5#%ED%99%94%EB%A9%B4-%EA%B5%AC%EC%84%B1-%EB%B0%8F-%EA%B8%B0%EB%8A%A5)
+
 ## 팀 구성
 
 - <img width="235" alt="connectflavor-contributors" src="https://user-images.githubusercontent.com/42905468/70593746-85a67a80-1c21-11ea-9fe1-03d609b4f266.png">
